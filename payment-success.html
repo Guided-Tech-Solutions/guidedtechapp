@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Payment Successful — Guided Tech Solutions</title>
+  <link rel="shortcut icon" href="../asset/logo-icon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="./portal.css" />
+  <style>
+    .success-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      padding: 20px;
+    }
+    .success-card {
+      background: var(--surface);
+      border-radius: var(--portal-radius);
+      border: 1px solid var(--portal-border);
+      box-shadow: var(--portal-shadow-md);
+      padding: 48px 36px;
+      max-width: 520px;
+      text-align: center;
+    }
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #d4f0e4, #b6e8d0);
+      display: grid;
+      place-items: center;
+      font-size: 38px;
+      margin: 0 auto 24px;
+      box-shadow: 0 8px 24px rgba(16,185,129,0.18);
+    }
+    .success-title {
+      font-family: "Poppins", sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+    .success-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+    .success-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .loader {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(27,79,114,0.2);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="success-wrapper">
+  <div class="success-card">
+
+    <!-- Success state (shown after verification) -->
+    <div id="successState" style="display:none">
+      <div class="success-icon">✓</div>
+      <h1 class="success-title">Payment Successful!</h1>
+      <p class="success-desc">
+        Your subscription has been activated. You now have access to your services and dashboard.
+      </p>
+      <div class="success-actions">
+        <a href="./portal-subscriptions.html" class="btn-portal-primary">View My Subscriptions</a>
+        <a href="./portal-dashboard.html" class="btn-portal-ghost">Go to Dashboard</a>
+      </div>
+    </div>
+
+    <!-- Processing state (shown while verifying) -->
+    <div id="processingState">
+      <div class="success-icon" style="background:rgba(27,79,114,0.10)">
+        <div class="loader"></div>
+      </div>
+      <h1 class="success-title">Processing Payment…</h1>
+      <p class="success-desc">
+        Please wait while we confirm your payment with Stripe. This usually takes just a few seconds.
+      </p>
+    </div>
+
+    <!-- Error state -->
+    <div id="errorState" style="display:none">
+      <div class="success-icon" style="background:rgba(239,68,68,0.10)">
+        <span style="color:#dc2626">✕</span>
+      </div>
+      <h1 class="success-title">Payment Verification Failed</h1>
+      <p class="success-desc" id="errorMessage">
+        We couldn't verify your payment. Please contact support if this issue persists.
+      </p>
+      <div class="success-actions">
+        <a href="./portal-services.html" class="btn-portal-primary">Back to Services</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+  import { db } from "../admin/firebase.js";
+  import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+  // Get session_id from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const stripeSessionId = urlParams.get("session_id");
+
+  if (!stripeSessionId) {
+    showError("No payment session found in URL.");
+  } else {
+    verifyPayment(stripeSessionId);
+  }
+
+  async function verifyPayment(sessionId) {
+    try {
+      // Poll Firestore for completion (webhook may take a moment)
+      const maxWait = 15000; // 15 seconds
+      const startTime = Date.now();
+      const checkInterval = 1000;
+
+      while (Date.now() - startTime < maxWait) {
+        const q = query(
+          collection(db, "checkoutSessions"),
+          where("stripeSessionId", "==", sessionId)
+        );
+        const snap = await getDocs(q);
+
+        if (!snap.empty) {
+          const doc = snap.docs[0];
+          const data = doc.data();
+
+          if (data.status === "completed") {
+            showSuccess();
+            return;
+          } else if (data.status === "failed" || data.status === "expired") {
+            showError("Payment was not completed. Please try again.");
+            return;
+          }
+        }
+
+        await new Promise(resolve => setTimeout(resolve, checkInterval));
+      }
+
+      // Timeout
+      showError("Payment verification timed out. Your payment may still be processing. Check your subscriptions page.");
+
+    } catch (err) {
+      console.error("Verification error:", err);
+      showError("An error occurred while verifying your payment.");
+    }
+  }
+
+  function showSuccess() {
+    document.getElementById("processingState").style.display = "none";
+    document.getElementById("successState").style.display = "block";
+  }
+
+  function showError(message) {
+    document.getElementById("processingState").style.display = "none";
+    document.getElementById("errorState").style.display = "block";
+    if (message) document.getElementById("errorMessage").textContent = message;
+  }
+</script>
+
+</body>
+</html>
