@@ -1,0 +1,1587 @@
+/* ============================================================
+   FILE: app/portal.css
+   Shared styles for all three portal pages.
+   Inherits global tokens from style.css
+   ============================================================ */
+
+:root {
+  --portal-sidebar-w: 260px;
+  --portal-topbar-h:  78px;
+  --portal-border:    rgba(46,64,83,0.09);
+  --portal-shadow:    0 2px 12px rgba(16,24,40,0.07);
+  --portal-shadow-md: 0 8px 30px rgba(16,24,40,0.10);
+  --portal-radius:    14px;
+  --portal-green:     #10b981;
+  --portal-trans:     0.22s ease;
+}
+
+/* ============================================================
+   PORTAL WRAP & LAYOUT
+   ============================================================ */
+.portal-wrap { min-height: 100vh; background: var(--bg); }
+
+.portal-layout {
+  display: flex;
+  min-height: calc(100vh - var(--portal-topbar-h));
+}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.portal-sidebar {
+  width: var(--portal-sidebar-w);
+  flex-shrink: 0;
+  position: sticky;
+  top: var(--portal-topbar-h);
+  height: calc(100vh - var(--portal-topbar-h));
+  background: var(--surface);
+  border-right: 1px solid var(--portal-border);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+/* User chip */
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(27,79,114,0.05);
+  margin-bottom: 4px;
+}
+
+.sidebar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), #2471a3);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.sidebar-user-info { flex: 1; min-width: 0; }
+
+.sidebar-user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user-email {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--portal-border);
+  margin: 6px 0 10px;
+}
+
+/* Nav links */
+.sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  transition: background var(--portal-trans),
+              color var(--portal-trans),
+              transform var(--portal-trans);
+}
+
+.sidebar-link:hover {
+  background: rgba(27,79,114,0.06);
+  color: var(--primary);
+  transform: translateX(3px);
+}
+
+.sidebar-link.active {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(27,79,114,0.22);
+}
+
+.sidebar-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(27,79,114,0.08);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.sidebar-link.active .sidebar-icon { background: rgba(255,255,255,0.18); }
+
+/* Logout button in sidebar */
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #dc2626;
+  text-decoration: none;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  background: rgba(220, 38, 38, 0.05);
+  margin-top: auto;
+  cursor: pointer;
+  transition: background var(--portal-trans),
+              border-color var(--portal-trans),
+              transform var(--portal-trans);
+}
+
+.sidebar-logout:hover {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.3);
+  transform: translateX(3px);
+}
+
+.sidebar-logout .sidebar-icon {
+  background: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+.portal-main {
+  flex: 1;
+  padding: 32px 36px 64px;
+  min-width: 0;
+}
+
+/* Auth status bar */
+.portal-auth-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--portal-border);
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.portal-auth-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d1d5db;
+  flex-shrink: 0;
+}
+
+.portal-auth-sep { opacity: 0.45; }
+
+/* Page heading */
+.portal-page-head { margin-bottom: 28px; }
+
+.portal-page-title {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.portal-page-subtitle {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 15px;
+  max-width: 640px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   SECTION CARD
+   ============================================================ */
+.portal-section {
+  background: var(--surface);
+  border-radius: var(--portal-radius);
+  border: 1px solid var(--portal-border);
+  box-shadow: var(--portal-shadow);
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+
+.portal-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 28px 16px;
+  border-bottom: 1px solid var(--portal-border);
+}
+
+.portal-section-title {
+  font-family: "Poppins", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.portal-section-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.portal-section-body { padding: 24px 28px; }
+
+/* ============================================================
+   SKELETON SHIMMER
+   ============================================================ */
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-block {
+  border-radius: var(--portal-radius);
+  background: linear-gradient(90deg, #eef2f7 25%, #e2e8f0 50%, #eef2f7 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+/* ============================================================
+   SERVICES FLOW  (portal-services.html)
+   ============================================================ */
+.services-flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.services-flow::before {
+  content: '';
+  position: absolute;
+  top: 36px;
+  left: calc(12.5% + 20px);
+  right: calc(12.5% + 20px);
+  height: 2px;
+  background: var(--portal-border);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.svc-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 14px 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.svc-card:not(:last-child)::after {
+  content: '›';
+  position: absolute;
+  right: -8px;
+  top: 22px;
+  font-size: 24px;
+  font-weight: 300;
+  color: #c8d6e0;
+  z-index: 2;
+  line-height: 1;
+}
+
+.svc-icon-ring {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e8f1f8, #d4e8f5);
+  border: 2px solid rgba(27,79,114,0.12);
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  margin-bottom: 14px;
+  position: relative;
+  transition: transform var(--portal-trans), box-shadow var(--portal-trans), border-color var(--portal-trans);
+}
+
+.svc-card:hover .svc-icon-ring {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(27,79,114,0.14);
+  border-color: var(--primary);
+}
+
+.svc-card.is-active .svc-icon-ring {
+  background: linear-gradient(135deg, #d4f0e4, #b6e8d0);
+  border-color: var(--portal-green);
+}
+
+.svc-card.is-active .svc-icon-ring::after {
+  content: '✓';
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 20px;
+  height: 20px;
+  background: var(--portal-green);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  border: 2px solid #fff;
+}
+
+.svc-name    { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 5px; line-height: 1.3; }
+.svc-desc    { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; min-height: 36px; }
+
+.svc-price-box {
+  width: 100%;
+  border: 1px solid var(--portal-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  background: #fafcfe;
+  text-align: left;
+}
+
+.svc-from   { font-size: 11px; color: var(--muted); }
+.svc-amount { font-size: 18px; font-weight: 800; color: #0f172a; letter-spacing: -0.03em; }
+.svc-amount span { font-size: 12px; font-weight: 500; color: var(--muted); }
+
+.btn-subscribe {
+  width: 100%;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 9px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  transition: background var(--portal-trans), transform var(--portal-trans);
+}
+
+.btn-subscribe:hover   { background: #154360; transform: translateY(-1px); }
+.btn-subscribe.activated { background: var(--portal-green); }
+.btn-subscribe:disabled  { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* ============================================================
+   PLANS GRID (portal-services.html + recommendation cards)
+   ============================================================ */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.plan-card {
+  border: 2px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  background: var(--surface);
+  transition: border-color var(--portal-trans), box-shadow var(--portal-trans), transform var(--portal-trans);
+}
+
+.plan-card:hover {
+  border-color: rgba(27,79,114,0.22);
+  box-shadow: var(--portal-shadow-md);
+  transform: translateY(-3px);
+}
+
+.plan-card.is-popular {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(230,126,34,0.10), var(--portal-shadow-md);
+}
+
+.plan-popular-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-family: "Poppins", sans-serif;
+}
+
+.plan-icon   { font-size: 28px; }
+
+.plan-name {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.plan-pricing { display: flex; align-items: baseline; gap: 4px; }
+
+.plan-price {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.04em;
+  font-family: "Poppins", sans-serif;
+}
+
+.plan-period { font-size: 13px; color: var(--muted); }
+.plan-desc   { font-size: 13px; color: var(--muted); line-height: 1.55; }
+.plan-divider{ height: 1px; background: var(--portal-border); }
+
+.plan-features { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+
+.plan-feat {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.plan-feat-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(16,185,129,0.12);
+  color: var(--portal-green);
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 900;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.btn-get-started {
+  width: 100%;
+  padding: 11px;
+  border: 2px solid #0f172a;
+  border-radius: 10px;
+  background: transparent;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  margin-top: auto;
+  transition: background var(--portal-trans), color var(--portal-trans),
+              border-color var(--portal-trans), transform var(--portal-trans);
+}
+
+.btn-get-started:hover            { background: #0f172a; color: #fff; transform: translateY(-1px); }
+.plan-card.is-popular .btn-get-started { background: var(--accent); border-color: var(--accent); color: #fff; }
+.plan-card.is-popular .btn-get-started:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-get-started.subscribed       { background: var(--portal-green); border-color: var(--portal-green); color: #fff; }
+.btn-get-started:disabled         { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* ============================================================
+   EMPTY / LOCKED STATE  (subscriptions + dashboard pages)
+   ============================================================ */
+.portal-locked {
+  text-align: center;
+  padding: 52px 28px 36px;
+}
+
+.portal-locked-icon  { font-size: 52px; display: block; margin-bottom: 16px; opacity: 0.45; }
+.portal-locked-title { font-family: "Poppins", sans-serif; font-size: 22px; font-weight: 600; color: #0f172a; margin-bottom: 8px; }
+.portal-locked-desc  { font-size: 14px; color: var(--muted); max-width: 400px; margin: 0 auto 24px; line-height: 1.65; }
+
+.portal-locked-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+.btn-portal-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 22px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Inter", sans-serif;
+  transition: background var(--portal-trans), transform var(--portal-trans);
+}
+
+.btn-portal-primary:hover { background: #154360; transform: translateY(-1px); }
+
+.btn-portal-ghost {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 22px;
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: "Inter", sans-serif;
+  transition: background var(--portal-trans), color var(--portal-trans);
+}
+
+.btn-portal-ghost:hover { background: var(--primary); color: #fff; }
+
+/* Recommendations heading */
+.rec-heading {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 16px;
+  padding-top: 8px;
+  border-top: 1px solid var(--portal-border);
+}
+
+/* ============================================================
+   ACTIVE SUBSCRIPTION CARDS  (portal-subscriptions.html)
+   ============================================================ */
+.sub-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.sub-card {
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--surface);
+  box-shadow: var(--portal-shadow);
+}
+
+.sub-card-header { display: flex; align-items: center; justify-content: space-between; }
+.sub-card-name   { font-family: "Poppins", sans-serif; font-size: 16px; font-weight: 700; color: #0f172a; }
+.sub-card-type   { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+
+.sub-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sub-status-badge.active   { background: rgba(16,185,129,0.12); color: var(--portal-green); }
+.sub-status-badge.pending  { background: rgba(245,158,11,0.12);  color: #d97706; }
+.sub-status-badge.inactive { background: rgba(239,68,68,0.10);   color: #dc2626; }
+
+.sub-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.sub-card-price { font-size: 22px; font-weight: 800; color: #0f172a; font-family: "Poppins", sans-serif; }
+.sub-card-price span { font-size: 13px; font-weight: 400; color: var(--muted); }
+
+.sub-card-meta { font-size: 12px; color: var(--muted); }
+
+.sub-card-features { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+
+.sub-feat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.sub-feat-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   DASHBOARD  (portal-dashboard.html)
+   ============================================================ */
+.dash-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.dash-kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--portal-border);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: var(--portal-shadow);
+}
+
+.dash-kpi-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.dash-kpi-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.04em;
+  margin-top: 4px;
+  font-family: "Poppins", sans-serif;
+}
+
+.dash-kpi-value--sm    { font-size: 18px; margin-top: 6px; }
+.dash-kpi-value--green { color: var(--portal-green); }
+
+.dash-kpi-meta { font-size: 11px; margin-top: 4px; color: var(--muted); }
+.dash-kpi-meta--up { color: var(--portal-green); }
+
+/* Chart placeholder */
+.dash-chart {
+  background: var(--surface);
+  border: 1px solid var(--portal-border);
+  border-radius: 12px;
+  padding: 20px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--portal-shadow);
+}
+
+.dash-chart-label {
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.dash-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 100px;
+}
+
+.dash-bar     { flex: 1; height: var(--h); border-radius: 5px 5px 0 0; background: rgba(27,79,114,0.18); }
+.dash-bar--mid{ background: rgba(27,79,114,0.45); }
+.dash-bar--hi { background: var(--accent); }
+
+/* ============================================================
+   LIVE PILL
+   ============================================================ */
+.dash-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(16,185,129,0.10);
+  border: 1px solid rgba(16,185,129,0.22);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  color: var(--portal-green);
+  font-weight: 600;
+}
+
+.dash-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--portal-green);
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(1.4); }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   TABLET (max-width: 1100px)
+═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .plans-grid    { grid-template-columns: repeat(2, 1fr); }
+  .services-flow { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .services-flow::before { display: none; }
+  .svc-card::after       { display: none; }
+  .dash-kpi-grid         { grid-template-columns: repeat(2, 1fr); }
+  .sub-cards-grid        { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE LANDSCAPE (max-width: 900px)
+═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  :root { --portal-sidebar-w: 72px; }
+  .sidebar-link span:not(.sidebar-icon) { display: none; }
+  .sidebar-link          { justify-content: center; padding: 10px; }
+  .sidebar-logout span:not(.sidebar-icon) { display: none; }
+  .sidebar-logout        { justify-content: center; padding: 10px; }
+  .sidebar-user-info     { display: none; }
+  .portal-main           { padding: 24px 20px 50px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE PORTRAIT (max-width: 767px) - KEEP SIDEBAR, 2 CARDS PER ROW
+═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  
+  /* KEEP SIDEBAR - just make it narrower */
+  :root { --portal-sidebar-w: 200px; }
+  
+  .portal-sidebar {
+    padding: 16px 12px;
+  }
+  
+  .sidebar-user {
+    padding: 10px;
+  }
+  
+  .sidebar-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  
+  .sidebar-user-name {
+    font-size: 0.8rem;
+  }
+  
+  .sidebar-user-email {
+    font-size: 0.7rem;
+  }
+  
+  .sidebar-link {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .sidebar-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+  }
+  
+  /* REDUCE MAIN CONTENT PADDING */
+  .portal-main {
+    padding: 20px 16px 50px;
+  }
+  
+  /* PAGE HEADER */
+  .portal-page-head {
+    margin-bottom: 20px;
+  }
+  
+  .portal-page-title {
+    font-size: 1.6rem;
+  }
+  
+  .portal-page-subtitle {
+    font-size: 0.9rem;
+    margin-top: 6px;
+  }
+  
+  /* AUTH BAR */
+  .portal-auth-bar {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    margin-bottom: 16px;
+  }
+  
+  .portal-auth-dot {
+    width: 7px;
+    height: 7px;
+  }
+  
+  /* SECTION CARDS */
+  .portal-section {
+    margin-bottom: 20px;
+    border-radius: 12px;
+  }
+  
+  .portal-section-head {
+    padding: 16px 16px 12px;
+  }
+  
+  .portal-section-title {
+    font-size: 1.1rem;
+  }
+  
+  .portal-section-sub {
+    font-size: 0.8rem;
+  }
+  
+  .portal-section-body {
+    padding: 16px;
+  }
+  
+  /* SERVICES FLOW - 2 PER ROW ON MOBILE */
+  .services-flow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .services-flow::before {
+    display: none;
+  }
+  
+  .svc-card {
+    padding: 0 6px 4px;
+  }
+  
+  .svc-card::after {
+    display: none;
+  }
+  
+  .svc-icon-ring {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .svc-card.is-active .svc-icon-ring::after {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+  }
+  
+  .svc-name {
+    font-size: 0.8rem;
+  }
+  
+  .svc-desc {
+    font-size: 0.68rem;
+    min-height: auto;
+    margin-bottom: 10px;
+  }
+  
+  .svc-price-box {
+    padding: 6px 8px;
+  }
+  
+  .svc-from {
+    font-size: 0.65rem;
+  }
+  
+  .svc-amount {
+    font-size: 1.1rem;
+  }
+  
+  .svc-amount span {
+    font-size: 0.7rem;
+  }
+  
+  .btn-subscribe {
+    padding: 7px 8px;
+    font-size: 0.7rem;
+  }
+  
+  /* PLANS GRID - 2 PER ROW ON MOBILE */
+  .plans-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .plan-card {
+    padding: 14px 10px;
+  }
+  
+  .plan-popular-badge {
+    font-size: 0.6rem;
+    padding: 3px 8px;
+  }
+  
+  .plan-icon {
+    font-size: 20px;
+  }
+  
+  .plan-name {
+    font-size: 0.9rem;
+  }
+  
+  .plan-price {
+    font-size: 1.2rem;
+  }
+  
+  .plan-period {
+    font-size: 0.7rem;
+  }
+  
+  .plan-desc {
+    font-size: 0.7rem;
+  }
+  
+  .plan-feat {
+    font-size: 0.7rem;
+  }
+  
+  .plan-feat-check {
+    width: 14px;
+    height: 14px;
+    font-size: 8px;
+  }
+  
+  .btn-get-started {
+    padding: 8px;
+    font-size: 0.7rem;
+  }
+  
+  /* SUBSCRIPTION CARDS - 2 PER ROW ON MOBILE */
+  .sub-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .sub-card {
+    padding: 12px;
+  }
+  
+  .sub-card-name {
+    font-size: 0.85rem;
+  }
+  
+  .sub-card-type {
+    font-size: 0.65rem;
+  }
+  
+  .sub-status-badge {
+    font-size: 0.65rem;
+    padding: 3px 7px;
+  }
+  
+  .sub-status-dot {
+    width: 5px;
+    height: 5px;
+  }
+  
+  .sub-card-price {
+    font-size: 1.1rem;
+  }
+  
+  .sub-card-price span {
+    font-size: 0.7rem;
+  }
+  
+  .sub-card-meta {
+    font-size: 0.7rem;
+  }
+  
+  .sub-feat {
+    font-size: 0.7rem;
+  }
+  
+  .sub-feat-dot {
+    width: 5px;
+    height: 5px;
+  }
+  
+  /* DASHBOARD KPI CARDS - 2 PER ROW ON MOBILE */
+  .dash-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  
+  .dash-kpi-card {
+    padding: 12px;
+  }
+  
+  .dash-kpi-label {
+    font-size: 0.65rem;
+  }
+  
+  .dash-kpi-value {
+    font-size: 1.3rem;
+    margin-top: 3px;
+  }
+  
+  .dash-kpi-value--sm {
+    font-size: 1.05rem;
+  }
+  
+  .dash-kpi-meta {
+    font-size: 0.7rem;
+    margin-top: 3px;
+  }
+  
+  /* CHART */
+  .dash-chart {
+    height: 140px;
+    padding: 14px;
+  }
+  
+  .dash-chart-label {
+    font-size: 0.7rem;
+    top: 10px;
+    left: 14px;
+  }
+  
+  .dash-bars {
+    height: 80px;
+    gap: 4px;
+  }
+  
+  .dash-bar {
+    border-radius: 4px 4px 0 0;
+  }
+  
+  /* LIVE PILL */
+  .dash-live-pill {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    gap: 5px;
+  }
+  
+  .dash-live-dot {
+    width: 6px;
+    height: 6px;
+  }
+  
+  /* LOCKED STATE */
+  .portal-locked {
+    padding: 40px 16px 28px;
+  }
+  
+  .portal-locked-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+  }
+  
+  .portal-locked-title {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+  
+  .portal-locked-desc {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+  
+  .portal-locked-actions {
+    gap: 8px;
+  }
+  
+  .btn-portal-primary,
+  .btn-portal-ghost {
+    padding: 10px 18px;
+    font-size: 0.85rem;
+  }
+  
+  /* RECOMMENDATIONS */
+  .rec-heading {
+    font-size: 1.05rem;
+    margin-bottom: 14px;
+  }
+  
+  /* SKELETON BLOCKS */
+  .skeleton-block {
+    border-radius: 12px;
+  }
+  
+  /* FOOTER ON PORTAL PAGES */
+  .gts-footer {
+    padding: 50px 0 25px;
+  }
+  
+  .gts-footer-inner {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 16px !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px 20px;
+  }
+  
+  .gts-footer-col.about-col {
+    grid-column: span 2;
+    order: 0;
+    margin-bottom: 10px;
+  }
+  
+  .gts-footer-col:nth-child(2) {
+    order: 1;
+  }
+  
+  .gts-footer-col:nth-child(3) {
+    order: 2;
+  }
+  
+  .gts-footer-col:nth-child(4) {
+    order: 3;
+  }
+  
+  .footer-logo {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .footer-desc {
+    font-size: 0.9rem;
+    max-width: 100%;
+    margin-bottom: 12px;
+  }
+  
+  .footer-heading {
+    font-size: 12px;
+    margin: 0 0 8px 0;
+  }
+  
+  .about-col .footer-heading {
+    margin-top: 14px;
+  }
+  
+  .gts-footer-col:not(.about-col) .footer-heading {
+    margin-top: 0;
+  }
+  
+  .gts-footer-col a {
+    font-size: 0.9rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 2 !important;
+  }
+  
+  .footer-social {
+    margin-top: 12px;
+    gap: 12px !important;
+  }
+  
+  .footer-social a {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .footer-social img {
+    width: 19px;
+  }
+  
+  .gts-footer-bottom {
+    margin-top: 30px;
+    padding-top: 20px;
+    font-size: 0.8rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SMALL MOBILE (max-width: 480px) - KEEP SIDEBAR & 2 COLUMNS
+═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  
+  /* Narrower sidebar */
+  :root { --portal-sidebar-w: 180px; }
+  
+  .portal-sidebar {
+    padding: 14px 10px;
+  }
+  
+  .sidebar-user {
+    padding: 8px;
+  }
+  
+  .sidebar-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+  
+  .sidebar-user-name {
+    font-size: 0.75rem;
+  }
+  
+  .sidebar-user-email {
+    font-size: 0.65rem;
+  }
+  
+  .sidebar-link {
+    padding: 7px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .sidebar-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+  }
+  
+  .portal-main {
+    padding: 16px 14px 40px;
+  }
+  
+  .portal-page-title {
+    font-size: 1.4rem;
+  }
+  
+  .portal-page-subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .portal-section-head {
+    padding: 14px 14px 10px;
+  }
+  
+  .portal-section-title {
+    font-size: 1rem;
+  }
+  
+  .portal-section-sub {
+    font-size: 0.75rem;
+  }
+  
+  .portal-section-body {
+    padding: 14px;
+  }
+  
+  /* Services - still 2 per row */
+  .services-flow {
+    gap: 10px;
+  }
+  
+  .svc-card {
+    padding: 0 6px 4px;
+  }
+  
+  .svc-icon-ring {
+    width: 45px;
+    height: 45px;
+    font-size: 16px;
+  }
+  
+  .svc-name {
+    font-size: 0.75rem;
+  }
+  
+  .svc-desc {
+    font-size: 0.65rem;
+  }
+  
+  .svc-amount {
+    font-size: 1rem;
+  }
+  
+  .btn-subscribe {
+    padding: 7px 8px;
+    font-size: 0.7rem;
+  }
+  
+  /* Plans - still 2 per row */
+  .plans-grid {
+    gap: 10px;
+  }
+  
+  .plan-card {
+    padding: 14px 10px;
+  }
+  
+  .plan-name {
+    font-size: 0.9rem;
+  }
+  
+  .plan-price {
+    font-size: 1.2rem;
+  }
+  
+  .plan-desc,
+  .plan-feat {
+    font-size: 0.7rem;
+  }
+  
+  /* Dashboard - still 2 per row */
+  .dash-kpi-card {
+    padding: 10px;
+  }
+  
+  .dash-kpi-label {
+    font-size: 0.6rem;
+  }
+  
+  .dash-kpi-value {
+    font-size: 1.2rem;
+  }
+  
+  .dash-kpi-value--sm {
+    font-size: 0.95rem;
+  }
+  
+  .dash-kpi-meta {
+    font-size: 0.65rem;
+  }
+  
+  .dash-chart {
+    height: 120px;
+    padding: 12px;
+  }
+  
+  .dash-bars {
+    height: 70px;
+  }
+  
+  /* Locked state */
+  .portal-locked {
+    padding: 32px 14px 24px;
+  }
+  
+  .portal-locked-icon {
+    font-size: 36px;
+  }
+  
+  .portal-locked-title {
+    font-size: 1.2rem;
+  }
+  
+  .portal-locked-desc {
+    font-size: 0.85rem;
+  }
+  
+  .btn-portal-primary,
+  .btn-portal-ghost {
+    padding: 9px 16px;
+    font-size: 0.8rem;
+  }
+  
+  /* Recommendations */
+  .rec-heading {
+    font-size: 1rem;
+  }
+  
+  /* Subscription cards - still 2 per row */
+  .sub-cards-grid {
+    gap: 10px;
+  }
+  
+  .sub-card {
+    padding: 12px;
+  }
+  
+  .sub-card-name {
+    font-size: 0.85rem;
+  }
+  
+  .sub-card-price {
+    font-size: 1.1rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   EXTRA SMALL MOBILE (max-width: 360px) - KEEP SIDEBAR & 2 COLUMNS
+═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 360px) {
+  
+  /* Even narrower sidebar */
+  :root { --portal-sidebar-w: 160px; }
+  
+  .portal-sidebar {
+    padding: 12px 8px;
+  }
+  
+  .sidebar-user {
+    padding: 6px;
+  }
+  
+  .sidebar-avatar {
+    width: 26px;
+    height: 26px;
+    font-size: 10px;
+  }
+  
+  .sidebar-user-name {
+    font-size: 0.7rem;
+  }
+  
+  .sidebar-user-email {
+    font-size: 0.6rem;
+  }
+  
+  .sidebar-link {
+    padding: 6px 7px;
+    font-size: 0.7rem;
+  }
+  
+  .sidebar-icon {
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+  }
+  
+  .portal-main {
+    padding: 14px 12px 35px;
+  }
+  
+  .portal-page-title {
+    font-size: 1.3rem;
+  }
+  
+  .portal-page-subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .portal-section-body,
+  .portal-section-head {
+    padding: 12px;
+  }
+  
+  .portal-section-title {
+    font-size: 0.95rem;
+  }
+  
+  /* Services - still 2 per row, tighter */
+  .services-flow {
+    gap: 8px;
+  }
+  
+  .svc-card {
+    padding: 0 4px 4px;
+  }
+  
+  .svc-icon-ring {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+  
+  .svc-name {
+    font-size: 0.7rem;
+  }
+  
+  .svc-desc {
+    font-size: 0.6rem;
+  }
+  
+  .svc-amount {
+    font-size: 0.95rem;
+  }
+  
+  .btn-subscribe {
+    font-size: 0.65rem;
+    padding: 6px 7px;
+  }
+  
+  /* Plans - still 2 per row */
+  .plans-grid {
+    gap: 8px;
+  }
+  
+  .plan-card {
+    padding: 12px 8px;
+  }
+  
+  .plan-name {
+    font-size: 0.85rem;
+  }
+  
+  .plan-price {
+    font-size: 1.1rem;
+  }
+  
+  .plan-desc,
+  .plan-feat {
+    font-size: 0.65rem;
+  }
+  
+  /* Dashboard - still 2 per row */
+  .dash-kpi-grid {
+    gap: 8px;
+  }
+  
+  .dash-kpi-card {
+    padding: 8px;
+  }
+  
+  .dash-kpi-value {
+    font-size: 1.1rem;
+  }
+  
+  .dash-kpi-value--sm {
+    font-size: 0.9rem;
+  }
+  
+  .dash-chart {
+    height: 110px;
+  }
+  
+  .dash-bars {
+    height: 60px;
+  }
+  
+  .portal-locked-title {
+    font-size: 1.1rem;
+  }
+  
+  .portal-locked-desc {
+    font-size: 0.8rem;
+  }
+  
+  .btn-portal-primary,
+  .btn-portal-ghost {
+    padding: 8px 14px;
+    font-size: 0.75rem;
+  }
+  
+  /* Subscription cards - still 2 per row */
+  .sub-cards-grid {
+    gap: 8px;
+  }
+  
+  .sub-card {
+    padding: 10px;
+  }
+  
+  .sub-card-name {
+    font-size: 0.8rem;
+  }
+  
+  .sub-card-price {
+    font-size: 1rem;
+  }
+}
