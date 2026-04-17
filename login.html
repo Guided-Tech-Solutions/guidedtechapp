@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Sign In — Guided Tech Solutions</title>
+  <link rel="shortcut icon" href="../asset/logo-icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./auth.css">
+</head>
+<body>
+
+  <div class="auth-container">
+    <!-- Header -->
+    <div class="auth-header">
+      <div class="logo-container">
+        <img src="../asset/logo-icon.png" alt="Guided Tech Solutions">
+      </div>
+      <h1>Guided Tech Solutions</h1>
+      <p>Access your account</p>
+    </div>
+
+    <!-- Body -->
+    <div class="auth-body">
+      <div class="welcome-text">
+        <h2>Welcome Back</h2>
+        <p>Sign in to access your services and subscriptions</p>
+      </div>
+
+      <!-- Error Message -->
+      <div class="error-message" id="errorMessage"></div>
+
+      <!-- Google Sign In -->
+      <button class="auth-btn" id="googleSignInBtn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Continue with Google
+      </button>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      <!-- Email/Password Form -->
+      <form class="email-form" id="emailForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          Sign In
+        </button>
+
+        <button type="button" class="back-btn" id="backBtn">
+          ← Back to options
+        </button>
+      </form>
+
+      <!-- Email Sign In Button (shows when form is hidden) -->
+      <button class="auth-btn" id="emailSignInBtn">
+        <span>📧</span>
+        Continue with Email
+      </button>
+
+      <!-- Sign Up Link -->
+      <div class="auth-link">
+        Don't have an account? <a href="./signup.html" id="signupLink">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./login.js"></script>
+
+</body>
+</html>
