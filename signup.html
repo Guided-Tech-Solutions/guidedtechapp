@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Sign Up — Guided Tech Solutions</title>
+  <link rel="shortcut icon" href="../asset/logo-icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .signup-container {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+      max-width: 440px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .signup-header {
+      background: linear-gradient(135deg, #1B4F72 0%, #2471a3 100%);
+      padding: 48px 40px;
+      text-align: center;
+      color: white;
+    }
+
+    .logo-container {
+      width: 80px;
+      height: 80px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-container img {
+      width: 50px;
+      height: 50px;
+      filter: brightness(0) invert(1);
+    }
+
+    .signup-header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .signup-header p {
+      font-size: 15px;
+      opacity: 0.95;
+      font-weight: 400;
+    }
+
+    .signup-body {
+      padding: 40px;
+    }
+
+    .welcome-text {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .welcome-text h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .welcome-text p {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .signup-btn {
+      width: 100%;
+      padding: 16px;
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 16px;
+    }
+
+    .signup-btn:hover {
+      background: #f8fafc;
+      border-color: #1B4F72;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(27, 79, 114, 0.15);
+    }
+
+    .signup-btn:active {
+      transform: translateY(0);
+    }
+
+    .signup-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 24px 0;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .divider span {
+      padding: 0 16px;
+    }
+
+    .email-form {
+      display: none;
+    }
+
+    .email-form.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #1B4F72;
+      box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.1);
+    }
+
+    .password-hint {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 6px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #1B4F72, #2471a3);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 4px 12px rgba(27, 79, 114, 0.3);
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #154360, #1e5f88);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(27, 79, 114, 0.4);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .back-btn {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 12px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .back-btn:hover {
+      color: #1B4F72;
+      text-decoration: underline;
+    }
+
+    .signin-link {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .signin-link a {
+      color: #1B4F72;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .signin-link a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .signup-header {
+        padding: 36px 24px;
+      }
+
+      .signup-body {
+        padding: 32px 24px;
+      }
+
+      .signup-header h1 {
+        font-size: 24px;
+      }
+
+      .welcome-text h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signup-container">
+    <!-- Header -->
+    <div class="signup-header">
+      <div class="logo-container">
+        <img src="../asset/logo-icon.png" alt="Guided Tech Solutions">
+      </div>
+      <h1>Guided Tech Solutions</h1>
+      <p>Create your account</p>
+    </div>
+
+    <!-- Body -->
+    <div class="signup-body">
+      <div class="welcome-text">
+        <h2>Get Started</h2>
+        <p>Create an account to access our services</p>
+      </div>
+
+      <!-- Error Message -->
+      <div class="error-message" id="errorMessage"></div>
+
+      <!-- Google Sign Up -->
+      <button class="signup-btn" id="googleSignUpBtn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Continue with Google
+      </button>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      <!-- Email/Password Form -->
+      <form class="email-form" id="emailForm">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="John Doe" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" required minlength="6">
+          <div class="password-hint">At least 6 characters</div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          Create Account
+        </button>
+
+        <button type="button" class="back-btn" id="backBtn">
+          ← Back to options
+        </button>
+      </form>
+
+      <!-- Email Sign Up Button (shows when form is hidden) -->
+      <button class="signup-btn" id="emailSignUpBtn">
+        <span>📧</span>
+        Continue with Email
+      </button>
+
+      <!-- Sign In Link -->
+      <div class="signin-link">
+        Already have an account? <a href="./login.html" id="signinLink">Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { auth } from '../admin/firebase.js';
+    import { 
+      signInWithPopup, 
+      GoogleAuthProvider,
+      createUserWithEmailAndPassword,
+      updateProfile
+    } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js';
+
+    const googleBtn = document.getElementById('googleSignUpBtn');
+    const emailBtn = document.getElementById('emailSignUpBtn');
+    const emailForm = document.getElementById('emailForm');
+    const backBtn = document.getElementById('backBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const signinLink = document.getElementById('signinLink');
+
+    // Get redirect URL from query params
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectUrl = urlParams.get('redirect') || '/app/portal-services.html';
+
+    // Update signin link to preserve redirect
+    signinLink.href += '?redirect=' + encodeURIComponent(redirectUrl);
+
+    // Show error
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add('show');
+    }
+
+    // Hide error
+    function hideError() {
+      errorMessage.classList.remove('show');
+    }
+
+    // Google Sign Up
+    googleBtn.addEventListener('click', async () => {
+      hideError();
+      googleBtn.disabled = true;
+      googleBtn.innerHTML = '<span class="loading-spinner"></span> Creating account...';
+
+      try {
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
+        
+        // Redirect to original page or default
+        window.location.href = redirectUrl;
+      } catch (error) {
+        console.error('Google sign up error:', error);
+        showError(error.message || 'Failed to sign up with Google');
+        googleBtn.disabled = false;
+        googleBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
+      }
+    });
+
+    // Show email form
+    emailBtn.addEventListener('click', () => {
+      emailBtn.style.display = 'none';
+      emailForm.classList.add('active');
+    });
+
+    // Back button
+    backBtn.addEventListener('click', () => {
+      emailForm.classList.remove('active');
+      emailBtn.style.display = 'flex';
+      hideError();
+    });
+
+    // Email/Password Sign Up
+    emailForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (password.length < 6) {
+        showError('Password must be at least 6 characters');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="loading-spinner"></span> Creating account...';
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        
+        // Update display name
+        await updateProfile(userCredential.user, {
+          displayName: name
+        });
+        
+        // Redirect to original page or default
+        window.location.href = redirectUrl;
+      } catch (error) {
+        console.error('Email sign up error:', error);
+        
+        let errorMsg = 'Failed to create account';
+        if (error.code === 'auth/email-already-in-use') {
+          errorMsg = 'This email is already registered. Try signing in instead.';
+        } else if (error.code === 'auth/invalid-email') {
+          errorMsg = 'Invalid email address';
+        } else if (error.code === 'auth/weak-password') {
+          errorMsg = 'Password is too weak. Use at least 6 characters.';
+        }
+        
+        showError(errorMsg);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account';
+      }
+    });
+
+    // Check if already signed in
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // Already signed in, redirect immediately
+        window.location.href = redirectUrl;
+      }
+    });
+  </script>
+
+</body>
+</html>
