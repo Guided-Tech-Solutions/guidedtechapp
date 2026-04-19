@@ -1,0 +1,18 @@
+{
+  "name": "guided-tech-api",
+  "version": "1.0.0",
+  "description": "Vercel API functions for Stripe payments and SendGrid emails",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.0",
+    "stripe": "^14.0.0",
+    "firebase-admin": "^12.0.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18"
+  }
+}
