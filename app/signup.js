@@ -1,15 +1,15 @@
 /* ============================================================
    FILE: app/signup.js
-   Signup page functionality
+   User signup functionality
    ============================================================ */
 
-import { auth } from '../admin/firebase.js';
+import { auth } from './firebase.js';
 import { 
   signInWithPopup, 
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   updateProfile
-} from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
 
 const googleBtn = document.getElementById('googleSignUpBtn');
 const emailBtn = document.getElementById('emailSignUpBtn');
@@ -21,7 +21,7 @@ const signinLink = document.getElementById('signinLink');
 
 // Get redirect URL from query params
 const urlParams = new URLSearchParams(window.location.search);
-const redirectUrl = urlParams.get('redirect') || '/app/portal-services.html';
+const redirectUrl = urlParams.get('redirect') || './portal-services.html';
 
 // Update signin link to preserve redirect
 signinLink.href += '?redirect=' + encodeURIComponent(redirectUrl);
