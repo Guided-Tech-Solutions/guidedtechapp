@@ -1,14 +1,14 @@
 /* ============================================================
    FILE: app/login.js
-   Login page functionality
+   User login functionality
    ============================================================ */
 
-import { auth } from '../admin/firebase.js';
+import { auth } from './firebase.js';
 import { 
   signInWithPopup, 
   GoogleAuthProvider,
   signInWithEmailAndPassword 
-} from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
 
 const googleBtn = document.getElementById('googleSignInBtn');
 const emailBtn = document.getElementById('emailSignInBtn');
@@ -20,7 +20,7 @@ const signupLink = document.getElementById('signupLink');
 
 // Get redirect URL from query params
 const urlParams = new URLSearchParams(window.location.search);
-const redirectUrl = urlParams.get('redirect') || '/app/portal-services.html';
+const redirectUrl = urlParams.get('redirect') || './portal-services.html';
 
 // Update signup link to preserve redirect
 signupLink.href += '?redirect=' + encodeURIComponent(redirectUrl);
