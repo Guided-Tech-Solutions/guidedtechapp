@@ -29,14 +29,3 @@ export const analytics = getAnalytics(app);
 
 // Export app for any additional Firebase services
 export default app;
-
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize services
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-
-// Export app for any additional Firebase services
-export default app;
