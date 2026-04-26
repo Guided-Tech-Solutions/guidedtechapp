@@ -48,7 +48,7 @@ auth.onAuthStateChanged(async (user) => {
 
   try {
     // Verify admin role
-    const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+    const adminDoc = await getDoc(doc(db, 'Admins', user.uid));
     
     if (!adminDoc.exists() || !adminDoc.data().active) {
       // Not an admin or disabled - sign out and redirect
