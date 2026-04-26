@@ -97,9 +97,14 @@ form.addEventListener('submit', async (e) => {
 });
 
 /* ══════════════════════════════
-   CHECK IF ALREADY SIGNED IN
+   CHECK IF ALREADY SIGNED IN - DISABLED TO PREVENT LOOPS
 ══════════════════════════════ */
 
+// Commented out to prevent infinite redirect loops
+// If you're already signed in, you can manually go to dashboard
+// or just sign in again (it will redirect after form submit)
+
+/*
 auth.onAuthStateChanged(async (user) => {
   if (user) {
     // Check if user is admin
@@ -118,3 +123,4 @@ auth.onAuthStateChanged(async (user) => {
     }
   }
 });
+*/
