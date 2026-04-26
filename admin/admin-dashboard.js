@@ -5,7 +5,8 @@
 
 import { auth, db } from './firebase-admin.js';
 import { 
-  signOut 
+  signOut,
+  createUserWithEmailAndPassword
 } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
 import {
   collection,
@@ -20,7 +21,8 @@ import {
   orderBy,
   limit,
   serverTimestamp,
-  onSnapshot
+  onSnapshot,
+  setDoc
 } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js';
 
 /* ══════════════════════════════
@@ -733,7 +735,8 @@ window.viewPayment = function(paymentId) {
 
 function loadSettings() {
   // Settings are loaded from Firebase config or environment variables
-  // For now, show empty form - admin can fill and save
+  // Load admins for admin management
+  loadAdmins();
 }
 
 function setupButtons() {
@@ -951,6 +954,204 @@ function setupSettingsForms() {
     alert('General settings saved!');
   });
 }
+
+/* ══════════════════════════════
+   ADMIN MANAGEMENT
+══════════════════════════════ */
+
+let editingAdminId = null;
+
+async function loadAdmins() {
+  const tbody = document.getElementById('adminsTableBody');
+  if (!tbody) return;
+
+  try {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--admin-text-light);">Loading admins...</td></tr>';
+
+    const adminsSnapshot = await getDocs(collection(db, 'Admins'));
+    
+    if (adminsSnapshot.empty) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--admin-text-light);">No admins found</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = '';
+    
+    adminsSnapshot.forEach((adminDoc) => {
+      const admin = adminDoc.data();
+      const adminId = adminDoc.id;
+      
+      const createdDate = admin.createdAt?.toDate ? 
+        admin.createdAt.toDate().toLocaleDateString() : 
+        'N/A';
+      
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>
+          <div class="table-user">
+            <div class="table-avatar">${admin.name?.charAt(0).toUpperCase() || 'A'}</div>
+            <div class="table-user-info">
+              <div class="table-user-name">${esc(admin.name || 'Unknown')}</div>
+            </div>
+          </div>
+        </td>
+        <td>${esc(admin.email || 'N/A')}</td>
+        <td><span class="status-badge ${admin.role === 'super_admin' ? 'active' : 'pending'}">${esc(admin.role || 'admin')}</span></td>
+        <td><span class="status-badge ${admin.active ? 'active' : 'inactive'}">${admin.active ? 'Active' : 'Inactive'}</span></td>
+        <td>${createdDate}</td>
+        <td>
+          <div class="table-actions">
+            ${adminId !== currentAdmin.uid ? `
+              <button class="table-btn" onclick="editAdmin('${adminId}')">Edit</button>
+              <button class="table-btn table-btn-danger" onclick="toggleAdminStatus('${adminId}', ${admin.active})">
+                ${admin.active ? 'Deactivate' : 'Activate'}
+              </button>
+            ` : '<span style="color: var(--admin-text-muted); font-size: 12px;">Current User</span>'}
+          </div>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+
+  } catch (error) {
+    console.error('Error loading admins:', error);
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--admin-danger);">Error loading admins</td></tr>';
+  }
+}
+
+// Add new admin button
+document.getElementById('addAdminBtn')?.addEventListener('click', () => {
+  editingAdminId = null;
+  document.getElementById('adminModalTitle').textContent = 'Add New Admin';
+  document.getElementById('adminSubmitText').textContent = 'Create Admin';
+  document.getElementById('adminForm').reset();
+  document.getElementById('adminActive').checked = true;
+  document.getElementById('adminPassword').required = true;
+  openModal('adminModal');
+});
+
+// Admin form submission
+document.getElementById('adminForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('adminName').value.trim();
+  const email = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPassword').value;
+  const role = document.getElementById('adminRole').value;
+  const active = document.getElementById('adminActive').checked;
+
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  const originalText = submitBtn.innerHTML;
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span style="opacity: 0.7;">Creating...</span>';
+
+  try {
+    if (editingAdminId) {
+      // Update existing admin (just Firestore doc, can't change Firebase Auth email easily)
+      await updateDoc(doc(db, 'Admins', editingAdminId), {
+        name,
+        role,
+        active,
+        updatedAt: serverTimestamp()
+      });
+
+      alert('✅ Admin updated successfully!');
+    } else {
+      // Create new admin in Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const newUserId = userCredential.user.uid;
+
+      // Create admin document in Firestore
+      await setDoc(doc(db, 'Admins', newUserId), {
+        name,
+        email,
+        role,
+        active,
+        createdAt: serverTimestamp(),
+        createdBy: currentAdmin.uid
+      });
+
+      // Sign back in as the current admin (because createUser signs in as new user)
+      // We'll handle this by just reloading the page
+      alert('✅ New admin created successfully!\n\n⚠️ The page will reload to refresh your session.');
+      window.location.reload();
+      return;
+    }
+
+    closeModal('adminModal');
+    loadAdmins();
+    
+  } catch (error) {
+    console.error('Error creating/updating admin:', error);
+    
+    let errorMsg = 'Failed to save admin. ';
+    if (error.code === 'auth/email-already-in-use') {
+      errorMsg += 'This email is already in use.';
+    } else if (error.code === 'auth/invalid-email') {
+      errorMsg += 'Invalid email address.';
+    } else if (error.code === 'auth/weak-password') {
+      errorMsg += 'Password should be at least 6 characters.';
+    } else {
+      errorMsg += error.message;
+    }
+    
+    alert('❌ ' + errorMsg);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalText;
+  }
+});
+
+// Edit admin function (global scope)
+window.editAdmin = async (adminId) => {
+  try {
+    const adminDoc = await getDoc(doc(db, 'Admins', adminId));
+    if (!adminDoc.exists()) {
+      alert('Admin not found');
+      return;
+    }
+
+    const admin = adminDoc.data();
+    editingAdminId = adminId;
+
+    document.getElementById('adminModalTitle').textContent = 'Edit Admin';
+    document.getElementById('adminSubmitText').textContent = 'Update Admin';
+    document.getElementById('adminName').value = admin.name || '';
+    document.getElementById('adminEmail').value = admin.email || '';
+    document.getElementById('adminEmail').disabled = true; // Can't change email easily
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('adminPassword').required = false; // Don't require password for edits
+    document.getElementById('adminPassword').placeholder = 'Leave blank to keep current password';
+    document.getElementById('adminRole').value = admin.role || 'admin';
+    document.getElementById('adminActive').checked = admin.active !== false;
+
+    openModal('adminModal');
+  } catch (error) {
+    console.error('Error loading admin:', error);
+    alert('Error loading admin details');
+  }
+};
+
+// Toggle admin status function (global scope)
+window.toggleAdminStatus = async (adminId, currentStatus) => {
+  const action = currentStatus ? 'deactivate' : 'activate';
+  const confirm = window.confirm(`Are you sure you want to ${action} this admin?`);
+  
+  if (!confirm) return;
+
+  try {
+    await updateDoc(doc(db, 'Admins', adminId), {
+      active: !currentStatus,
+      updatedAt: serverTimestamp()
+    });
+
+    alert(`✅ Admin ${action}d successfully!`);
+    loadAdmins();
+  } catch (error) {
+    console.error('Error toggling admin status:', error);
+    alert('❌ Failed to update admin status');
+  }
+};
 
 /* ══════════════════════════════
    UTILITY FUNCTIONS
