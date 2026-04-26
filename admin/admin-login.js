@@ -108,7 +108,10 @@ auth.onAuthStateChanged(async (user) => {
       
       if (adminDoc.exists() && adminDoc.data().active) {
         // Already signed in as admin, redirect to dashboard
-        window.location.href = './admin-dashboard.html';
+        // Only redirect if we're actually on the login page
+        if (window.location.pathname.includes('admin-login.html')) {
+          window.location.href = './admin-dashboard.html';
+        }
       }
     } catch (error) {
       console.error('Auth state check error:', error);
