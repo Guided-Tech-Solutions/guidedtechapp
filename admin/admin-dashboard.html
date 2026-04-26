@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Dashboard — Guided Tech Solutions</title>
+  <link rel="shortcut icon" href="../asset/logo-icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin.css">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-header">
+      <div class="admin-logo">
+        <img src="../asset/logo-icon.png" alt="GTS">
+        <span>GTS Admin</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <a href="#" class="admin-nav-link active" data-section="dashboard">
+        <span class="nav-icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="admin-nav-link" data-section="users">
+        <span class="nav-icon">👥</span>
+        <span>Users</span>
+      </a>
+      <a href="#" class="admin-nav-link" data-section="subscriptions">
+        <span class="nav-icon">💳</span>
+        <span>Subscriptions</span>
+      </a>
+      <a href="#" class="admin-nav-link" data-section="services">
+        <span class="nav-icon">⚙️</span>
+        <span>Services</span>
+      </a>
+      <a href="#" class="admin-nav-link" data-section="plans">
+        <span class="nav-icon">📦</span>
+        <span>Plans</span>
+      </a>
+      <a href="#" class="admin-nav-link" data-section="payments">
+        <span class="nav-icon">💰</span>
+        <span>Payments</span>
+      </a>
+      <a href="#" class="admin-nav-link" data-section="settings">
+        <span class="nav-icon">🔧</span>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      <div class="admin-profile">
+        <div class="admin-avatar" id="adminAvatar">A</div>
+        <div class="admin-info">
+          <div class="admin-name" id="adminName">Admin</div>
+          <div class="admin-email" id="adminEmail">admin@example.com</div>
+        </div>
+      </div>
+      <button class="admin-logout" id="adminLogout">
+        <span>🚪</span> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <button class="mobile-toggle" id="mobileToggle">☰</button>
+        <h1 class="page-title" id="pageTitle">Dashboard</h1>
+      </div>
+      <div class="admin-header-right">
+        <button class="header-btn" id="refreshBtn">🔄 Refresh</button>
+        <button class="header-btn" id="exportBtn">📥 Export</button>
+      </div>
+    </header>
+
+    <!-- Dashboard Section -->
+    <section class="admin-section active" id="section-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-info">
+            <div class="stat-label">Total Users</div>
+            <div class="stat-value" id="statTotalUsers">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💳</div>
+          <div class="stat-info">
+            <div class="stat-label">Active Subscriptions</div>
+            <div class="stat-value" id="statActiveSubs">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <div class="stat-label">Revenue</div>
+            <div class="stat-value" id="statRevenue">$0.00</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div class="stat-info">
+            <div class="stat-label">Conversion Rate</div>
+            <div class="stat-value" id="statConversion">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>Recent Activity</h2>
+          </div>
+          <div class="card-body" id="activityList">
+            <p style="color: var(--admin-text-muted); font-size: 13px;">No recent activity</p>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2>Recent Transactions</h2>
+          </div>
+          <div class="card-body" id="transactionList">
+            <p style="color: var(--admin-text-muted); font-size: 13px;">No recent transactions</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Users Section -->
+    <section class="admin-section" id="section-users">
+      <div class="section-header">
+        <h2>Users Management</h2>
+        <button class="btn-primary" id="addUserBtn">+ Add User</button>
+      </div>
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Subscriptions</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <tr>
+              <td colspan="6" style="text-align: center; color: var(--admin-text-muted);">
+                Loading users...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Subscriptions Section -->
+    <section class="admin-section" id="section-subscriptions">
+      <div class="section-header">
+        <h2>Subscriptions</h2>
+      </div>
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Plan/Service</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Start Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="subsTableBody">
+            <tr>
+              <td colspan="6" style="text-align: center; color: var(--admin-text-muted);">
+                Loading subscriptions...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="admin-section" id="section-services">
+      <div class="section-header">
+        <h2>Services Management</h2>
+        <button class="btn-primary" id="addServiceBtn">+ Add Service</button>
+      </div>
+      <div class="services-grid" id="servicesGrid">
+        <div class="loading-card">Loading services...</div>
+      </div>
+    </section>
+
+    <!-- Plans Section -->
+    <section class="admin-section" id="section-plans">
+      <div class="section-header">
+        <h2>Plans Management</h2>
+        <button class="btn-primary" id="addPlanBtn">+ Add Plan</button>
+      </div>
+      <div class="plans-grid" id="plansGrid">
+        <div class="loading-card">Loading plans...</div>
+      </div>
+    </section>
+
+    <!-- Payments Section -->
+    <section class="admin-section" id="section-payments">
+      <div class="section-header">
+        <h2>Payment Transactions</h2>
+      </div>
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>User</th>
+              <th>Amount</th>
+              <th>Item</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="paymentsTableBody">
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--admin-text-muted);">
+                Loading payments...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Settings Section -->
+    <section class="admin-section" id="section-settings">
+      <div class="section-header">
+        <h2>Settings</h2>
+      </div>
+
+      <div class="settings-container">
+        <!-- Stripe Settings -->
+        <div class="settings-card">
+          <h3>Stripe Configuration</h3>
+          <form id="stripeSettingsForm">
+            <div class="form-group">
+              <label>Stripe Publishable Key</label>
+              <input type="text" placeholder="pk_live_..." class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Stripe Secret Key</label>
+              <input type="password" placeholder="sk_live_..." class="form-input">
+            </div>
+            <button type="submit" class="btn-primary">Save Stripe Settings</button>
+          </form>
+        </div>
+
+        <!-- Email Settings -->
+        <div class="settings-card">
+          <h3>Email Configuration</h3>
+          <form id="emailSettingsForm">
+            <div class="form-group">
+              <label>From Email</label>
+              <input type="email" placeholder="noreply@guidedtechms.com" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Support Email</label>
+              <input type="email" placeholder="support@guidedtechms.com" class="form-input">
+            </div>
+            <button type="submit" class="btn-primary">Save Email Settings</button>
+          </form>
+        </div>
+
+        <!-- General Settings -->
+        <div class="settings-card">
+          <h3>General Settings</h3>
+          <form id="generalSettingsForm">
+            <div class="form-group">
+              <label>Site Name</label>
+              <input type="text" value="Guided Tech Solutions" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Maintenance Mode</label>
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <button type="submit" class="btn-primary">Save General Settings</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- User Modal -->
+  <div class="modal" id="userModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add/Edit User</h2>
+        <button class="modal-close" data-modal="userModal">×</button>
+      </div>
+      <form id="userForm">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="userName" required class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="userEmail" required class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="userStatus" class="form-input">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="banned">Banned</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-modal="userModal">Cancel</button>
+          <button type="submit" class="btn-primary">Save User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Service Modal -->
+  <div class="modal" id="serviceModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add/Edit Service</h2>
+        <button class="modal-close" data-modal="serviceModal">×</button>
+      </div>
+      <form id="serviceForm">
+        <div class="form-group">
+          <label>Service Name</label>
+          <input type="text" id="serviceName" required class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Icon (Emoji)</label>
+          <input type="text" id="serviceIcon" placeholder="🤖" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="serviceDescription" rows="3" class="form-input"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Price</label>
+            <input type="number" id="servicePrice" step="0.01" required class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Period</label>
+            <select id="servicePeriod" class="form-input">
+              <option value="month">Month</option>
+              <option value="year">Year</option>
+              <option value="once">One-time</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="serviceActive" checked>
+            <span>Active</span>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-modal="serviceModal">Cancel</button>
+          <button type="submit" class="btn-primary">Save Service</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Plan Modal -->
+  <div class="modal" id="planModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add/Edit Plan</h2>
+        <button class="modal-close" data-modal="planModal">×</button>
+      </div>
+      <form id="planForm">
+        <div class="form-group">
+          <label>Plan Name</label>
+          <input type="text" id="planName" required class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Icon (Emoji)</label>
+          <input type="text" id="planIcon" placeholder="📦" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="planDescription" rows="3" class="form-input"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Price</label>
+            <input type="number" id="planPrice" step="0.01" required class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Billing Period</label>
+            <select id="planBilling" class="form-input">
+              <option value="month">Monthly</option>
+              <option value="year">Yearly</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Features (one per line)</label>
+          <textarea id="planFeatures" rows="5" placeholder="Feature 1&#10;Feature 2&#10;Feature 3" class="form-input"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="planPopular">
+            <span>Mark as Popular</span>
+          </label>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="planActive" checked>
+            <span>Active</span>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-modal="planModal">Cancel</button>
+          <button type="submit" class="btn-primary">Save Plan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="./admin-dashboard.js"></script>
+
+</body>
+</html>
