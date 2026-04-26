@@ -248,6 +248,38 @@
       </div>
 
       <div class="settings-container">
+        <!-- Admin Management -->
+        <div class="settings-card" style="grid-column: 1 / -1;">
+          <h3>👥 Admin Management</h3>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <p style="color: var(--admin-text-light); margin: 0;">Manage administrator accounts and permissions</p>
+            <button class="btn-primary" id="addAdminBtn">➕ Add New Admin</button>
+          </div>
+
+          <div class="table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Admin</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminsTableBody">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 40px; color: var(--admin-text-light);">
+                    Loading admins...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <!-- Stripe Settings -->
         <div class="settings-card">
           <h3>Stripe Configuration</h3>
@@ -434,6 +466,53 @@
         <div class="modal-footer">
           <button type="button" class="btn-secondary" data-modal="planModal">Cancel</button>
           <button type="submit" class="btn-primary">Save Plan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Modal -->
+  <div class="modal" id="adminModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="adminModalTitle">Add New Admin</h2>
+        <button class="modal-close" data-modal="adminModal">×</button>
+      </div>
+      <form id="adminForm">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="adminName" required class="form-input" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="adminEmail" required class="form-input" placeholder="admin@guidedtechms.com">
+        </div>
+        <div class="form-group">
+          <label>Temporary Password *</label>
+          <input type="password" id="adminPassword" required class="form-input" placeholder="Min. 6 characters" minlength="6">
+          <small style="color: var(--admin-text-light); font-size: 12px; display: block; margin-top: 4px;">
+            The admin will use this password to sign in for the first time
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Role *</label>
+          <select id="adminRole" class="form-input">
+            <option value="super_admin">Super Admin (Full Access)</option>
+            <option value="admin">Admin (Standard Access)</option>
+            <option value="moderator">Moderator (Limited Access)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="adminActive" checked>
+            <span>Active (Can sign in immediately)</span>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-modal="adminModal">Cancel</button>
+          <button type="submit" class="btn-primary">
+            <span id="adminSubmitText">Create Admin</span>
+          </button>
         </div>
       </form>
     </div>
