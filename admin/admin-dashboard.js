@@ -39,20 +39,16 @@ let allPayments = [];
    AUTH CHECK & PROTECTION
 ══════════════════════════════ */
 
-// TEMPORARILY DISABLE ALL REDIRECTS TO DEBUG
-const STOP_REDIRECTS = true; // Set to false once working
+// Set to false once everything is working to enable redirects
+const STOP_REDIRECTS = false;
 
 auth.onAuthStateChanged(async (user) => {
   console.log('🔍 Dashboard Auth Check Started');
-  console.log('User object:', user);
   
   if (!user) {
     console.log('❌ No user signed in');
-    if (!STOP_REDIRECTS) {
-      window.location.replace('./admin-login.html');
-    } else {
-      document.body.innerHTML = '<div style="padding:20px;background:#7f1d1d;color:white;font-family:monospace;"><h1>❌ NOT SIGNED IN</h1><p>No user is authenticated. Please go to <a href="./admin-login.html" style="color:#60a5fa;">admin-login.html</a> and sign in.</p></div>';
-    }
+    // Redirect silently without showing error
+    window.location.replace('./admin-login.html');
     return;
   }
 
@@ -69,102 +65,28 @@ auth.onAuthStateChanged(async (user) => {
     
     if (!adminDoc.exists()) {
       console.error('❌ Admin document not found for UID:', user.uid);
-      console.log('Expected path: Admins/' + user.uid);
-      
-      if (!STOP_REDIRECTS) {
-        await signOut(auth);
-        window.location.replace('./admin-login.html');
-      } else {
-        document.body.innerHTML = `
-          <div style="padding:20px;background:#7f1d1d;color:white;font-family:monospace;">
-            <h1>❌ ADMIN DOCUMENT NOT FOUND</h1>
-            <p><strong>User:</strong> ${user.email}</p>
-            <p><strong>UID:</strong> ${user.uid}</p>
-            <p><strong>Expected Path:</strong> Admins/${user.uid}</p>
-            <h3>Fix:</h3>
-            <ol>
-              <li>Go to Firebase Console → Firestore Database</li>
-              <li>Check collection name is exactly: <strong>Admins</strong> (capital A)</li>
-              <li>Check document ID is exactly: <strong>${user.uid}</strong></li>
-              <li>If document doesn't exist, create it with these fields:
-                <ul>
-                  <li>name: "Super Admin"</li>
-                  <li>email: "${user.email}"</li>
-                  <li>active: true (boolean)</li>
-                  <li>role: "super_admin"</li>
-                </ul>
-              </li>
-            </ol>
-          </div>
-        `;
-      }
+      await signOut(auth);
+      window.location.replace('./admin-login.html');
       return;
     }
     
     const adminData = adminDoc.data();
     console.log('✅ Admin document found:', adminData);
-    console.log('Active status:', adminData.active);
-    console.log('Active type:', typeof adminData.active);
     
     if (!adminData.active) {
       console.error('❌ Admin account is not active');
-      console.error('Active value:', adminData.active);
-      console.error('Active type:', typeof adminData.active);
-      
-      if (!STOP_REDIRECTS) {
-        await signOut(auth);
-        window.location.replace('./admin-login.html');
-      } else {
-        document.body.innerHTML = `
-          <div style="padding:20px;background:#7f1d1d;color:white;font-family:monospace;">
-            <h1>❌ ADMIN ACCOUNT NOT ACTIVE</h1>
-            <p><strong>User:</strong> ${user.email}</p>
-            <p><strong>Active status:</strong> ${adminData.active}</p>
-            <p><strong>Type:</strong> ${typeof adminData.active}</p>
-            <h3>Fix:</h3>
-            <ol>
-              <li>Go to Firebase Console → Firestore Database → Admins → ${user.uid}</li>
-              <li>Find the "active" field</li>
-              <li>Make sure it's type: <strong>boolean</strong> (not string)</li>
-              <li>Set value to: <strong>true</strong></li>
-              <li>Click Update</li>
-            </ol>
-            <p>Current data: <pre>${JSON.stringify(adminData, null, 2)}</pre></p>
-          </div>
-        `;
-      }
+      await signOut(auth);
+      window.location.replace('./admin-login.html');
       return;
     }
 
     console.log('✅ All checks passed! Initializing admin dashboard...');
     currentAdmin = { uid: user.uid, ...adminData };
-    
-    // Show success message briefly
-    const successDiv = document.createElement('div');
-    successDiv.style.cssText = 'position:fixed;top:20px;right:20px;background:#065f46;color:white;padding:15px;border-radius:8px;z-index:9999;font-family:monospace;';
-    successDiv.innerHTML = '✅ Admin authenticated successfully!';
-    document.body.appendChild(successDiv);
-    setTimeout(() => successDiv.remove(), 3000);
-    
     initializeAdmin();
 
   } catch (error) {
     console.error('❌ Auth check error:', error);
-    console.error('Error message:', error.message);
-    console.error('Error code:', error.code);
-    console.error('Full error:', error);
-    
-    document.body.innerHTML = `
-      <div style="padding:20px;background:#7f1d1d;color:white;font-family:monospace;">
-        <h1>❌ ERROR CHECKING ADMIN STATUS</h1>
-        <p><strong>Error:</strong> ${error.message}</p>
-        <p><strong>Code:</strong> ${error.code || 'none'}</p>
-        <h3>Full Error:</h3>
-        <pre>${JSON.stringify(error, null, 2)}</pre>
-        <h3>Console Log:</h3>
-        <p>Check browser console (F12) for detailed logs</p>
-      </div>
-    `;
+    window.location.replace('./admin-login.html');
   }
 });
 
