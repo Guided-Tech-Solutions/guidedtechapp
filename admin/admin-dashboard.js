@@ -41,8 +41,8 @@ let allPayments = [];
 
 auth.onAuthStateChanged(async (user) => {
   if (!user) {
-    // Not signed in - redirect to login
-    window.location.href = './admin-login.html';
+    // Not signed in - redirect to login once
+    window.location.replace('./admin-login.html');
     return;
   }
 
@@ -50,19 +50,28 @@ auth.onAuthStateChanged(async (user) => {
     // Verify admin role
     const adminDoc = await getDoc(doc(db, 'Admins', user.uid));
     
-    if (!adminDoc.exists() || !adminDoc.data().active) {
-      // Not an admin or disabled - sign out and redirect
+    if (!adminDoc.exists()) {
+      console.error('Admin document not found for UID:', user.uid);
       await signOut(auth);
-      window.location.href = './admin-login.html';
+      window.location.replace('./admin-login.html');
+      return;
+    }
+    
+    const adminData = adminDoc.data();
+    
+    if (!adminData.active) {
+      console.error('Admin account is not active');
+      await signOut(auth);
+      window.location.replace('./admin-login.html');
       return;
     }
 
-    currentAdmin = { uid: user.uid, ...adminDoc.data() };
+    currentAdmin = { uid: user.uid, ...adminData };
     initializeAdmin();
 
   } catch (error) {
     console.error('Auth check error:', error);
-    window.location.href = './admin-login.html';
+    window.location.replace('./admin-login.html');
   }
 });
 
