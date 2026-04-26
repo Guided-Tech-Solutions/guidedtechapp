@@ -6,11 +6,11 @@
 import { auth, db } from './firebase-admin.js';
 import { 
   signInWithEmailAndPassword 
-} from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js';
+} from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
 import { 
   doc, 
   getDoc 
-} from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js';
 
 const form = document.getElementById('adminLoginForm');
 const submitBtn = document.getElementById('submitBtn');
