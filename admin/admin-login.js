@@ -49,7 +49,7 @@ form.addEventListener('submit', async (e) => {
     const user = userCredential.user;
 
     // Verify admin role in Firestore
-    const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+    const adminDoc = await getDoc(doc(db, 'Admins', user.uid));
 
     if (!adminDoc.exists()) {
       // Not an admin - sign out immediately
@@ -104,7 +104,7 @@ auth.onAuthStateChanged(async (user) => {
   if (user) {
     // Check if user is admin
     try {
-      const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+      const adminDoc = await getDoc(doc(db, 'Admins', user.uid));
       
       if (adminDoc.exists() && adminDoc.data().active) {
         // Already signed in as admin, redirect to dashboard
