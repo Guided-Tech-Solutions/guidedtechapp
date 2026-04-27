@@ -7,9 +7,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
 
-// Firebase configuration
+// Firebase configuration - guidedtechapp project
 const firebaseConfig = {
   apiKey: "AIzaSyD0f7L_vf2HZjzzxTyH2-Xu9rC6KWzKUuU",
   authDomain: "guidedtechapp.firebaseapp.com",
@@ -26,7 +25,8 @@ const app = initializeApp(firebaseConfig);
 // Initialize services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const analytics = getAnalytics(app);
 
 // Export app for any additional Firebase services
 export default app;
+
+console.log('✅ Firebase initialized for user portal');
