@@ -49,12 +49,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .logo-container img {
-      width: 50px;
-      height: 50px;
-      filter: brightness(0) invert(1);
+      font-size: 40px;
     }
 
     .signup-header h1 {
@@ -116,10 +111,6 @@
       border-color: #1B4F72;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(27, 79, 114, 0.15);
-    }
-
-    .signup-btn:active {
-      transform: translateY(0);
     }
 
     .signup-btn img {
@@ -210,10 +201,6 @@
       box-shadow: 0 6px 16px rgba(27, 79, 114, 0.4);
     }
 
-    .submit-btn:active {
-      transform: translateY(0);
-    }
-
     .submit-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
@@ -285,60 +272,32 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-
-    @media (max-width: 480px) {
-      .signup-header {
-        padding: 36px 24px;
-      }
-
-      .signup-body {
-        padding: 32px 24px;
-      }
-
-      .signup-header h1 {
-        font-size: 24px;
-      }
-
-      .welcome-text h2 {
-        font-size: 20px;
-      }
-    }
   </style>
 </head>
 <body>
 
   <div class="signup-container">
-    <!-- Header -->
     <div class="signup-header">
-      <div class="logo-container">
-        <img src="../asset/logo-icon.png" alt="Guided Tech Solutions">
-      </div>
+      <div class="logo-container">🚀</div>
       <h1>Guided Tech Solutions</h1>
       <p>Create your account</p>
     </div>
 
-    <!-- Body -->
     <div class="signup-body">
       <div class="welcome-text">
         <h2>Get Started</h2>
         <p>Create an account to access our services</p>
       </div>
 
-      <!-- Error Message -->
       <div class="error-message" id="errorMessage"></div>
 
-      <!-- Google Sign Up -->
       <button class="signup-btn" id="googleSignUpBtn">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
         Continue with Google
       </button>
 
-      <!-- Divider -->
-      <div class="divider">
-        <span>or</span>
-      </div>
+      <div class="divider"><span>or</span></div>
 
-      <!-- Email/Password Form -->
       <form class="email-form" id="emailForm">
         <div class="form-group">
           <label for="name">Full Name</label>
@@ -356,150 +315,22 @@
           <div class="password-hint">At least 6 characters</div>
         </div>
 
-        <button type="submit" class="submit-btn" id="submitBtn">
-          Create Account
-        </button>
-
-        <button type="button" class="back-btn" id="backBtn">
-          ← Back to options
-        </button>
+        <button type="submit" class="submit-btn" id="submitBtn">Create Account</button>
+        <button type="button" class="back-btn" id="backBtn">← Back to options</button>
       </form>
 
-      <!-- Email Sign Up Button (shows when form is hidden) -->
       <button class="signup-btn" id="emailSignUpBtn">
         <span>📧</span>
         Continue with Email
       </button>
 
-      <!-- Sign In Link -->
       <div class="signin-link">
         Already have an account? <a href="./login.html" id="signinLink">Sign In</a>
       </div>
     </div>
   </div>
 
-  <!-- Firebase -->
-  <script type="module">
-    import { auth } from '../admin/firebase.js';
-    import { 
-      signInWithPopup, 
-      GoogleAuthProvider,
-      createUserWithEmailAndPassword,
-      updateProfile
-    } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js';
-
-    const googleBtn = document.getElementById('googleSignUpBtn');
-    const emailBtn = document.getElementById('emailSignUpBtn');
-    const emailForm = document.getElementById('emailForm');
-    const backBtn = document.getElementById('backBtn');
-    const submitBtn = document.getElementById('submitBtn');
-    const errorMessage = document.getElementById('errorMessage');
-    const signinLink = document.getElementById('signinLink');
-
-    // Get redirect URL from query params
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectUrl = urlParams.get('redirect') || '/app/portal-services.html';
-
-    // Update signin link to preserve redirect
-    signinLink.href += '?redirect=' + encodeURIComponent(redirectUrl);
-
-    // Show error
-    function showError(message) {
-      errorMessage.textContent = message;
-      errorMessage.classList.add('show');
-    }
-
-    // Hide error
-    function hideError() {
-      errorMessage.classList.remove('show');
-    }
-
-    // Google Sign Up
-    googleBtn.addEventListener('click', async () => {
-      hideError();
-      googleBtn.disabled = true;
-      googleBtn.innerHTML = '<span class="loading-spinner"></span> Creating account...';
-
-      try {
-        const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider);
-        
-        // Redirect to original page or default
-        window.location.href = redirectUrl;
-      } catch (error) {
-        console.error('Google sign up error:', error);
-        showError(error.message || 'Failed to sign up with Google');
-        googleBtn.disabled = false;
-        googleBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
-      }
-    });
-
-    // Show email form
-    emailBtn.addEventListener('click', () => {
-      emailBtn.style.display = 'none';
-      emailForm.classList.add('active');
-    });
-
-    // Back button
-    backBtn.addEventListener('click', () => {
-      emailForm.classList.remove('active');
-      emailBtn.style.display = 'flex';
-      hideError();
-    });
-
-    // Email/Password Sign Up
-    emailForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      hideError();
-
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      if (password.length < 6) {
-        showError('Password must be at least 6 characters');
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="loading-spinner"></span> Creating account...';
-
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        
-        // Update display name
-        await updateProfile(userCredential.user, {
-          displayName: name
-        });
-        
-        // Redirect to original page or default
-        window.location.href = redirectUrl;
-      } catch (error) {
-        console.error('Email sign up error:', error);
-        
-        let errorMsg = 'Failed to create account';
-        if (error.code === 'auth/email-already-in-use') {
-          errorMsg = 'This email is already registered. Try signing in instead.';
-        } else if (error.code === 'auth/invalid-email') {
-          errorMsg = 'Invalid email address';
-        } else if (error.code === 'auth/weak-password') {
-          errorMsg = 'Password is too weak. Use at least 6 characters.';
-        }
-        
-        showError(errorMsg);
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Create Account';
-      }
-    });
-
-    // Check if already signed in
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        // Already signed in, redirect immediately
-        window.location.href = redirectUrl;
-      }
-    });
-  </script>
+  <script type="module" src="./signup.js"></script>
 
 </body>
 </html>
