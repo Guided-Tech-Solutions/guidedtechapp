@@ -19,12 +19,21 @@ const submitBtn = document.getElementById('submitBtn');
 const errorMessage = document.getElementById('errorMessage');
 const signinLink = document.getElementById('signinLink');
 
+// Debug logging
+console.log('🔍 Signup.js loaded');
+console.log('Google button:', googleBtn);
+console.log('Email button:', emailBtn);
+console.log('Email form:', emailForm);
+console.log('Auth object:', auth);
+
 // Get redirect URL from query params
 const urlParams = new URLSearchParams(window.location.search);
 const redirectUrl = urlParams.get('redirect') || './portal-services.html';
 
 // Update signin link to preserve redirect
-signinLink.href += '?redirect=' + encodeURIComponent(redirectUrl);
+if (signinLink) {
+  signinLink.href += '?redirect=' + encodeURIComponent(redirectUrl);
+}
 
 /* ══════════════════════════════
    HELPER FUNCTIONS
@@ -43,19 +52,22 @@ function hideError() {
    GOOGLE SIGN UP
 ══════════════════════════════ */
 
-googleBtn.addEventListener('click', async () => {
+googleBtn?.addEventListener('click', async () => {
+  console.log('🔵 Google sign up button clicked!');
   hideError();
   googleBtn.disabled = true;
   googleBtn.innerHTML = '<span class="loading-spinner"></span> Creating account...';
 
   try {
+    console.log('Attempting Google sign up...');
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+    console.log('✅ Google sign up successful:', result.user.email);
     
     // Redirect to original page or default
     window.location.href = redirectUrl;
   } catch (error) {
-    console.error('Google sign up error:', error);
+    console.error('❌ Google sign up error:', error);
     showError(error.message || 'Failed to sign up with Google');
     googleBtn.disabled = false;
     googleBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
@@ -66,12 +78,15 @@ googleBtn.addEventListener('click', async () => {
    EMAIL FORM TOGGLE
 ══════════════════════════════ */
 
-emailBtn.addEventListener('click', () => {
+emailBtn?.addEventListener('click', () => {
+  console.log('📧 Email sign up button clicked!');
   emailBtn.style.display = 'none';
   emailForm.classList.add('active');
+  console.log('Email form should now be visible');
 });
 
-backBtn.addEventListener('click', () => {
+backBtn?.addEventListener('click', () => {
+  console.log('⬅️ Back button clicked');
   emailForm.classList.remove('active');
   emailBtn.style.display = 'flex';
   hideError();
