@@ -3,17 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow" />
   <title>Sign In — Guided Tech Solutions</title>
-  <link rel="shortcut icon" href="../asset/logo-icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -23,8 +16,7 @@
       justify-content: center;
       padding: 20px;
     }
-
-    .auth-container {
+    .login-container {
       background: white;
       border-radius: 24px;
       box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
@@ -32,14 +24,12 @@
       width: 100%;
       overflow: hidden;
     }
-
-    .auth-header {
+    .login-header {
       background: linear-gradient(135deg, #1B4F72 0%, #2471a3 100%);
       padding: 48px 40px;
       text-align: center;
       color: white;
     }
-
     .logo-container {
       width: 80px;
       height: 80px;
@@ -51,28 +41,15 @@
       justify-content: center;
       font-size: 40px;
     }
-
-    .auth-header h1 {
+    .login-header h1 {
       font-family: 'Poppins', sans-serif;
       font-size: 28px;
       font-weight: 700;
       margin-bottom: 8px;
     }
-
-    .auth-header p {
-      font-size: 15px;
-      opacity: 0.95;
-    }
-
-    .auth-body {
-      padding: 40px;
-    }
-
-    .welcome-text {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
+    .login-header p { font-size: 15px; opacity: 0.95; }
+    .login-body { padding: 40px; }
+    .welcome-text { text-align: center; margin-bottom: 32px; }
     .welcome-text h2 {
       font-family: 'Poppins', sans-serif;
       font-size: 22px;
@@ -80,13 +57,8 @@
       color: #0f172a;
       margin-bottom: 8px;
     }
-
-    .welcome-text p {
-      font-size: 14px;
-      color: #64748b;
-    }
-
-    .auth-btn {
+    .welcome-text p { font-size: 14px; color: #64748b; }
+    .login-btn {
       width: 100%;
       padding: 16px;
       background: white;
@@ -104,51 +76,29 @@
       font-family: 'Inter', sans-serif;
       margin-bottom: 16px;
     }
-
-    .auth-btn:hover {
+    .login-btn:hover {
       background: #f8fafc;
       border-color: #1B4F72;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(27, 79, 114, 0.15);
     }
-
-    .auth-btn img {
-      width: 20px;
-      height: 20px;
-    }
-
+    .login-btn img { width: 20px; height: 20px; }
     .divider {
       display: flex;
       align-items: center;
-      text-align: center;
       margin: 24px 0;
       color: #94a3b8;
       font-size: 13px;
     }
-
-    .divider::before,
-    .divider::after {
+    .divider::before, .divider::after {
       content: '';
       flex: 1;
       border-bottom: 1px solid #e2e8f0;
     }
-
-    .divider span {
-      padding: 0 16px;
-    }
-
-    .email-form {
-      display: none;
-    }
-
-    .email-form.active {
-      display: block;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
+    .divider span { padding: 0 16px; }
+    .email-form { display: none; }
+    .email-form.active { display: block; }
+    .form-group { margin-bottom: 20px; }
     .form-group label {
       display: block;
       font-size: 14px;
@@ -156,7 +106,6 @@
       color: #334155;
       margin-bottom: 8px;
     }
-
     .form-group input {
       width: 100%;
       padding: 12px 16px;
@@ -166,13 +115,11 @@
       font-family: 'Inter', sans-serif;
       transition: all 0.2s;
     }
-
     .form-group input:focus {
       outline: none;
       border-color: #1B4F72;
       box-shadow: 0 0 0 3px rgba(27, 79, 114, 0.1);
     }
-
     .submit-btn {
       width: 100%;
       padding: 14px;
@@ -187,19 +134,11 @@
       font-family: 'Inter', sans-serif;
       box-shadow: 0 4px 12px rgba(27, 79, 114, 0.3);
     }
-
     .submit-btn:hover {
       background: linear-gradient(135deg, #154360, #1e5f88);
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(27, 79, 114, 0.4);
     }
-
-    .submit-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     .back-btn {
       width: 100%;
       padding: 12px;
@@ -212,13 +151,8 @@
       margin-top: 12px;
       font-family: 'Inter', sans-serif;
     }
-
-    .back-btn:hover {
-      color: #1B4F72;
-      text-decoration: underline;
-    }
-
-    .auth-link {
+    .back-btn:hover { color: #1B4F72; text-decoration: underline; }
+    .signup-link {
       text-align: center;
       margin-top: 24px;
       padding-top: 24px;
@@ -226,17 +160,12 @@
       font-size: 14px;
       color: #64748b;
     }
-
-    .auth-link a {
+    .signup-link a {
       color: #1B4F72;
       font-weight: 600;
       text-decoration: none;
     }
-
-    .auth-link a:hover {
-      text-decoration: underline;
-    }
-
+    .signup-link a:hover { text-decoration: underline; }
     .error-message {
       background: #fee2e2;
       border: 1px solid #fecaca;
@@ -247,11 +176,7 @@
       margin-bottom: 20px;
       display: none;
     }
-
-    .error-message.show {
-      display: block;
-    }
-
+    .error-message.show { display: block; }
     .loading-spinner {
       display: inline-block;
       width: 16px;
@@ -261,30 +186,26 @@
       border-radius: 50%;
       animation: spin 0.6s linear infinite;
     }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-
-  <div class="auth-container">
-    <div class="auth-header">
+  <div class="login-container">
+    <div class="login-header">
       <div class="logo-container">🚀</div>
       <h1>Guided Tech Solutions</h1>
       <p>Access your account</p>
     </div>
 
-    <div class="auth-body">
+    <div class="login-body">
       <div class="welcome-text">
         <h2>Welcome Back</h2>
-        <p>Sign in to access your services and subscriptions</p>
+        <p>Sign in to access your services</p>
       </div>
 
       <div class="error-message" id="errorMessage"></div>
 
-      <button class="auth-btn" id="googleSignInBtn">
+      <button class="login-btn" id="googleSignInBtn">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
         Continue with Google
       </button>
@@ -294,30 +215,26 @@
       <form class="email-form" id="emailForm">
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+          <input type="email" id="email" required placeholder="you@example.com">
         </div>
-
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="••••••••" required>
+          <input type="password" id="password" required placeholder="Enter your password">
         </div>
-
         <button type="submit" class="submit-btn" id="submitBtn">Sign In</button>
         <button type="button" class="back-btn" id="backBtn">← Back to options</button>
       </form>
 
-      <button class="auth-btn" id="emailSignInBtn">
-        <span>📧</span>
-        Continue with Email
+      <button class="login-btn" id="emailSignInBtn">
+        📧 Continue with Email
       </button>
 
-      <div class="auth-link">
+      <div class="signup-link">
         Don't have an account? <a href="./signup.html" id="signupLink">Sign Up</a>
       </div>
     </div>
   </div>
 
   <script type="module" src="./login.js"></script>
-
 </body>
 </html>
