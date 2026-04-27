@@ -18,12 +18,7 @@ const submitBtn = document.getElementById('submitBtn');
 const errorMessage = document.getElementById('errorMessage');
 const signupLink = document.getElementById('signupLink');
 
-// Debug logging
 console.log('🔍 Login.js loaded');
-console.log('Google button:', googleBtn);
-console.log('Email button:', emailBtn);
-console.log('Email form:', emailForm);
-console.log('Auth object:', auth);
 
 // Get redirect URL from query params
 const urlParams = new URLSearchParams(window.location.search);
@@ -31,12 +26,8 @@ const redirectUrl = urlParams.get('redirect') || './portal-services.html';
 
 // Update signup link to preserve redirect
 if (signupLink) {
-  signupLink.href += '?redirect=' + encodeURIComponent(redirectUrl);
+  signupLink.href = './signup.html?redirect=' + encodeURIComponent(redirectUrl);
 }
-
-/* ══════════════════════════════
-   HELPER FUNCTIONS
-══════════════════════════════ */
 
 function showError(message) {
   errorMessage.textContent = message;
@@ -47,55 +38,41 @@ function hideError() {
   errorMessage.classList.remove('show');
 }
 
-/* ══════════════════════════════
-   GOOGLE SIGN IN
-══════════════════════════════ */
-
+/* Google Sign In */
 googleBtn?.addEventListener('click', async () => {
-  console.log('🔵 Google sign in button clicked!');
+  console.log('🔵 Google sign in clicked');
   hideError();
   googleBtn.disabled = true;
   googleBtn.innerHTML = '<span class="loading-spinner"></span> Signing in...';
 
   try {
-    console.log('Attempting Google sign in...');
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     console.log('✅ Google sign in successful:', result.user.email);
-    
-    // Redirect to original page or default
     window.location.href = redirectUrl;
   } catch (error) {
-    console.error('❌ Google sign in error:', error);
+    console.error('❌ Google error:', error);
     showError(error.message || 'Failed to sign in with Google');
     googleBtn.disabled = false;
     googleBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
   }
 });
 
-/* ══════════════════════════════
-   EMAIL FORM TOGGLE
-══════════════════════════════ */
-
+/* Email Form Toggle */
 emailBtn?.addEventListener('click', () => {
-  console.log('📧 Email sign in button clicked!');
+  console.log('📧 Email button clicked');
   emailBtn.style.display = 'none';
   emailForm.classList.add('active');
-  console.log('Email form should now be visible');
 });
 
 backBtn?.addEventListener('click', () => {
-  console.log('⬅️ Back button clicked');
   emailForm.classList.remove('active');
   emailBtn.style.display = 'flex';
   hideError();
 });
 
-/* ══════════════════════════════
-   EMAIL/PASSWORD SIGN IN
-══════════════════════════════ */
-
-emailForm.addEventListener('submit', async (e) => {
+/* Email/Password Sign In */
+emailForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   hideError();
 
@@ -107,11 +84,10 @@ emailForm.addEventListener('submit', async (e) => {
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    
-    // Redirect to original page or default
+    console.log('✅ Email sign in successful:', email);
     window.location.href = redirectUrl;
   } catch (error) {
-    console.error('Email sign in error:', error);
+    console.error('❌ Email error:', error);
     
     let errorMsg = 'Failed to sign in';
     if (error.code === 'auth/user-not-found') {
@@ -130,13 +106,10 @@ emailForm.addEventListener('submit', async (e) => {
   }
 });
 
-/* ══════════════════════════════
-   CHECK IF ALREADY SIGNED IN
-══════════════════════════════ */
-
+/* Check if already signed in */
 auth.onAuthStateChanged((user) => {
   if (user) {
-    // Already signed in, redirect immediately
+    console.log('Already signed in, redirecting...');
     window.location.href = redirectUrl;
   }
 });
