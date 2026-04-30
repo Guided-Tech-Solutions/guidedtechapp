@@ -85,3 +85,5 @@ export function fmtPrice(price) {
   const p = Number(price) || 0;
   return p % 1 === 0 ? String(p) : p.toFixed(2);
 }
+
+console.log('✅ Portal layout initialized');
