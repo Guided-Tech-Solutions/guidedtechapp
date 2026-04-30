@@ -1,130 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="robots" content="noindex, nofollow" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard — Guided Tech Solutions</title>
-  <link rel="icon" type="image/png" href="../asset/logo-icon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../style.css" />
-  <link rel="stylesheet" href="./portal.css" />
+  <link rel="stylesheet" href="./portal.css">
+  <style>
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 2.25rem;
+      font-weight: 800;
+      font-family: 'Poppins', sans-serif;
+      color: var(--primary);
+    }
+
+    .stat-change {
+      font-size: 0.875rem;
+      color: var(--success);
+      margin-top: 0.5rem;
+    }
+
+    .chart-container {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="page-wrapper">
-
-    <header class="navbar">
-      <div class="navbar-container">
-
-        <a href="../index.html" class="navbar-logo">
-          <img src="../asset/logo-icon.png" alt="Guided Tech Solutions Logo" class="navbar-logo-img">
-          <span class="logo-text">Guided Tech Solutions</span>
-        </a>
-
-        <nav class="navbar-menu" id="navbarMenu" aria-label="Main navigation">
-
-          <button class="mobile-nav-close" id="mobileNavClose" type="button" aria-label="Close menu">✕</button>
-
-          <a href="../index.html" class="nav-link">Home</a>
-
-          <div class="nav-item">
-            <a href="#" class="nav-link nav-parent">About</a>
-            <div class="mega-dropdown">
-              <div class="mega-col">
-                <h4>Company</h4>
-                <a href="../about.html"><span class="icon"></span>Company Overview</a>
-                <a href="../about.html#mission"><span class="icon"></span>Mission & Vision</a>
-                <a href="../about.html#history"><span class="icon"></span>History</a>
-              </div>
-              <div class="mega-col">
-                <h4>Team</h4>
-                <a href="../team.html"><span class="icon"></span>Our Team</a>
-                <a href="../team.html#leaders"><span class="icon"></span>Leadership</a>
-                <a href="../team.html#values"><span class="icon"></span>Our Values</a>
-              </div>
-              <div class="mega-col">
-                <h4>More About Us</h4>
-                <a href="../careers.html"><span class="icon"></span>Careers</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="nav-item">
-            <a href="#" class="nav-link nav-parent active">Services</a>
-            <div class="mega-dropdown">
-              <div class="mega-col">
-                <h4>AI Solutions</h4>
-                <a href="../ai.html"><span class="icon"></span>AI Consulting</a>
-                <a href="../ai.html#machinelearning"><span class="icon"></span>Machine Learning</a>
-                <a href="../ai.html#aiautomation"><span class="icon"></span>Automation AI</a>
-              </div>
-              <div class="mega-col">
-                <h4>By Tool</h4>
-                <a href="../automation.html"><span class="icon"></span>Automation</a>
-                <a href="../automation.html#rpa"><span class="icon"></span>RPA Setup</a>
-                <a href="../automation.html#integration"><span class="icon"></span>Integration Tools</a>
-              </div>
-              <div class="mega-col">
-                <h4>Connector Development</h4>
-                <a href="../services.html"><span class="icon"></span>All Services</a>
-                <a href="../services.html#consulting"><span class="icon"></span>Consulting</a>
-                <a href="../services.html#custom"><span class="icon"></span>Custom Connector</a>
-              </div>
-            </div>
-          </div>
-
-          <a href="../capability.html" class="nav-link">Capability</a>
-
-          <div class="nav-item">
-            <a href="#" class="nav-link nav-parent">Resources</a>
-            <div class="mega-dropdown">
-              <div class="mega-col">
-                <h4>Articles</h4>
-                <a href="../blog.html"><span class="icon"></span>Blogs</a>
-                <a href="../faq.html"><span class="icon"></span>Faqs</a>
-              </div>
-              <div class="mega-col">
-                <h4>Others</h4>
-                <a href="../casestudy.html"><span class="icon"></span>Case Study</a>
-                <a href="../videos.html"><span class="icon"></span>Videos</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="nav-item">
-            <a href="#" class="nav-link nav-parent">Contact</a>
-            <div class="mega-dropdown">
-              <div class="mega-col">
-                <h4>Get in Touch</h4>
-                <a href="../contact.html"><span class="icon"></span>Contact Form</a>
-                <a href="../contact.html#partnership"><span class="icon"></span>Partnership</a>
-              </div>
-              <div class="mega-col">
-                <h4>More</h4>
-                <a href="../contact.html#support"><span class="icon"></span>Support</a>
-              </div>
-            </div>
-          </div>
-        </nav>
-
-        <div class="navbar-actions">
-          <button class="btn-primary sp-btn" id="btnLogin" type="button">Log In</button>
-          <button class="btn-primary sp-btn" id="btnLogout" type="button" style="display:none;">Log Out</button>
-          <a href="../form.html" class="btn-primary sp-btn" id="btnGetStarted">Get Started</a>
-          <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">
-            <span class="menu-line"></span>
-            <span class="menu-line"></span>
-            <span class="menu-line"></span>
-          </button>
-        </div>
-
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="../index.html" class="navbar-logo">
+        <span>🚀</span>
+        Guided Tech Solutions
+      </a>
+      <div class="navbar-actions">
+        <button class="btn-nav btn-nav-secondary" id="btnLogin" style="display:none;">Log In</button>
+        <button class="btn-nav" id="btnLogout" style="display:none;">Log Out</button>
       </div>
-    </header>
+    </div>
+  </nav>
 
-    <div class="nav-overlay" id="navOverlay"></div>
-
-  <div class="portal-layout">
-
+  <!-- PORTAL LAYOUT -->
+  <div class="portal-wrapper">
+    <!-- SIDEBAR -->
     <aside class="portal-sidebar">
       <div class="sidebar-user">
         <div class="sidebar-avatar" id="sidebarAvatar">?</div>
@@ -133,218 +93,95 @@
           <div class="sidebar-user-email" id="sidebarEmail">—</div>
         </div>
       </div>
-      <div class="sidebar-divider"></div>
-      <nav class="sidebar-nav" aria-label="Portal navigation">
+      
+      <nav class="sidebar-nav">
         <a href="./portal-services.html" class="sidebar-link">
-          <span class="sidebar-icon">☰</span><span>Services &amp; Pricing</span>
+          <span class="sidebar-icon">🛍️</span>
+          <span>Services</span>
         </a>
         <a href="./portal-subscriptions.html" class="sidebar-link">
-          <span class="sidebar-icon">👤</span><span>My Subscriptions</span>
+          <span class="sidebar-icon">📋</span>
+          <span>My Subscriptions</span>
         </a>
         <a href="./portal-dashboard.html" class="sidebar-link active">
-          <span class="sidebar-icon">📊</span><span>Dashboard</span>
+          <span class="sidebar-icon">📊</span>
+          <span>Dashboard</span>
         </a>
       </nav>
     </aside>
 
+    <!-- MAIN CONTENT -->
     <main class="portal-main">
-
-      <div class="portal-auth-bar" aria-live="polite">
-        <span class="portal-auth-dot" id="authDot"></span>
-        <span id="authText">Checking sign-in…</span>
-        <span class="portal-auth-sep">•</span>
-        <span id="loadText">Loading…</span>
+      <div class="page-header">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Overview of your services and activity</p>
       </div>
 
-      <div class="portal-page-head">
-        <h1 class="portal-page-title">Dashboard</h1>
-        <p class="portal-page-subtitle">Real-time KPIs and usage metrics for your active services.</p>
-      </div>
+      <!-- STATS GRID -->
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <div class="stat-label">Active Services</div>
+          <div class="stat-value" id="statServices">—</div>
+          <div class="stat-change">↑ All systems running</div>
+        </div>
 
-      <!-- ACTIVE DASHBOARD -->
-      <div id="activeDashboard" style="display:none">
+        <div class="stat-card">
+          <div class="stat-label">Current Plan</div>
+          <div class="stat-value" style="font-size: 1.5rem;" id="statPlan">—</div>
+          <div class="stat-change">Subscription tier</div>
+        </div>
 
-        <section class="portal-section">
-          <div class="portal-section-head">
-            <div>
-              <h2 class="portal-section-title">Your Real-Time Service Dashboard</h2>
-              <p class="portal-section-sub">Live metrics across your active subscriptions</p>
-            </div>
-            <span class="dash-live-pill">
-              <span class="dash-live-dot"></span>
-              Live
-            </span>
-          </div>
-          <div class="portal-section-body">
+        <div class="stat-card">
+          <div class="stat-label">Member Since</div>
+          <div class="stat-value" style="font-size: 1.5rem;" id="statSince">—</div>
+          <div class="stat-change">Account created</div>
+        </div>
 
-            <div class="dash-kpi-grid">
-              <div class="dash-kpi-card">
-                <div class="dash-kpi-label">Active Services</div>
-                <div class="dash-kpi-value" id="kpiServices">—</div>
-                <div class="dash-kpi-meta">Running now</div>
-              </div>
-              <div class="dash-kpi-card">
-                <div class="dash-kpi-label">Current Plan</div>
-                <div class="dash-kpi-value dash-kpi-value--sm" id="kpiPlan">—</div>
-                <div class="dash-kpi-meta">Subscription tier</div>
-              </div>
-              <div class="dash-kpi-card">
-                <div class="dash-kpi-label">Member Since</div>
-                <div class="dash-kpi-value dash-kpi-value--sm" id="kpiSince">—</div>
-                <div class="dash-kpi-meta">Subscription start</div>
-              </div>
-              <div class="dash-kpi-card">
-                <div class="dash-kpi-label">Status</div>
-                <div class="dash-kpi-value dash-kpi-value--sm dash-kpi-value--green">Active</div>
-                <div class="dash-kpi-meta dash-kpi-meta--up">↑ All systems running</div>
-              </div>
-            </div>
-
-            <div class="dash-chart">
-              <div class="dash-chart-label">Usage Activity (last 12 months)</div>
-              <div class="dash-bars">
-                <div class="dash-bar"      style="--h:30%"></div>
-                <div class="dash-bar--mid dash-bar" style="--h:45%"></div>
-                <div class="dash-bar"      style="--h:55%"></div>
-                <div class="dash-bar--mid dash-bar" style="--h:40%"></div>
-                <div class="dash-bar"      style="--h:65%"></div>
-                <div class="dash-bar--mid dash-bar" style="--h:50%"></div>
-                <div class="dash-bar"      style="--h:72%"></div>
-                <div class="dash-bar--mid dash-bar" style="--h:60%"></div>
-                <div class="dash-bar"      style="--h:80%"></div>
-                <div class="dash-bar--hi  dash-bar" style="--h:90%"></div>
-                <div class="dash-bar--mid dash-bar" style="--h:85%"></div>
-                <div class="dash-bar--hi  dash-bar" style="--h:100%"></div>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        <section class="portal-section">
-          <div class="portal-section-head">
-            <div>
-              <h2 class="portal-section-title">Subscription Summary</h2>
-              <p class="portal-section-sub">Your active plans and services at a glance</p>
-            </div>
-          </div>
-          <div class="portal-section-body">
-            <div class="sub-cards-grid" id="dashSubCards"></div>
-          </div>
-        </section>
-
-      </div>
-
-      <!-- LOCKED STATE -->
-      <div id="lockedDashboard">
-
-        <section class="portal-section">
-          <div class="portal-section-body">
-
-            <div class="portal-locked">
-              <span class="portal-locked-icon">🔒</span>
-              <h2 class="portal-locked-title">Dashboard Unlocks When You Subscribe</h2>
-              <p class="portal-locked-desc">
-                Your real-time KPIs, usage metrics, and performance reports become available
-                once you activate a service or subscribe to a plan.
-              </p>
-              <div class="portal-locked-actions">
-                <a href="./portal-services.html" class="btn-portal-primary">Browse Services &amp; Plans</a>
-              </div>
-            </div>
-
-            <p class="rec-heading">Get Started — Recommended Plans</p>
-            <p style="font-size:13px;color:var(--muted);margin-bottom:16px">
-              Choose a plan to unlock your dashboard instantly:
-            </p>
-            <div class="plans-grid" id="recPlansGrid" aria-busy="true">
-              <div class="skeleton-block" style="height:280px;border-radius:14px"></div>
-              <div class="skeleton-block" style="height:280px;border-radius:14px"></div>
-              <div class="skeleton-block" style="height:280px;border-radius:14px"></div>
-              <div class="skeleton-block" style="height:280px;border-radius:14px"></div>
-            </div>
-
-            <p style="font-size:13px;color:var(--muted);margin:24px 0 16px">
-              Or start with a single service:
-            </p>
-            <div class="services-flow" id="recServicesFlow" aria-busy="true">
-              <div class="skeleton-block" style="height:240px;border-radius:14px"></div>
-              <div class="skeleton-block" style="height:240px;border-radius:14px"></div>
-              <div class="skeleton-block" style="height:240px;border-radius:14px"></div>
-              <div class="skeleton-block" style="height:240px;border-radius:14px"></div>
-            </div>
-
-          </div>
-        </section>
-
-      </div>
-
-    </main>
-  </div>
-
-  <footer class="gts-footer">
-    <div class="gts-footer-inner">
-
-      <div class="gts-footer-col about-col">
-        <h2 class="footer-logo">Guided Tech Solutions</h2>
-        <p class="footer-desc">
-          Empowering organizations with intelligent,
-          scalable technology, and modern digital transformation solutions.
-        </p>
-        <h4 class="footer-heading">CONTACT US</h4>
-        <p>info@guidedtechms.com</p>
-        <div class="footer-social">
-          <a href="https://web.facebook.com/profile.php?id=61579123374511&sk=about" target="_blank" rel="noopener" aria-label="Facebook">
-            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook">
-          </a>
-          <a href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
-            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram">
-          </a>
-          <a href="https://www.linkedin.com/company/guided-tech-solutions-of-mississippi/" target="_blank" rel="noopener" aria-label="LinkedIn">
-            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn">
-          </a>
-          <a href="https://www.skool.com/the-time-saving-business-hub-2509/about?ref=56223a1a91aa4e92911c46ddb2559c94" target="_blank" rel="noopener" aria-label="Skool">
-            <img src="../asset/skool-logo.png" alt="Skool">
-          </a>
+        <div class="stat-card">
+          <div class="stat-label">Status</div>
+          <div class="stat-value" style="font-size: 1.5rem; color: var(--success);">Active</div>
+          <div class="stat-change">All systems operational</div>
         </div>
       </div>
 
-      <div class="gts-footer-col">
-        <h4 class="footer-heading">SERVICES</h4>
-        <a href="../ai.html">AI Consulting</a>
-        <a href="../ai.html#machinelearning">Machine Learning</a>
-        <a href="../ai.html#aiautomation">Automation AI</a>
-        <a href="../automation.html#rpa">RPA SetUp</a>
-        <a href="../automation.html">Automation</a>
-        <a href="../automation.html#integration">Integration Tools</a>
-        <a href="../services.html#custom">Custom Connector</a>
-        <a href="../services.html#consulting">Consulting</a>
-        <a href="../services.html">All Services</a>
+      <!-- ACTIVITY CHART -->
+      <div class="chart-container">
+        <div style="text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+          <div style="font-size: 1.125rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem;">
+            Activity Analytics
+          </div>
+          <div>Usage charts and analytics coming soon</div>
+        </div>
       </div>
 
-      <div class="gts-footer-col">
-        <h4 class="footer-heading">RESOURCES</h4>
-        <a href="../blog.html">Blog</a>
-        <a href="../casestudy.html">Case Studies</a>
-        <a href="../videos.html">Videos</a>
+      <!-- RECENT SUBSCRIPTIONS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Recent Activity</h2>
+            <p class="card-subtitle">Your recent subscriptions and services</p>
+          </div>
+        </div>
+
+        <div class="subscriptions-grid" id="recentActivity">
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+
+        <div class="empty-state" id="emptyActivity" style="display:none;">
+          <div class="empty-icon">📭</div>
+          <h3 class="empty-title">No Activity Yet</h3>
+          <p class="empty-text">Start by subscribing to a service!</p>
+          <div class="empty-actions">
+            <a href="./portal-services.html" class="btn btn-primary">Browse Services</a>
+          </div>
+        </div>
       </div>
-
-      <div class="gts-footer-col">
-        <h4 class="footer-heading">ABOUT</h4>
-        <a href="../about.html">Company</a>
-        <a href="../contact.html">Contact</a>
-      </div>
-    </div>
-
-    <div class="gts-footer-bottom">
-      © <span id="year"></span> Guided Tech Solutions — All rights reserved.
-    </div>
-  </footer>
-
+    </main>
   </div>
 
-  <script src="../script.js"></script>
   <script type="module" src="./portal-dashboard.js"></script>
-  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>
