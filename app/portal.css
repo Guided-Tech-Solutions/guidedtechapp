@@ -172,14 +172,14 @@ body {
 
 .sidebar-user-name {
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .sidebar-user-email {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   opacity: 0.8;
   white-space: nowrap;
   overflow: hidden;
@@ -194,12 +194,13 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.875rem 1rem;
+  padding: 0.75rem 1rem;
   margin-bottom: 0.5rem;
   border-radius: 10px;
   color: rgba(255,255,255,0.8);
   text-decoration: none;
   font-weight: 500;
+  font-size: 0.875rem;
   transition: var(--transition);
 }
 
@@ -262,7 +263,7 @@ body {
 }
 
 .page-title {
-  font-size: 2.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   font-family: 'Poppins', sans-serif;
   color: var(--text);
@@ -270,7 +271,7 @@ body {
 }
 
 .page-subtitle {
-  font-size: 1.0625rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
 }
 
@@ -297,14 +298,14 @@ body {
 }
 
 .card-title {
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   font-weight: 700;
   font-family: 'Poppins', sans-serif;
   color: var(--text);
 }
 
 .card-subtitle {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
   margin-top: 0.25rem;
 }
@@ -335,48 +336,48 @@ body {
 }
 
 .service-icon {
-  width: 56px;
-  height: 56px;
+  width: 40px;
+  height: 40px;
   background: linear-gradient(135deg, var(--primary-light), var(--primary));
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.75rem;
-  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .service-name {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
   font-family: 'Poppins', sans-serif;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   color: var(--text);
 }
 
 .service-description {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
-  margin-bottom: 1.25rem;
-  line-height: 1.6;
+  margin-bottom: 1rem;
+  line-height: 1.5;
 }
 
 .service-price {
   display: flex;
   align-items: baseline;
   gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .price-amount {
-  font-size: 2rem;
+  font-size: 1.25rem;
   font-weight: 800;
   font-family: 'Poppins', sans-serif;
   color: var(--primary);
 }
 
 .price-period {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
 }
 
@@ -426,7 +427,7 @@ body {
 }
 
 .subscription-title {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
   font-family: 'Poppins', sans-serif;
   color: var(--text);
@@ -461,7 +462,7 @@ body {
 .detail-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
 }
 
 .detail-label {
@@ -479,27 +480,27 @@ body {
 
 .empty-state {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 2.5rem 1.5rem;
 }
 
 .empty-icon {
-  font-size: 4rem;
-  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
   opacity: 0.3;
 }
 
 .empty-title {
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   font-weight: 700;
   font-family: 'Poppins', sans-serif;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .empty-text {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
   max-width: 500px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1.5rem;
 }
 
 .empty-actions {
