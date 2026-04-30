@@ -1,281 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="robots" content="noindex, nofollow" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Subscriptions — Guided Tech Solutions</title>
-  <link rel="shortcut icon" href="../asset/logo-icon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../style.css" />
-  <link rel="stylesheet" href="./portal.css" />
+  <link rel="stylesheet" href="./portal.css">
 </head>
 <body>
-  <div class="page-wrapper">
-
-    <!-- NAVBAR (same structure as homepage) -->
-    <header class="navbar">
-      <div class="navbar-container">
-
-        <!-- LOGO -->
-        <a href="../index.html" class="navbar-logo">
-          <img src="../asset/logo-icon.png" alt="Guided Tech Solutions Logo" class="navbar-logo-img">
-          <span class="logo-text">Guided Tech Solutions</span>
-        </a>
-
-        <!-- NAV MENU -->
-        <nav class="navbar-menu" id="navbarMenu">
-
-          <!-- ✅ ADDED: MOBILE CLOSE BUTTON -->
-          <button class="mobile-nav-close" id="mobileNavClose" type="button" aria-label="Close menu">✕</button>
-
-          <a href="../index.html" class="nav-link">Home</a>
-
-          <!-- ABOUT -->
-          <div class="nav-item">
-            <a href="#" class="nav-link nav-parent">About</a>
-            <div class="mega-dropdown">
-              <div class="mega-col">
-                <h4>Company</h4>
-                <a href="../about.html"><span class="icon"></span>Company Overview</a>
-                <a href="../about.html#mission"><span class="icon"></span>Mission & Vision</a>
-                <a href="../about.html#history"><span class="icon"></span>History</a>
-              </div>
-              <div class="mega-col">
-                <h4>Team</h4>
-                <a href="../team.html"><span class="icon"></span>Our Team</a>
-                <a href="../team.html#leaders"><span class="icon"></span>Leadership</a>
-                <a href="../team.html#values"><span class="icon"></span>Our Values</a>
-              </div>
-              <div class="mega-col">
-                <h4>More About Us</h4>
-                <a href="../careers.html"><span class="icon"></span>Careers</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- SERVICES -->
-          <div class="nav-item">
-            <a href="#" class="nav-link nav-parent active">Services</a>
-            <div class="mega-dropdown">
-              <div class="mega-col">
-                <h4>AI Solutions</h4>
-                <a href="../ai.html"><span class="icon"></span>AI Consulting</a>
-                <a href="../ai.html#machinelearning"><span class="icon"></span>Machine Learning</a>
-                <a href="../ai.html#aiautomation"><span class="icon"></span>Automation AI</a>
-              </div>
-
-              <div class="mega-col">
-                <h4>By Tool</h4>
-                <a href="../automation.html"><span class="icon"></span>Automation</a>
-                <a href="../automation.html#rpa"><span class="icon"></span>RPA Setup</a>
-                <a href="../automation.html#integration"><span class="icon"></span>Integration Tools</a>
-              </div>
-
-              <div class="mega-col">
-                <h4>Connector Development</h4>
-                <a href="../services.html"><span class="icon"></span>All Services</a>
-                <a href="../services.html#consulting"><span class="icon"></span>Consulting</a>
-                <a href="../services.html#custom"><span class="icon"></span>Custom Connector</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- CAPABILITY -->
-          <a href="../capability.html" class="nav-link">Capability</a>
-
-          <!-- RESOURCES -->
-          <div class="nav-item">
-            <a href="#" class="nav-link nav-parent">Resources</a>
-            <div class="mega-dropdown">
-              <div class="mega-col">
-                <h4>Articles</h4>
-                <a href="../blog.html"><span class="icon"></span>Blogs</a>
-                <a href="../faq.html"><span class="icon"></span>Faqs</a>
-              </div>
-
-              <div class="mega-col">
-                <h4>Others</h4>
-                <a href="../casestudy.html"><span class="icon"></span>Case Study</a>
-                <a href="../videos.html"><span class="icon"></span>Videos</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- CONTACT -->
-          <div class="nav-item">
-            <a href="#" class="nav-link nav-parent">Contact</a>
-            <div class="mega-dropdown">
-              <div class="mega-col">
-                <h4>Get in Touch</h4>
-                <a href="../contact.html"><span class="icon"></span>Contact Form</a>
-                <a href="../contact.html#partnership"><span class="icon"></span>Partnership</a>
-              </div>
-
-              <div class="mega-col">
-                <h4>More</h4>
-                <a href="../contact.html#support"><span class="icon"></span>Support</a>
-              </div>
-            </div>
-          </div>
-        </nav>
-
-        <!-- RIGHT ACTIONS -->
-        <div class="navbar-actions">
-          <!-- Auth buttons for portal -->
-          <button class="btn-primary sp-btn" id="btnLogin" type="button">Log In</button>
-          <button class="btn-primary sp-btn" id="btnLogout" type="button" style="display:none;">Log Out</button>
-
-          <!-- Your existing CTA -->
-          <a href="../form.html" class="btn-primary sp-btn" id="btnGetStarted">Get Started</a>
-
-          <!-- Mobile toggle -->
-          <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">
-            <span class="menu-line"></span>
-            <span class="menu-line"></span>
-            <span class="menu-line"></span>
-          </button>
-        </div>
-
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="../index.html" class="navbar-logo">
+        <span>🚀</span>
+        Guided Tech Solutions
+      </a>
+      <div class="navbar-actions">
+        <button class="btn-nav btn-nav-secondary" id="btnLogin" style="display:none;">Log In</button>
+        <button class="btn-nav" id="btnLogout" style="display:none;">Log Out</button>
       </div>
-    </header>
-
-    <!-- Overlay -->
-    <div class="nav-overlay" id="navOverlay"></div>
+    </div>
+  </nav>
 
   <!-- PORTAL LAYOUT -->
-  <div class="portal-layout">
-
+  <div class="portal-wrapper">
     <!-- SIDEBAR -->
     <aside class="portal-sidebar">
       <div class="sidebar-user">
         <div class="sidebar-avatar" id="sidebarAvatar">?</div>
         <div class="sidebar-user-info">
-          <div class="sidebar-user-name"  id="sidebarName">Not signed in</div>
+          <div class="sidebar-user-name" id="sidebarName">Not signed in</div>
           <div class="sidebar-user-email" id="sidebarEmail">—</div>
         </div>
       </div>
-      <div class="sidebar-divider"></div>
+      
       <nav class="sidebar-nav">
-        <a href="./portal-services.html"       class="sidebar-link">
-          <span class="sidebar-icon">☰</span><span>Services &amp; Pricing</span>
+        <a href="./portal-services.html" class="sidebar-link">
+          <span class="sidebar-icon">🛍️</span>
+          <span>Services</span>
         </a>
-        <a href="./portal-subscriptions.html"  class="sidebar-link active">
-          <span class="sidebar-icon">👤</span><span>My Subscriptions</span>
+        <a href="./portal-subscriptions.html" class="sidebar-link active">
+          <span class="sidebar-icon">📋</span>
+          <span>My Subscriptions</span>
         </a>
-        <a href="./portal-dashboard.html"      class="sidebar-link">
-          <span class="sidebar-icon">📊</span><span>Dashboard</span>
+        <a href="./portal-dashboard.html" class="sidebar-link">
+          <span class="sidebar-icon">📊</span>
+          <span>Dashboard</span>
         </a>
       </nav>
     </aside>
 
-    <!-- MAIN -->
+    <!-- MAIN CONTENT -->
     <main class="portal-main">
-
-      <div class="portal-auth-bar" aria-live="polite">
-        <span class="portal-auth-dot" id="authDot"></span>
-        <span id="authText">Checking sign-in…</span>
-        <span class="portal-auth-sep">•</span>
-        <span id="loadText">Loading…</span>
+      <div class="page-header">
+        <h1 class="page-title">My Subscriptions</h1>
+        <p class="page-subtitle">Manage your active services and subscriptions</p>
       </div>
 
-      <div class="portal-page-head">
-        <h1 class="portal-page-title">My Subscriptions</h1>
-        <p class="portal-page-subtitle">View and manage your active services and subscription plans.</p>
-      </div>
-
-      <!-- ACTIVE SUBSCRIPTIONS (shown when user has subscriptions) -->
-      <section class="portal-section" id="activeSubsSection" style="display:none">
-        <div class="portal-section-head">
+      <!-- ACTIVE SUBSCRIPTIONS -->
+      <div class="card" id="activeSubscriptions" style="display:none;">
+        <div class="card-header">
           <div>
-            <h2 class="portal-section-title">Active Subscriptions</h2>
-            <p class="portal-section-sub">Your currently active services and plans</p>
+            <h2 class="card-title">Active Subscriptions</h2>
+            <p class="card-subtitle">Your currently active services</p>
           </div>
-          <span class="dash-live-pill">
-            <span class="dash-live-dot"></span>
-            Live
-          </span>
         </div>
-        <div class="portal-section-body">
-          <div class="sub-cards-grid" id="subCardsGrid"></div>
+
+        <div class="subscriptions-grid" id="subscriptionsGrid"></div>
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div class="card" id="emptySubscriptions">
+        <div class="empty-state">
+          <div class="empty-icon">📭</div>
+          <h3 class="empty-title">No Active Subscriptions</h3>
+          <p class="empty-text">You haven't subscribed to any services yet. Browse our catalog to get started!</p>
+          <div class="empty-actions">
+            <a href="./portal-services.html" class="btn btn-primary">Browse Services</a>
+          </div>
         </div>
-      </section>
+      </div>
 
-      <!-- EMPTY / LOCKED STATE (shown when no subscriptions) -->
-      <section class="portal-section" id="emptySubsSection">
-        <div class="portal-section-body">
-
-          <!-- No subscriptions message -->
-          <div class="portal-locked">
-            <span class="portal-locked-icon">📭</span>
-            <h2 class="portal-locked-title">No Active Subscriptions Yet</h2>
-            <p class="portal-locked-desc">
-              You haven't subscribed to any services or plans yet.
-              Browse our offerings below and get started — your subscription details will appear here once active.
-            </p>
-            <div class="portal-locked-actions">
-              <a href="./portal-services.html" class="btn-portal-primary">Browse Services</a>
-              <a href="./portal-services.html#plans" class="btn-portal-ghost">View Plans</a>
-            </div>
-          </div>
-
-          <!-- Recommendations divider -->
-          <p class="rec-heading">Recommended for You</p>
-
-          <!-- Recommended plans -->
-          <p style="font-size:13px;color:var(--muted);margin-bottom:16px">
-            Popular subscription plans chosen by businesses like yours:
-          </p>
-          <div class="plans-grid" id="recPlansGrid" aria-busy="true">
-            <div class="skeleton-block" style="height:280px;border-radius:14px"></div>
-            <div class="skeleton-block" style="height:280px;border-radius:14px"></div>
-            <div class="skeleton-block" style="height:280px;border-radius:14px"></div>
-            <div class="skeleton-block" style="height:280px;border-radius:14px"></div>
-          </div>
-
-          <!-- Recommended services -->
-          <p style="font-size:13px;color:var(--muted);margin:24px 0 16px">
-            Or activate individual services:
-          </p>
-          <div class="services-flow" id="recServicesFlow" aria-busy="true">
-            <div class="skeleton-block" style="height:240px;border-radius:14px"></div>
-            <div class="skeleton-block" style="height:240px;border-radius:14px"></div>
-            <div class="skeleton-block" style="height:240px;border-radius:14px"></div>
-            <div class="skeleton-block" style="height:240px;border-radius:14px"></div>
-          </div>
-
+      <!-- LOADING STATE -->
+      <div class="card" id="loadingSubscriptions">
+        <div class="loading">
+          <div class="spinner"></div>
         </div>
-      </section>
-
+      </div>
     </main>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="gts-footer">
-    <div class="gts-footer-inner">
-      <div class="gts-footer-col about-col">
-        <h2 class="footer-logo">Guided Tech Solutions</h2>
-        <p class="footer-desc">Empowering organizations with intelligent, scalable technology and modern digital transformation solutions.</p>
-        <h4 class="footer-heading">CONTACT US</h4>
-        <p>info@guidedtechms.com</p>
-      </div>
-      <div class="gts-footer-col">
-        <h4 class="footer-heading">PORTAL</h4>
-        <a href="./portal-services.html">Services &amp; Pricing</a>
-        <a href="./portal-subscriptions.html">My Subscriptions</a>
-        <a href="./portal-dashboard.html">Dashboard</a>
-      </div>
-      <div class="gts-footer-col">
-        <h4 class="footer-heading">COMPANY</h4>
-        <a href="../about.html">About</a>
-        <a href="../contact.html">Contact</a>
-      </div>
-    </div>
-    <div class="gts-footer-bottom">© <span id="footerYear"></span> Guided Tech Solutions — All rights reserved.</div>
-  </footer>
-
-</div>
-<script src="../script.js"></script>
-<script type="module" src="./portal-subscriptions.js"></script>
+  <script type="module" src="./portal-subscriptions.js"></script>
 </body>
 </html>
