@@ -1,229 +1,132 @@
 /* ============================================================
-   FILE: app/portal-dashboard.js
-   Page 3 — Dashboard
-   Shows live KPIs if subscribed, else locked + recommendations
+   FILE: portal-dashboard.js
+   Dashboard page logic with KPIs and analytics
    ============================================================ */
 
-import { db } from "../admin/firebase.js";
+import { db } from "./firebase.js";
 import { authReady, currentUser, esc, fmtPrice } from "./portal-layout.js";
 import {
-  collection, getDocs, query, where
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+  collection,
+  getDocs,
+  query,
+  where
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
-const loadText = document.getElementById("loadText");
+const statServices = document.getElementById("statServices");
+const statPlan = document.getElementById("statPlan");
+const statSince = document.getElementById("statSince");
+const recentActivity = document.getElementById("recentActivity");
+const emptyActivity = document.getElementById("emptyActivity");
 
-/* ══════════════════════════════
-   RECOMMENDATION RENDER HELPERS
-══════════════════════════════ */
-function renderPlanCard(plan) {
-  const price    = Number(plan.price) || 0;
-  const billing  = plan.billingPeriod || "month";
-  const features = Array.isArray(plan.features) ? plan.features : [];
-  const popular  = !!plan.popular;
-
-  const featHTML = features.map(f => `
-    <div class="plan-feat">
-      <div class="plan-feat-check">✓</div>
-      <span>${esc(f)}</span>
-    </div>`).join("");
-
-  return `
-    <div class="plan-card${popular ? " is-popular" : ""}" data-plan-id="${esc(plan.id)}">
-      ${popular ? `<div class="plan-popular-badge">⭐ Most Popular</div>` : ""}
-      ${plan.icon ? `<div class="plan-icon">${esc(plan.icon)}</div>` : ""}
-      <div class="plan-name">${esc(plan.name || "Plan")}</div>
-      <div class="plan-pricing">
-        <span class="plan-price">$${esc(fmtPrice(price))}</span>
-        <span class="plan-period">/ ${esc(billing)}</span>
-      </div>
-      ${plan.description ? `<div class="plan-desc">${esc(plan.description)}</div>` : ""}
-      ${featHTML ? `<div class="plan-divider"></div><div class="plan-features">${featHTML}</div>` : ""}
-      <a href="./portal-services.html" class="btn-get-started">Get Started</a>
-    </div>`;
-}
-
-function renderServiceCard(svc) {
-  const price  = Number(svc.price) || 0;
-  const period = svc.pricePeriod || "";
-  return `
-    <div class="svc-card">
-      <div class="svc-icon-ring">${esc(svc.icon || "⚙️")}</div>
-      <div class="svc-name">${esc(svc.name || "Service")}</div>
-      <div class="svc-desc">${esc(svc.description || "")}</div>
-      <div class="svc-price-box">
-        <div class="svc-from">From</div>
-        <div class="svc-amount">
-          $${esc(fmtPrice(price))}
-          ${period ? `<span>${esc(period)}</span>` : ""}
-        </div>
-      </div>
-      <a href="./portal-services.html" class="btn-subscribe" style="text-align:center;text-decoration:none;display:block">
-        Subscribe to Activate
-      </a>
-    </div>`;
-}
-
-/* ══════════════════════════════
-   RENDER SUBSCRIPTION SUMMARY CARD
-══════════════════════════════ */
-function renderSubCard(sub) {
-  const price   = Number(sub.price) || 0;
-  const billing = sub.billingPeriod || sub.period || "month";
-  const status  = sub.status || "active";
-  const since   = sub.createdAt?.toDate
-    ? sub.createdAt.toDate().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+function renderActivityCard(subscription) {
+  const price = Number(subscription.price) || 0;
+  const billing = subscription.billingPeriod || subscription.period || "month";
+  const status = subscription.status || "active";
+  const since = subscription.createdAt?.toDate 
+    ? subscription.createdAt.toDate().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
     : "—";
 
-  const features = Array.isArray(sub.features) ? sub.features.slice(0, 4) : [];
-  const featHTML  = features.map(f => `
-    <div class="sub-feat">
-      <span class="sub-feat-dot"></span>
-      <span>${esc(f)}</span>
-    </div>`).join("");
+  const statusClass = status === "active" ? "badge-success" : 
+                      status === "pending" ? "badge-warning" : "";
 
   return `
-    <div class="sub-card">
-      <div class="sub-card-header">
-        <div>
-          <div class="sub-card-name">${esc(sub.planName || sub.serviceName || "Subscription")}</div>
-          <div class="sub-card-type">${sub.type === "plan" ? "Subscription Plan" : "Individual Service"}</div>
-        </div>
-        <span class="sub-status-badge ${status}">
-          <span class="sub-status-dot"></span>
-          ${status.charAt(0).toUpperCase() + status.slice(1)}
-        </span>
+    <div class="subscription-card">
+      <div class="subscription-header">
+        <h3 class="subscription-title">${esc(subscription.planName || subscription.serviceName || "Subscription")}</h3>
+        <span class="badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
       </div>
-      ${price ? `<div class="sub-card-price">$${esc(fmtPrice(price))} <span>/ ${esc(billing)}</span></div>` : ""}
-      <div class="sub-card-meta">Active since ${since}</div>
-      ${featHTML ? `<div class="sub-card-features">${featHTML}</div>` : ""}
-    </div>`;
+      
+      <div class="subscription-details">
+        <div class="detail-row">
+          <span class="detail-label">Price:</span>
+          <span class="detail-value">$${esc(fmtPrice(price))} / ${esc(billing)}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Started:</span>
+          <span class="detail-value">${since}</span>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
-/* ══════════════════════════════
-   FETCH USER SUBSCRIPTIONS
-══════════════════════════════ */
-async function fetchUserSubscriptions(uid) {
-  const results = [];
-
-  const planSnap = await getDocs(
-    query(collection(db, "checkoutSessions"), where("userId", "==", uid))
-  );
-  planSnap.forEach(doc => {
-    const d = doc.data();
-    if (d.status === "active" || d.status === "pending") {
-      results.push({ id: doc.id, type: "plan", ...d });
-    }
-  });
-
-  const svcSnap = await getDocs(
-    query(collection(db, "serviceActivations"), where("userId", "==", uid))
-  );
-  svcSnap.forEach(doc => {
-    const d = doc.data();
-    if (d.status === "active" || d.status === "pending") {
-      results.push({ id: doc.id, type: "service", ...d });
-    }
-  });
-
-  return results;
-}
-
-/* ══════════════════════════════
-   LOAD RECOMMENDATIONS
-══════════════════════════════ */
-async function loadRecommendations() {
-  const plansGrid    = document.getElementById("recPlansGrid");
-  const servicesFlow = document.getElementById("recServicesFlow");
-
+async function loadDashboard(user) {
   try {
-    const snap = await getDocs(query(collection(db, "plans"), where("active", "==", true)));
-    const plans = [];
-    snap.forEach(doc => plans.push({ id: doc.id, ...doc.data() }));
-    if (plansGrid) {
-      plansGrid.innerHTML = plans.length
-        ? plans.map(p => renderPlanCard(p)).join("")
-        : `<p style="color:var(--muted);font-size:13px">No plans available yet.</p>`;
-      plansGrid.removeAttribute("aria-busy");
+    const subscriptions = [];
+
+    // Load plans
+    const plansQuery = query(
+      collection(db, "checkoutSessions"), 
+      where("userId", "==", user.uid)
+    );
+    const plansSnapshot = await getDocs(plansQuery);
+    plansSnapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.status === "active" || data.status === "pending") {
+        subscriptions.push({ id: doc.id, type: "plan", ...data });
+      }
+    });
+
+    // Load individual services
+    const servicesQuery = query(
+      collection(db, "serviceActivations"), 
+      where("userId", "==", user.uid)
+    );
+    const servicesSnapshot = await getDocs(servicesQuery);
+    servicesSnapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.status === "active" || data.status === "pending") {
+        subscriptions.push({ id: doc.id, type: "service", ...data });
+      }
+    });
+
+    // Update stats
+    if (statServices) statServices.textContent = subscriptions.length;
+    
+    if (statPlan) {
+      const planSub = subscriptions.find(s => s.type === "plan");
+      statPlan.textContent = planSub?.planName || subscriptions[0]?.serviceName || "Free";
     }
-  } catch (err) { console.error("Load rec plans:", err); }
 
-  try {
-    const snap = await getDocs(query(collection(db, "services"), where("active", "==", true)));
-    const services = [];
-    snap.forEach(doc => services.push({ id: doc.id, ...doc.data() }));
-    if (servicesFlow) {
-      servicesFlow.innerHTML = services.length
-        ? services.map(s => renderServiceCard(s)).join("")
-        : `<p style="color:var(--muted);font-size:13px">No services available yet.</p>`;
-      servicesFlow.removeAttribute("aria-busy");
+    if (statSince && user.metadata?.creationTime) {
+      const createdDate = new Date(user.metadata.creationTime);
+      statSince.textContent = createdDate.toLocaleDateString("en-US", { month: "short", year: "numeric" });
     }
-  } catch (err) { console.error("Load rec services:", err); }
-}
 
-/* ══════════════════════════════
-   UNLOCK DASHBOARD UI
-══════════════════════════════ */
-function unlockDashboard(subs) {
-  document.getElementById("lockedDashboard").style.display  = "none";
-  document.getElementById("activeDashboard").style.display  = "block";
+    // Show recent activity
+    if (subscriptions.length === 0) {
+      recentActivity.innerHTML = "";
+      emptyActivity.style.display = "block";
+    } else {
+      emptyActivity.style.display = "none";
+      const recent = subscriptions.slice(0, 3); // Show last 3
+      recentActivity.innerHTML = recent.map(s => renderActivityCard(s)).join("");
+    }
 
-  // KPI — active services count
-  const kpiServices = document.getElementById("kpiServices");
-  if (kpiServices) kpiServices.textContent = subs.length;
+    console.log(`✅ Dashboard loaded: ${subscriptions.length} subscriptions`);
 
-  // KPI — plan name (first plan found, else first service)
-  const planSub = subs.find(s => s.type === "plan");
-  const kpiPlan = document.getElementById("kpiPlan");
-  if (kpiPlan) kpiPlan.textContent = planSub?.planName || subs[0]?.serviceName || "Custom";
-
-  // KPI — member since (earliest createdAt)
-  const kpiSince = document.getElementById("kpiSince");
-  if (kpiSince) {
-    const earliest = subs
-      .filter(s => s.createdAt?.toDate)
-      .map(s => s.createdAt.toDate())
-      .sort((a, b) => a - b)[0];
-
-    kpiSince.textContent = earliest
-      ? earliest.toLocaleDateString("en-US", { month: "short", year: "numeric" })
-      : "—";
+  } catch (error) {
+    console.error("❌ Error loading dashboard:", error);
+    recentActivity.innerHTML = "";
+    emptyActivity.style.display = "block";
   }
-
-  // Subscription summary cards
-  const dashSubCards = document.getElementById("dashSubCards");
-  if (dashSubCards) dashSubCards.innerHTML = subs.map(s => renderSubCard(s)).join("");
 }
 
-/* ══════════════════════════════
-   BOOT
-══════════════════════════════ */
+// Initialize page
 document.addEventListener("DOMContentLoaded", async () => {
-  loadText.textContent = "Loading…";
+  console.log('🔄 Loading dashboard...');
   const user = await authReady;
-
+  
   if (!user) {
-    loadText.textContent = "Loading recommendations…";
-    await loadRecommendations();
-    loadText.textContent = "Sign in to access your dashboard";
+    console.log('⚠️ User not authenticated');
+    if (statServices) statServices.textContent = "0";
+    if (statPlan) statPlan.textContent = "None";
+    if (statSince) statSince.textContent = "—";
+    recentActivity.innerHTML = "";
+    emptyActivity.style.display = "block";
     return;
   }
-
-  loadText.textContent = "Checking subscriptions…";
-
-  try {
-    const subs = await fetchUserSubscriptions(user.uid);
-
-    if (subs.length > 0) {
-      unlockDashboard(subs);
-      loadText.textContent = "Dashboard ready";
-    } else {
-      loadText.textContent = "Loading recommendations…";
-      await loadRecommendations();
-      loadText.textContent = "No active subscriptions";
-    }
-  } catch (err) {
-    console.error("Dashboard boot:", err);
-    loadText.textContent = "Error loading dashboard";
-    await loadRecommendations();
-  }
+  
+  console.log('✅ User authenticated, loading dashboard...');
+  await loadDashboard(user);
 });
