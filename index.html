@@ -3,591 +3,614 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Guided Tech Solutions - Transform your business with AI-powered solutions and expert consulting services.">
-  <meta name="keywords" content="AI consulting, automation, tech solutions, business transformation">
-  <title>Guided Tech Solutions - AI-Powered Business Transformation</title>
-  <link rel="shortcut icon" href="./asset/logo-icon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <title>GTS Amplify — Business Growth Solutions by Guided Tech Solutions</title>
+  <meta name="description" content="Lead generation, cloud migration, automation and SEO — all in one platform. Real-time analytics dashboards for every service. Pay with Paystack, Stripe or PayPal.">
+  <link rel="icon" href="./asset/logo-icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root{
+      --brand:#1B4F72;--brand-dark:#0F2E42;--brand-mid:#2471A3;--brand-light:#3498DB;--brand-pale:#EBF5FB;
+      --accent:#E67E22;--accent-dark:#CA6F1E;--success:#0F9D58;
+      --text:#0D1B2A;--text-mid:#334155;--text-muted:#64748B;
+      --border:#E2E8F0;--surface:#fff;--bg:#F2F5F9;
+      --ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif;
     }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--ff-b);color:var(--text);background:var(--surface);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
 
-    :root {
-      --primary: #1B4F72;
-      --primary-dark: #154360;
-      --accent: #e67e22;
-      --success: #10b981;
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --text: #0f172a;
-      --text-muted: #64748b;
+    /* ── NAV ──────────────────────────────────── */
+    .nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      background:rgba(255,255,255,.92);backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(226,232,240,.8);height:68px;
     }
+    .nav-inner{max-width:1200px;margin:0 auto;padding:0 1.5rem;height:100%;display:flex;align-items:center;justify-content:space-between}
+    .nav-logo{display:flex;align-items:center;gap:.5rem;font-family:var(--ff-d);font-size:1.0625rem;font-weight:700;color:var(--brand)}
+    .nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 2px 8px rgba(27,79,114,.25)}
+    .nav-links{display:flex;align-items:center;gap:.25rem}
+    .nav-link{padding:.4375rem .875rem;border-radius:8px;font-size:.875rem;font-weight:500;color:var(--text-mid);transition:all .2s}
+    .nav-link:hover{background:var(--bg);color:var(--brand)}
+    .nav-cta{display:flex;gap:.625rem;align-items:center}
+    .btn-nav-outline{padding:.5rem 1.125rem;border-radius:8px;font-weight:600;font-size:.875rem;color:var(--brand);border:1.5px solid var(--brand);background:transparent;cursor:pointer;transition:all .2s}
+    .btn-nav-outline:hover{background:var(--brand-pale)}
+    .btn-nav-solid{padding:.5rem 1.25rem;border-radius:8px;font-weight:600;font-size:.875rem;color:white;background:var(--brand);border:none;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(27,79,114,.25)}
+    .btn-nav-solid:hover{background:var(--brand-dark);transform:translateY(-1px)}
+    .nav-mobile-btn{display:none;background:none;border:none;font-size:1.375rem;cursor:pointer;color:var(--text-mid)}
+    .mobile-nav{display:none;position:fixed;top:68px;left:0;right:0;background:white;border-bottom:1px solid var(--border);padding:1rem 1.5rem;z-index:99;flex-direction:column;gap:.25rem;box-shadow:0 8px 24px rgba(0,0,0,.1)}
+    .mobile-nav.show{display:flex}
+    .mobile-nav-link{padding:.625rem .75rem;border-radius:8px;font-weight:500;color:var(--text-mid)}
+    .mobile-nav-link:hover{background:var(--bg);color:var(--brand)}
+    .mob-divider{height:1px;background:var(--border);margin:.5rem 0}
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1B4F72 100%);
-      color: white;
-      line-height: 1.6;
-      overflow-x: hidden;
+    /* ── SHARED ───────────────────────────────── */
+    section{padding:5rem 0}
+    .container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+    .section-badge{display:inline-block;background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:.25rem .875rem;border-radius:100px;margin-bottom:.875rem}
+    .section-title{font-family:var(--ff-d);font-size:clamp(1.75rem,4vw,2.75rem);font-weight:800;color:var(--text);letter-spacing:-.03em;line-height:1.15;margin-bottom:.875rem}
+    .section-desc{font-size:1.0625rem;color:var(--text-muted);max-width:560px;line-height:1.7}
+    .text-center{text-align:center}.text-center .section-desc{margin:0 auto}
+
+    /* ── HERO ─────────────────────────────────── */
+    .hero{min-height:100vh;padding-top:68px;background:linear-gradient(170deg,#08111C 0%,#0F2E42 45%,#1B4F72 100%);display:flex;align-items:center;position:relative;overflow:hidden}
+    .hero-orb-1{position:absolute;top:-120px;right:-120px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(52,152,219,.12),transparent 70%);pointer-events:none}
+    .hero-orb-2{position:absolute;bottom:-180px;left:-80px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(230,126,34,.08),transparent 70%);pointer-events:none}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+    .hero-inner{max-width:1200px;margin:0 auto;padding:5rem 1.5rem 6rem;position:relative;z-index:1;text-align:center}
+    .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:.375rem 1rem;font-size:.8125rem;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:1.75rem;letter-spacing:.02em}
+    .hero-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+    .hero-title{font-family:var(--ff-d);font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;color:white;line-height:1.08;letter-spacing:-.04em;margin-bottom:1.5rem}
+    .hero-accent{color:var(--accent)}
+    .hero-desc{font-size:1.125rem;color:rgba(255,255,255,.65);max-width:580px;margin:0 auto 2.5rem;line-height:1.7}
+    .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+    .btn-hero-primary{padding:.9375rem 2.25rem;border-radius:10px;font-family:var(--ff-d);font-weight:700;font-size:1rem;color:white;background:var(--accent);border:none;cursor:pointer;transition:all .25s;box-shadow:0 6px 24px rgba(230,126,34,.35);display:inline-flex;align-items:center;gap:.5rem}
+    .btn-hero-primary:hover{background:var(--accent-dark);transform:translateY(-2px);box-shadow:0 10px 32px rgba(230,126,34,.45)}
+    .btn-hero-ghost{padding:.9375rem 2.25rem;border-radius:10px;font-family:var(--ff-d);font-weight:700;font-size:1rem;color:white;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.25);cursor:pointer;transition:all .25s;display:inline-flex;align-items:center;gap:.5rem}
+    .btn-hero-ghost:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4);transform:translateY(-2px)}
+    .hero-trust{display:flex;align-items:center;justify-content:center;gap:2rem;color:rgba(255,255,255,.45);font-size:.8125rem;flex-wrap:wrap}
+    .hero-trust-item{display:flex;align-items:center;gap:.375rem}
+
+    /* ── STATS BANNER ─────────────────────────── */
+    .stats-banner{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2rem 0}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center}
+    .stat-num{font-family:var(--ff-d);font-size:2rem;font-weight:900;color:var(--brand);letter-spacing:-.03em}
+    .stat-lbl{font-size:.875rem;color:var(--text-muted);margin-top:.25rem}
+
+    /* ── SERVICES ─────────────────────────────── */
+    .services-section{background:var(--surface)}
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;margin-top:3rem}
+    .svc-card{border:1.5px solid var(--border);border-radius:16px;padding:2rem;background:var(--surface);transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;display:flex;flex-direction:column}
+    .svc-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--brand-pale),transparent);opacity:0;transition:opacity .3s}
+    .svc-card:hover{border-color:var(--brand);transform:translateY(-4px);box-shadow:0 12px 40px rgba(27,79,114,.12)}.svc-card:hover::before{opacity:1}
+    .svc-card-inner{position:relative;z-index:1;display:flex;flex-direction:column;flex:1}
+    .svc-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--brand-pale),#d0e8f8);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1.25rem}
+    .svc-name{font-family:var(--ff-d);font-size:1.125rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+    .svc-desc{font-size:.9rem;color:var(--text-muted);line-height:1.6;margin-bottom:1.125rem;flex:1}
+    .svc-features{margin-bottom:1.125rem}
+    .svc-feature{display:flex;align-items:center;gap:.4375rem;font-size:.8125rem;color:var(--text-mid);margin-bottom:.25rem}
+    .svc-feature::before{content:'✓';color:var(--success);font-weight:700;font-size:.6875rem;flex-shrink:0}
+    .svc-price{display:flex;align-items:baseline;gap:.25rem;padding-top:.875rem;border-top:1px solid var(--border);margin-top:auto}
+    .svc-price-from{font-size:.75rem;color:var(--text-muted)}
+    .svc-price-val{font-family:var(--ff-d);font-size:1.375rem;font-weight:800;color:var(--brand)}
+    .svc-price-per{font-size:.8125rem;color:var(--text-muted)}
+    .svc-card-cta{display:block;text-align:center;padding:.625rem;background:var(--brand);color:white;border-radius:8px;font-weight:700;font-size:.875rem;margin-top:1rem;transition:all .2s}
+    .svc-card-cta:hover{background:var(--brand-dark);transform:translateY(-1px)}
+
+    /* ── HOW IT WORKS ─────────────────────────── */
+    .how-section{background:var(--bg)}
+    .steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem;position:relative}
+    .steps-grid::before{content:'';position:absolute;top:28px;left:12.5%;right:12.5%;height:2px;background:linear-gradient(90deg,var(--border),var(--border-mid),var(--border));z-index:0}
+    .step-card{text-align:center;position:relative;z-index:1}
+    .step-num{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-mid));color:white;font-family:var(--ff-d);font-size:1.25rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;box-shadow:0 4px 16px rgba(27,79,114,.3);border:3px solid white}
+    .step-title{font-family:var(--ff-d);font-size:1.0625rem;font-weight:700;margin-bottom:.5rem}
+    .step-desc{font-size:.875rem;color:var(--text-muted);line-height:1.6}
+
+    /* ── ANALYTICS PREVIEW ────────────────────── */
+    .analytics-section{background:linear-gradient(180deg,var(--surface) 0%,var(--bg) 100%)}
+    .analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;margin-top:3rem}
+    .analytics-visual{background:linear-gradient(145deg,#0D2137,#1B4F72);border-radius:20px;padding:1.75rem;box-shadow:0 24px 64px rgba(27,79,114,.28)}
+    .av-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+    .av-title{font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:white}
+    .av-live{display:flex;align-items:center;gap:.375rem;font-size:.75rem;color:rgba(255,255,255,.6)}
+    .live-dot{width:6px;height:6px;background:#22c55e;border-radius:50%;animation:pulse 2s ease-in-out infinite}
+    .av-stats{display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin-bottom:1.25rem}
+    .av-stat{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:.875rem}
+    .av-stat-label{font-size:.625rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem}
+    .av-stat-value{font-family:var(--ff-d);font-size:1.5rem;font-weight:700;color:white}
+    .av-stat-change{font-size:.625rem;color:#4ade80;margin-top:.2rem}
+    .av-bar-row{margin-bottom:.5rem}
+    .av-bar-label{display:flex;justify-content:space-between;font-size:.6875rem;color:rgba(255,255,255,.5);margin-bottom:.3rem}
+    .av-bar-track{background:rgba(255,255,255,.08);border-radius:4px;height:7px;overflow:hidden}
+    .av-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--brand-light),var(--accent))}
+    .analytics-features{list-style:none}
+    .af-item{display:flex;align-items:flex-start;gap:.875rem;padding:.875rem 0;border-bottom:1px solid var(--border)}
+    .af-item:last-child{border-bottom:none;padding-bottom:0}
+    .af-icon{width:40px;height:40px;border-radius:10px;flex-shrink:0;background:var(--brand-pale);display:flex;align-items:center;justify-content:center;font-size:1.125rem}
+    .af-title{font-weight:700;font-size:.9375rem;margin-bottom:.25rem}
+    .af-desc{font-size:.8125rem;color:var(--text-muted);line-height:1.5}
+
+    /* ── PAYMENT PROVIDERS ─────────────────────── */
+    .payment-section{background:var(--surface)}
+    .providers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+    .provider-card{border:1.5px solid var(--border);border-radius:16px;padding:2rem;text-align:center;transition:all .3s}
+    .provider-card:hover{border-color:var(--brand);transform:translateY(-3px);box-shadow:0 8px 28px rgba(27,79,114,.1)}
+    .provider-logo{font-size:2.75rem;margin-bottom:1rem}
+    .provider-name{font-family:var(--ff-d);font-size:1.125rem;font-weight:700;margin-bottom:.5rem}
+    .provider-desc{font-size:.875rem;color:var(--text-muted);line-height:1.6;margin-bottom:1rem}
+    .provider-badge{display:inline-block;background:var(--success-pale,#E6F4EA);color:var(--success,#0F9D58);font-size:.6875rem;font-weight:700;padding:.1875rem .625rem;border-radius:20px}
+
+    /* ── PRICING ───────────────────────────────── */
+    .pricing-section{background:var(--bg)}
+    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+    .pricing-card{border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:var(--surface);transition:all .3s;display:flex;flex-direction:column}
+    .pricing-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(27,79,114,.1);border-color:var(--brand)}
+    .pricing-card.popular{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+    .pricing-card-top{padding:1.75rem;background:var(--surface-alt,#F8FAFC);border-bottom:1px solid var(--border)}
+    .pricing-card.popular .pricing-card-top{background:linear-gradient(135deg,var(--brand-pale),#d4eaf8)}
+    .popular-badge{display:inline-block;background:var(--brand);color:white;font-size:.625rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:20px;margin-bottom:.625rem}
+    .plan-name{font-family:var(--ff-d);font-size:1.125rem;font-weight:700;color:var(--text)}
+    .plan-tagline{font-size:.8125rem;color:var(--text-muted);margin-top:.25rem;margin-bottom:.875rem}
+    .plan-price{font-family:var(--ff-d);font-size:2.25rem;font-weight:900;color:var(--brand);letter-spacing:-.04em}
+    .plan-per{font-size:.875rem;color:var(--text-muted);font-weight:400}
+    .pricing-card-body{padding:1.75rem;flex:1;display:flex;flex-direction:column}
+    .pricing-feat{display:flex;gap:.5rem;font-size:.8125rem;color:var(--text-mid);padding:.3125rem 0;border-bottom:1px solid var(--border)}
+    .pricing-feat:last-of-type{border-bottom:none}
+    .pricing-check{color:var(--success);font-weight:700;font-size:.6875rem;flex-shrink:0;margin-top:2px}
+    .btn-plan{width:100%;margin-top:1.375rem;padding:.75rem;border-radius:10px;font-weight:700;font-size:.9375rem;cursor:pointer;transition:all .25s;border:none;font-family:var(--ff-b)}
+    .btn-plan-primary{background:var(--brand);color:white;box-shadow:0 4px 12px rgba(27,79,114,.25)}.btn-plan-primary:hover{background:var(--brand-dark);transform:translateY(-1px)}
+    .btn-plan-outline{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}.btn-plan-outline:hover{background:var(--brand-pale)}
+
+    /* ── CONSULTATION CTA ─────────────────────── */
+    .cta-section{background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand) 60%,var(--brand-mid) 100%);padding:5rem 0;position:relative;overflow:hidden}
+    .cta-section::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.04)}
+    .cta-inner{position:relative;z-index:1;text-align:center}
+    .cta-title{font-family:var(--ff-d);font-size:clamp(1.875rem,4vw,2.75rem);font-weight:800;color:white;letter-spacing:-.03em;margin-bottom:1rem}
+    .cta-desc{font-size:1.0625rem;color:rgba(255,255,255,.7);max-width:500px;margin:0 auto 2.5rem;line-height:1.65}
+    .cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+    .btn-cta-white{padding:.9375rem 2.25rem;border-radius:10px;font-weight:700;font-size:1rem;background:white;color:var(--brand);border:none;cursor:pointer;transition:all .25s;display:inline-flex;align-items:center;gap:.5rem}
+    .btn-cta-white:hover{background:var(--brand-pale);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+    .btn-cta-ghost{padding:.9375rem 2.25rem;border-radius:10px;font-weight:600;font-size:1rem;background:rgba(255,255,255,.1);color:white;border:1.5px solid rgba(255,255,255,.3);cursor:pointer;transition:all .25s;display:inline-flex;align-items:center;gap:.5rem}
+    .btn-cta-ghost:hover{background:rgba(255,255,255,.2)}
+
+    /* ── FOOTER ───────────────────────────────── */
+    .footer{background:#0B1E30;padding:4rem 0 2rem}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+    .footer-brand-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.875rem}
+    .footer-brand-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9375rem}
+    .footer-brand-name{font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:white}
+    .footer-desc{font-size:.875rem;color:rgba(255,255,255,.42);line-height:1.65;max-width:280px}
+    .footer-col-title{font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:.875rem}
+    .footer-link{display:block;font-size:.875rem;color:rgba(255,255,255,.48);margin-bottom:.4375rem;transition:color .2s}
+    .footer-link:hover{color:rgba(255,255,255,.85)}
+    .footer-bottom{padding-top:2rem;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .footer-copy{font-size:.8125rem;color:rgba(255,255,255,.28)}
+    .footer-socials{display:flex;gap:.5rem}
+    .social-btn{width:32px;height:32px;background:rgba(255,255,255,.06);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.875rem;color:rgba(255,255,255,.42);transition:all .2s}
+    .social-btn:hover{background:rgba(255,255,255,.12);color:white}
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media(max-width:1024px){
+      .analytics-grid{grid-template-columns:1fr}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
+      .pricing-grid{grid-template-columns:1fr}
+      .steps-grid::before{display:none}
     }
-
-    /* Header */
-    .header {
-      padding: 20px 0;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    @media(max-width:768px){
+      .nav-links,.nav-cta{display:none}
+      .nav-mobile-btn{display:block}
+      section{padding:3.5rem 0}
+      .hero-inner{padding:3.5rem 1.5rem 5rem}
+      .hero-btns{flex-direction:column;align-items:center}
+      .btn-hero-primary,.btn-hero-ghost{width:100%;max-width:320px;justify-content:center}
+      .steps-grid{grid-template-columns:1fr 1fr;gap:1.5rem}
+      .stats-row{grid-template-columns:1fr 1fr;gap:1.5rem}
+      .providers-grid{grid-template-columns:1fr}
+      .pricing-grid{grid-template-columns:1fr}
+      .footer-grid{grid-template-columns:1fr;gap:2rem}
+      .footer-bottom{flex-direction:column;text-align:center}
+      .cta-btns{flex-direction:column;align-items:center}
+      .btn-cta-white,.btn-cta-ghost{width:100%;max-width:320px;justify-content:center}
     }
-
-    .header-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: white;
-    }
-
-    .logo img {
-      width: 40px;
-      height: 40px;
-    }
-
-    .logo-text {
-      font-family: 'Poppins', sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    .nav-buttons {
-      display: flex;
-      gap: 12px;
-    }
-
-    .btn {
-      padding: 10px 24px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: none;
-      font-family: 'Inter', sans-serif;
-      display: inline-block;
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: white;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), #2471a3);
-      color: white;
-      box-shadow: 0 4px 12px rgba(27, 79, 114, 0.3);
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(135deg, var(--primary-dark), #1e5f88);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(27, 79, 114, 0.4);
-    }
-
-    /* Hero Section */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 120px 20px 60px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(27, 79, 114, 0.2) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .hero-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 30px;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      animation: fadeInDown 0.8s ease-out;
-    }
-
-    .hero-title {
-      font-family: 'Poppins', sans-serif;
-      font-size: clamp(32px, 6vw, 64px);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 24px;
-      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: fadeInUp 0.8s ease-out 0.2s backwards;
-    }
-
-    .hero-subtitle {
-      font-size: clamp(16px, 2vw, 20px);
-      color: rgba(255, 255, 255, 0.8);
-      max-width: 700px;
-      margin: 0 auto 40px;
-      line-height: 1.6;
-      animation: fadeInUp 0.8s ease-out 0.4s backwards;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      animation: fadeInUp 0.8s ease-out 0.6s backwards;
-    }
-
-    .btn-large {
-      padding: 16px 32px;
-      font-size: 16px;
-    }
-
-    .btn-accent {
-      background: linear-gradient(135deg, var(--accent), #d35400);
-      color: white;
-      box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
-    }
-
-    .btn-accent:hover {
-      background: linear-gradient(135deg, #d35400, #ba4a00);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
-    }
-
-    /* Features Section */
-    .features {
-      padding: 80px 20px;
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(10px);
-    }
-
-    .features-container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      font-family: 'Poppins', sans-serif;
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 16px;
-    }
-
-    .section-subtitle {
-      text-align: center;
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 18px;
-      margin-bottom: 60px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      margin-bottom: 60px;
-    }
-
-    .feature-card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 32px;
-      transition: all 0.3s;
-      cursor: pointer;
-    }
-
-    .feature-card:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.2);
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    .feature-icon {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, var(--primary), #2471a3);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-
-    .feature-title {
-      font-family: 'Poppins', sans-serif;
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .feature-description {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    /* CTA Section */
-    .cta {
-      padding: 80px 20px;
-      text-align: center;
-    }
-
-    .cta-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: linear-gradient(135deg, rgba(27, 79, 114, 0.3), rgba(36, 113, 163, 0.3));
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 24px;
-      padding: 60px 40px;
-    }
-
-    .cta-title {
-      font-family: 'Poppins', sans-serif;
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-
-    .cta-subtitle {
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 18px;
-      margin-bottom: 32px;
-    }
-
-    /* Footer */
-    .footer {
-      padding: 40px 20px 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      text-align: center;
-    }
-
-    .footer-container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 32px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-
-    .footer-link {
-      color: rgba(255, 255, 255, 0.7);
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.3s;
-    }
-
-    .footer-link:hover {
-      color: white;
-    }
-
-    .footer-copyright {
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 14px;
-    }
-
-    /* Animations */
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .header-container {
-        padding: 0 16px;
-      }
-
-      .logo-text {
-        font-size: 16px;
-      }
-
-      .nav-buttons {
-        gap: 8px;
-      }
-
-      .btn {
-        padding: 8px 16px;
-        font-size: 13px;
-      }
-
-      .hero {
-        padding: 100px 16px 40px;
-      }
-
-      .hero-buttons {
-        flex-direction: column;
-      }
-
-      .btn-large {
-        width: 100%;
-        max-width: 300px;
-      }
-
-      .features {
-        padding: 60px 16px;
-      }
-
-      .features-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-
-      .cta {
-        padding: 60px 16px;
-      }
-
-      .cta-container {
-        padding: 40px 24px;
-      }
-
-      .footer-links {
-        flex-direction: column;
-        gap: 16px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero-title {
-        font-size: 28px;
-      }
-
-      .hero-subtitle {
-        font-size: 16px;
-      }
-
-      .feature-card {
-        padding: 24px;
-      }
-
-      .section-title {
-        font-size: 24px;
-      }
+    @media(max-width:480px){
+      .steps-grid{grid-template-columns:1fr}
+      .stats-row{grid-template-columns:1fr 1fr}
+      .services-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="header-container">
-      <a href="/" class="logo">
-        <img src="./asset/logo-icon.png" alt="Guided Tech Solutions">
-        <span class="logo-text">Guided Tech Solutions</span>
-      </a>
-      <nav class="nav-buttons">
-        <a href="./app/login.html" class="btn btn-secondary">Sign In</a>
-        <a href="./app/signup.html" class="btn btn-primary">Get Started</a>
-      </nav>
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-icon">🚀</div>
+      GTS Amplify
+    </a>
+    <div class="nav-links">
+      <a href="#services"     class="nav-link">Services</a>
+      <a href="#how-it-works" class="nav-link">How It Works</a>
+      <a href="pricing.html"  class="nav-link">Pricing</a>
+      <a href="#consultation" class="nav-link">Consultation</a>
+      <a href="about.html"    class="nav-link">About</a>
     </div>
-  </header>
+    <div class="nav-cta">
+      <a href="./app/login.html"  class="btn-nav-outline">Sign In</a>
+      <a href="./app/signup.html" class="btn-nav-solid">Get Started Free →</a>
+    </div>
+    <button class="nav-mobile-btn" id="mobileMenuToggle">☰</button>
+  </div>
+</nav>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-container">
-      <div class="hero-badge">
-        🚀 AI-Powered Business Transformation
+<div class="mobile-nav" id="mobileNav">
+  <a href="#services"     class="mobile-nav-link">Services</a>
+  <a href="#how-it-works" class="mobile-nav-link">How It Works</a>
+  <a href="pricing.html"  class="mobile-nav-link">Pricing</a>
+  <a href="#consultation" class="mobile-nav-link">Consultation</a>
+  <a href="about.html"    class="mobile-nav-link">About</a>
+  <div class="mob-divider"></div>
+  <a href="./app/login.html"  class="mobile-nav-link" style="color:var(--brand);font-weight:600">Sign In</a>
+  <a href="./app/signup.html" class="mobile-nav-link" style="background:var(--brand);color:white;border-radius:8px;text-align:center;font-weight:700">Get Started Free →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb-1"></div><div class="hero-orb-2"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="hero-dot"></span> Powered by Guided Tech Solutions</div>
+    <h1 class="hero-title">Grow your business with<br><span class="hero-accent">intelligent solutions</span></h1>
+    <p class="hero-desc">Lead generation, cloud migration, automation and SEO — all in one platform, with real-time analytics dashboards for every service you subscribe to.</p>
+    <div class="hero-btns">
+      <a href="./app/signup.html" class="btn-hero-primary">🚀 Get Started Free</a>
+      <a href="#services"         class="btn-hero-ghost">Explore Services →</a>
+    </div>
+    <div class="hero-trust">
+      <div class="hero-trust-item">✓ No setup fees</div>
+      <div class="hero-trust-item">✓ Cancel anytime</div>
+      <div class="hero-trust-item">✓ Real-time dashboards</div>
+      <div class="hero-trust-item">✓ Pay with Paystack, Stripe or PayPal</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BANNER -->
+<div class="stats-banner">
+  <div class="container">
+    <div class="stats-row">
+      <div><div class="stat-num">500+</div><div class="stat-lbl">Businesses Served</div></div>
+      <div><div class="stat-num">98%</div><div class="stat-lbl">Client Satisfaction</div></div>
+      <div><div class="stat-num">₦2B+</div><div class="stat-lbl">Revenue Generated</div></div>
+      <div><div class="stat-num">24/7</div><div class="stat-lbl">Dashboard Monitoring</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-badge">Our Services</div>
+      <h2 class="section-title">Everything your business needs to scale</h2>
+      <p class="section-desc">Each service includes a dedicated real-time analytics dashboard so you see results as they happen.</p>
+    </div>
+    <div class="services-grid">
+      <div class="svc-card">
+        <div class="svc-card-inner">
+          <div class="svc-icon">🎯</div>
+          <div class="svc-name">Lead Generation</div>
+          <div class="svc-desc">We capture and qualify leads from your website, landing pages, and digital channels — delivered straight to your dashboard in real time.</div>
+          <div class="svc-features">
+            <div class="svc-feature">Live lead tracking dashboard</div>
+            <div class="svc-feature">Hot / Warm / Cold lead scoring</div>
+            <div class="svc-feature">CRM &amp; webhook integration</div>
+            <div class="svc-feature">CSV export anytime</div>
+          </div>
+          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">₦50,000</span><span class="svc-price-per">/ month</span></div>
+          <a href="./app/signup.html" class="svc-card-cta">Get Started →</a>
+        </div>
       </div>
-      <h1 class="hero-title">
-        Transform Your Business<br>With Intelligent Solutions
-      </h1>
-      <p class="hero-subtitle">
-        Empowering organizations with cutting-edge AI consulting, automation, and custom technology solutions that drive real results.
-      </p>
-      <div class="hero-buttons">
-        <a href="./app/signup.html" class="btn btn-accent btn-large">Start Free Trial</a>
-        <a href="./app/portal-services.html" class="btn btn-primary btn-large">View Services</a>
+      <div class="svc-card">
+        <div class="svc-card-inner">
+          <div class="svc-icon">☁️</div>
+          <div class="svc-name">Cloud Migration</div>
+          <div class="svc-desc">Move your infrastructure, data and applications to the cloud safely and efficiently with zero-downtime planning and full event tracking.</div>
+          <div class="svc-features">
+            <div class="svc-feature">Phase-by-phase migration tracking</div>
+            <div class="svc-feature">AWS, GCP, Azure support</div>
+            <div class="svc-feature">Data integrity validation</div>
+            <div class="svc-feature">Live migration event log</div>
+          </div>
+          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">₦150,000</span><span class="svc-price-per">/ project</span></div>
+          <a href="./app/signup.html" class="svc-card-cta">Get Started →</a>
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-card-inner">
+          <div class="svc-icon">🤖</div>
+          <div class="svc-name">Business Automation</div>
+          <div class="svc-desc">Automate repetitive workflows — email sequences, CRM syncs, invoicing, reporting — and track every run from your dashboard.</div>
+          <div class="svc-features">
+            <div class="svc-feature">Run history &amp; success rate tracking</div>
+            <div class="svc-feature">Multi-tool integrations</div>
+            <div class="svc-feature">Failure alerts &amp; notifications</div>
+            <div class="svc-feature">Custom trigger scheduling</div>
+          </div>
+          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">₦75,000</span><span class="svc-price-per">/ month</span></div>
+          <a href="./app/signup.html" class="svc-card-cta">Get Started →</a>
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-card-inner">
+          <div class="svc-icon">🔍</div>
+          <div class="svc-name">SEO Optimization</div>
+          <div class="svc-desc">Rank higher on Google, grow organic traffic, and track your keyword positions in real time with our data-driven SEO approach.</div>
+          <div class="svc-features">
+            <div class="svc-feature">Keyword ranking tracker</div>
+            <div class="svc-feature">Domain authority monitoring</div>
+            <div class="svc-feature">Backlink &amp; competitor analysis</div>
+            <div class="svc-feature">Core Web Vitals tracking</div>
+          </div>
+          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">₦60,000</span><span class="svc-price-per">/ month</span></div>
+          <a href="./app/signup.html" class="svc-card-cta">Get Started →</a>
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-card-inner">
+          <div class="svc-icon">💼</div>
+          <div class="svc-name">IT Consulting</div>
+          <div class="svc-desc">Strategic technology consulting for businesses modernizing operations and building the right tech stack for sustainable growth.</div>
+          <div class="svc-features">
+            <div class="svc-feature">Technology stack assessment</div>
+            <div class="svc-feature">Digital transformation roadmap</div>
+            <div class="svc-feature">Vendor selection support</div>
+            <div class="svc-feature">Ongoing advisory retainer</div>
+          </div>
+          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">₦100,000</span><span class="svc-price-per">/ month</span></div>
+          <a href="./app/signup.html" class="svc-card-cta">Get Started →</a>
+        </div>
+      </div>
+      <div class="svc-card" style="background:linear-gradient(135deg,var(--brand-dark),var(--brand));border-color:var(--brand)">
+        <div class="svc-card-inner">
+          <div class="svc-icon" style="background:rgba(255,255,255,.12)">📞</div>
+          <div class="svc-name" style="color:white">Free Discovery Call</div>
+          <div class="svc-desc" style="color:rgba(255,255,255,.7)">Not sure which service is right for you? Book a free 30-minute strategy call with our experts — no commitment required.</div>
+          <div class="svc-features">
+            <div class="svc-feature" style="color:rgba(255,255,255,.8)">Business needs assessment</div>
+            <div class="svc-feature" style="color:rgba(255,255,255,.8)">Tailored service recommendations</div>
+            <div class="svc-feature" style="color:rgba(255,255,255,.8)">No credit card, no commitment</div>
+          </div>
+          <div style="padding-top:.875rem;border-top:1px solid rgba(255,255,255,.15);margin-top:auto;display:flex;align-items:baseline;gap:.25rem">
+            <span style="font-family:var(--ff-d);font-size:1.375rem;font-weight:800;color:#4ade80">Free</span>
+          </div>
+          <a href="./app/signup.html" class="svc-card-cta" style="background:white;color:var(--brand)">Book Free Call →</a>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Features Section -->
-  <section class="features">
-    <div class="features-container">
-      <h2 class="section-title">Why Choose Us?</h2>
-      <p class="section-subtitle">
-        We deliver comprehensive solutions tailored to your business needs
-      </p>
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how-it-works">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-badge">How It Works</div>
+      <h2 class="section-title">From sign-up to results in minutes</h2>
+      <p class="section-desc">Our streamlined onboarding gets your services running fast, with full dashboard visibility from day one.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card"><div class="step-num">1</div><div class="step-title">Create Your Account</div><div class="step-desc">Sign up in seconds with Google or email. No credit card required to explore.</div></div>
+      <div class="step-card"><div class="step-num">2</div><div class="step-title">Choose a Service</div><div class="step-desc">Browse individual services or pick a bundle. Pay with Paystack, Stripe, or PayPal.</div></div>
+      <div class="step-card"><div class="step-num">3</div><div class="step-title">Configure via Wizard</div><div class="step-desc">A guided setup wizard collects exactly what we need to activate your service.</div></div>
+      <div class="step-card"><div class="step-num">4</div><div class="step-title">Watch Results Live</div><div class="step-desc">Your personal dashboard updates in real time — leads, migrations, automation runs, rankings.</div></div>
+    </div>
+  </div>
+</section>
 
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🤖</div>
-          <h3 class="feature-title">AI Consulting</h3>
-          <p class="feature-description">
-            Expert guidance on implementing AI solutions that transform your operations and drive innovation.
-          </p>
+<!-- ANALYTICS PREVIEW -->
+<section class="analytics-section">
+  <div class="container">
+    <div class="analytics-grid">
+      <div class="analytics-visual">
+        <div class="av-header">
+          <div class="av-title">🎯 Lead Generation Dashboard</div>
+          <div class="av-live"><span class="live-dot"></span>Live</div>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">⚙️</div>
-          <h3 class="feature-title">Automation Services</h3>
-          <p class="feature-description">
-            Streamline your workflows with intelligent automation that saves time and reduces costs.
-          </p>
+        <div class="av-stats">
+          <div class="av-stat"><div class="av-stat-label">Total Leads</div><div class="av-stat-value">1,284</div><div class="av-stat-change">↑ 18% this month</div></div>
+          <div class="av-stat"><div class="av-stat-label">Hot Leads</div><div class="av-stat-value">142</div><div class="av-stat-change">↑ 23% vs last month</div></div>
+          <div class="av-stat"><div class="av-stat-label">Conversion</div><div class="av-stat-value">11%</div><div class="av-stat-change">↑ 2.1pts</div></div>
+          <div class="av-stat"><div class="av-stat-label">This Week</div><div class="av-stat-value">87</div><div class="av-stat-change">↑ 34% vs last week</div></div>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🔧</div>
-          <h3 class="feature-title">Custom Development</h3>
-          <p class="feature-description">
-            Tailored software solutions built to meet your unique business requirements and goals.
-          </p>
+        <div>
+          <div class="av-bar-row"><div class="av-bar-label"><span style="color:rgba(255,255,255,.7)">Website Forms</span><span style="color:rgba(255,255,255,.7)">48%</span></div><div class="av-bar-track"><div class="av-bar-fill" style="width:48%"></div></div></div>
+          <div class="av-bar-row"><div class="av-bar-label"><span style="color:rgba(255,255,255,.7)">Chat Widget</span><span style="color:rgba(255,255,255,.7)">31%</span></div><div class="av-bar-track"><div class="av-bar-fill" style="width:31%;background:linear-gradient(90deg,var(--accent),#f59e0b)"></div></div></div>
+          <div class="av-bar-row"><div class="av-bar-label"><span style="color:rgba(255,255,255,.7)">Landing Page</span><span style="color:rgba(255,255,255,.7)">21%</span></div><div class="av-bar-track"><div class="av-bar-fill" style="width:21%;background:linear-gradient(90deg,var(--success),#34d399)"></div></div></div>
         </div>
+      </div>
+      <div>
+        <div class="section-badge">Real-Time Analytics</div>
+        <h2 class="section-title">Your data, live and in one place</h2>
+        <p class="section-desc" style="margin-bottom:2rem">Every subscribed service gets its own dedicated analytics panel. No switching between tools — everything is in your GTS Amplify dashboard.</p>
+        <ul class="analytics-features">
+          <li class="af-item"><div class="af-icon">🎯</div><div><div class="af-title">Live Lead Tracking</div><div class="af-desc">See new leads the moment they're captured. Filter by score, source and date.</div></div></li>
+          <li class="af-item"><div class="af-icon">☁️</div><div><div class="af-title">Migration Progress</div><div class="af-desc">Track each migration phase with a real-time event log and completion bar.</div></div></li>
+          <li class="af-item"><div class="af-icon">🤖</div><div><div class="af-title">Automation Run History</div><div class="af-desc">Every run logged with success/failure status, duration and trigger details.</div></div></li>
+          <li class="af-item"><div class="af-icon">🔍</div><div><div class="af-title">SEO Keyword Rankings</div><div class="af-desc">See exactly where you rank for every target keyword, updated regularly.</div></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3 class="feature-title">Analytics & Insights</h3>
-          <p class="feature-description">
-            Data-driven insights that help you make informed decisions and track your success.
-          </p>
+<!-- PAYMENT PROVIDERS -->
+<section class="payment-section" id="payments">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-badge">Secure Payments</div>
+      <h2 class="section-title">Pay the way that works for you</h2>
+      <p class="section-desc">GTS Amplify supports three payment providers so you can choose whichever is most convenient.</p>
+    </div>
+    <div class="providers-grid">
+      <div class="provider-card">
+        <div class="provider-logo">💳</div>
+        <div class="provider-name">Paystack</div>
+        <div class="provider-desc">Nigeria's leading payment gateway. Pay with debit card, USSD, bank transfer, or mobile money. Prices displayed in Naira (₦).</div>
+        <span class="provider-badge">🇳🇬 Recommended for Nigeria</span>
+      </div>
+      <div class="provider-card">
+        <div class="provider-logo">🔵</div>
+        <div class="provider-name">Stripe</div>
+        <div class="provider-desc">Global card payments accepted worldwide. Pay with Visa, Mastercard, or American Express. Prices billed in USD.</div>
+        <span class="provider-badge">🌍 Global Payments</span>
+      </div>
+      <div class="provider-card">
+        <div class="provider-logo">🅿️</div>
+        <div class="provider-name">PayPal</div>
+        <div class="provider-desc">Pay from your PayPal balance or any linked payment method. Convenient for international clients with existing PayPal accounts.</div>
+        <span class="provider-badge">🌐 PayPal Balance &amp; Cards</span>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:1.5rem;font-size:.875rem;color:var(--text-muted)">🔒 All transactions are secured with industry-standard encryption. Your payment details are never stored on our servers.</div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-badge">Pricing</div>
+      <h2 class="section-title">Simple, transparent pricing</h2>
+      <p class="section-desc">Choose individual services or save with a bundle plan. All subscriptions include full dashboard access.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-card-top">
+          <div class="plan-name">Starter</div>
+          <div class="plan-tagline">Perfect for solo businesses</div>
+          <div><span class="plan-price">₦75,000</span><span class="plan-per"> / month</span></div>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🛡️</div>
-          <h3 class="feature-title">Enterprise Security</h3>
-          <p class="feature-description">
-            Bank-level security and compliance to protect your data and maintain trust.
-          </p>
+        <div class="pricing-card-body">
+          <div class="pricing-feat"><span class="pricing-check">✓</span>1 service of your choice</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Real-time analytics dashboard</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Email support</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Monthly performance report</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Free discovery call included</div>
+          <a href="./app/signup.html" class="btn-plan btn-plan-outline">Get Started</a>
         </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">💬</div>
-          <h3 class="feature-title">24/7 Support</h3>
-          <p class="feature-description">
-            Round-the-clock assistance from our dedicated team of technical experts.
-          </p>
+      </div>
+      <div class="pricing-card popular">
+        <div class="pricing-card-top">
+          <div class="popular-badge">Most Popular</div>
+          <div class="plan-name">Growth</div>
+          <div class="plan-tagline">For growing businesses</div>
+          <div><span class="plan-price">₦180,000</span><span class="plan-per"> / month</span></div>
+        </div>
+        <div class="pricing-card-body">
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Lead Gen + Automation + SEO</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>All analytics dashboards</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Priority support (48h response)</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Bi-weekly performance calls</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>CRM integration setup</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Save 20% vs individual pricing</div>
+          <a href="./app/signup.html" class="btn-plan btn-plan-primary">Get Started</a>
+        </div>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-card-top">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-tagline">For scaling organizations</div>
+          <div><span class="plan-price" style="font-size:1.75rem">Custom</span></div>
+        </div>
+        <div class="pricing-card-body">
+          <div class="pricing-feat"><span class="pricing-check">✓</span>All services included</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Dedicated account manager</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Custom integrations</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>SLA &amp; uptime guarantees</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>On-site support available</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Cloud migration included</div>
+          <a href="./app/signup.html" class="btn-plan btn-plan-outline">Contact Sales</a>
         </div>
       </div>
     </div>
-  </section>
+    <div style="text-align:center;margin-top:1.5rem"><a href="pricing.html" style="color:var(--brand);font-weight:600;font-size:.9375rem">View full pricing details →</a></div>
+  </div>
+</section>
 
-  <!-- CTA Section -->
-  <section class="cta">
-    <div class="cta-container">
-      <h2 class="cta-title">Ready to Get Started?</h2>
-      <p class="cta-subtitle">
-        Join hundreds of businesses already transforming with our solutions
-      </p>
-      <div class="hero-buttons">
-        <a href="./app/signup.html" class="btn btn-accent btn-large">Create Account</a>
-        <a href="./app/portal-services.html" class="btn btn-primary btn-large">Browse Services</a>
+<!-- CONSULTATION CTA -->
+<section class="cta-section" id="consultation">
+  <div class="container">
+    <div class="cta-inner">
+      <h2 class="cta-title">Not sure where to start?<br>Talk to our experts — free.</h2>
+      <p class="cta-desc">Book a free 30-minute discovery call. We'll assess your business challenges and recommend exactly the right services — no pressure, no commitment.</p>
+      <div class="cta-btns">
+        <a href="./app/signup.html" class="btn-cta-white">📅 Book Free Discovery Call</a>
+        <a href="./app/signup.html" class="btn-cta-ghost">💼 Paid Strategy Session</a>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-links">
-        <a href="./app/portal-services.html" class="footer-link">Services</a>
-        <a href="./app/portal-subscriptions.html" class="footer-link">Pricing</a>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-row">
+          <div class="footer-brand-icon">🚀</div>
+          <div class="footer-brand-name">GTS Amplify</div>
+        </div>
+        <div class="footer-desc">Guided Tech Solutions helps businesses grow smarter with data-driven technology services and real-time analytics dashboards.</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <a href="#services" class="footer-link">Lead Generation</a>
+        <a href="#services" class="footer-link">Cloud Migration</a>
+        <a href="#services" class="footer-link">Automation</a>
+        <a href="#services" class="footer-link">SEO</a>
+        <a href="#services" class="footer-link">IT Consulting</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <a href="./app/signup.html" class="footer-link">Get Started</a>
+        <a href="./app/login.html"  class="footer-link">Sign In</a>
+        <a href="pricing.html"      class="footer-link">Pricing</a>
+        <a href="#consultation"     class="footer-link">Book Consultation</a>
         <a href="./admin/admin-login.html" class="footer-link">Admin</a>
-        <a href="mailto:info@guidedtechms.com" class="footer-link">Contact</a>
       </div>
-      <p class="footer-copyright">
-        © <span id="year"></span> Guided Tech Solutions. All rights reserved.
-      </p>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <a href="about.html"   class="footer-link">About GTS</a>
+        <a href="privacy.html" class="footer-link">Privacy Policy</a>
+        <a href="terms.html"   class="footer-link">Terms of Service</a>
+      </div>
     </div>
-  </footer>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Guided Tech Solutions. All rights reserved.</div>
+      <div class="footer-socials">
+        <a href="#" class="social-btn">𝕏</a>
+        <a href="#" class="social-btn">in</a>
+        <a href="#" class="social-btn">ig</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-  <script>
-    // Set current year
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
+<script>
+  document.getElementById("mobileMenuToggle").addEventListener("click",()=>{
+    document.getElementById("mobileNav").classList.toggle("show");
+  });
+  document.querySelectorAll(".mobile-nav a").forEach(a=>{
+    a.addEventListener("click",()=>document.getElementById("mobileNav").classList.remove("show"));
+  });
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener("click",e=>{
+      const t=document.querySelector(a.getAttribute("href"));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:"smooth",block:"start"});}
     });
-  </script>
-
+  });
+</script>
 </body>
 </html>
