@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Pricing — GTS Amplify</title>
+  <meta name="description" content="Transparent pricing for all GTS Amplify services. Individual services or bundle plans. Pay with Paystack, Stripe or PayPal.">
+  <link rel="icon" href="./asset/logo-icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--brand:#1B4F72;--brand-dark:#0F2E42;--brand-mid:#2471A3;--brand-pale:#EBF5FB;--accent:#E67E22;--success:#0F9D58;--success-pale:#E6F4EA;--text:#0D1B2A;--text-mid:#334155;--text-muted:#64748B;--border:#E2E8F0;--surface:#fff;--bg:#F2F5F9;--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--ff-b);color:var(--text);background:var(--surface);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
+
+    /* Nav */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(226,232,240,.8);height:68px}
+    .nav-inner{max-width:1200px;margin:0 auto;padding:0 1.5rem;height:100%;display:flex;align-items:center;justify-content:space-between}
+    .nav-logo{display:flex;align-items:center;gap:.5rem;font-family:var(--ff-d);font-size:1.0625rem;font-weight:700;color:var(--brand)}
+    .nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+    .nav-right{display:flex;gap:.625rem;align-items:center}
+    .btn-nav-ghost{padding:.4375rem 1rem;border-radius:8px;font-weight:600;font-size:.875rem;color:var(--brand);border:1.5px solid var(--brand);background:transparent;cursor:pointer;transition:all .2s}
+    .btn-nav-ghost:hover{background:var(--brand-pale)}
+    .btn-nav-solid{padding:.4375rem 1.125rem;border-radius:8px;font-weight:600;font-size:.875rem;color:white;background:var(--brand);border:none;cursor:pointer;transition:all .2s}
+    .btn-nav-solid:hover{background:var(--brand-dark)}
+
+    /* Hero */
+    .hero{padding:6rem 0 4rem;background:linear-gradient(170deg,#08111C,#0F2E42,#1B4F72);text-align:center;margin-top:68px}
+    .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:.3125rem .875rem;font-size:.8125rem;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:1.25rem;letter-spacing:.02em}
+    .hero-title{font-family:var(--ff-d);font-size:clamp(2rem,5vw,3.5rem);font-weight:900;color:white;letter-spacing:-.04em;line-height:1.1;margin-bottom:1rem}
+    .hero-desc{font-size:1.0625rem;color:rgba(255,255,255,.65);max-width:520px;margin:0 auto 2rem;line-height:1.7}
+
+    /* Billing toggle */
+    .billing-toggle-row{display:flex;justify-content:center;margin-bottom:3rem}
+    .billing-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:.3rem;gap:.25rem}
+    .billing-btn{padding:.4375rem 1.25rem;border-radius:100px;border:none;font-size:.875rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all .2s;background:transparent;display:flex;align-items:center;gap:.375rem}
+    .billing-btn.active{background:var(--brand);color:white;box-shadow:0 2px 8px rgba(27,79,114,.25)}
+    .save-tag{background:var(--success-pale);color:var(--success);font-size:.5625rem;font-weight:700;padding:1px 5px;border-radius:8px}
+
+    /* Sections */
+    section{padding:5rem 0}
+    .container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+    .section-badge{display:inline-block;background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:.25rem .875rem;border-radius:100px;margin-bottom:.875rem}
+    .section-title{font-family:var(--ff-d);font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;color:var(--text);letter-spacing:-.03em;line-height:1.15;margin-bottom:.875rem}
+    .section-desc{font-size:1rem;color:var(--text-muted);max-width:560px;line-height:1.7}
+    .text-center{text-align:center}.text-center .section-desc{margin:0 auto}
+
+    /* Plans */
+    .plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+    .plan-card{border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:var(--surface);transition:all .3s;display:flex;flex-direction:column}
+    .plan-card:hover{border-color:var(--brand);transform:translateY(-4px);box-shadow:0 12px 40px rgba(27,79,114,.1)}
+    .plan-card.featured{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+    .plan-card-top{padding:1.75rem;border-bottom:1px solid var(--border);background:#FAFBFD}
+    .plan-card.featured .plan-card-top{background:linear-gradient(135deg,var(--brand-pale),#d4eaf8)}
+    .popular-tag{display:inline-block;background:var(--brand);color:white;font-size:.5625rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:20px;margin-bottom:.5rem}
+    .plan-name{font-family:var(--ff-d);font-size:1.125rem;font-weight:700;color:var(--text)}
+    .plan-tagline{font-size:.8125rem;color:var(--text-muted);margin-top:.2rem;margin-bottom:.875rem}
+    .plan-price{font-family:var(--ff-d);font-size:2.5rem;font-weight:900;color:var(--brand);letter-spacing:-.04em}
+    .plan-per{font-size:.875rem;color:var(--text-muted);font-weight:400}
+    .plan-orig{font-size:.875rem;color:var(--text-faint,#94A3B8);text-decoration:line-through;margin-left:.375rem}
+    .plan-card-body{padding:1.75rem;flex:1;display:flex;flex-direction:column}
+    .feat{display:flex;gap:.5rem;font-size:.875rem;color:var(--text-mid);padding:.375rem 0;border-bottom:1px solid var(--border)}
+    .feat:last-of-type{border-bottom:none}
+    .feat-check{color:var(--success);font-weight:700;font-size:.75rem;flex-shrink:0;margin-top:2px}
+    .btn-plan{width:100%;margin-top:1.5rem;padding:.8125rem;border-radius:10px;font-weight:700;font-size:.9375rem;cursor:pointer;transition:all .25s;border:none;font-family:var(--ff-b)}
+    .btn-plan-primary{background:var(--brand);color:white;box-shadow:0 4px 12px rgba(27,79,114,.25)}.btn-plan-primary:hover{background:var(--brand-dark);transform:translateY(-1px)}
+    .btn-plan-outline{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}.btn-plan-outline:hover{background:var(--brand-pale)}
+
+    /* Individual services table */
+    .svc-pricing-table{width:100%;border-collapse:collapse;margin-top:2rem}
+    .svc-pricing-table th{padding:.75rem 1rem;text-align:left;font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);background:#F8FAFC;border-bottom:2px solid var(--border)}
+    .svc-pricing-table td{padding:.875rem 1rem;border-bottom:1px solid var(--border);color:var(--text-mid);vertical-align:middle}
+    .svc-pricing-table tr:last-child td{border-bottom:none}
+    .svc-pricing-table tr:hover td{background:#F8FAFC}
+    .td-name{font-weight:700;color:var(--text)}
+    .td-sub{font-size:.75rem;color:var(--text-muted);margin-top:2px}
+
+    /* FAQ */
+    .faq-section{background:var(--bg)}
+    .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem}
+    .faq-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
+    .faq-q{font-family:var(--ff-d);font-weight:700;font-size:.9375rem;color:var(--text);margin-bottom:.5rem}
+    .faq-a{font-size:.875rem;color:var(--text-muted);line-height:1.65}
+
+    /* CTA */
+    .cta-section{background:linear-gradient(135deg,var(--brand-dark),var(--brand),var(--brand-mid));padding:5rem 0;text-align:center}
+    .cta-title{font-family:var(--ff-d);font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;color:white;letter-spacing:-.03em;margin-bottom:1rem}
+    .cta-desc{font-size:1rem;color:rgba(255,255,255,.7);max-width:480px;margin:0 auto 2rem;line-height:1.65}
+    .cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+    .btn-cta-white{padding:.875rem 2rem;border-radius:10px;font-weight:700;font-size:.9375rem;background:white;color:var(--brand);border:none;cursor:pointer;transition:all .25s}
+    .btn-cta-white:hover{background:var(--brand-pale);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+    .btn-cta-ghost{padding:.875rem 2rem;border-radius:10px;font-weight:600;font-size:.9375rem;background:rgba(255,255,255,.1);color:white;border:1.5px solid rgba(255,255,255,.3);cursor:pointer;transition:all .25s}
+    .btn-cta-ghost:hover{background:rgba(255,255,255,.2)}
+
+    /* Footer minimal */
+    .footer-mini{background:#0B1E30;padding:2rem 0;text-align:center}
+    .footer-mini-logo{display:flex;align-items:center;justify-content:center;gap:.5rem;font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:white;margin-bottom:.75rem}
+    .footer-mini-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.875rem}
+    .footer-mini-copy{font-size:.8125rem;color:rgba(255,255,255,.3)}
+    .footer-mini-links{display:flex;gap:1.25rem;justify-content:center;margin-bottom:.75rem}
+    .footer-mini-link{font-size:.8125rem;color:rgba(255,255,255,.45);transition:color .2s}
+    .footer-mini-link:hover{color:rgba(255,255,255,.8)}
+
+    @media(max-width:1024px){.plans-grid{grid-template-columns:1fr}.faq-grid{grid-template-columns:1fr}}
+    @media(max-width:768px){section{padding:3.5rem 0}.hero{padding:4.5rem 0 3.5rem}.cta-btns{flex-direction:column;align-items:center}}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="./index.html" class="nav-logo"><div class="nav-logo-icon">🚀</div>GTS Amplify</a>
+    <div class="nav-right">
+      <a href="./app/login.html"  class="btn-nav-ghost">Sign In</a>
+      <a href="./app/signup.html" class="btn-nav-solid">Get Started Free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="container">
+    <div class="hero-badge">💰 Transparent Pricing</div>
+    <h1 class="hero-title">Simple pricing,<br>no surprises</h1>
+    <p class="hero-desc">Choose individual services or save with a bundle. Every plan includes full real-time analytics dashboards.</p>
+  </div>
+</div>
+
+<!-- BUNDLE PLANS -->
+<section style="background:var(--surface)">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-badge">Bundle Plans</div>
+      <h2 class="section-title">Save more with a bundle</h2>
+      <p class="section-desc">Combine services and save up to 20% compared to subscribing individually.</p>
+    </div>
+
+    <div class="billing-toggle-row">
+      <div class="billing-toggle">
+        <button class="billing-btn active" id="btnMonthly">Monthly</button>
+        <button class="billing-btn" id="btnYearly">Yearly <span class="save-tag">Save 20%</span></button>
+      </div>
+    </div>
+
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-card-top">
+          <div class="plan-name">Starter</div>
+          <div class="plan-tagline">Perfect for solo businesses</div>
+          <div><span class="plan-price" id="starter-price">₦75,000</span><span class="plan-per"> / month</span><span class="plan-orig" id="starter-orig" style="display:none">₦900,000</span></div>
+        </div>
+        <div class="plan-card-body">
+          <div class="feat"><span class="feat-check">✓</span>1 service of your choice</div>
+          <div class="feat"><span class="feat-check">✓</span>Full analytics dashboard</div>
+          <div class="feat"><span class="feat-check">✓</span>Email &amp; chat support</div>
+          <div class="feat"><span class="feat-check">✓</span>Monthly performance report</div>
+          <div class="feat"><span class="feat-check">✓</span>Free discovery call included</div>
+          <div class="feat"><span class="feat-check">✓</span>Service setup wizard</div>
+          <a href="./app/signup.html" class="btn-plan btn-plan-outline">Get Started</a>
+        </div>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-card-top">
+          <div class="popular-tag">Most Popular</div>
+          <div class="plan-name">Growth</div>
+          <div class="plan-tagline">For growing businesses</div>
+          <div><span class="plan-price" id="growth-price">₦180,000</span><span class="plan-per"> / month</span><span class="plan-orig" id="growth-orig" style="display:none"></span></div>
+        </div>
+        <div class="plan-card-body">
+          <div class="feat"><span class="feat-check">✓</span>Lead Generation + Automation + SEO</div>
+          <div class="feat"><span class="feat-check">✓</span>All analytics dashboards</div>
+          <div class="feat"><span class="feat-check">✓</span>Priority support (48h SLA)</div>
+          <div class="feat"><span class="feat-check">✓</span>Bi-weekly performance calls</div>
+          <div class="feat"><span class="feat-check">✓</span>CRM integration setup</div>
+          <div class="feat"><span class="feat-check">✓</span>Save 20% vs individual pricing</div>
+          <a href="./app/signup.html" class="btn-plan btn-plan-primary">Get Started</a>
+        </div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-card-top">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-tagline">For scaling organizations</div>
+          <div><span class="plan-price" style="font-size:1.75rem">Custom</span></div>
+        </div>
+        <div class="plan-card-body">
+          <div class="feat"><span class="feat-check">✓</span>All services included</div>
+          <div class="feat"><span class="feat-check">✓</span>Dedicated account manager</div>
+          <div class="feat"><span class="feat-check">✓</span>Custom API integrations</div>
+          <div class="feat"><span class="feat-check">✓</span>SLA &amp; uptime guarantees</div>
+          <div class="feat"><span class="feat-check">✓</span>On-site support available</div>
+          <div class="feat"><span class="feat-check">✓</span>Cloud migration project included</div>
+          <a href="./app/signup.html" class="btn-plan btn-plan-outline">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDIVIDUAL SERVICES -->
+<section style="background:var(--bg)">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-badge">Individual Services</div>
+      <h2 class="section-title">Subscribe to exactly what you need</h2>
+      <p class="section-desc">Every service comes with a full real-time analytics dashboard and guided setup wizard.</p>
+    </div>
+    <div style="overflow-x:auto;margin-top:2rem">
+      <table class="svc-pricing-table">
+        <thead><tr><th>Service</th><th>Monthly</th><th>Yearly (save 20%)</th><th>Billing</th><th>Dashboard</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><div class="td-name">🎯 Lead Generation</div><div class="td-sub">Real-time lead capture, scoring & CRM sync</div></td><td><strong>₦50,000</strong></td><td><strong style="color:var(--success)">₦480,000</strong></td><td>Monthly / Yearly</td><td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">Live Dashboard</span></td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td></tr>
+          <tr><td><div class="td-name">☁️ Cloud Migration</div><div class="td-sub">Phase tracking, event log, multi-cloud support</div></td><td><strong>₦150,000</strong></td><td><strong style="color:var(--success)">₦1,440,000</strong></td><td>Per project</td><td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">Progress Tracker</span></td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td></tr>
+          <tr><td><div class="td-name">🤖 Business Automation</div><div class="td-sub">Workflow automation with run history & alerts</div></td><td><strong>₦75,000</strong></td><td><strong style="color:var(--success)">₦720,000</strong></td><td>Monthly / Yearly</td><td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">Run History</span></td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td></tr>
+          <tr><td><div class="td-name">🔍 SEO Optimization</div><div class="td-sub">Keyword tracking, DA monitoring, competitor analysis</div></td><td><strong>₦60,000</strong></td><td><strong style="color:var(--success)">₦576,000</strong></td><td>Monthly / Yearly</td><td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">Rankings Tracker</span></td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td></tr>
+          <tr><td><div class="td-name">💼 IT Consulting</div><div class="td-sub">Tech stack assessment, roadmap, vendor selection</div></td><td><strong>₦100,000</strong></td><td><strong style="color:var(--success)">₦960,000</strong></td><td>Monthly / Yearly</td><td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">Service Status</span></td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td></tr>
+          <tr><td><div class="td-name">📞 Free Discovery Call</div><div class="td-sub">30-minute expert consultation, no commitment</div></td><td><strong style="color:var(--success)">Free</strong></td><td><strong style="color:var(--success)">Free</strong></td><td>Anytime</td><td>—</td><td><a href="./app/signup.html" style="color:var(--success);font-weight:600;font-size:.875rem">Book Now →</a></td></tr>
+          <tr><td><div class="td-name">💼 Strategy Session</div><div class="td-sub">60-minute deep-dive with written action plan</div></td><td colspan="2"><strong>₦15,000</strong> per session</td><td>Per session</td><td>—</td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Book Now →</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-badge">FAQ</div>
+      <h2 class="section-title">Common pricing questions</h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item"><div class="faq-q">Can I cancel anytime?</div><div class="faq-a">Yes. There are no lock-in contracts. You can cancel your subscription at any time and retain access until the end of your billing period.</div></div>
+      <div class="faq-item"><div class="faq-q">Which payment methods are accepted?</div><div class="faq-a">We accept payments via Paystack (card, USSD, bank transfer — great for Nigeria), Stripe (global card payments in USD), and PayPal.</div></div>
+      <div class="faq-item"><div class="faq-q">Are prices in Naira or USD?</div><div class="faq-a">Paystack charges in Naira (₦). Stripe charges in USD. When you select your payment provider at checkout, the amount is shown in the correct currency.</div></div>
+      <div class="faq-item"><div class="faq-q">What happens after I subscribe?</div><div class="faq-a">After payment, your service is activated and a setup wizard guides you through configuration. Your analytics dashboard becomes live once setup is complete.</div></div>
+      <div class="faq-item"><div class="faq-q">Is there a free trial?</div><div class="faq-a">We offer a free 30-minute discovery call so you can understand exactly what you'll get before subscribing. No trial period, but our consultants will walk you through everything.</div></div>
+      <div class="faq-item"><div class="faq-q">Can I switch between plans?</div><div class="faq-a">Yes, you can upgrade or add more services at any time. Contact us and we'll prorate the difference. Downgrades take effect at the next billing cycle.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="cta-title">Ready to get started?</h2>
+    <p class="cta-desc">Sign up free and book your discovery call. No credit card required to explore the platform.</p>
+    <div class="cta-btns">
+      <a href="./app/signup.html" class="btn-cta-white">🚀 Start Free</a>
+      <a href="./app/signup.html" class="btn-cta-ghost">📅 Book Discovery Call</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer-mini">
+  <div class="container">
+    <div class="footer-mini-logo"><div class="footer-mini-icon">🚀</div>GTS Amplify</div>
+    <div class="footer-mini-links">
+      <a href="./index.html"   class="footer-mini-link">Home</a>
+      <a href="./about.html"   class="footer-mini-link">About</a>
+      <a href="./privacy.html" class="footer-mini-link">Privacy</a>
+      <a href="./terms.html"   class="footer-mini-link">Terms</a>
+    </div>
+    <div class="footer-mini-copy">© 2025 Guided Tech Solutions. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  const prices = {
+    monthly: { starter:"₦75,000", starterYear:null, growth:"₦180,000", growthYear:null },
+    yearly:  { starter:"₦720,000", starterYear:"₦900,000", growth:"₦1,728,000", growthYear:"₦2,160,000" },
+  };
+  let mode="monthly";
+  document.getElementById("btnMonthly").addEventListener("click",()=>{
+    mode="monthly";
+    document.getElementById("btnMonthly").classList.add("active");
+    document.getElementById("btnYearly").classList.remove("active");
+    document.getElementById("starter-price").textContent="₦75,000";
+    document.getElementById("growth-price").textContent="₦180,000";
+    document.getElementById("starter-orig").style.display="none";
+    document.getElementById("growth-orig").style.display="none";
+  });
+  document.getElementById("btnYearly").addEventListener("click",()=>{
+    mode="yearly";
+    document.getElementById("btnYearly").classList.add("active");
+    document.getElementById("btnMonthly").classList.remove("active");
+    document.getElementById("starter-price").textContent="₦720,000";
+    document.getElementById("growth-price").textContent="₦1,728,000";
+    document.getElementById("starter-orig").style.display="inline";document.getElementById("starter-orig").textContent="₦900,000";
+    document.getElementById("growth-orig").style.display="inline";document.getElementById("growth-orig").textContent="₦2,160,000";
+  });
+</script>
+</body>
+</html>
