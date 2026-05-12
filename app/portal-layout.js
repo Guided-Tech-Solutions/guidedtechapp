@@ -1,184 +1,179 @@
-/* ============================================================
-   FILE: app/portal-layout.js
-   Shared auth, sidebar, toast, utilities for all portal pages
-   ============================================================ */
+/* ================================================================
+   FILE: app/portal-layout.js  —  GTS Amplify Shared Layout
+   Auth state, sidebar, toast system, modal helpers, utilities
+   ================================================================ */
 import { auth } from "./firebase.js";
 import {
-  onAuthStateChanged,
-  signOut
+  onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 
-/* ── DOM refs ─────────────────────────────────────────────── */
-const sidebarAvatar  = document.getElementById("sidebarAvatar");
-const sidebarName    = document.getElementById("sidebarName");
-const sidebarEmail   = document.getElementById("sidebarEmail");
-const btnLogin       = document.getElementById("btnLogin");
-const btnLogout      = document.getElementById("btnLogout");
-const mobilMenuBtn   = document.getElementById("mobileMenuBtn");
-const sidebar        = document.querySelector(".portal-sidebar");
-const sidebarOverlay = document.getElementById("sidebarOverlay");
-const btnSidebarLogout = document.getElementById("btnSidebarLogout");
-
-/* ── Auth state ───────────────────────────────────────────── */
+/* ── Auth state ─────────────────────────────────────────────── */
 export let currentUser = null;
 
 export const authReady = new Promise(resolve => {
   onAuthStateChanged(auth, user => {
     currentUser = user;
+
+    const avatar = document.getElementById("sidebarAvatar");
+    const name   = document.getElementById("sidebarName");
+    const email  = document.getElementById("sidebarEmail");
+    const btnL   = document.getElementById("btnLogin");
+    const btnO   = document.getElementById("btnLogout");
+
     if (user) {
       const initials = (user.displayName || user.email || "?")
-        .split(/[\s@]/).slice(0, 2)
-        .map(s => s[0]?.toUpperCase() || "").join("") || "U";
+        .split(/[\s@]+/).slice(0,2).map(s => s[0]?.toUpperCase() || "").join("") || "U";
 
-      if (sidebarAvatar) {
-        if (user.photoURL) {
-          sidebarAvatar.innerHTML = `<img src="${user.photoURL}" alt="">`;
-        } else {
-          sidebarAvatar.textContent = initials;
-        }
+      if (avatar) {
+        if (user.photoURL) avatar.innerHTML = `<img src="${user.photoURL}" alt="">`;
+        else avatar.textContent = initials;
       }
-      if (sidebarName) sidebarName.textContent = user.displayName || user.email.split("@")[0];
-      if (sidebarEmail) sidebarEmail.textContent = user.email;
-      if (btnLogin)  btnLogin.style.display  = "none";
-      if (btnLogout) btnLogout.style.display = "inline-flex";
+      if (name)  name.textContent  = user.displayName || user.email.split("@")[0];
+      if (email) email.textContent = user.email;
+      if (btnL) btnL.style.display = "none";
+      if (btnO) btnO.style.display = "inline-flex";
     } else {
-      if (sidebarAvatar) sidebarAvatar.textContent = "?";
-      if (sidebarName)   sidebarName.textContent   = "Not signed in";
-      if (sidebarEmail)  sidebarEmail.textContent  = "—";
-      if (btnLogin)  btnLogin.style.display  = "inline-flex";
-      if (btnLogout) btnLogout.style.display = "none";
+      if (avatar) avatar.textContent = "?";
+      if (name)   name.textContent   = "Not signed in";
+      if (email)  email.textContent  = "—";
+      if (btnL) btnL.style.display = "inline-flex";
+      if (btnO) btnO.style.display = "none";
     }
     resolve(user);
   });
 });
 
-/* ── Nav buttons ──────────────────────────────────────────── */
-btnLogin?.addEventListener("click", () => {
+/* ── Nav buttons ─────────────────────────────────────────────── */
+async function doSignOut() {
+  try { await signOut(auth); window.location.href = "./login.html"; } catch(e) {}
+}
+document.getElementById("btnLogin")?.addEventListener("click", () => {
   window.location.href = "./login.html?redirect=" + encodeURIComponent(window.location.pathname);
 });
+document.getElementById("btnLogout")?.addEventListener("click", doSignOut);
+document.getElementById("btnSidebarSignout")?.addEventListener("click", doSignOut);
 
-async function doLogout() {
-  try {
-    await signOut(auth);
-    window.location.href = "./login.html";
-  } catch (e) { console.error("Logout error", e); }
-}
-btnLogout?.addEventListener("click", doLogout);
-btnSidebarLogout?.addEventListener("click", doLogout);
+/* ── Mobile sidebar ──────────────────────────────────────────── */
+const sidebar  = document.querySelector(".portal-sidebar");
+const overlay  = document.getElementById("sidebarOverlay");
 
-/* ── Mobile sidebar ───────────────────────────────────────── */
-function openSidebar() {
+document.getElementById("hamburgerBtn")?.addEventListener("click", () => {
   sidebar?.classList.add("open");
-  sidebarOverlay?.classList.add("show");
+  overlay?.classList.add("open");
   document.body.style.overflow = "hidden";
-}
+});
+overlay?.addEventListener("click", closeSidebar);
+
 function closeSidebar() {
   sidebar?.classList.remove("open");
-  sidebarOverlay?.classList.remove("show");
+  overlay?.classList.remove("open");
   document.body.style.overflow = "";
 }
-mobilMenuBtn?.addEventListener("click", openSidebar);
-sidebarOverlay?.addEventListener("click", closeSidebar);
 
-/* Mark active sidebar link */
-const currentPath = window.location.pathname.split("/").pop();
+/* Active sidebar link */
+const currentPage = window.location.pathname.split("/").pop();
 document.querySelectorAll(".sidebar-link[data-page]").forEach(link => {
-  if (link.dataset.page === currentPath) link.classList.add("active");
+  if (link.dataset.page === currentPage) link.classList.add("active");
 });
 
-/* ── Toast system ─────────────────────────────────────────── */
-let toastContainer = document.getElementById("toastContainer");
-if (!toastContainer) {
-  toastContainer = document.createElement("div");
-  toastContainer.id = "toastContainer";
-  document.body.appendChild(toastContainer);
+/* ── Toast system ────────────────────────────────────────────── */
+let _toastRoot = document.getElementById("toastRoot");
+if (!_toastRoot) {
+  _toastRoot = document.createElement("div");
+  _toastRoot.id = "toastRoot";
+  document.body.appendChild(_toastRoot);
 }
 
-export function showToast({ title = "", message = "", type = "info", duration = 4000 } = {}) {
-  const icons = { success: "✅", error: "❌", warning: "⚠️", info: "ℹ️" };
-  const toast = document.createElement("div");
-  toast.className = `toast ${type}`;
-  toast.innerHTML = `
-    <span class="toast-icon">${icons[type] || icons.info}</span>
-    <div class="toast-content">
+export function showToast({ title = "", message = "", type = "info", duration = 4500 } = {}) {
+  const ICONS = { success:"✅", error:"❌", warning:"⚠️", info:"ℹ️" };
+  const t = document.createElement("div");
+  t.className = `toast ${type}`;
+  t.innerHTML = `
+    <span class="toast-icon">${ICONS[type] || ICONS.info}</span>
+    <div class="toast-body">
       ${title ? `<div class="toast-title">${esc(title)}</div>` : ""}
       ${message ? `<div class="toast-msg">${esc(message)}</div>` : ""}
     </div>
-    <button class="toast-close" aria-label="Dismiss">✕</button>
-  `;
-  toast.querySelector(".toast-close").addEventListener("click", () => removeToast(toast));
-  toastContainer.appendChild(toast);
-  setTimeout(() => removeToast(toast), duration);
-  return toast;
+    <button class="toast-x" aria-label="Dismiss">✕</button>`;
+  t.querySelector(".toast-x").onclick = () => removeToast(t);
+  _toastRoot.appendChild(t);
+  setTimeout(() => removeToast(t), duration);
+}
+function removeToast(t) {
+  t.style.opacity = "0"; t.style.transform = "translateX(20px)"; t.style.transition = "all .25s";
+  setTimeout(() => t.remove(), 250);
 }
 
-function removeToast(toast) {
-  toast.style.animation = "toastOut .25s ease forwards";
-  setTimeout(() => toast.remove(), 250);
-}
-
-/* ── Modal helpers ────────────────────────────────────────── */
+/* ── Modal helpers ───────────────────────────────────────────── */
 export function openModal(id) {
-  const el = document.getElementById(id);
-  if (el) { el.classList.add("show"); document.body.style.overflow = "hidden"; }
+  document.getElementById(id)?.classList.add("open");
+  document.body.style.overflow = "hidden";
 }
 export function closeModal(id) {
-  const el = document.getElementById(id);
-  if (el) { el.classList.remove("show"); document.body.style.overflow = ""; }
+  document.getElementById(id)?.classList.remove("open");
+  document.body.style.overflow = "";
 }
 
-/* Wire up all modals with close buttons */
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".modal-overlay").forEach(overlay => {
-    overlay.addEventListener("click", e => {
-      if (e.target === overlay) closeModal(overlay.id);
-    });
+  // Overlay click closes
+  document.querySelectorAll(".modal-overlay").forEach(o => {
+    o.addEventListener("click", e => { if (e.target === o) closeModal(o.id); });
   });
-  document.querySelectorAll("[data-close-modal]").forEach(btn => {
-    btn.addEventListener("click", () => closeModal(btn.dataset.closeModal));
+  // data-modal-close buttons
+  document.querySelectorAll("[data-modal-close]").forEach(btn => {
+    btn.addEventListener("click", () => closeModal(btn.dataset.modalClose));
   });
 });
 
-/* ── Utilities ────────────────────────────────────────────── */
+/* ── Auth guard ──────────────────────────────────────────────── */
+export async function requireAuth() {
+  const user = await authReady;
+  if (!user) {
+    window.location.href = "./login.html?redirect=" + encodeURIComponent(window.location.pathname);
+    return null;
+  }
+  return user;
+}
+
+/* ── Utilities ───────────────────────────────────────────────── */
 export function esc(s) {
   return String(s ?? "").replace(/[&<>"']/g, c =>
     ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])
   );
 }
 
-export function fmtPrice(price, currency = "$") {
-  const p = Number(price) || 0;
-  return currency + (p % 1 === 0 ? p.toLocaleString() : p.toFixed(2));
+export function fmtMoney(amount, symbol = "₦") {
+  const n = Number(amount) || 0;
+  return symbol + n.toLocaleString("en-NG", { minimumFractionDigits: n % 1 !== 0 ? 2 : 0 });
 }
 
-export function fmtDate(ts, opts = { month: "short", day: "numeric", year: "numeric" }) {
+export function fmtDate(ts, opts = { day:"numeric", month:"short", year:"numeric" }) {
   if (!ts) return "—";
-  const date = ts?.toDate ? ts.toDate() : new Date(ts);
-  return date.toLocaleDateString("en-US", opts);
+  const d = ts?.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString("en-NG", opts);
 }
 
 export function timeAgo(ts) {
   if (!ts) return "—";
-  const date = ts?.toDate ? ts.toDate() : new Date(ts);
-  const diff = Date.now() - date.getTime();
+  const d    = ts?.toDate ? ts.toDate() : new Date(ts);
+  const diff = Date.now() - d.getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "just now";
+  if (mins < 1)  return "just now";
   if (mins < 60) return `${mins}m ago`;
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
+  if (hrs < 24)  return `${hrs}h ago`;
   const days = Math.floor(hrs / 24);
-  if (days < 7) return `${days}d ago`;
+  if (days < 7)  return `${days}d ago`;
   return fmtDate(ts);
 }
 
-export function requireAuth(redirectTo = "./login.html") {
-  return authReady.then(user => {
-    if (!user) {
-      window.location.href = redirectTo + "?redirect=" + encodeURIComponent(window.location.pathname);
-      return null;
-    }
-    return user;
-  });
+export function getDashboardType(sub) {
+  if (sub.dashboardType) return sub.dashboardType;
+  const n = (sub.name || "").toLowerCase();
+  if (n.includes("lead"))   return "lead_generation";
+  if (n.includes("cloud") || n.includes("migr")) return "cloud_migration";
+  if (n.includes("automat")) return "automation";
+  if (n.includes("seo"))    return "seo";
+  if (n.includes("consult"))return "consultation";
+  return "generic";
 }
-
-console.log("✅ Portal layout initialized");
