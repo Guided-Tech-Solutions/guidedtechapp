@@ -1,187 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — Guided Tech Solutions</title>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Dashboard — GTS Amplify</title>
+  <link rel="icon" href="../asset/logo-icon.png">
   <link rel="stylesheet" href="./portal.css">
-  <style>
-    .dashboard-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .stat-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .stat-label {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-value {
-      font-size: 2.25rem;
-      font-weight: 800;
-      font-family: 'Poppins', sans-serif;
-      color: var(--primary);
-    }
-
-    .stat-change {
-      font-size: 0.875rem;
-      color: var(--success);
-      margin-top: 0.5rem;
-    }
-
-    .chart-container {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: var(--shadow-sm);
-      height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-    }
-
-    @media (max-width: 1024px) {
-      .dashboard-stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .dashboard-stats {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
 </head>
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="navbar-container">
-      <a href="../index.html" class="navbar-logo">
-        <span>🚀</span>
-        Guided Tech Solutions
-      </a>
-      <div class="navbar-actions">
-        <button class="btn-nav btn-nav-secondary" id="btnLogin" style="display:none;">Log In</button>
-        <button class="btn-nav" id="btnLogout" style="display:none;">Log Out</button>
+<nav class="navbar"><div class="navbar-inner">
+  <div class="navbar-left">
+    <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+    <a href="../index.html" class="brand-logo"><div class="brand-logo-icon">🚀</div>GTS Amplify</a>
+  </div>
+  <div class="navbar-right">
+    <button class="btn-nav btn-nav-ghost" id="btnLogin"  style="display:none">Log In</button>
+    <button class="btn-nav btn-nav-ghost" id="btnLogout" style="display:none">Log Out</button>
+  </div>
+</div></nav>
+
+<div class="portal-wrapper">
+  <aside class="portal-sidebar" id="portalSidebar">
+    <div class="sidebar-profile">
+      <div class="sidebar-avatar" id="sidebarAvatar">?</div>
+      <div class="sidebar-info">
+        <div class="sidebar-name"  id="sidebarName">Loading...</div>
+        <div class="sidebar-email" id="sidebarEmail">—</div>
       </div>
     </div>
-  </nav>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a href="./portal-dashboard.html"     class="sidebar-link" data-page="portal-dashboard.html"><span class="sidebar-icon">📊</span>Dashboard</a>
+      <a href="./portal-services.html"      class="sidebar-link" data-page="portal-services.html"><span class="sidebar-icon">🛍️</span>Services & Pricing</a>
+      <a href="./portal-subscriptions.html" class="sidebar-link" data-page="portal-subscriptions.html"><span class="sidebar-icon">📋</span>My Subscriptions</a>
+      <a href="./portal-onboarding.html"    class="sidebar-link" data-page="portal-onboarding.html"><span class="sidebar-icon">⚙️</span>Service Setup</a>
+      <div class="sidebar-section-label">Account</div>
+      <a href="./portal-profile.html"       class="sidebar-link" data-page="portal-profile.html"><span class="sidebar-icon">👤</span>My Profile</a>
+      <a href="./portal-billing.html"       class="sidebar-link" data-page="portal-billing.html"><span class="sidebar-icon">💳</span>Billing</a>
+    </nav>
+    <div class="sidebar-footer"><button class="btn-signout" id="btnSidebarSignout">🚪 Sign Out</button></div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-  <!-- PORTAL LAYOUT -->
-  <div class="portal-wrapper">
-    <!-- SIDEBAR -->
-    <aside class="portal-sidebar">
-      <div class="sidebar-user">
-        <div class="sidebar-avatar" id="sidebarAvatar">?</div>
-        <div class="sidebar-user-info">
-          <div class="sidebar-user-name" id="sidebarName">Not signed in</div>
-          <div class="sidebar-user-email" id="sidebarEmail">—</div>
-        </div>
+  <main class="portal-main">
+    <!-- Welcome -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" id="welcomeTitle">Dashboard</h1>
+        <p class="page-subtitle" id="welcomeSub">Loading your services...</p>
       </div>
-      
-      <nav class="sidebar-nav">
-        <a href="./portal-services.html" class="sidebar-link">
-          <span class="sidebar-icon">🛍️</span>
-          <span>Services</span>
-        </a>
-        <a href="./portal-subscriptions.html" class="sidebar-link">
-          <span class="sidebar-icon">📋</span>
-          <span>My Subscriptions</span>
-        </a>
-        <a href="./portal-dashboard.html" class="sidebar-link active">
-          <span class="sidebar-icon">📊</span>
-          <span>Dashboard</span>
-        </a>
-      </nav>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <main class="portal-main">
-      <div class="page-header">
-        <h1 class="page-title">Dashboard</h1>
-        <p class="page-subtitle">Overview of your services and activity</p>
+      <div class="page-actions">
+        <a href="./portal-services.html" class="btn btn-primary btn-sm">+ Add Service</a>
       </div>
+    </div>
 
-      <!-- STATS GRID -->
-      <div class="dashboard-stats">
-        <div class="stat-card">
-          <div class="stat-label">Active Services</div>
-          <div class="stat-value" id="statServices">—</div>
-          <div class="stat-change">↑ All systems running</div>
-        </div>
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-label">Active Services</div><div class="stat-value" id="sActive">—</div><div class="stat-change" id="sActiveSub">Loading...</div></div>
+      <div class="stat-card"><div class="stat-icon orange">🎯</div><div class="stat-label">Leads This Month</div><div class="stat-value" id="sLeads">—</div><div class="stat-change">Lead generation</div></div>
+      <div class="stat-card"><div class="stat-icon green">🤖</div><div class="stat-label">Automation Runs</div><div class="stat-value" id="sRuns">—</div><div class="stat-change">This month</div></div>
+      <div class="stat-card"><div class="stat-icon yellow">💰</div><div class="stat-label">Monthly Spend</div><div class="stat-value sm" id="sSpend">—</div><div class="stat-change">All active services</div></div>
+    </div>
 
-        <div class="stat-card">
-          <div class="stat-label">Current Plan</div>
-          <div class="stat-value" style="font-size: 1.5rem;" id="statPlan">—</div>
-          <div class="stat-change">Subscription tier</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-label">Member Since</div>
-          <div class="stat-value" style="font-size: 1.5rem;" id="statSince">—</div>
-          <div class="stat-change">Account created</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-label">Status</div>
-          <div class="stat-value" style="font-size: 1.5rem; color: var(--success);">Active</div>
-          <div class="stat-change">All systems operational</div>
-        </div>
-      </div>
-
-      <!-- ACTIVITY CHART -->
-      <div class="chart-container">
-        <div style="text-align: center;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
-          <div style="font-size: 1.125rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem;">
-            Activity Analytics
-          </div>
-          <div>Usage charts and analytics coming soon</div>
-        </div>
-      </div>
-
-      <!-- RECENT SUBSCRIPTIONS -->
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <h2 class="card-title">Recent Activity</h2>
-            <p class="card-subtitle">Your recent subscriptions and services</p>
-          </div>
-        </div>
-
-        <div class="subscriptions-grid" id="recentActivity">
-          <div class="loading">
-            <div class="spinner"></div>
-          </div>
-        </div>
-
-        <div class="empty-state" id="emptyActivity" style="display:none;">
-          <div class="empty-icon">📭</div>
-          <h3 class="empty-title">No Activity Yet</h3>
-          <p class="empty-text">Start by subscribing to a service!</p>
+    <!-- No services -->
+    <div id="noServicesState" style="display:none">
+      <div class="card"><div class="card-body">
+        <div class="empty-state">
+          <div class="empty-icon" style="opacity:1;font-size:3rem">🚀</div>
+          <h3 class="empty-title">Welcome to GTS Amplify!</h3>
+          <p class="empty-text">You don't have any active services yet. Browse our catalog and subscribe to start seeing your analytics dashboard.</p>
           <div class="empty-actions">
             <a href="./portal-services.html" class="btn btn-primary">Browse Services</a>
+            <a href="./portal-services.html" class="btn btn-secondary">Book Free Consultation</a>
           </div>
         </div>
-      </div>
-    </main>
-  </div>
+      </div></div>
+    </div>
 
-  <script type="module" src="./portal-dashboard.js"></script>
+    <!-- Analytics -->
+    <div id="analyticsRoot" style="display:none">
+      <div class="analytics-tabs" id="analyticsTabsRow"></div>
+      <div id="analyticsPanels"></div>
+    </div>
+
+    <!-- Loading -->
+    <div id="dashLoading">
+      <div class="card"><div class="card-body"><div class="loading-box"><div class="spinner"></div></div></div></div>
+    </div>
+  </main>
+</div>
+
+<div id="toastRoot"></div>
+<script type="module" src="./portal-dashboard.js"></script>
 </body>
 </html>
