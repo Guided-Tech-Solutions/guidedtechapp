@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Service Setup — GTS Amplify</title>
+  <link rel="icon" href="../asset/logo-icon.png">
+  <link rel="stylesheet" href="./portal.css">
+</head>
+<body>
+<nav class="navbar"><div class="navbar-inner">
+  <div class="navbar-left">
+    <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+    <a href="../index.html" class="brand-logo"><div class="brand-logo-icon">🚀</div>GTS Amplify</a>
+  </div>
+  <div class="navbar-right">
+    <button class="btn-nav btn-nav-ghost" id="btnLogin"  style="display:none">Log In</button>
+    <button class="btn-nav btn-nav-ghost" id="btnLogout" style="display:none">Log Out</button>
+  </div>
+</div></nav>
+<div class="portal-wrapper">
+  <aside class="portal-sidebar" id="portalSidebar">
+    <div class="sidebar-profile">
+      <div class="sidebar-avatar" id="sidebarAvatar">?</div>
+      <div class="sidebar-info">
+        <div class="sidebar-name"  id="sidebarName">Loading...</div>
+        <div class="sidebar-email" id="sidebarEmail">—</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a href="./portal-dashboard.html"     class="sidebar-link" data-page="portal-dashboard.html"><span class="sidebar-icon">📊</span>Dashboard</a>
+      <a href="./portal-services.html"      class="sidebar-link" data-page="portal-services.html"><span class="sidebar-icon">🛍️</span>Services & Pricing</a>
+      <a href="./portal-subscriptions.html" class="sidebar-link" data-page="portal-subscriptions.html"><span class="sidebar-icon">📋</span>My Subscriptions</a>
+      <a href="./portal-onboarding.html"    class="sidebar-link" data-page="portal-onboarding.html"><span class="sidebar-icon">⚙️</span>Service Setup</a>
+      <div class="sidebar-section-label">Account</div>
+      <a href="./portal-profile.html"       class="sidebar-link" data-page="portal-profile.html"><span class="sidebar-icon">👤</span>My Profile</a>
+      <a href="./portal-billing.html"       class="sidebar-link" data-page="portal-billing.html"><span class="sidebar-icon">💳</span>Billing</a>
+    </nav>
+    <div class="sidebar-footer"><button class="btn-signout" id="btnSidebarSignout">🚪 Sign Out</button></div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <main class="portal-main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" id="onboardTitle">Service Setup</h1>
+        <p class="page-subtitle" id="onboardSub">Configure your service to get started</p>
+      </div>
+    </div>
+
+    <div id="loadingCard" class="card"><div class="card-body"><div class="loading-box"><div class="spinner"></div></div></div></div>
+
+    <div id="wizardCard" class="card" style="display:none">
+      <div class="card-header">
+        <div>
+          <div class="card-title" id="wizardTitle">Setup Wizard</div>
+          <div class="card-subtitle" id="wizardStep">Step 1</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="wizard-steps" id="wizardStepsRow"></div>
+        <div id="wizardPanels"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+          <button class="btn btn-ghost" id="btnPrev" style="display:none">← Previous</button>
+          <div style="margin-left:auto;display:flex;gap:.625rem">
+            <button class="btn btn-ghost" onclick="window.location.href='./portal-subscriptions.html'">Save & Exit</button>
+            <button class="btn btn-primary" id="btnNext">Continue →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="completeCard" class="card" style="display:none">
+      <div class="card-body">
+        <div class="empty-state">
+          <div style="font-size:3.5rem;margin-bottom:.875rem">🎉</div>
+          <h3 class="empty-title">Setup Complete!</h3>
+          <p class="empty-text">Your service is now configured. Head to your dashboard to start seeing results in real time.</p>
+          <div class="empty-actions">
+            <a href="./portal-dashboard.html" class="btn btn-primary">Open Dashboard</a>
+            <a href="./portal-subscriptions.html" class="btn btn-ghost">My Subscriptions</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="noServiceCard" class="card" style="display:none">
+      <div class="card-body">
+        <div class="empty-state">
+          <div class="empty-icon">⚠️</div>
+          <h3 class="empty-title">No Service Specified</h3>
+          <p class="empty-text">Please navigate here from your subscriptions page to set up a specific service.</p>
+          <a href="./portal-subscriptions.html" class="btn btn-primary">Go to Subscriptions</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<div id="toastRoot"></div>
+<script type="module">
+import { db } from "./firebase.js";
+import { requireAuth, esc, showToast } from "./portal-layout.js";
+import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+const WIZARD_CONFIGS = {
+  lead_generation: {
+    title: "Lead Generation Setup",
+    steps: [
+      { label:"Website", title:"Your Website", fields:[
+        { id:"targetUrl",    label:"Website URL",       type:"url",      ph:"https://yourbusiness.com", req:true },
+        { id:"targetPages",  label:"Target Pages",      type:"textarea", ph:"/contact, /products, /home" },
+        { id:"industry",     label:"Industry",          type:"select",   opts:["E-commerce","SaaS","Real Estate","Healthcare","Finance","Education","Retail","Consulting","Other"] },
+      ]},
+      { label:"Audience", title:"Target Audience", fields:[
+        { id:"targetRegion", label:"Target Region",     type:"text",     ph:"Nigeria, West Africa, Global" },
+        { id:"targetAge",    label:"Target Age Group",  type:"select",   opts:["18-24","25-34","35-44","45-54","55+","All Ages"] },
+        { id:"targetRole",   label:"Target Job Title",  type:"text",     ph:"Business Owners, Marketing Managers, CEOs" },
+      ]},
+      { label:"Capture", title:"Lead Capture Settings", fields:[
+        { id:"captureMethod",label:"Capture Method",   type:"select",   opts:["Contact Form","Chat Widget","Exit-Intent Popup","Quiz/Survey","Lead Magnet","All Methods"] },
+        { id:"crmEmail",     label:"Forward Leads To", type:"email",    ph:"sales@yourbusiness.com" },
+        { id:"webhookUrl",   label:"CRM Webhook URL",  type:"url",      ph:"https://your-crm.com/webhook (optional)" },
+      ]},
+      { label:"Scoring", title:"Lead Scoring Rules", fields:[
+        { id:"hotCriteria",  label:"Hot Lead Criteria", type:"textarea", ph:"Requested demo, Budget > ₦500k, Decision maker" },
+        { id:"warmCriteria", label:"Warm Lead Criteria",type:"textarea", ph:"Downloaded resource, Visited pricing page 2+ times" },
+        { id:"monthlyTarget",label:"Monthly Lead Target",type:"number",  ph:"50" },
+      ]},
+      { label:"Review", title:"Review & Confirm", review:true, fields:[] },
+    ],
+  },
+  cloud_migration: {
+    title: "Cloud Migration Setup",
+    steps: [
+      { label:"Current", title:"Current Infrastructure", fields:[
+        { id:"currentProvider", label:"Current Hosting/Provider", type:"text",   ph:"On-premise, cPanel, AWS, GoDaddy" },
+        { id:"dataVolume",      label:"Data Volume",              type:"select", opts:["< 100GB","100GB – 1TB","1TB – 10TB","> 10TB"] },
+        { id:"numServers",      label:"Number of Servers/Apps",   type:"number", ph:"5" },
+      ]},
+      { label:"Target", title:"Target Cloud", fields:[
+        { id:"targetCloud",  label:"Target Platform",     type:"select", opts:["AWS","Google Cloud","Microsoft Azure","DigitalOcean","Hetzner","Not decided"] },
+        { id:"timeline",     label:"Migration Timeline",  type:"select", opts:["ASAP (< 1 month)","1-3 months","3-6 months","6-12 months","Flexible"] },
+        { id:"downtime",     label:"Acceptable Downtime", type:"select", opts:["Zero downtime required","< 1 hour","< 4 hours","Up to 1 day"] },
+      ]},
+      { label:"Apps", title:"Applications to Migrate", fields:[
+        { id:"appList",      label:"Applications / Databases", type:"textarea", ph:"List your apps, databases, services (one per line)" },
+        { id:"criticalApps", label:"Mission-Critical Apps",    type:"textarea", ph:"Which must be migrated first or require special care?" },
+      ]},
+      { label:"Access", title:"Access & Compliance", fields:[
+        { id:"devAccess",    label:"DevOps Access Level",       type:"select", opts:["Full admin access","Partial access","No access – handle it fully"] },
+        { id:"compliance",   label:"Compliance Requirements",   type:"select", opts:["None","NDPR (Nigeria)","GDPR","HIPAA","PCI-DSS","ISO 27001","Multiple"] },
+        { id:"techContact",  label:"Technical Contact Person",  type:"text",   ph:"Name + email or phone" },
+      ]},
+      { label:"Review", title:"Review & Confirm", review:true, fields:[] },
+    ],
+  },
+  automation: {
+    title: "Business Automation Setup",
+    steps: [
+      { label:"Use Case", title:"What to Automate?", fields:[
+        { id:"useCase",     label:"Primary Use Case",       type:"select", opts:["Email marketing sequences","Lead follow-up","Invoice & billing","Social media posting","CRM data sync","Customer onboarding","Report generation","Custom workflow"] },
+        { id:"useCaseDesc", label:"Describe the workflow",  type:"textarea", ph:"Step by step: when X happens, do Y, then Z..." },
+      ]},
+      { label:"Tools", title:"Tools & Integrations", fields:[
+        { id:"currentTools",  label:"Tools You Use",             type:"textarea", ph:"HubSpot, Slack, Gmail, Notion, Airtable, Zoho..." },
+        { id:"triggerEvent",  label:"Automation Trigger",        type:"text",     ph:"New form submission, New customer, Daily at 9am" },
+      ]},
+      { label:"Schedule", title:"Run Schedule & Alerts", fields:[
+        { id:"runFrequency",  label:"Run Frequency",             type:"select", opts:["Real-time (event-triggered)","Every hour","Daily","Weekly","Monthly","Manual only"] },
+        { id:"notifyEmail",   label:"Notify on completion",      type:"email",  ph:"your@email.com" },
+        { id:"failureAlert",  label:"Alert on failure?",         type:"select", opts:["Yes – email immediately","Yes – daily digest","No notifications"] },
+      ]},
+      { label:"Review", title:"Review & Confirm", review:true, fields:[] },
+    ],
+  },
+  seo: {
+    title: "SEO Optimization Setup",
+    steps: [
+      { label:"Website", title:"Your Website", fields:[
+        { id:"siteUrl",      label:"Website URL",      type:"url",    ph:"https://yoursite.com", req:true },
+        { id:"sitePlatform", label:"CMS Platform",     type:"select", opts:["WordPress","Shopify","Wix","Squarespace","Joomla","Custom HTML","Other"] },
+        { id:"siteAccess",   label:"CMS/Admin Access", type:"select", opts:["Yes – full access","No – credentials provided separately","No access needed"] },
+      ]},
+      { label:"Keywords", title:"Target Keywords", fields:[
+        { id:"seedKeywords", label:"Primary Keywords (one per line)", type:"textarea", ph:"digital marketing Nigeria\nbusiness automation Lagos\ncloud solutions Africa" },
+        { id:"competitors",  label:"Competitor Websites",            type:"textarea", ph:"https://competitor1.com\nhttps://competitor2.com" },
+        { id:"targetLoc",    label:"Target Location",               type:"text",     ph:"Nigeria, Lagos, West Africa, Global" },
+      ]},
+      { label:"Goals", title:"SEO Goals", fields:[
+        { id:"seoGoal",   label:"Primary SEO Goal",          type:"select", opts:["Increase organic traffic","Rank for specific keywords","Local SEO / Google Maps","E-commerce product SEO","Brand visibility & awareness"] },
+        { id:"seoBudget", label:"Content Budget / Month",    type:"select", opts:["Included in plan","< ₦50,000","₦50k – ₦150k","₦150k – ₦500k","> ₦500k"] },
+      ]},
+      { label:"Review", title:"Review & Confirm", review:true, fields:[] },
+    ],
+  },
+};
+
+const params    = new URLSearchParams(window.location.search);
+const serviceId = params.get("serviceId");
+
+let userId    = null;
+let steps     = [];
+let formData  = {};
+let stepIdx   = 0;
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  userId = user.uid;
+
+  if (!serviceId) {
+    document.getElementById("loadingCard").style.display = "none";
+    document.getElementById("noServiceCard").style.display = "block";
+    return;
+  }
+
+  // Load service metadata
+  let dashType = "lead_generation";
+  try {
+    const snap = await getDoc(doc(db,"services",serviceId));
+    if (snap.exists()) {
+      const data = snap.data();
+      dashType = data.dashboardType || inferType(data.name||"");
+      document.getElementById("onboardTitle").textContent  = (WIZARD_CONFIGS[dashType]?.title || "Service Setup");
+      document.getElementById("onboardSub").textContent    = "Configure: " + (data.name || "Service");
+    }
+  } catch(e) {}
+
+  const cfg = WIZARD_CONFIGS[dashType] || WIZARD_CONFIGS.lead_generation;
+  steps = cfg.steps;
+  document.getElementById("wizardTitle").textContent = cfg.title;
+
+  // Load existing config
+  try {
+    const cfgSnap = await getDoc(doc(db,"serviceConfigs",`${userId}_${serviceId}`));
+    if (cfgSnap.exists()) formData = { ...cfgSnap.data() };
+  } catch(e) {}
+
+  document.getElementById("loadingCard").style.display = "none";
+  document.getElementById("wizardCard").style.display  = "block";
+
+  renderWizard();
+  setupNav();
+});
+
+function inferType(name) {
+  const n = name.toLowerCase();
+  if (n.includes("lead"))  return "lead_generation";
+  if (n.includes("cloud")||n.includes("migr")) return "cloud_migration";
+  if (n.includes("auto"))  return "automation";
+  if (n.includes("seo"))   return "seo";
+  return "lead_generation";
+}
+
+function renderWizard() {
+  // Steps row
+  const stepsRow = document.getElementById("wizardStepsRow");
+  stepsRow.innerHTML = steps.map((s, i) => `
+    ${i>0 ? `<div class="wizard-connector ${i<=stepIdx?"done":""}"></div>` : ""}
+    <div class="wizard-step ${i<stepIdx?"done":i===stepIdx?"active":""}">
+      <div class="wizard-step-circle">${i<stepIdx?"✓":i+1}</div>
+      <div class="wizard-step-label">${esc(s.label)}</div>
+    </div>`).join("");
+
+  document.getElementById("wizardStep").textContent = `Step ${stepIdx+1} of ${steps.length}`;
+
+  // Panels
+  const panelsEl = document.getElementById("wizardPanels");
+  panelsEl.innerHTML = steps.map((step, i) => {
+    if (i !== stepIdx) return "";
+    if (step.review) {
+      const entries = Object.entries(formData).filter(([k,v]) => v && !["userId","serviceId","configured","configuredAt","updatedAt"].includes(k));
+      return `<div class="wizard-panel active">
+        <h3 style="font-family:var(--ff-d);margin-bottom:1rem">${esc(step.title)}</h3>
+        ${entries.length ? `
+        <div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem">
+          ${entries.map(([k,v]) => `
+            <div class="detail-row">
+              <span class="detail-label">${k.replace(/([A-Z])/g," $1").trim()}</span>
+              <span class="detail-value" style="max-width:55%;text-align:right;font-size:.8125rem;word-break:break-word">${esc(String(v).substring(0,120))}</span>
+            </div>`).join("")}
+        </div>
+        <div style="background:var(--brand-pale);border-radius:var(--r-sm);padding:.75rem;margin-top:1rem;font-size:.8125rem;color:var(--brand)">
+          ✅ Everything looks good! Click "Complete Setup" to activate your service configuration.
+        </div>` : `<div class="empty-state" style="padding:1rem"><p class="empty-text">No configuration data collected yet. Please go back and fill in the details.</p></div>`}
+      </div>`;
+    }
+    return `<div class="wizard-panel active">
+      <h3 style="font-family:var(--ff-d);margin-bottom:1.25rem">${esc(step.title)}</h3>
+      ${step.fields.map(f => `
+        <div class="form-group">
+          <label class="form-label">${esc(f.label)} ${f.req?'<span class="req">*</span>':''}</label>
+          ${f.type==="textarea"
+            ? `<textarea class="form-control" id="wf_${f.id}" rows="3" placeholder="${esc(f.ph||"")}">${esc(formData[f.id]||"")}</textarea>`
+            : f.type==="select"
+            ? `<select class="form-control" id="wf_${f.id}">${(f.opts||[]).map(o=>`<option value="${esc(o)}" ${formData[f.id]===o?"selected":""}>${esc(o)}</option>`).join("")}</select>`
+            : `<input type="${f.type}" class="form-control" id="wf_${f.id}" placeholder="${esc(f.ph||"")}" value="${esc(formData[f.id]||"")}">`
+          }
+        </div>`).join("")}
+    </div>`;
+  }).join("");
+
+  document.getElementById("btnPrev").style.display = stepIdx > 0 ? "inline-flex" : "none";
+  document.getElementById("btnNext").textContent = stepIdx === steps.length-1 ? "Complete Setup ✓" : "Continue →";
+}
+
+function collectStep() {
+  const step = steps[stepIdx];
+  if (!step || step.review) return true;
+  for (const f of step.fields) {
+    const el = document.getElementById("wf_"+f.id);
+    if (!el) continue;
+    formData[f.id] = el.value;
+    if (f.req && !el.value.trim()) {
+      showToast({ title:"Required", message:`Please fill in "${f.label}".`, type:"warning" });
+      el.focus(); return false;
+    }
+  }
+  return true;
+}
+
+function setupNav() {
+  document.getElementById("btnPrev").addEventListener("click", () => {
+    collectStep();
+    stepIdx = Math.max(0, stepIdx-1);
+    renderWizard();
+  });
+  document.getElementById("btnNext").addEventListener("click", async () => {
+    if (!collectStep()) return;
+    if (stepIdx < steps.length-1) { stepIdx++; renderWizard(); }
+    else await saveConfig();
+  });
+}
+
+async function saveConfig() {
+  const btn = document.getElementById("btnNext");
+  btn.classList.add("is-loading"); btn.disabled = true;
+  try {
+    await setDoc(doc(db,"serviceConfigs",`${userId}_${serviceId}`), {
+      ...formData, userId, serviceId,
+      configured: true, configuredAt: serverTimestamp(), updatedAt: serverTimestamp(),
+    });
+    document.getElementById("wizardCard").style.display   = "none";
+    document.getElementById("completeCard").style.display = "block";
+    showToast({ title:"Setup complete! 🎉", message:"Your service is now configured.", type:"success" });
+  } catch(e) {
+    console.error("Save config error", e);
+    showToast({ title:"Save failed", message:"Please try again.", type:"error" });
+  } finally {
+    btn.classList.remove("is-loading"); btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
