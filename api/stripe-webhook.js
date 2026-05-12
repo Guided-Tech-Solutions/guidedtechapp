@@ -1,163 +1,132 @@
-/* ============================================================
+/* ================================================================
    FILE: api/stripe-webhook.js
-   Vercel Serverless Function — Stripe webhook handler
-   
-   Place this file in: /api/stripe-webhook.js
-   
-   REQUIRED ENVIRONMENT VARIABLES (set in Vercel Dashboard):
-   - STRIPE_SECRET_KEY
-   - STRIPE_WEBHOOK_SECRET
-   - FIREBASE_SERVICE_ACCOUNT
-   ============================================================ */
+   GTS Amplify — Stripe Webhook Handler
+   ================================================================ */
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const admin  = require("firebase-admin");
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const admin = require('firebase-admin');
-
-// Initialize Firebase Admin
 if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert({
+      projectId:   process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey:  process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    }),
   });
 }
-
 const db = admin.firestore();
 
-// IMPORTANT: Need to get raw body for signature verification
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+module.exports = async function handler(req, res) {
+  if (req.method !== "POST") return res.status(405).send("Method not allowed");
 
-// Helper to get raw body
-async function getRawBody(req) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    req.on('data', (chunk) => chunks.push(chunk));
-    req.on('end', () => resolve(Buffer.concat(chunks)));
-    req.on('error', reject);
-  });
-}
-
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const sig = req.headers['stripe-signature'];
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
+  const sig  = req.headers["stripe-signature"];
   let event;
-
   try {
-    const rawBody = await getRawBody(req);
-
-    // Verify webhook signature
-    event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error('Webhook signature verification failed:', err.message);
+    console.warn("[stripe-webhook] Signature error:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // Handle the event
+  console.log(`[stripe-webhook] Event: ${event.type}`);
+
   try {
     switch (event.type) {
-      case 'checkout.session.completed':
-        await handleCheckoutCompleted(event.data.object);
-        break;
+      case "checkout.session.completed": {
+        const session   = event.data.object;
+        const sessionId = session.client_reference_id || session.metadata?.sessionId;
+        const amountPaid = (session.amount_total || 0) / 100;
 
-      case 'checkout.session.expired':
-        await handleCheckoutExpired(event.data.object);
+        if (!sessionId) { console.warn("[stripe-webhook] No sessionId"); break; }
+
+        const sessionRef  = db.collection("checkoutSessions").doc(sessionId);
+        const sessionSnap = await sessionRef.get();
+        if (!sessionSnap.exists()) { console.warn("[stripe-webhook] Session not found:", sessionId); break; }
+
+        const sessionData = sessionSnap.data();
+        const batch       = db.batch();
+
+        batch.update(sessionRef, {
+          status:          "completed",
+          amountPaid,
+          stripePaymentId: session.payment_intent,
+          stripeSessionId: session.id,
+          paidAt:          admin.firestore.FieldValue.serverTimestamp(),
+          provider:        "stripe",
+          updatedAt:       admin.firestore.FieldValue.serverTimestamp(),
+        });
+
+        if (sessionData.itemType === "service" && sessionData.itemId && sessionData.userId) {
+          batch.set(db.collection("serviceActivations").doc(), {
+            userId:           sessionData.userId,
+            serviceId:        sessionData.itemId,
+            serviceName:      sessionData.itemName,
+            price:            sessionData.price || amountPaid,
+            billing:          sessionData.billing || "month",
+            status:           "active",
+            provider:         "stripe",
+            stripePaymentId:  session.payment_intent,
+            stripeSessionId:  session.id,
+            checkoutSessionId: sessionId,
+            createdAt:        admin.firestore.FieldValue.serverTimestamp(),
+            nextBillingDate:  getNextBillingDate(sessionData.billing),
+          });
+        } else if (sessionData.itemType === "plan" && sessionData.itemId && sessionData.userId) {
+          batch.set(db.collection("userSubscriptions").doc(), {
+            userId:          sessionData.userId,
+            planId:          sessionData.itemId,
+            planName:        sessionData.itemName,
+            priceMonthly:    sessionData.price || amountPaid,
+            billing:         sessionData.billing || "month",
+            status:          "active",
+            provider:        "stripe",
+            stripePaymentId: session.payment_intent,
+            stripeSessionId: session.id,
+            checkoutSessionId: sessionId,
+            createdAt:       admin.firestore.FieldValue.serverTimestamp(),
+            nextBillingDate: getNextBillingDate(sessionData.billing),
+          });
+        } else if (sessionData.itemType === "consultation" && sessionData.itemId) {
+          batch.update(db.collection("consultationBookings").doc(sessionData.itemId), {
+            status:          "confirmed",
+            paidAt:          admin.firestore.FieldValue.serverTimestamp(),
+            stripePaymentId: session.payment_intent,
+            updatedAt:       admin.firestore.FieldValue.serverTimestamp(),
+          });
+        }
+
+        await batch.commit();
+        console.log(`[stripe-webhook] Activated: ${sessionData.itemType} ${sessionData.itemId}`);
         break;
+      }
+
+      case "payment_intent.payment_failed": {
+        const pi        = event.data.object;
+        const sessionId = pi.metadata?.sessionId;
+        if (sessionId) {
+          await db.collection("checkoutSessions").doc(sessionId).update({
+            status: "failed", error: pi.last_payment_error?.message || "Payment failed",
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          });
+        }
+        break;
+      }
 
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        console.log(`[stripe-webhook] Unhandled: ${event.type}`);
     }
 
-    res.json({ received: true });
-  } catch (error) {
-    console.error('Webhook handler error:', error);
-    res.status(500).json({ error: 'Webhook handler failed' });
+    return res.status(200).json({ received: true });
+  } catch (err) {
+    console.error("[stripe-webhook] Error:", err);
+    return res.status(500).json({ error: err.message });
   }
-}
+};
 
-/* ══════════════════════════════
-   CHECKOUT COMPLETED
-══════════════════════════════ */
-async function handleCheckoutCompleted(session) {
-  const firestoreSessionId = session.metadata?.firestoreSessionId;
-  const userId = session.metadata?.userId;
-  const itemType = session.metadata?.itemType;
-  const itemId = session.metadata?.itemId;
-
-  if (!firestoreSessionId) {
-    console.error('No firestoreSessionId in session metadata');
-    return;
-  }
-
-  try {
-    // Update checkout session status
-    await db.collection('checkoutSessions').doc(firestoreSessionId).update({
-      status: 'completed',
-      stripePaymentStatus: session.payment_status,
-      stripePaymentIntent: session.payment_intent,
-      completedAt: admin.firestore.FieldValue.serverTimestamp(),
-    });
-
-    // Create appropriate subscription record
-    if (itemType === 'service') {
-      // Service activation
-      await db.collection('serviceActivations').add({
-        userId: userId,
-        userEmail: session.customer_email,
-        serviceId: itemId,
-        checkoutSessionId: firestoreSessionId,
-        stripeSessionId: session.id,
-        status: 'active',
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      });
-
-      console.log(`Service ${itemId} activated for user ${userId}`);
-
-    } else if (itemType === 'plan') {
-      // Plan subscription
-      await db.collection('userSubscriptions').add({
-        userId: userId,
-        userEmail: session.customer_email,
-        planId: itemId,
-        checkoutSessionId: firestoreSessionId,
-        stripeSessionId: session.id,
-        status: 'active',
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      });
-
-      console.log(`Plan ${itemId} subscribed for user ${userId}`);
-    }
-
-  } catch (error) {
-    console.error('Error handling checkout completion:', error);
-    throw error;
-  }
-}
-
-/* ══════════════════════════════
-   CHECKOUT EXPIRED
-══════════════════════════════ */
-async function handleCheckoutExpired(session) {
-  const firestoreSessionId = session.metadata?.firestoreSessionId;
-
-  if (!firestoreSessionId) return;
-
-  try {
-    await db.collection('checkoutSessions').doc(firestoreSessionId).update({
-      status: 'expired',
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-    });
-
-    console.log(`Checkout session ${firestoreSessionId} expired`);
-  } catch (error) {
-    console.error('Error handling checkout expiration:', error);
-    throw error;
-  }
+function getNextBillingDate(billing) {
+  const d = new Date();
+  if (billing === "year")  d.setFullYear(d.getFullYear() + 1);
+  else if (billing === "once") return null;
+  else d.setMonth(d.getMonth() + 1);
+  return admin.firestore.Timestamp.fromDate(d);
 }
