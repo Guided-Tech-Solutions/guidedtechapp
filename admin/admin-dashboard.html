@@ -1,524 +1,773 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Admin Dashboard — Guided Tech Solutions</title>
-  <link rel="shortcut icon" href="../asset/logo-icon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./admin.css">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Admin Dashboard — GTS Amplify</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--brand:#1B4F72;--brand-dark:#0F2E42;--brand-mid:#2471A3;--brand-light:#3498DB;--brand-pale:#EBF5FB;--accent:#E67E22;--success:#0F9D58;--success-pale:#E6F4EA;--warning:#F39C12;--warning-pale:#FEF9E7;--danger:#E53935;--danger-pale:#FDECEA;--info:#1565C0;--info-pale:#E3F2FD;--bg:#F2F5F9;--surface:#fff;--surface-alt:#F8FAFC;--border:#E2E8F0;--border-mid:#CBD5E1;--text:#0D1B2A;--text-mid:#334155;--text-muted:#64748B;--text-faint:#94A3B8;--sidebar-w:256px;--nav-h:60px;--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif;--r:8px;--r-lg:14px;--sh-xs:0 1px 2px rgba(0,0,0,.05);--sh-sm:0 2px 8px rgba(0,0,0,.08);--sh-md:0 8px 24px rgba(0,0,0,.1);--tr:all .2s cubic-bezier(.4,0,.2,1)}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:var(--ff-b);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:var(--ff-b)}
+    ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border-mid);border-radius:3px}
+
+    /* Topbar */
+    .topbar{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--surface);border-bottom:1px solid var(--border);z-index:200;display:flex;align-items:center;box-shadow:var(--sh-xs)}
+    .topbar-inner{width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem}
+    .topbar-left{display:flex;align-items:center;gap:.75rem}
+    .hamburger{background:none;border:1px solid var(--border);border-radius:var(--r);padding:.3125rem .5rem;color:var(--text-mid);font-size:1.0625rem;cursor:pointer;transition:var(--tr);display:none}
+    .hamburger:hover{background:var(--bg);border-color:var(--brand);color:var(--brand)}
+    .topbar-logo{display:flex;align-items:center;gap:.5rem;font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:var(--brand)}
+    .topbar-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.875rem}
+    .admin-tag{font-size:.5625rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:var(--danger-pale);color:var(--danger);padding:1px 5px;border-radius:3px;margin-left:.25rem}
+    .topbar-right{display:flex;align-items:center;gap:.625rem}
+    .topbar-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-mid));color:white;font-weight:700;font-size:.75rem;display:flex;align-items:center;justify-content:center;font-family:var(--ff-d)}
+    .topbar-email{font-size:.8125rem;color:var(--text-muted)}
+    .btn-signout{padding:.3125rem .75rem;border-radius:var(--r);background:var(--danger-pale);color:var(--danger);border:1px solid rgba(229,57,53,.2);font-size:.8125rem;font-weight:600;cursor:pointer;transition:var(--tr)}
+    .btn-signout:hover{background:var(--danger);color:white}
+
+    /* Layout */
+    .wrapper{padding-top:var(--nav-h);min-height:100vh;display:flex}
+
+    /* Sidebar */
+    .sidebar{width:var(--sidebar-w);background:linear-gradient(180deg,#0A1929 0%,#0F2840 100%);position:fixed;left:0;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;z-index:100;display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+    .sidebar-nav{padding:.375rem .625rem;flex:1}
+    .nav-label{font-size:.5625rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.22);padding:.75rem .625rem .25rem}
+    .nav-link{display:flex;align-items:center;gap:.5rem;padding:.4375rem .625rem;margin-bottom:1px;border-radius:var(--r);color:rgba(255,255,255,.48);font-size:.8125rem;font-weight:500;transition:var(--tr);cursor:pointer;border:none;background:transparent;width:100%;text-align:left;position:relative}
+    .nav-link:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+    .nav-link.active{background:rgba(52,152,219,.18);color:white;font-weight:600}
+    .nav-link.active::before{content:'';position:absolute;left:0;top:25%;bottom:25%;width:3px;background:var(--brand-light);border-radius:0 2px 2px 0}
+    .nav-icon{font-size:.8125rem;width:16px;text-align:center;flex-shrink:0}
+    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;backdrop-filter:blur(3px)}
+    .overlay.open{display:block}
+
+    /* Main */
+    .main{flex:1;margin-left:var(--sidebar-w);padding:1.5rem 1.75rem;min-height:calc(100vh - var(--nav-h))}
+    .section{display:none}.section.active{display:block}
+
+    /* Page header */
+    .page-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1.375rem}
+    .page-title{font-family:var(--ff-d);font-size:1.4375rem;font-weight:700;color:var(--text);letter-spacing:-.025em}
+    .page-subtitle{font-size:.8125rem;color:var(--text-muted);margin-top:.25rem}
+
+    /* Stats */
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.375rem}
+    .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.125rem 1.25rem;box-shadow:var(--sh-xs);transition:var(--tr);position:relative;overflow:hidden}
+    .stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--brand-light));opacity:0;transition:opacity .2s}
+    .stat-card:hover{transform:translateY(-2px);box-shadow:var(--sh-md)}.stat-card:hover::after{opacity:1}
+    .stat-icon{width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:.9375rem;margin-bottom:.75rem;background:var(--brand-pale)}
+    .stat-icon.g{background:var(--success-pale)}.stat-icon.o{background:var(--warning-pale)}.stat-icon.a{background:#FEF5EC}
+    .stat-label{font-size:.625rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:.2rem}
+    .stat-value{font-family:var(--ff-d);font-size:1.75rem;font-weight:700;color:var(--text);letter-spacing:-.03em;line-height:1}
+    .stat-value.sm{font-size:1.125rem}
+
+    /* Cards */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh-xs);overflow:hidden;margin-bottom:1.25rem}
+    .card-header{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.25rem;border-bottom:1px solid var(--border);background:var(--surface-alt)}
+    .card-title{font-family:var(--ff-d);font-size:.9375rem;font-weight:600;color:var(--text)}
+    .card-subtitle{font-size:.75rem;color:var(--text-muted);margin-top:1px}
+    .card-body{padding:1.25rem}
+
+    /* Buttons */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.375rem;padding:.4375rem 1rem;border-radius:var(--r);font-weight:600;font-size:.8125rem;cursor:pointer;transition:var(--tr);border:none;white-space:nowrap}
+    .btn-sm{padding:.3125rem .625rem;font-size:.75rem}
+    .btn-block{width:100%;justify-content:center}
+    .btn-primary{background:var(--brand);color:white}.btn-primary:hover{background:var(--brand-dark);transform:translateY(-1px)}
+    .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .btn-secondary{background:var(--surface);color:var(--brand);border:1.5px solid var(--brand)}.btn-secondary:hover{background:var(--brand-pale)}
+    .btn-ghost{background:transparent;color:var(--text-mid);border:1px solid var(--border)}.btn-ghost:hover{background:var(--bg)}
+    .btn-danger{background:var(--danger-pale);color:var(--danger);border:1px solid rgba(229,57,53,.2)}.btn-danger:hover{background:var(--danger);color:white}
+    .btn-success{background:var(--success);color:white}.btn-success:hover{background:#0a8a4d}
+    .btn.loading{position:relative;color:transparent!important;pointer-events:none}
+    .btn.loading::after{content:'';position:absolute;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite}
+
+    /* Badges */
+    .badge{display:inline-flex;align-items:center;gap:.2rem;padding:.15rem .5rem;border-radius:20px;font-size:.625rem;font-weight:700;letter-spacing:.02em}
+    .badge::before{content:'●';font-size:.375rem}
+    .badge-active{background:var(--success-pale);color:var(--success)}.badge-pending{background:var(--warning-pale);color:var(--warning)}
+    .badge-inactive,.badge-canceled{background:#f1f3f6;color:var(--text-muted)}.badge-danger{background:var(--danger-pale);color:var(--danger)}
+    .badge-info{background:var(--info-pale);color:var(--info)}.badge-brand{background:var(--brand-pale);color:var(--brand)}
+
+    /* Table */
+    .table-wrap{overflow-x:auto}
+    .tbl{width:100%;border-collapse:collapse;font-size:.8125rem}
+    .tbl th{padding:.5rem .875rem;text-align:left;font-size:.625rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);background:var(--surface-alt);border-bottom:2px solid var(--border);white-space:nowrap}
+    .tbl td{padding:.5625rem .875rem;border-bottom:1px solid var(--border);color:var(--text-mid);vertical-align:middle}
+    .tbl tr:last-child td{border-bottom:none}.tbl tr:hover td{background:var(--surface-alt)}
+    .td-name{font-weight:600;color:var(--text)}.td-sub{font-size:.75rem;color:var(--text-muted);margin-top:1px}
+
+    /* Forms */
+    .form-group{margin-bottom:.875rem}
+    .form-label{display:block;font-size:.8125rem;font-weight:600;color:var(--text-mid);margin-bottom:.25rem}
+    .form-label .req{color:var(--danger);margin-left:2px}
+    .form-control{width:100%;padding:.5rem .875rem;border:1.5px solid var(--border);border-radius:var(--r);font-size:.875rem;color:var(--text);background:var(--surface);transition:var(--tr)}
+    .form-control:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(27,79,114,.1)}
+    .form-control::placeholder{color:var(--text-faint)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.875rem}
+    select.form-control{cursor:pointer}textarea.form-control{resize:vertical;min-height:70px}
+    .form-hint{font-size:.75rem;color:var(--text-muted);margin-top:.2rem}
+
+    /* Filter bar */
+    .filter-bar{display:flex;gap:.625rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center}
+    .search-wrap{position:relative;flex:1;min-width:180px}
+    .search-wrap::before{content:'🔍';position:absolute;left:.625rem;top:50%;transform:translateY(-50%);font-size:.75rem;pointer-events:none}
+    .search-input{width:100%;padding:.5rem .875rem .5rem 2rem;border:1.5px solid var(--border);border-radius:var(--r);font-size:.8125rem;background:var(--surface);color:var(--text);transition:var(--tr)}
+    .search-input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(27,79,114,.1)}
+
+    /* Modals */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+    .modal-overlay.open{display:flex}
+    .modal-box{background:var(--surface);border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:modalIn .25s cubic-bezier(.34,1.56,.64,1)}
+    .modal-box.lg{max-width:660px}.modal-box.sm{max-width:400px}
+    @keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .modal-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1}
+    .modal-title{font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:var(--text)}
+    .modal-x{width:26px;height:26px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8125rem;color:var(--text-muted);cursor:pointer;transition:var(--tr)}
+    .modal-x:hover{background:var(--danger-pale);color:var(--danger);border-color:var(--danger);transform:rotate(90deg)}
+    .modal-body{padding:1.25rem}
+    .modal-footer{padding:.875rem 1.25rem;border-top:1px solid var(--border);display:flex;gap:.625rem;justify-content:flex-end;position:sticky;bottom:0;background:var(--surface)}
+
+    /* Toast */
+    #toastRoot{position:fixed;bottom:1rem;right:1rem;z-index:9999;display:flex;flex-direction:column;gap:.375rem}
+    .toast{display:flex;align-items:flex-start;gap:.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.625rem .875rem;box-shadow:var(--sh-md);min-width:240px;max-width:320px;animation:toastIn .3s cubic-bezier(.34,1.56,.64,1)}
+    @keyframes toastIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+    .toast-icon{font-size:.9375rem;flex-shrink:0;margin-top:1px}.toast-body{flex:1}
+    .toast-title{font-weight:600;font-size:.8125rem;color:var(--text)}.toast-msg{font-size:.75rem;color:var(--text-muted);margin-top:1px}
+    .toast.success{border-left:3px solid var(--success)}.toast.error{border-left:3px solid var(--danger)}.toast.info{border-left:3px solid var(--brand)}
+
+    /* Empty/Loading */
+    .empty{text-align:center;padding:2rem 1rem}
+    .empty-icon{font-size:2rem;opacity:.25;margin-bottom:.5rem}
+    .empty-title{font-family:var(--ff-d);font-size:.9375rem;font-weight:700;margin-bottom:.25rem}
+    .empty-text{font-size:.8125rem;color:var(--text-muted)}
+    .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .75s linear infinite;margin:2rem auto}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Responsive */
+    @media(max-width:1200px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:1024px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.hamburger{display:inline-flex}}
+    @media(max-width:768px){.main{padding:1rem}.stats-grid{grid-template-columns:1fr 1fr}.form-row{grid-template-columns:1fr}.topbar-email{display:none}}
+    @media(max-width:480px){.stats-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <aside class="admin-sidebar">
-    <div class="admin-sidebar-header">
-      <div class="admin-logo">
-        <img src="../asset/logo-icon.png" alt="GTS">
-        <span>GTS Admin</span>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-left">
+      <button class="hamburger" id="hamburger">☰</button>
+      <div class="topbar-logo">
+        <div class="topbar-logo-icon">🚀</div>
+        GTS Amplify
+        <span class="admin-tag">Admin</span>
       </div>
     </div>
+    <div class="topbar-right">
+      <div class="topbar-avatar" id="topbarAvatar">A</div>
+      <span class="topbar-email" id="topbarEmail"></span>
+      <button class="btn-signout" id="btnSignout">Sign Out</button>
+    </div>
+  </div>
+</div>
 
-    <nav class="admin-nav">
-      <a href="#" class="admin-nav-link active" data-section="dashboard">
-        <span class="nav-icon">📊</span>
-        <span>Dashboard</span>
-      </a>
-      <a href="#" class="admin-nav-link" data-section="users">
-        <span class="nav-icon">👥</span>
-        <span>Users</span>
-      </a>
-      <a href="#" class="admin-nav-link" data-section="subscriptions">
-        <span class="nav-icon">💳</span>
-        <span>Subscriptions</span>
-      </a>
-      <a href="#" class="admin-nav-link" data-section="services">
-        <span class="nav-icon">⚙️</span>
-        <span>Services</span>
-      </a>
-      <a href="#" class="admin-nav-link" data-section="plans">
-        <span class="nav-icon">📦</span>
-        <span>Plans</span>
-      </a>
-      <a href="#" class="admin-nav-link" data-section="payments">
-        <span class="nav-icon">💰</span>
-        <span>Payments</span>
-      </a>
-      <a href="#" class="admin-nav-link" data-section="settings">
-        <span class="nav-icon">🔧</span>
-        <span>Settings</span>
-      </a>
+<div class="wrapper">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <div class="nav-label">Overview</div>
+      <button class="nav-link active" data-sec="overview"><span class="nav-icon">📊</span>Dashboard</button>
+      <div class="nav-label">Catalog</div>
+      <button class="nav-link" data-sec="services"><span class="nav-icon">🔧</span>Services</button>
+      <button class="nav-link" data-sec="plans"><span class="nav-icon">📦</span>Plans & Bundles</button>
+      <button class="nav-link" data-sec="consultpricing"><span class="nav-icon">📅</span>Consultation Pricing</button>
+      <div class="nav-label">Customers</div>
+      <button class="nav-link" data-sec="users"><span class="nav-icon">👥</span>Users</button>
+      <button class="nav-link" data-sec="subscriptions"><span class="nav-icon">📋</span>Subscriptions</button>
+      <button class="nav-link" data-sec="bookings"><span class="nav-icon">📞</span>Consultations</button>
+      <div class="nav-label">Finance</div>
+      <button class="nav-link" data-sec="payments"><span class="nav-icon">💳</span>Payments</button>
+      <div class="nav-label">Admin</div>
+      <button class="nav-link" data-sec="admins"><span class="nav-icon">🔐</span>Admin Users</button>
     </nav>
-
-    <div class="admin-sidebar-footer">
-      <div class="admin-profile">
-        <div class="admin-avatar" id="adminAvatar">A</div>
-        <div class="admin-info">
-          <div class="admin-name" id="adminName">Admin</div>
-          <div class="admin-email" id="adminEmail">admin@example.com</div>
-        </div>
-      </div>
-      <button class="admin-logout" id="adminLogout">
-        <span>🚪</span> Logout
-      </button>
-    </div>
   </aside>
+  <div class="overlay" id="overlay"></div>
 
-  <!-- Main Content -->
-  <main class="admin-main">
-    <!-- Header -->
-    <header class="admin-header">
-      <div class="admin-header-left">
-        <button class="mobile-toggle" id="mobileToggle">☰</button>
-        <h1 class="page-title" id="pageTitle">Dashboard</h1>
-      </div>
-      <div class="admin-header-right">
-        <button class="header-btn" id="refreshBtn">🔄 Refresh</button>
-        <button class="header-btn" id="exportBtn">📥 Export</button>
-      </div>
-    </header>
+  <main class="main" id="mainArea">
 
-    <!-- Dashboard Section -->
-    <section class="admin-section active" id="section-dashboard">
+    <!-- ── OVERVIEW ──────────────────────────────────────── -->
+    <div class="section active" id="sec-overview">
+      <div class="page-header">
+        <div><h1 class="page-title">Dashboard</h1><p class="page-subtitle">Platform overview</p></div>
+        <button class="btn btn-ghost btn-sm" onclick="location.reload()">🔄 Refresh</button>
+      </div>
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">👥</div>
-          <div class="stat-info">
-            <div class="stat-label">Total Users</div>
-            <div class="stat-value" id="statTotalUsers">0</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">💳</div>
-          <div class="stat-info">
-            <div class="stat-label">Active Subscriptions</div>
-            <div class="stat-value" id="statActiveSubs">0</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">💰</div>
-          <div class="stat-info">
-            <div class="stat-label">Revenue</div>
-            <div class="stat-value" id="statRevenue">$0.00</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">📈</div>
-          <div class="stat-info">
-            <div class="stat-label">Conversion Rate</div>
-            <div class="stat-value" id="statConversion">0%</div>
-          </div>
-        </div>
+        <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-label">Total Users</div><div class="stat-value" id="ovUsers">—</div></div>
+        <div class="stat-card"><div class="stat-icon g">⚡</div><div class="stat-label">Active Subscriptions</div><div class="stat-value" id="ovSubs">—</div></div>
+        <div class="stat-card"><div class="stat-icon a">💰</div><div class="stat-label">Revenue (Completed)</div><div class="stat-value sm" id="ovRevenue">—</div></div>
+        <div class="stat-card"><div class="stat-icon o">📞</div><div class="stat-label">Consultation Bookings</div><div class="stat-value" id="ovBookings">—</div></div>
       </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+        <div class="card"><div class="card-header"><div class="card-title">Recent Users</div></div><div class="card-body" id="ovRecentUsers"><div class="spinner"></div></div></div>
+        <div class="card"><div class="card-header"><div class="card-title">Recent Payments</div></div><div class="card-body" id="ovRecentPays"><div class="spinner"></div></div></div>
+      </div>
+    </div>
 
-      <div class="dashboard-grid">
-        <div class="dashboard-card">
-          <div class="card-header">
-            <h2>Recent Activity</h2>
-          </div>
-          <div class="card-body" id="activityList">
-            <p style="color: var(--admin-text-muted); font-size: 13px;">No recent activity</p>
-          </div>
-        </div>
+    <!-- ── SERVICES ───────────────────────────────────────── -->
+    <div class="section" id="sec-services">
+      <div class="page-header">
+        <div><h1 class="page-title">Services</h1><p class="page-subtitle">Manage the service catalog</p></div>
+        <button class="btn btn-primary" id="btnAddService">+ Add Service</button>
+      </div>
+      <div class="card"><div class="card-header"><div class="card-title">All Services</div><span class="badge badge-brand" id="svcCount">0</span></div><div class="card-body" id="svcBody"><div class="spinner"></div></div></div>
+    </div>
 
-        <div class="dashboard-card">
-          <div class="card-header">
-            <h2>Recent Transactions</h2>
-          </div>
-          <div class="card-body" id="transactionList">
-            <p style="color: var(--admin-text-muted); font-size: 13px;">No recent transactions</p>
-          </div>
+    <!-- ── PLANS ──────────────────────────────────────────── -->
+    <div class="section" id="sec-plans">
+      <div class="page-header">
+        <div><h1 class="page-title">Plans & Bundles</h1><p class="page-subtitle">Subscription bundle management</p></div>
+        <button class="btn btn-primary" id="btnAddPlan">+ Add Plan</button>
+      </div>
+      <div class="card"><div class="card-header"><div class="card-title">All Plans</div><span class="badge badge-brand" id="planCount">0</span></div><div class="card-body" id="planBody"><div class="spinner"></div></div></div>
+    </div>
+
+    <!-- ── CONSULTATION PRICING ───────────────────────────── -->
+    <div class="section" id="sec-consultpricing">
+      <div class="page-header"><div><h1 class="page-title">Consultation Pricing</h1><p class="page-subtitle">Set discovery call & strategy session prices</p></div></div>
+      <div class="card" style="max-width:520px">
+        <div class="card-header"><div class="card-title">Session Pricing</div></div>
+        <div class="card-body">
+          <div class="form-group"><label class="form-label">Free Discovery Call</label><input type="number" class="form-control" value="0" disabled><div class="form-hint">Discovery calls are always free</div></div>
+          <div class="form-group"><label class="form-label">Strategy Session Price (₦) <span class="req">*</span></label><input type="number" class="form-control" id="cpPaidPrice" placeholder="15000" min="0"></div>
+          <div class="form-group"><label class="form-label">Session Duration</label><input type="text" class="form-control" id="cpDuration" placeholder="60 minutes"></div>
+          <div class="form-group"><label class="form-label">Includes (one per line)</label><textarea class="form-control" id="cpIncludes" rows="4" placeholder="In-depth business analysis&#10;Custom technology roadmap&#10;Written action plan&#10;30-day email follow-up"></textarea></div>
+          <button class="btn btn-primary" id="btnSaveCP">Save Pricing</button>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- Users Section -->
-    <section class="admin-section" id="section-users">
-      <div class="section-header">
-        <h2>Users Management</h2>
-        <button class="btn-primary" id="addUserBtn">+ Add User</button>
+    <!-- ── USERS ──────────────────────────────────────────── -->
+    <div class="section" id="sec-users">
+      <div class="page-header"><div><h1 class="page-title">Users</h1><p class="page-subtitle">All registered users</p></div></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">All Users</div><span class="badge badge-brand" id="usrCount">0</span></div>
+        <div class="card-body">
+          <div class="filter-bar"><div class="search-wrap" style="max-width:300px"><input type="text" class="search-input" id="usrSearch" placeholder="Search name or email..."></div></div>
+          <div id="usrBody"><div class="spinner"></div></div>
+        </div>
       </div>
-      <div class="table-container">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th>Subscriptions</th>
-              <th>Joined</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="usersTableBody">
-            <tr>
-              <td colspan="6" style="text-align: center; color: var(--admin-text-muted);">
-                Loading users...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+    </div>
 
-    <!-- Subscriptions Section -->
-    <section class="admin-section" id="section-subscriptions">
-      <div class="section-header">
-        <h2>Subscriptions</h2>
-      </div>
-      <div class="table-container">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Plan/Service</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Start Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="subsTableBody">
-            <tr>
-              <td colspan="6" style="text-align: center; color: var(--admin-text-muted);">
-                Loading subscriptions...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- Services Section -->
-    <section class="admin-section" id="section-services">
-      <div class="section-header">
-        <h2>Services Management</h2>
-        <button class="btn-primary" id="addServiceBtn">+ Add Service</button>
-      </div>
-      <div class="services-grid" id="servicesGrid">
-        <div class="loading-card">Loading services...</div>
-      </div>
-    </section>
-
-    <!-- Plans Section -->
-    <section class="admin-section" id="section-plans">
-      <div class="section-header">
-        <h2>Plans Management</h2>
-        <button class="btn-primary" id="addPlanBtn">+ Add Plan</button>
-      </div>
-      <div class="plans-grid" id="plansGrid">
-        <div class="loading-card">Loading plans...</div>
-      </div>
-    </section>
-
-    <!-- Payments Section -->
-    <section class="admin-section" id="section-payments">
-      <div class="section-header">
-        <h2>Payment Transactions</h2>
-      </div>
-      <div class="table-container">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Transaction ID</th>
-              <th>User</th>
-              <th>Amount</th>
-              <th>Item</th>
-              <th>Status</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="paymentsTableBody">
-            <tr>
-              <td colspan="7" style="text-align: center; color: var(--admin-text-muted);">
-                Loading payments...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- Settings Section -->
-    <section class="admin-section" id="section-settings">
-      <div class="section-header">
-        <h2>Settings</h2>
-      </div>
-
-      <div class="settings-container">
-        <!-- Admin Management -->
-        <div class="settings-card" style="grid-column: 1 / -1;">
-          <h3>👥 Admin Management</h3>
-          
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <p style="color: var(--admin-text-light); margin: 0;">Manage administrator accounts and permissions</p>
-            <button class="btn-primary" id="addAdminBtn">➕ Add New Admin</button>
+    <!-- ── SUBSCRIPTIONS ──────────────────────────────────── -->
+    <div class="section" id="sec-subscriptions">
+      <div class="page-header"><div><h1 class="page-title">Subscriptions</h1><p class="page-subtitle">All service activations</p></div></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Service Activations</div><span class="badge badge-active" id="subCount">0</span></div>
+        <div class="card-body">
+          <div class="filter-bar">
+            <div class="search-wrap" style="max-width:260px"><input type="text" class="search-input" id="subSearch" placeholder="Search..."></div>
+            <select class="form-control" id="subStatus" style="width:auto"><option value="">All statuses</option><option>active</option><option>canceled</option><option>pending</option></select>
           </div>
-
-          <div class="table-container">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>Admin</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Created</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="adminsTableBody">
-                <tr>
-                  <td colspan="6" style="text-align: center; padding: 40px; color: var(--admin-text-light);">
-                    Loading admins...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Stripe Settings -->
-        <div class="settings-card">
-          <h3>Stripe Configuration</h3>
-          <form id="stripeSettingsForm">
-            <div class="form-group">
-              <label>Stripe Publishable Key</label>
-              <input type="text" placeholder="pk_live_..." class="form-input">
-            </div>
-            <div class="form-group">
-              <label>Stripe Secret Key</label>
-              <input type="password" placeholder="sk_live_..." class="form-input">
-            </div>
-            <button type="submit" class="btn-primary">Save Stripe Settings</button>
-          </form>
-        </div>
-
-        <!-- Email Settings -->
-        <div class="settings-card">
-          <h3>Email Configuration</h3>
-          <form id="emailSettingsForm">
-            <div class="form-group">
-              <label>From Email</label>
-              <input type="email" placeholder="noreply@guidedtechms.com" class="form-input">
-            </div>
-            <div class="form-group">
-              <label>Support Email</label>
-              <input type="email" placeholder="support@guidedtechms.com" class="form-input">
-            </div>
-            <button type="submit" class="btn-primary">Save Email Settings</button>
-          </form>
-        </div>
-
-        <!-- General Settings -->
-        <div class="settings-card">
-          <h3>General Settings</h3>
-          <form id="generalSettingsForm">
-            <div class="form-group">
-              <label>Site Name</label>
-              <input type="text" value="Guided Tech Solutions" class="form-input">
-            </div>
-            <div class="form-group">
-              <label>Maintenance Mode</label>
-              <label class="switch">
-                <input type="checkbox">
-                <span class="slider"></span>
-              </label>
-            </div>
-            <button type="submit" class="btn-primary">Save General Settings</button>
-          </form>
+          <div id="subBody"><div class="spinner"></div></div>
         </div>
       </div>
-    </section>
+    </div>
+
+    <!-- ── BOOKINGS ───────────────────────────────────────── -->
+    <div class="section" id="sec-bookings">
+      <div class="page-header"><div><h1 class="page-title">Consultations</h1><p class="page-subtitle">All booking requests</p></div></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">All Bookings</div><span class="badge badge-brand" id="bkgCount">0</span></div>
+        <div class="card-body">
+          <div class="filter-bar">
+            <div class="search-wrap" style="max-width:260px"><input type="text" class="search-input" id="bkgSearch" placeholder="Search..."></div>
+            <select class="form-control" id="bkgStatus" style="width:auto"><option value="">All statuses</option><option>confirmed</option><option>pending_payment</option><option>completed</option></select>
+          </div>
+          <div id="bkgBody"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAYMENTS ───────────────────────────────────────── -->
+    <div class="section" id="sec-payments">
+      <div class="page-header"><div><h1 class="page-title">Payments</h1><p class="page-subtitle">All payment records across providers</p></div></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Payment History</div><span class="badge badge-active" id="payCount">0</span></div>
+        <div class="card-body">
+          <div class="filter-bar">
+            <div class="search-wrap" style="max-width:260px"><input type="text" class="search-input" id="paySearch" placeholder="Search email or ref..."></div>
+            <select class="form-control" id="payStatus" style="width:auto"><option value="">All</option><option>completed</option><option>pending</option><option>failed</option></select>
+            <select class="form-control" id="payProvider" style="width:auto"><option value="">All providers</option><option>paystack</option><option>stripe</option><option>paypal</option></select>
+          </div>
+          <div id="payBody"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADMIN USERS ────────────────────────────────────── -->
+    <div class="section" id="sec-admins">
+      <div class="page-header">
+        <div><h1 class="page-title">Admin Users</h1><p class="page-subtitle">Manage admin access</p></div>
+        <button class="btn btn-primary" id="btnAddAdmin">+ Add Admin</button>
+      </div>
+      <div class="card"><div class="card-header"><div class="card-title">Admins</div></div><div class="card-body" id="admBody"><div class="spinner"></div></div></div>
+    </div>
+
   </main>
+</div>
 
-  <!-- User Modal -->
-  <div class="modal" id="userModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Add/Edit User</h2>
-        <button class="modal-close" data-modal="userModal">×</button>
+<!-- SERVICE MODAL -->
+<div class="modal-overlay" id="svcModal">
+  <div class="modal-box lg">
+    <div class="modal-header"><h2 class="modal-title" id="svcModalTitle">Add Service</h2><button class="modal-x" data-close="svcModal">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="svcId">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Service Name <span class="req">*</span></label><input type="text" class="form-control" id="svcName" placeholder="Lead Generation"></div>
+        <div class="form-group"><label class="form-label">Icon (emoji)</label><input type="text" class="form-control" id="svcIcon" placeholder="🎯"></div>
       </div>
-      <form id="userForm">
-        <div class="form-group">
-          <label>Name</label>
-          <input type="text" id="userName" required class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="userEmail" required class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Status</label>
-          <select id="userStatus" class="form-input">
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="banned">Banned</option>
-          </select>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-secondary" data-modal="userModal">Cancel</button>
-          <button type="submit" class="btn-primary">Save User</button>
-        </div>
-      </form>
+      <div class="form-group"><label class="form-label">Description <span class="req">*</span></label><textarea class="form-control" id="svcDesc" rows="2"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Price (₦) <span class="req">*</span></label><input type="number" class="form-control" id="svcPrice" min="0"></div>
+        <div class="form-group"><label class="form-label">Billing Period</label><select class="form-control" id="svcPeriod"><option value="month">Monthly</option><option value="year">Yearly</option><option value="once">One-time</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Dashboard Type</label><select class="form-control" id="svcDashType"><option value="lead_generation">Lead Generation</option><option value="cloud_migration">Cloud Migration</option><option value="automation">Automation</option><option value="seo">SEO</option><option value="consultation">Consultation</option><option value="generic">Generic</option></select></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="svcActive"><option value="true">Active</option><option value="false">Inactive</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Features (one per line)</label><textarea class="form-control" id="svcFeatures" rows="4" placeholder="Real-time dashboard&#10;Lead scoring&#10;CSV export"></textarea></div>
+      <div class="form-row">
+        <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer"><input type="checkbox" id="svcFeatured"> Mark as Featured</label>
+        <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer"><input type="checkbox" id="svcIsNew"> Mark as New</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" id="btnDelSvc" style="display:none;margin-right:auto">Delete</button>
+      <button class="btn btn-ghost" data-close="svcModal">Cancel</button>
+      <button class="btn btn-primary" id="btnSaveSvc">Save Service</button>
     </div>
   </div>
+</div>
 
-  <!-- Service Modal -->
-  <div class="modal" id="serviceModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Add/Edit Service</h2>
-        <button class="modal-close" data-modal="serviceModal">×</button>
+<!-- PLAN MODAL -->
+<div class="modal-overlay" id="planModal">
+  <div class="modal-box lg">
+    <div class="modal-header"><h2 class="modal-title" id="planModalTitle">Add Plan</h2><button class="modal-x" data-close="planModal">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="planId">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Plan Name <span class="req">*</span></label><input type="text" class="form-control" id="planName" placeholder="Growth Bundle"></div>
+        <div class="form-group"><label class="form-label">Tagline</label><input type="text" class="form-control" id="planTagline" placeholder="For growing businesses"></div>
       </div>
-      <form id="serviceForm">
-        <div class="form-group">
-          <label>Service Name</label>
-          <input type="text" id="serviceName" required class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Icon (Emoji)</label>
-          <input type="text" id="serviceIcon" placeholder="🤖" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Description</label>
-          <textarea id="serviceDescription" rows="3" class="form-input"></textarea>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Price</label>
-            <input type="number" id="servicePrice" step="0.01" required class="form-input">
-          </div>
-          <div class="form-group">
-            <label>Period</label>
-            <select id="servicePeriod" class="form-input">
-              <option value="month">Month</option>
-              <option value="year">Year</option>
-              <option value="once">One-time</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="checkbox-label">
-            <input type="checkbox" id="serviceActive" checked>
-            <span>Active</span>
-          </label>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-secondary" data-modal="serviceModal">Cancel</button>
-          <button type="submit" class="btn-primary">Save Service</button>
-        </div>
-      </form>
+      <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" id="planDesc" rows="2"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Monthly Price (₦) <span class="req">*</span></label><input type="number" class="form-control" id="planMonthly" min="0"></div>
+        <div class="form-group"><label class="form-label">Yearly Price (₦)</label><input type="number" class="form-control" id="planYearly" min="0" placeholder="Auto: 80% of monthly×12"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Features (one per line)</label><textarea class="form-control" id="planFeatures" rows="5" placeholder="Lead Generation&#10;Automation suite&#10;SEO service&#10;Save 20%"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="planActive"><option value="true">Active</option><option value="false">Inactive</option></select></div>
+        <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer;margin-top:1.5rem"><input type="checkbox" id="planPopular"> Most Popular</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" id="btnDelPlan" style="display:none;margin-right:auto">Delete</button>
+      <button class="btn btn-ghost" data-close="planModal">Cancel</button>
+      <button class="btn btn-primary" id="btnSavePlan">Save Plan</button>
     </div>
   </div>
+</div>
 
-  <!-- Plan Modal -->
-  <div class="modal" id="planModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Add/Edit Plan</h2>
-        <button class="modal-close" data-modal="planModal">×</button>
-      </div>
-      <form id="planForm">
-        <div class="form-group">
-          <label>Plan Name</label>
-          <input type="text" id="planName" required class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Icon (Emoji)</label>
-          <input type="text" id="planIcon" placeholder="📦" class="form-input">
-        </div>
-        <div class="form-group">
-          <label>Description</label>
-          <textarea id="planDescription" rows="3" class="form-input"></textarea>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Price</label>
-            <input type="number" id="planPrice" step="0.01" required class="form-input">
-          </div>
-          <div class="form-group">
-            <label>Billing Period</label>
-            <select id="planBilling" class="form-input">
-              <option value="month">Monthly</option>
-              <option value="year">Yearly</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Features (one per line)</label>
-          <textarea id="planFeatures" rows="5" placeholder="Feature 1&#10;Feature 2&#10;Feature 3" class="form-input"></textarea>
-        </div>
-        <div class="form-group">
-          <label class="checkbox-label">
-            <input type="checkbox" id="planPopular">
-            <span>Mark as Popular</span>
-          </label>
-        </div>
-        <div class="form-group">
-          <label class="checkbox-label">
-            <input type="checkbox" id="planActive" checked>
-            <span>Active</span>
-          </label>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-secondary" data-modal="planModal">Cancel</button>
-          <button type="submit" class="btn-primary">Save Plan</button>
-        </div>
-      </form>
+<!-- ADD ADMIN MODAL -->
+<div class="modal-overlay" id="adminModal">
+  <div class="modal-box sm">
+    <div class="modal-header"><h2 class="modal-title">Add Admin User</h2><button class="modal-x" data-close="adminModal">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Firebase UID <span class="req">*</span></label><input type="text" class="form-control" id="adminUid" placeholder="Firebase Auth UID"><div class="form-hint">Find UID in Firebase Console → Authentication</div></div>
+      <div class="form-group"><label class="form-label">Display Name</label><input type="text" class="form-control" id="adminName" placeholder="Admin name"></div>
     </div>
+    <div class="modal-footer"><button class="btn btn-ghost" data-close="adminModal">Cancel</button><button class="btn btn-primary" id="btnSaveAdmin">Add Admin</button></div>
   </div>
+</div>
 
-  <!-- Admin Modal -->
-  <div class="modal" id="adminModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 id="adminModalTitle">Add New Admin</h2>
-        <button class="modal-close" data-modal="adminModal">×</button>
-      </div>
-      <form id="adminForm">
-        <div class="form-group">
-          <label>Full Name *</label>
-          <input type="text" id="adminName" required class="form-input" placeholder="John Doe">
-        </div>
-        <div class="form-group">
-          <label>Email Address *</label>
-          <input type="email" id="adminEmail" required class="form-input" placeholder="admin@guidedtechms.com">
-        </div>
-        <div class="form-group">
-          <label>Temporary Password *</label>
-          <input type="password" id="adminPassword" required class="form-input" placeholder="Min. 6 characters" minlength="6">
-          <small style="color: var(--admin-text-light); font-size: 12px; display: block; margin-top: 4px;">
-            The admin will use this password to sign in for the first time
-          </small>
-        </div>
-        <div class="form-group">
-          <label>Role *</label>
-          <select id="adminRole" class="form-input">
-            <option value="super_admin">Super Admin (Full Access)</option>
-            <option value="admin">Admin (Standard Access)</option>
-            <option value="moderator">Moderator (Limited Access)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="checkbox-label">
-            <input type="checkbox" id="adminActive" checked>
-            <span>Active (Can sign in immediately)</span>
-          </label>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-secondary" data-modal="adminModal">Cancel</button>
-          <button type="submit" class="btn-primary">
-            <span id="adminSubmitText">Create Admin</span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+<div id="toastRoot"></div>
 
-  <script type="module" src="./admin-dashboard.js"></script>
+<script type="module">
+import { auth, db } from "./firebase-admin.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import {
+  collection, getDocs, addDoc, setDoc, updateDoc, deleteDoc,
+  doc, getDoc, query, where, orderBy, limit, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
+/* ── Auth guard ─────────────────────────────────────────────── */
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href="./admin-login.html"; return; }
+  const snap = await getDoc(doc(db,"Admins",user.uid));
+  if (!snap.exists()) { await signOut(auth); window.location.href="./admin-login.html"; return; }
+  const initials=(user.displayName||user.email||"A").split(/[\s@]+/).slice(0,2).map(s=>s[0]?.toUpperCase()||"").join("")||"A";
+  document.getElementById("topbarAvatar").textContent=initials;
+  document.getElementById("topbarEmail").textContent=user.email;
+  loadOverview();
+});
+document.getElementById("btnSignout").addEventListener("click", async()=>{ await signOut(auth); window.location.href="./admin-login.html"; });
+
+/* ── Toast ─────────────────────────────────────────────────── */
+function toast(title,msg,type="info"){
+  const icons={success:"✅",error:"❌",warning:"⚠️",info:"ℹ️"};
+  const el=document.createElement("div");
+  el.className=`toast ${type}`;
+  el.innerHTML=`<span class="toast-icon">${icons[type]}</span><div class="toast-body"><div class="toast-title">${title}</div>${msg?`<div class="toast-msg">${msg}</div>`:""}</div>`;
+  document.getElementById("toastRoot").appendChild(el);
+  setTimeout(()=>{ el.style.opacity="0"; el.style.transition="opacity .25s"; setTimeout(()=>el.remove(),250); },4000);
+}
+
+/* ── Modals ─────────────────────────────────────────────────── */
+function openM(id){document.getElementById(id)?.classList.add("open")}
+function closeM(id){document.getElementById(id)?.classList.remove("open")}
+document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>closeM(b.dataset.close)));
+document.querySelectorAll(".modal-overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)closeM(o.id)}));
+
+/* ── Sidebar nav ─────────────────────────────────────────────── */
+const loaded=new Set();
+document.querySelectorAll(".nav-link[data-sec]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+    btn.classList.add("active");
+    const id="sec-"+btn.dataset.sec;
+    document.getElementById(id)?.classList.add("active");
+    closeSidebar();
+    if(!loaded.has(btn.dataset.sec)){loaded.add(btn.dataset.sec);loadSection(btn.dataset.sec);}
+  });
+});
+
+const sidebar=document.getElementById("sidebar");
+const overlay=document.getElementById("overlay");
+document.getElementById("hamburger").addEventListener("click",()=>{sidebar.classList.add("open");overlay.classList.add("open")});
+function closeSidebar(){sidebar.classList.remove("open");overlay.classList.remove("open")}
+overlay.addEventListener("click",closeSidebar);
+
+function loadSection(sec){
+  switch(sec){
+    case"services":loadServices();break;case"plans":loadPlans();break;
+    case"consultpricing":loadCP();break;case"users":loadUsers();break;
+    case"subscriptions":loadSubs();break;case"bookings":loadBookings();break;
+    case"payments":loadPayments();break;case"admins":loadAdmins();break;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   OVERVIEW
+═══════════════════════════════════════════════════════════ */
+async function loadOverview(){
+  const [u,s,p,b]=await Promise.all([
+    getDocs(collection(db,"users")),
+    getDocs(query(collection(db,"serviceActivations"),where("status","==","active"))),
+    getDocs(query(collection(db,"checkoutSessions"),where("status","==","completed"),orderBy("createdAt","desc"),limit(5))),
+    getDocs(collection(db,"consultationBookings")),
+  ]);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set("ovUsers",u.size);set("ovSubs",s.size);set("ovBookings",b.size);
+  let rev=0;p.forEach(d=>rev+=Number(d.data().amountPaid||d.data().price||0));
+  set("ovRevenue","₦"+rev.toLocaleString());
+
+  const usrs=[];u.forEach(d=>usrs.push({id:d.id,...d.data()}));
+  usrs.sort((a,b2)=>(b2.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  document.getElementById("ovRecentUsers").innerHTML=usrs.slice(0,5).map(u2=>`
+    <div style="display:flex;align-items:center;gap:.625rem;padding:.375rem 0;border-bottom:1px solid var(--border)">
+      <div style="width:28px;height:28px;border-radius:50%;background:var(--brand-pale);color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.6875rem;flex-shrink:0">${(u2.displayName||u2.email||"U")[0].toUpperCase()}</div>
+      <div style="flex:1;min-width:0"><div style="font-size:.8125rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u2.displayName||"—"}</div><div style="font-size:.6875rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u2.email||"—"}</div></div>
+    </div>`).join("")||"<div class='empty'><div class='empty-text'>No users yet</div></div>";
+
+  const pays=[];p.forEach(d=>pays.push({id:d.id,...d.data()}));
+  document.getElementById("ovRecentPays").innerHTML=pays.map(pay=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:.375rem 0;border-bottom:1px solid var(--border)">
+      <div><div style="font-size:.8125rem;font-weight:600">${pay.itemName||"Payment"}</div><div style="font-size:.6875rem;color:var(--text-muted)">${pay.userEmail||"—"} · ${pay.provider||"paystack"}</div></div>
+      <div style="font-family:var(--ff-d);font-weight:700;color:var(--success);font-size:.875rem">₦${Number(pay.amountPaid||pay.price||0).toLocaleString()}</div>
+    </div>`).join("")||"<div class='empty'><div class='empty-text'>No payments yet</div></div>";
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SERVICES
+═══════════════════════════════════════════════════════════ */
+let allSvcs=[];
+async function loadServices(){
+  const snap=await getDocs(collection(db,"services"));
+  allSvcs=[];snap.forEach(d=>allSvcs.push({id:d.id,...d.data()}));
+  document.getElementById("svcCount").textContent=allSvcs.length;
+  renderSvcs(allSvcs);
+}
+function renderSvcs(arr){
+  const el=document.getElementById("svcBody");
+  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-icon'>🔧</div><div class='empty-title'>No services</div><div class='empty-text'>Click + Add Service to create one.</div></div>";return;}
+  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Service</th><th>Price</th><th>Dashboard</th><th>Status</th><th>Featured</th><th></th></tr></thead><tbody>${arr.map(s=>`<tr>
+    <td><div class="td-name">${s.icon||""} ${s.name||"—"}</div><div class="td-sub">${(s.description||"").substring(0,50)}...</div></td>
+    <td>₦${Number(s.price||0).toLocaleString()}/${s.pricePeriod||"mo"}</td>
+    <td><span class="badge badge-brand">${s.dashboardType||"generic"}</span></td>
+    <td><span class="badge ${s.active?"badge-active":"badge-inactive"}">${s.active?"Active":"Inactive"}</span></td>
+    <td>${s.featured?"⭐":"—"}</td>
+    <td><button class="btn btn-ghost btn-sm" onclick="editSvc('${s.id}')">Edit</button></td>
+  </tr>`).join("")}</tbody></table></div>`;
+}
+document.getElementById("btnAddService").addEventListener("click",()=>{
+  document.getElementById("svcId").value="";document.getElementById("svcModalTitle").textContent="Add Service";document.getElementById("btnDelSvc").style.display="none";
+  ["svcName","svcIcon","svcDesc","svcPrice","svcFeatures"].forEach(i=>document.getElementById(i).value="");
+  document.getElementById("svcPeriod").value="month";document.getElementById("svcDashType").value="lead_generation";document.getElementById("svcActive").value="true";
+  document.getElementById("svcFeatured").checked=false;document.getElementById("svcIsNew").checked=false;
+  openM("svcModal");
+});
+window.editSvc=function(id){
+  const s=allSvcs.find(x=>x.id===id);if(!s)return;
+  document.getElementById("svcId").value=s.id;document.getElementById("svcModalTitle").textContent="Edit Service";document.getElementById("btnDelSvc").style.display="inline-flex";
+  document.getElementById("svcName").value=s.name||"";document.getElementById("svcIcon").value=s.icon||"";document.getElementById("svcDesc").value=s.description||"";
+  document.getElementById("svcPrice").value=s.price||"";document.getElementById("svcPeriod").value=s.pricePeriod||"month";
+  document.getElementById("svcDashType").value=s.dashboardType||"lead_generation";document.getElementById("svcActive").value=String(s.active!==false);
+  document.getElementById("svcFeatured").checked=!!s.featured;document.getElementById("svcIsNew").checked=!!s.isNew;
+  document.getElementById("svcFeatures").value=Array.isArray(s.features)?s.features.join("\n"):"";
+  openM("svcModal");
+};
+document.getElementById("btnSaveSvc").addEventListener("click",async()=>{
+  const btn=document.getElementById("btnSaveSvc");
+  const name=document.getElementById("svcName").value.trim();
+  if(!name){toast("Missing","Service name required.","warning");return;}
+  btn.classList.add("loading");btn.disabled=true;
+  const payload={name,icon:document.getElementById("svcIcon").value.trim(),description:document.getElementById("svcDesc").value.trim(),
+    price:Number(document.getElementById("svcPrice").value)||0,pricePeriod:document.getElementById("svcPeriod").value,
+    dashboardType:document.getElementById("svcDashType").value,active:document.getElementById("svcActive").value==="true",
+    featured:document.getElementById("svcFeatured").checked,isNew:document.getElementById("svcIsNew").checked,
+    features:document.getElementById("svcFeatures").value.split("\n").map(s=>s.trim()).filter(Boolean),updatedAt:serverTimestamp()};
+  try{
+    const id=document.getElementById("svcId").value;
+    if(id)await updateDoc(doc(db,"services",id),payload);
+    else{payload.createdAt=serverTimestamp();await addDoc(collection(db,"services"),payload);}
+    closeM("svcModal");toast("Saved!","Service saved.","success");
+    allSvcs=[];loadServices();
+  }catch(e){toast("Error",e.message,"error");}
+  finally{btn.classList.remove("loading");btn.disabled=false;}
+});
+document.getElementById("btnDelSvc").addEventListener("click",async()=>{
+  const id=document.getElementById("svcId").value;
+  if(!id||!confirm("Delete this service?"))return;
+  try{await deleteDoc(doc(db,"services",id));closeM("svcModal");toast("Deleted","","success");allSvcs=[];loadServices();}catch(e){toast("Error",e.message,"error");}
+});
+
+/* ═══════════════════════════════════════════════════════════
+   PLANS
+═══════════════════════════════════════════════════════════ */
+let allPlans=[];
+async function loadPlans(){
+  const snap=await getDocs(collection(db,"plans"));
+  allPlans=[];snap.forEach(d=>allPlans.push({id:d.id,...d.data()}));
+  document.getElementById("planCount").textContent=allPlans.length;
+  renderPlans(allPlans);
+}
+function renderPlans(arr){
+  const el=document.getElementById("planBody");
+  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-icon'>📦</div><div class='empty-title'>No plans</div></div>";return;}
+  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Plan</th><th>Monthly</th><th>Yearly</th><th>Popular</th><th>Status</th><th></th></tr></thead><tbody>${arr.map(p=>`<tr>
+    <td><div class="td-name">${p.name||"—"}</div><div class="td-sub">${p.tagline||""}</div></td>
+    <td>₦${Number(p.priceMonthly||0).toLocaleString()}</td>
+    <td>₦${Number(p.priceYearly||0).toLocaleString()}</td>
+    <td>${p.popular?"⭐ Yes":"—"}</td>
+    <td><span class="badge ${p.active?"badge-active":"badge-inactive"}">${p.active?"Active":"Inactive"}</span></td>
+    <td><button class="btn btn-ghost btn-sm" onclick="editPlan('${p.id}')">Edit</button></td>
+  </tr>`).join("")}</tbody></table></div>`;
+}
+document.getElementById("btnAddPlan").addEventListener("click",()=>{
+  document.getElementById("planId").value="";document.getElementById("planModalTitle").textContent="Add Plan";document.getElementById("btnDelPlan").style.display="none";
+  ["planName","planTagline","planDesc","planMonthly","planYearly","planFeatures"].forEach(i=>document.getElementById(i).value="");
+  document.getElementById("planActive").value="true";document.getElementById("planPopular").checked=false;
+  openM("planModal");
+});
+window.editPlan=function(id){
+  const p=allPlans.find(x=>x.id===id);if(!p)return;
+  document.getElementById("planId").value=p.id;document.getElementById("planModalTitle").textContent="Edit Plan";document.getElementById("btnDelPlan").style.display="inline-flex";
+  document.getElementById("planName").value=p.name||"";document.getElementById("planTagline").value=p.tagline||"";document.getElementById("planDesc").value=p.description||"";
+  document.getElementById("planMonthly").value=p.priceMonthly||"";document.getElementById("planYearly").value=p.priceYearly||"";
+  document.getElementById("planActive").value=String(p.active!==false);document.getElementById("planPopular").checked=!!p.popular;
+  document.getElementById("planFeatures").value=Array.isArray(p.features)?p.features.join("\n"):"";
+  openM("planModal");
+};
+document.getElementById("btnSavePlan").addEventListener("click",async()=>{
+  const btn=document.getElementById("btnSavePlan");const name=document.getElementById("planName").value.trim();
+  if(!name){toast("Missing","Plan name required.","warning");return;}
+  btn.classList.add("loading");btn.disabled=true;
+  const m=Number(document.getElementById("planMonthly").value)||0;
+  const payload={name,tagline:document.getElementById("planTagline").value.trim(),description:document.getElementById("planDesc").value.trim(),
+    priceMonthly:m,priceYearly:Number(document.getElementById("planYearly").value)||Math.round(m*12*0.8),
+    active:document.getElementById("planActive").value==="true",popular:document.getElementById("planPopular").checked,
+    features:document.getElementById("planFeatures").value.split("\n").map(s=>s.trim()).filter(Boolean),updatedAt:serverTimestamp()};
+  try{
+    const id=document.getElementById("planId").value;
+    if(id)await updateDoc(doc(db,"plans",id),payload);
+    else{payload.createdAt=serverTimestamp();await addDoc(collection(db,"plans"),payload);}
+    closeM("planModal");toast("Saved!","Plan saved.","success");allPlans=[];loadPlans();
+  }catch(e){toast("Error",e.message,"error");}
+  finally{btn.classList.remove("loading");btn.disabled=false;}
+});
+document.getElementById("btnDelPlan").addEventListener("click",async()=>{
+  const id=document.getElementById("planId").value;
+  if(!id||!confirm("Delete this plan?"))return;
+  try{await deleteDoc(doc(db,"plans",id));closeM("planModal");toast("Deleted","","success");allPlans=[];loadPlans();}catch(e){toast("Error",e.message,"error");}
+});
+
+/* ═══════════════════════════════════════════════════════════
+   CONSULTATION PRICING
+═══════════════════════════════════════════════════════════ */
+async function loadCP(){
+  try{
+    const snap=await getDocs(collection(db,"consultationPricing"));
+    snap.forEach(d=>{const dt=d.data();if(dt.type==="paid"){document.getElementById("cpPaidPrice").value=dt.price||"";document.getElementById("cpDuration").value=dt.duration||"";document.getElementById("cpIncludes").value=Array.isArray(dt.includes)?dt.includes.join("\n"):(dt.includes||"");}});
+  }catch(e){}
+}
+document.getElementById("btnSaveCP").addEventListener("click",async()=>{
+  const btn=document.getElementById("btnSaveCP");btn.classList.add("loading");btn.disabled=true;
+  try{
+    await setDoc(doc(db,"consultationPricing","paid"),{type:"paid",price:Number(document.getElementById("cpPaidPrice").value)||0,duration:document.getElementById("cpDuration").value.trim()||"60 minutes",includes:document.getElementById("cpIncludes").value.split("\n").map(s=>s.trim()).filter(Boolean),updatedAt:serverTimestamp()});
+    await setDoc(doc(db,"consultationPricing","free"),{type:"free",price:0,updatedAt:serverTimestamp()});
+    toast("Saved!","Consultation pricing updated.","success");
+  }catch(e){toast("Error",e.message,"error");}
+  finally{btn.classList.remove("loading");btn.disabled=false;}
+});
+
+/* ═══════════════════════════════════════════════════════════
+   USERS
+═══════════════════════════════════════════════════════════ */
+let allUsrs=[];
+async function loadUsers(){
+  const snap=await getDocs(collection(db,"users"));
+  allUsrs=[];snap.forEach(d=>allUsrs.push({id:d.id,...d.data()}));
+  document.getElementById("usrCount").textContent=allUsrs.length;renderUsrs(allUsrs);
+}
+function renderUsrs(arr){
+  const el=document.getElementById("usrBody");
+  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-text'>No users yet</div></div>";return;}
+  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>User</th><th>Company</th><th>Industry</th><th>Joined</th></tr></thead><tbody>${arr.map(u=>`<tr>
+    <td><div class="td-name">${u.displayName||"—"}</div><div class="td-sub">${u.email||"—"}</div></td>
+    <td>${u.company||"—"}</td><td>${u.industry||"—"}</td>
+    <td style="font-size:.75rem;color:var(--text-muted)">${u.createdAt?.toDate?.().toLocaleDateString()||"—"}</td>
+  </tr>`).join("")}</tbody></table></div>`;
+}
+document.getElementById("usrSearch")?.addEventListener("input",function(){
+  const q=this.value.toLowerCase();renderUsrs(allUsrs.filter(u=>(u.displayName||"").toLowerCase().includes(q)||(u.email||"").toLowerCase().includes(q)));
+});
+
+/* ═══════════════════════════════════════════════════════════
+   SUBSCRIPTIONS
+═══════════════════════════════════════════════════════════ */
+let allSubs=[];
+async function loadSubs(){
+  const snap=await getDocs(collection(db,"serviceActivations"));
+  allSubs=[];snap.forEach(d=>allSubs.push({id:d.id,...d.data()}));
+  const active=allSubs.filter(s=>s.status==="active").length;
+  document.getElementById("subCount").textContent=active+" active";renderSubTable(allSubs);
+}
+function renderSubTable(arr){
+  const el=document.getElementById("subBody");
+  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-text'>No subscriptions yet</div></div>";return;}
+  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>User</th><th>Service</th><th>Price</th><th>Provider</th><th>Status</th><th>Since</th><th></th></tr></thead><tbody>${arr.map(s=>`<tr>
+    <td style="font-size:.75rem;color:var(--text-muted)">${s.userId||"—"}</td>
+    <td><div class="td-name">${s.serviceName||"—"}</div></td>
+    <td>₦${Number(s.price||0).toLocaleString()}/${s.billing||"mo"}</td>
+    <td><span class="badge badge-brand" style="text-transform:capitalize">${s.provider||"paystack"}</span></td>
+    <td><span class="badge ${s.status==="active"?"badge-active":s.status==="canceled"?"badge-inactive":"badge-pending"}">${s.status||"active"}</span></td>
+    <td style="font-size:.75rem;color:var(--text-muted)">${s.createdAt?.toDate?.().toLocaleDateString()||"—"}</td>
+    <td>${s.status==="active"?`<button class="btn btn-danger btn-sm" onclick="cancelSub('${s.id}')">Cancel</button>`:""}</td>
+  </tr>`).join("")}</tbody></table></div>`;
+}
+window.cancelSub=async function(id){
+  if(!confirm("Cancel this subscription?"))return;
+  try{await updateDoc(doc(db,"serviceActivations",id),{status:"canceled",canceledAt:serverTimestamp()});toast("Done","Subscription canceled.","success");allSubs=[];loadSubs();}
+  catch(e){toast("Error",e.message,"error");}
+};
+document.getElementById("subSearch")?.addEventListener("input",function(){const q=this.value.toLowerCase();renderSubTable(allSubs.filter(s=>(s.serviceName||"").toLowerCase().includes(q)||(s.userId||"").toLowerCase().includes(q)));});
+document.getElementById("subStatus")?.addEventListener("change",function(){renderSubTable(this.value?allSubs.filter(s=>s.status===this.value):allSubs);});
+
+/* ═══════════════════════════════════════════════════════════
+   BOOKINGS
+═══════════════════════════════════════════════════════════ */
+let allBkgs=[];
+async function loadBookings(){
+  const snap=await getDocs(query(collection(db,"consultationBookings"),orderBy("createdAt","desc")));
+  allBkgs=[];snap.forEach(d=>allBkgs.push({id:d.id,...d.data()}));
+  document.getElementById("bkgCount").textContent=allBkgs.length;renderBkgs(allBkgs);
+}
+function renderBkgs(arr){
+  const el=document.getElementById("bkgBody");
+  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-text'>No bookings yet</div></div>";return;}
+  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Customer</th><th>Session</th><th>Fee</th><th>Preferred Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${arr.map(b=>`<tr>
+    <td><div class="td-name">${b.userName||"—"}</div><div class="td-sub">${b.userEmail||"—"}</div></td>
+    <td>${b.sessionType==="paid"?"💼 Strategy":"📞 Discovery"}</td>
+    <td>${b.price>0?"₦"+Number(b.price).toLocaleString():"Free"}</td>
+    <td style="font-size:.75rem;color:var(--text-muted)">${b.preferredDate?new Date(b.preferredDate).toLocaleString():"—"}</td>
+    <td><span class="badge ${b.status==="confirmed"?"badge-active":b.status==="completed"?"badge-info":b.status==="pending_payment"?"badge-pending":"badge-inactive"}">${b.status||"pending"}</span></td>
+    <td style="display:flex;gap:.25rem">
+      ${b.status==="confirmed"?`<button class="btn btn-success btn-sm" onclick="completeBkg('${b.id}')">✓ Done</button>`:""}
+      ${b.status==="pending_payment"?`<button class="btn btn-ghost btn-sm" onclick="confirmBkg('${b.id}')">Confirm</button>`:""}
+    </td>
+  </tr>`).join("")}</tbody></table></div>`;
+}
+window.completeBkg=async function(id){try{await updateDoc(doc(db,"consultationBookings",id),{status:"completed",completedAt:serverTimestamp()});toast("Done","Marked complete.","success");allBkgs=[];loadBookings();}catch(e){toast("Error",e.message,"error");}};
+window.confirmBkg=async function(id){try{await updateDoc(doc(db,"consultationBookings",id),{status:"confirmed",confirmedAt:serverTimestamp()});toast("Done","Booking confirmed.","success");allBkgs=[];loadBookings();}catch(e){toast("Error",e.message,"error");}};
+document.getElementById("bkgSearch")?.addEventListener("input",function(){const q=this.value.toLowerCase();renderBkgs(allBkgs.filter(b=>(b.userName||"").toLowerCase().includes(q)||(b.userEmail||"").toLowerCase().includes(q)));});
+document.getElementById("bkgStatus")?.addEventListener("change",function(){renderBkgs(this.value?allBkgs.filter(b=>b.status===this.value):allBkgs);});
+
+/* ═══════════════════════════════════════════════════════════
+   PAYMENTS
+═══════════════════════════════════════════════════════════ */
+let allPays=[];
+async function loadPayments(){
+  const snap=await getDocs(query(collection(db,"checkoutSessions"),orderBy("createdAt","desc")));
+  allPays=[];snap.forEach(d=>allPays.push({id:d.id,...d.data()}));
+  const comp=allPays.filter(p=>p.status==="completed").length;
+  document.getElementById("payCount").textContent=comp+" completed";renderPays(allPays);
+}
+function renderPays(arr){
+  const el=document.getElementById("payBody");
+  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-text'>No payments yet</div></div>";return;}
+  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Customer</th><th>Item</th><th>Amount</th><th>Provider</th><th>Reference</th><th>Status</th><th>Date</th></tr></thead><tbody>${arr.map(p=>`<tr>
+    <td style="font-size:.75rem;color:var(--text-muted)">${p.userEmail||"—"}</td>
+    <td><div class="td-name">${p.itemName||"—"}</div><div class="td-sub">${p.itemType||""}</div></td>
+    <td style="font-weight:700;color:var(--success)">₦${Number(p.amountPaid||p.price||0).toLocaleString()}</td>
+    <td><span class="badge badge-brand" style="text-transform:capitalize">${p.provider||"paystack"}</span></td>
+    <td style="font-family:monospace;font-size:.6875rem;color:var(--text-muted)">${(p.paystackReference||p.stripePaymentId||p.paypalOrderId||"—").substring(0,18)}</td>
+    <td><span class="badge ${p.status==="completed"?"badge-active":p.status==="failed"?"badge-danger":"badge-pending"}">${p.status||"pending"}</span></td>
+    <td style="font-size:.6875rem;color:var(--text-muted)">${p.createdAt?.toDate?.().toLocaleDateString()||"—"}</td>
+  </tr>`).join("")}</tbody></table></div>`;
+}
+document.getElementById("paySearch")?.addEventListener("input",function(){const q=this.value.toLowerCase();renderPays(allPays.filter(p=>(p.userEmail||"").toLowerCase().includes(q)||(p.paystackReference||p.stripePaymentId||"").toLowerCase().includes(q)));});
+document.getElementById("payStatus")?.addEventListener("change",function(){renderPays(this.value?allPays.filter(p=>p.status===this.value):allPays);});
+document.getElementById("payProvider")?.addEventListener("change",function(){renderPays(this.value?allPays.filter(p=>p.provider===this.value):allPays);});
+
+/* ═══════════════════════════════════════════════════════════
+   ADMIN USERS
+═══════════════════════════════════════════════════════════ */
+async function loadAdmins(){
+  const snap=await getDocs(collection(db,"Admins"));
+  const adms=[];snap.forEach(d=>adms.push({id:d.id,...d.data()}));
+  const el=document.getElementById("admBody");
+  if(!adms.length){el.innerHTML="<div class='empty'><div class='empty-text'>No admins</div></div>";return;}
+  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>UID</th><th>Name</th><th>Added</th><th></th></tr></thead><tbody>${adms.map(a=>`<tr>
+    <td style="font-family:monospace;font-size:.6875rem">${a.id}</td>
+    <td>${a.displayName||"—"}</td>
+    <td style="font-size:.75rem;color:var(--text-muted)">${a.addedAt?.toDate?.().toLocaleDateString()||"—"}</td>
+    <td><button class="btn btn-danger btn-sm" onclick="removeAdmin('${a.id}')">Remove</button></td>
+  </tr>`).join("")}</tbody></table></div>`;
+}
+window.removeAdmin=async function(id){
+  if(!confirm("Remove admin access?"))return;
+  try{await deleteDoc(doc(db,"Admins",id));toast("Removed","","success");loadAdmins();}catch(e){toast("Error",e.message,"error");}
+};
+document.getElementById("btnAddAdmin").addEventListener("click",()=>{document.getElementById("adminUid").value="";document.getElementById("adminName").value="";openM("adminModal");});
+document.getElementById("btnSaveAdmin").addEventListener("click",async()=>{
+  const uid=document.getElementById("adminUid").value.trim();const name=document.getElementById("adminName").value.trim();
+  if(!uid){toast("Missing","Enter a Firebase UID.","warning");return;}
+  const btn=document.getElementById("btnSaveAdmin");btn.classList.add("loading");btn.disabled=true;
+  try{await setDoc(doc(db,"Admins",uid),{displayName:name,addedAt:serverTimestamp()});closeM("adminModal");toast("Added!","Admin user added.","success");loadAdmins();}
+  catch(e){toast("Error",e.message,"error");}
+  finally{btn.classList.remove("loading");btn.disabled=false;}
+});
+</script>
 </body>
 </html>
