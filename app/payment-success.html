@@ -1,186 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="robots" content="noindex, nofollow" />
-  <title>Payment Successful — Guided Tech Solutions</title>
-  <link rel="shortcut icon" href="../asset/logo-icon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../style.css" />
-  <link rel="stylesheet" href="./portal.css" />
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Payment Confirmation — GTS Amplify</title>
+  <link rel="icon" href="../asset/logo-icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    .success-wrapper {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg);
-      padding: 20px;
-    }
-    .success-card {
-      background: var(--surface);
-      border-radius: var(--portal-radius);
-      border: 1px solid var(--portal-border);
-      box-shadow: var(--portal-shadow-md);
-      padding: 48px 36px;
-      max-width: 520px;
-      text-align: center;
-    }
-    .success-icon {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #d4f0e4, #b6e8d0);
-      display: grid;
-      place-items: center;
-      font-size: 38px;
-      margin: 0 auto 24px;
-      box-shadow: 0 8px 24px rgba(16,185,129,0.18);
-    }
-    .success-title {
-      font-family: "Poppins", sans-serif;
-      font-size: 26px;
-      font-weight: 700;
-      color: #0f172a;
-      margin-bottom: 12px;
-    }
-    .success-desc {
-      font-size: 15px;
-      color: var(--muted);
-      line-height: 1.65;
-      margin-bottom: 28px;
-    }
-    .success-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .loader {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(27,79,114,0.2);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    :root{--brand:#1B4F72;--brand-dark:#0F2E42;--brand-pale:#EBF5FB;--success:#0F9D58;--success-pale:#E6F4EA;--danger:#E53935;--danger-pale:#FDECEA;--warning:#F39C12;--warning-pale:#FEF9E7;--border:#E2E8F0;--text:#0D1B2A;--text-muted:#64748B;--surface:#fff;--bg:#F2F5F9;--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:var(--ff-b);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:1.5rem;-webkit-font-smoothing:antialiased}
+    .card{background:var(--surface);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.1);max-width:480px;width:100%;padding:2.5rem;text-align:center}
+    .icon{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.25rem}
+    .icon.success{background:var(--success-pale);color:var(--success)}
+    .icon.error  {background:var(--danger-pale); color:var(--danger)}
+    .icon.pending{background:var(--warning-pale);color:var(--warning)}
+    h1{font-family:var(--ff-d);font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+    p{font-size:.9375rem;color:var(--text-muted);line-height:1.65;margin-bottom:1.5rem}
+    .detail-box{background:var(--bg);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;text-align:left}
+    .detail-row{display:flex;justify-content:space-between;align-items:center;padding:.3125rem 0;border-bottom:1px solid var(--border);font-size:.875rem}
+    .detail-row:last-child{border-bottom:none}
+    .detail-label{color:var(--text-muted)}
+    .detail-value{font-weight:600;color:var(--text)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 1.5rem;border-radius:10px;font-weight:700;font-size:.9375rem;cursor:pointer;transition:all .2s;border:none;text-decoration:none;gap:.375rem;font-family:var(--ff-b)}
+    .btn-primary{background:var(--brand);color:white}
+    .btn-primary:hover{background:var(--brand-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(27,79,114,.3)}
+    .btn-ghost{background:var(--bg);color:var(--text-muted);border:1px solid var(--border)}
+    .btn-ghost:hover{background:var(--border)}
+    .btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+    .logo{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:1.875rem}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--brand),#2471A3);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+    .logo-text{font-family:var(--ff-d);font-size:1rem;font-weight:700;color:var(--brand)}
+    .spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 1rem}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+    .icon{animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
   </style>
 </head>
 <body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">🚀</div>
+    <div class="logo-text">GTS Amplify</div>
+  </div>
 
-<div class="success-wrapper">
-  <div class="success-card">
+  <!-- Verifying state -->
+  <div id="stateVerifying">
+    <div class="spinner"></div>
+    <h1>Verifying Payment...</h1>
+    <p>Please wait while we confirm your payment. Do not close this page.</p>
+  </div>
 
-    <!-- Success state (shown after verification) -->
-    <div id="successState" style="display:none">
-      <div class="success-icon">✓</div>
-      <h1 class="success-title">Payment Successful!</h1>
-      <p class="success-desc">
-        Your subscription has been activated. You now have access to your services and dashboard.
-      </p>
-      <div class="success-actions">
-        <a href="./portal-subscriptions.html" class="btn-portal-primary">View My Subscriptions</a>
-        <a href="./portal-dashboard.html" class="btn-portal-ghost">Go to Dashboard</a>
-      </div>
+  <!-- Success state -->
+  <div id="stateSuccess" style="display:none">
+    <div class="icon success">✓</div>
+    <h1>Payment Successful! 🎉</h1>
+    <p>Your subscription is now active. Your dashboard will update within a few moments.</p>
+    <div class="detail-box" id="successDetails"></div>
+    <div class="btns">
+      <a href="./portal-dashboard.html" class="btn btn-primary">📊 Open Dashboard</a>
+      <a href="./portal-subscriptions.html" class="btn btn-ghost">My Subscriptions</a>
     </div>
+  </div>
 
-    <!-- Processing state (shown while verifying) -->
-    <div id="processingState">
-      <div class="success-icon" style="background:rgba(27,79,114,0.10)">
-        <div class="loader"></div>
-      </div>
-      <h1 class="success-title">Processing Payment…</h1>
-      <p class="success-desc">
-        Please wait while we confirm your payment with Stripe. This usually takes just a few seconds.
-      </p>
+  <!-- Pending state -->
+  <div id="statePending" style="display:none">
+    <div class="icon pending">⏳</div>
+    <h1>Payment Pending</h1>
+    <p>Your payment is being processed. This may take a few minutes. We'll update your account automatically once confirmed.</p>
+    <div class="btns">
+      <a href="./portal-dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+      <a href="./portal-billing.html" class="btn btn-ghost">Check Billing</a>
     </div>
+  </div>
 
-    <!-- Error state -->
-    <div id="errorState" style="display:none">
-      <div class="success-icon" style="background:rgba(239,68,68,0.10)">
-        <span style="color:#dc2626">✕</span>
-      </div>
-      <h1 class="success-title">Payment Verification Failed</h1>
-      <p class="success-desc" id="errorMessage">
-        We couldn't verify your payment. Please contact support if this issue persists.
-      </p>
-      <div class="success-actions">
-        <a href="./portal-services.html" class="btn-portal-primary">Back to Services</a>
-      </div>
+  <!-- Error state -->
+  <div id="stateError" style="display:none">
+    <div class="icon error">✕</div>
+    <h1>Payment Failed</h1>
+    <p id="errorMsg">Something went wrong with your payment. Please try again or choose a different payment method.</p>
+    <div class="btns">
+      <a href="./portal-services.html" class="btn btn-primary">Try Again</a>
+      <a href="./portal-billing.html" class="btn btn-ghost">View Billing</a>
     </div>
-
   </div>
 </div>
 
 <script type="module">
-  import { db } from "../admin/firebase.js";
-  import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { db } from "./firebase.js";
+import {
+  doc, getDoc, collection, query, where, getDocs, orderBy, limit
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
-  // Get session_id from URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const stripeSessionId = urlParams.get("session_id");
+const params    = new URLSearchParams(window.location.search);
+const reference = params.get("reference") || params.get("trxref");          // Paystack
+const sessionId = params.get("session_id");                                  // Stripe
+const token     = params.get("token");                                       // PayPal
+const payerId   = params.get("PayerID");                                     // PayPal
+const canceled  = params.get("canceled");
 
-  if (!stripeSessionId) {
-    showError("No payment session found in URL.");
-  } else {
-    verifyPayment(stripeSessionId);
-  }
+function show(id) {
+  ["stateVerifying","stateSuccess","statePending","stateError"].forEach(s => {
+    document.getElementById(s).style.display = s===id?"block":"none";
+  });
+}
 
-  async function verifyPayment(sessionId) {
+function renderSuccessDetails(data) {
+  const box = document.getElementById("successDetails");
+  if (!box) return;
+  box.innerHTML = [
+    ["Service",  data.itemName || "Subscription"],
+    ["Amount",   data.amountPaid ? "₦"+Number(data.amountPaid).toLocaleString() : (data.price ? "₦"+Number(data.price).toLocaleString() : "—")],
+    ["Provider", data.provider  || "—"],
+    ["Ref",      (data.paystackReference||data.stripePaymentId||data.paypalOrderId||reference||sessionId||"—").substring(0,20)],
+    ["Date",     new Date().toLocaleDateString("en-NG",{day:"numeric",month:"long",year:"numeric"})],
+  ].map(([l,v]) => `<div class="detail-row"><span class="detail-label">${l}</span><span class="detail-value">${v}</span></div>`).join("");
+}
+
+async function verifyPaystack(ref) {
+  // Poll Firestore for session with matching reference
+  let attempts = 0;
+  while (attempts < 15) {
     try {
-      // Poll Firestore for completion (webhook may take a moment)
-      const maxWait = 15000; // 15 seconds
-      const startTime = Date.now();
-      const checkInterval = 1000;
-
-      while (Date.now() - startTime < maxWait) {
-        const q = query(
-          collection(db, "checkoutSessions"),
-          where("stripeSessionId", "==", sessionId)
-        );
-        const snap = await getDocs(q);
-
-        if (!snap.empty) {
-          const doc = snap.docs[0];
-          const data = doc.data();
-
-          if (data.status === "completed") {
-            showSuccess();
-            return;
-          } else if (data.status === "failed" || data.status === "expired") {
-            showError("Payment was not completed. Please try again.");
-            return;
-          }
-        }
-
-        await new Promise(resolve => setTimeout(resolve, checkInterval));
+      const snap = await getDocs(query(
+        collection(db,"checkoutSessions"),
+        where("paystackReference","==", ref),
+        limit(1)
+      ));
+      if (!snap.empty) {
+        const data = snap.docs[0].data();
+        if (data.status === "completed") { renderSuccessDetails(data); show("stateSuccess"); return; }
+        if (data.status === "failed")    { show("stateError"); return; }
       }
-
-      // Timeout
-      showError("Payment verification timed out. Your payment may still be processing. Check your subscriptions page.");
-
-    } catch (err) {
-      console.error("Verification error:", err);
-      showError("An error occurred while verifying your payment.");
+    } catch(e) {}
+    attempts++;
+    await new Promise(r => setTimeout(r, 2500));
+  }
+  // Fallback — call verification API
+  try {
+    const res  = await fetch(`/api/verify-paystack?reference=${encodeURIComponent(ref)}`);
+    const data = await res.json();
+    if (data.success && data.status === "success") {
+      renderSuccessDetails(data);
+      show("stateSuccess");
+    } else if (data.status === "pending") {
+      show("statePending");
+    } else {
+      show("stateError");
     }
+  } catch(e) {
+    show("statePending");
   }
+}
 
-  function showSuccess() {
-    document.getElementById("processingState").style.display = "none";
-    document.getElementById("successState").style.display = "block";
+async function verifyStripe(sid) {
+  let attempts = 0;
+  while (attempts < 15) {
+    try {
+      const snap = await getDocs(query(
+        collection(db,"checkoutSessions"),
+        where("stripeSessionId","==", sid),
+        limit(1)
+      ));
+      if (!snap.empty) {
+        const data = snap.docs[0].data();
+        if (data.status === "completed") { renderSuccessDetails(data); show("stateSuccess"); return; }
+        if (data.status === "failed")    { show("stateError"); return; }
+      }
+    } catch(e) {}
+    attempts++;
+    await new Promise(r => setTimeout(r, 2500));
   }
+  show("statePending");
+}
 
-  function showError(message) {
-    document.getElementById("processingState").style.display = "none";
-    document.getElementById("errorState").style.display = "block";
-    if (message) document.getElementById("errorMessage").textContent = message;
+async function verifyPayPal(token, payerId) {
+  try {
+    const res  = await fetch(`/api/verify-paypal?token=${encodeURIComponent(token)}&payerId=${encodeURIComponent(payerId||"")}`);
+    const data = await res.json();
+    if (data.success) { renderSuccessDetails(data||{}); show("stateSuccess"); }
+    else              { show("stateError"); }
+  } catch(e) {
+    show("statePending");
   }
+}
+
+// Route to the right verification flow
+(async () => {
+  if (canceled) {
+    document.getElementById("errorMsg").textContent = "Payment was canceled. You have not been charged. Please try again.";
+    show("stateError"); return;
+  }
+  if (reference)        await verifyPaystack(reference);
+  else if (sessionId)   await verifyStripe(sessionId);
+  else if (token)       await verifyPayPal(token, payerId);
+  else                  show("statePending");
+})();
 </script>
-
 </body>
 </html>
