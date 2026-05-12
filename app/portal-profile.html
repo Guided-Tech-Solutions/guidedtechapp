@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>My Profile — GTS Amplify</title>
+  <link rel="icon" href="../asset/logo-icon.png">
+  <link rel="stylesheet" href="./portal.css">
+</head>
+<body>
+<nav class="navbar"><div class="navbar-inner">
+  <div class="navbar-left">
+    <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+    <a href="../index.html" class="brand-logo"><div class="brand-logo-icon">🚀</div>GTS Amplify</a>
+  </div>
+  <div class="navbar-right">
+    <button class="btn-nav btn-nav-ghost" id="btnLogin"  style="display:none">Log In</button>
+    <button class="btn-nav btn-nav-ghost" id="btnLogout" style="display:none">Log Out</button>
+  </div>
+</div></nav>
+
+<div class="portal-wrapper">
+  <aside class="portal-sidebar" id="portalSidebar">
+    <div class="sidebar-profile">
+      <div class="sidebar-avatar" id="sidebarAvatar">?</div>
+      <div class="sidebar-info">
+        <div class="sidebar-name"  id="sidebarName">Loading...</div>
+        <div class="sidebar-email" id="sidebarEmail">—</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a href="./portal-dashboard.html"     class="sidebar-link" data-page="portal-dashboard.html"><span class="sidebar-icon">📊</span>Dashboard</a>
+      <a href="./portal-services.html"      class="sidebar-link" data-page="portal-services.html"><span class="sidebar-icon">🛍️</span>Services & Pricing</a>
+      <a href="./portal-subscriptions.html" class="sidebar-link" data-page="portal-subscriptions.html"><span class="sidebar-icon">📋</span>My Subscriptions</a>
+      <a href="./portal-onboarding.html"    class="sidebar-link" data-page="portal-onboarding.html"><span class="sidebar-icon">⚙️</span>Service Setup</a>
+      <div class="sidebar-section-label">Account</div>
+      <a href="./portal-profile.html"       class="sidebar-link" data-page="portal-profile.html"><span class="sidebar-icon">👤</span>My Profile</a>
+      <a href="./portal-billing.html"       class="sidebar-link" data-page="portal-billing.html"><span class="sidebar-icon">💳</span>Billing</a>
+    </nav>
+    <div class="sidebar-footer"><button class="btn-signout" id="btnSidebarSignout">🚪 Sign Out</button></div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <main class="portal-main">
+    <div class="page-header">
+      <div><h1 class="page-title">My Profile</h1><p class="page-subtitle">Manage your account details and preferences</p></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.375rem;align-items:start">
+
+      <!-- Profile Info -->
+      <div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">👤 Personal Information</div></div>
+          <div class="card-body">
+            <!-- Avatar -->
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)">
+              <div id="profileAvatarLarge" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-weight:700;font-size:1.375rem;color:white;flex-shrink:0;overflow:hidden"></div>
+              <div>
+                <div style="font-weight:700;font-size:.9375rem" id="profileDisplayName">—</div>
+                <div style="font-size:.8125rem;color:var(--text-muted)" id="profileEmail">—</div>
+                <div style="margin-top:.25rem"><span class="badge badge-active">Verified</span></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input type="text" class="form-control" id="pfFirstName" placeholder="First name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="pfLastName" placeholder="Last name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="pfPhone" placeholder="+234 800 000 0000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Company / Business Name</label>
+              <input type="text" class="form-control" id="pfCompany" placeholder="Your company name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Industry</label>
+              <select class="form-control" id="pfIndustry">
+                <option value="">Select industry...</option>
+                <option>E-commerce</option><option>SaaS / Technology</option><option>Real Estate</option>
+                <option>Healthcare</option><option>Finance & Banking</option><option>Education</option>
+                <option>Retail</option><option>Consulting</option><option>Media & Entertainment</option>
+                <option>Manufacturing</option><option>Agriculture</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Website</label>
+              <input type="url" class="form-control" id="pfWebsite" placeholder="https://yourwebsite.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bio</label>
+              <textarea class="form-control" id="pfBio" rows="3" placeholder="Brief description of your business..."></textarea>
+            </div>
+            <button class="btn btn-primary" id="btnSaveProfile">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security & Danger -->
+      <div style="display:flex;flex-direction:column;gap:1.375rem">
+
+        <!-- Change Password -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">🔒 Change Password</div></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Current Password</label>
+              <input type="password" class="form-control" id="pwdCurrent" placeholder="••••••••" autocomplete="current-password">
+            </div>
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <input type="password" class="form-control" id="pwdNew" placeholder="Min. 6 characters" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm New Password</label>
+              <input type="password" class="form-control" id="pwdConfirm" placeholder="Repeat new password">
+            </div>
+            <button class="btn btn-secondary" id="btnChangePassword">Update Password</button>
+          </div>
+        </div>
+
+        <!-- Account Stats -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">📊 Account Overview</div></div>
+          <div class="card-body">
+            <div class="detail-row" style="padding:.375rem 0;border-bottom:1px solid var(--border)">
+              <span class="detail-label">Member Since</span>
+              <span class="detail-value" id="memberSince">—</span>
+            </div>
+            <div class="detail-row" style="padding:.375rem 0;border-bottom:1px solid var(--border)">
+              <span class="detail-label">Active Services</span>
+              <span class="detail-value" id="activeServicesCount">—</span>
+            </div>
+            <div class="detail-row" style="padding:.375rem 0;border-bottom:1px solid var(--border)">
+              <span class="detail-label">Total Payments</span>
+              <span class="detail-value" id="totalPaymentsCount">—</span>
+            </div>
+            <div class="detail-row" style="padding:.375rem 0">
+              <span class="detail-label">Account Type</span>
+              <span class="badge badge-brand">Standard</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="card" style="border-color:rgba(229,57,53,.25)">
+          <div class="card-header" style="background:var(--danger-pale)">
+            <div><div class="card-title" style="color:var(--danger)">⚠️ Danger Zone</div><div class="card-subtitle">Irreversible actions</div></div>
+          </div>
+          <div class="card-body">
+            <p style="font-size:.875rem;color:var(--text-muted);margin-bottom:1rem;line-height:1.5">
+              Deleting your account is permanent and cannot be undone. All your data, subscriptions and history will be erased.
+            </p>
+            <button class="btn btn-danger" id="btnDeleteAccount">🗑️ Delete My Account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Delete account modal -->
+<div class="modal-overlay" id="deleteAccountModal">
+  <div class="modal-box sm">
+    <div class="modal-header">
+      <h2 class="modal-title" style="color:var(--danger)">⚠️ Delete Account</h2>
+      <button class="modal-close" data-modal-close="deleteAccountModal">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--text-mid);line-height:1.65;margin-bottom:1rem">This action is <strong>permanent and irreversible</strong>. All your data will be deleted immediately.</p>
+      <div class="form-group">
+        <label class="form-label">Type <strong>DELETE</strong> to confirm</label>
+        <input type="text" class="form-control" id="deleteConfirmInput" placeholder="DELETE">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" data-modal-close="deleteAccountModal">Cancel</button>
+      <button class="btn btn-danger" id="btnConfirmDelete">Delete Account</button>
+    </div>
+  </div>
+</div>
+
+<div id="toastRoot"></div>
+<script type="module">
+import { auth, db } from "./firebase.js";
+import {
+  requireAuth, esc, fmtDate, fmtMoney, showToast, openModal, closeModal
+} from "./portal-layout.js";
+import {
+  reauthenticateWithCredential, EmailAuthProvider,
+  updatePassword, deleteUser, updateProfile
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import {
+  doc, getDoc, setDoc, getDocs, collection, query, where, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const user = await requireAuth();
+  if (!user) return;
+
+  // Load profile from Firestore
+  try {
+    const snap = await getDoc(doc(db,"users",user.uid));
+    const data = snap.exists() ? snap.data() : {};
+
+    const nameArr = (user.displayName||"").split(" ");
+    document.getElementById("pfFirstName").value = data.firstName || nameArr[0] || "";
+    document.getElementById("pfLastName").value  = data.lastName  || nameArr.slice(1).join(" ") || "";
+    document.getElementById("pfPhone").value     = data.phone     || "";
+    document.getElementById("pfCompany").value   = data.company   || "";
+    document.getElementById("pfWebsite").value   = data.website   || "";
+    document.getElementById("pfBio").value       = data.bio       || "";
+    document.getElementById("pfIndustry").value  = data.industry  || "";
+
+    const displayName = user.displayName || user.email;
+    const initials = displayName.split(/[\s@]+/).slice(0,2).map(s=>s[0]?.toUpperCase()||"").join("") || "U";
+    const avatarEl = document.getElementById("profileAvatarLarge");
+    if (user.photoURL) avatarEl.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover">`;
+    else avatarEl.textContent = initials;
+
+    document.getElementById("profileDisplayName").textContent = user.displayName || "—";
+    document.getElementById("profileEmail").textContent       = user.email;
+    document.getElementById("memberSince").textContent        = fmtDate(data.createdAt || user.metadata.creationTime);
+  } catch(e) {}
+
+  // Load stats
+  try {
+    const [subs, pays] = await Promise.all([
+      getDocs(query(collection(db,"serviceActivations"), where("userId","==",user.uid), where("status","==","active"))),
+      getDocs(query(collection(db,"checkoutSessions"),   where("userId","==",user.uid), where("status","==","completed"))),
+    ]);
+    document.getElementById("activeServicesCount").textContent = subs.size;
+    document.getElementById("totalPaymentsCount").textContent  = pays.size;
+  } catch(e) {}
+
+  // Save profile
+  document.getElementById("btnSaveProfile").addEventListener("click", async () => {
+    const btn = document.getElementById("btnSaveProfile");
+    btn.classList.add("is-loading"); btn.disabled = true;
+    try {
+      const first   = document.getElementById("pfFirstName").value.trim();
+      const last    = document.getElementById("pfLastName").value.trim();
+      const displayName = [first, last].filter(Boolean).join(" ") || user.displayName;
+
+      await updateProfile(user, { displayName });
+      await setDoc(doc(db,"users",user.uid), {
+        displayName,
+        firstName:  first,
+        lastName:   last,
+        phone:      document.getElementById("pfPhone").value.trim(),
+        company:    document.getElementById("pfCompany").value.trim(),
+        website:    document.getElementById("pfWebsite").value.trim(),
+        bio:        document.getElementById("pfBio").value.trim(),
+        industry:   document.getElementById("pfIndustry").value,
+        email:      user.email,
+        updatedAt:  serverTimestamp(),
+      }, { merge: true });
+
+      document.getElementById("profileDisplayName").textContent = displayName;
+      document.getElementById("sidebarName").textContent        = displayName;
+      showToast({ title:"Profile updated!", type:"success" });
+    } catch(e) {
+      showToast({ title:"Update failed", message: e.message, type:"error" });
+    } finally {
+      btn.classList.remove("is-loading"); btn.disabled = false;
+    }
+  });
+
+  // Change password
+  document.getElementById("btnChangePassword").addEventListener("click", async () => {
+    const current  = document.getElementById("pwdCurrent").value;
+    const newPwd   = document.getElementById("pwdNew").value;
+    const confirm  = document.getElementById("pwdConfirm").value;
+
+    if (!current || !newPwd) { showToast({ title:"Fill all fields", type:"warning" }); return; }
+    if (newPwd.length < 6)   { showToast({ title:"Password too short", message:"Min. 6 characters", type:"warning" }); return; }
+    if (newPwd !== confirm)   { showToast({ title:"Passwords don't match", type:"warning" }); return; }
+
+    const btn = document.getElementById("btnChangePassword");
+    btn.classList.add("is-loading"); btn.disabled = true;
+    try {
+      const cred = EmailAuthProvider.credential(user.email, current);
+      await reauthenticateWithCredential(user, cred);
+      await updatePassword(user, newPwd);
+      ["pwdCurrent","pwdNew","pwdConfirm"].forEach(id => document.getElementById(id).value="");
+      showToast({ title:"Password updated!", type:"success" });
+    } catch(e) {
+      const msgs = {
+        "auth/wrong-password":     "Current password is incorrect.",
+        "auth/too-many-requests":  "Too many attempts. Try again later.",
+        "auth/requires-recent-login":"Please sign out and sign in again first.",
+      };
+      showToast({ title:"Update failed", message: msgs[e.code]||e.message, type:"error" });
+    } finally {
+      btn.classList.remove("is-loading"); btn.disabled = false;
+    }
+  });
+
+  // Delete account
+  document.getElementById("btnDeleteAccount").addEventListener("click", () => {
+    document.getElementById("deleteConfirmInput").value = "";
+    openModal("deleteAccountModal");
+  });
+
+  document.getElementById("btnConfirmDelete").addEventListener("click", async () => {
+    const input = document.getElementById("deleteConfirmInput").value.trim();
+    if (input !== "DELETE") {
+      showToast({ title:"Type DELETE to confirm", type:"warning" }); return;
+    }
+    const btn = document.getElementById("btnConfirmDelete");
+    btn.classList.add("is-loading"); btn.disabled = true;
+    try {
+      await deleteUser(user);
+      window.location.href = "../index.html";
+    } catch(e) {
+      const msgs = { "auth/requires-recent-login":"Please sign out and sign in again before deleting." };
+      showToast({ title:"Failed", message: msgs[e.code]||e.message, type:"error" });
+      btn.classList.remove("is-loading"); btn.disabled = false;
+    }
+  });
+});
+</script>
+</body>
+</html>
