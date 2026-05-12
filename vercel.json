@@ -1,15 +1,14 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "**/*",
-      "use": "@vercel/static"
-    }
-  ],
+  "functions": {
+    "api/paystack-webhook.js": { "maxDuration": 15 },
+    "api/stripe-webhook.js":   { "maxDuration": 15 },
+    "api/paypal-webhook.js":   { "maxDuration": 15 },
+    "api/create-checkout.js":  { "maxDuration": 10 },
+    "api/get-payment-config.js": { "maxDuration": 5 }
+  },
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)",     "dest": "/$1"    }
   ]
 }
