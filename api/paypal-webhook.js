@@ -79,7 +79,7 @@ module.exports = async function handler(req, res) {
 
         batch.update(sessionDoc.ref, {
           status:       "completed",
-          amountPaid:   amountPaid * 1500,  // Convert USD back to NGN approx
+          amountPaid:   amountPaid,  // USD
           amountPaidUSD: amountPaid,
           paypalCaptureId: resource.id,
           paidAt:       admin.firestore.FieldValue.serverTimestamp(),
