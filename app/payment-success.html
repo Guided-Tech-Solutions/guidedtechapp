@@ -109,10 +109,10 @@ function renderSuccessDetails(data) {
   if (!box) return;
   box.innerHTML = [
     ["Service",  data.itemName || "Subscription"],
-    ["Amount",   data.amountPaid ? "₦"+Number(data.amountPaid).toLocaleString() : (data.price ? "₦"+Number(data.price).toLocaleString() : "—")],
+    ["Amount",   data.amountPaid ? "$"+Number(data.amountPaid).toLocaleString() : (data.price ? "$"+Number(data.price).toLocaleString() : "—")],
     ["Provider", data.provider  || "—"],
     ["Ref",      (data.paystackReference||data.stripePaymentId||data.paypalOrderId||reference||sessionId||"—").substring(0,20)],
-    ["Date",     new Date().toLocaleDateString("en-NG",{day:"numeric",month:"long",year:"numeric"})],
+    ["Date",     new Date().toLocaleDateString("en-US",{day:"numeric",month:"long",year:"numeric"})],
   ].map(([l,v]) => `<div class="detail-row"><span class="detail-label">${l}</span><span class="detail-value">${v}</span></div>`).join("");
 }
 
