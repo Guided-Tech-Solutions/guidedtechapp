@@ -46,8 +46,8 @@ module.exports = async function handler(req, res) {
       const reference = `gts_${sessionId}_${Date.now()}`;
       const body = {
         email,
-        amount:    Math.round(amountNum * 100),  // Paystack uses kobo
-        currency:  "NGN",
+        amount:    Math.round(amountNum * 100),  // amount in cents (USD)
+        currency:  "USD",
         reference,
         callback_url: `${successUrl}?reference=${reference}`,
         metadata: {
@@ -132,7 +132,7 @@ module.exports = async function handler(req, res) {
       if (!tokenData.access_token) throw new Error("PayPal auth failed");
 
       // Create order
-      const ppAmountUSD = (amountNum / 1500).toFixed(2);  // convert NGN to USD approx
+      const ppAmountUSD = amountNum.toFixed(2);  // already USD
       const orderRes = await fetch(`https://${ppMode}.paypal.com/v2/checkout/orders`, {
         method:  "POST",
         headers: {
