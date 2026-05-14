@@ -121,7 +121,7 @@ const WIZARD_CONFIGS = {
         { id:"webhookUrl",   label:"CRM Webhook URL",  type:"url",      ph:"https://your-crm.com/webhook (optional)" },
       ]},
       { label:"Scoring", title:"Lead Scoring Rules", fields:[
-        { id:"hotCriteria",  label:"Hot Lead Criteria", type:"textarea", ph:"Requested demo, Budget > ₦500k, Decision maker" },
+        { id:"hotCriteria",  label:"Hot Lead Criteria", type:"textarea", ph:"Requested demo, Budget > $5,000, Decision maker" },
         { id:"warmCriteria", label:"Warm Lead Criteria",type:"textarea", ph:"Downloaded resource, Visited pricing page 2+ times" },
         { id:"monthlyTarget",label:"Monthly Lead Target",type:"number",  ph:"50" },
       ]},
@@ -187,7 +187,7 @@ const WIZARD_CONFIGS = {
       ]},
       { label:"Goals", title:"SEO Goals", fields:[
         { id:"seoGoal",   label:"Primary SEO Goal",          type:"select", opts:["Increase organic traffic","Rank for specific keywords","Local SEO / Google Maps","E-commerce product SEO","Brand visibility & awareness"] },
-        { id:"seoBudget", label:"Content Budget / Month",    type:"select", opts:["Included in plan","< ₦50,000","₦50k – ₦150k","₦150k – ₦500k","> ₦500k"] },
+        { id:"seoBudget", label:"Content Budget / Month",    type:"select", opts:["Included in plan","< $50","$50 – $150","$150 – $500","> $500"] },
       ]},
       { label:"Review", title:"Review & Confirm", review:true, fields:[] },
     ],
