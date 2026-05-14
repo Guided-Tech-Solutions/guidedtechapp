@@ -238,7 +238,7 @@
         <div class="card-header"><div class="card-title">Session Pricing</div></div>
         <div class="card-body">
           <div class="form-group"><label class="form-label">Free Discovery Call</label><input type="number" class="form-control" value="0" disabled><div class="form-hint">Discovery calls are always free</div></div>
-          <div class="form-group"><label class="form-label">Strategy Session Price (₦) <span class="req">*</span></label><input type="number" class="form-control" id="cpPaidPrice" placeholder="15000" min="0"></div>
+          <div class="form-group"><label class="form-label">Strategy Session Price ($) <span class="req">*</span></label><input type="number" class="form-control" id="cpPaidPrice" placeholder="15" min="0"></div>
           <div class="form-group"><label class="form-label">Session Duration</label><input type="text" class="form-control" id="cpDuration" placeholder="60 minutes"></div>
           <div class="form-group"><label class="form-label">Includes (one per line)</label><textarea class="form-control" id="cpIncludes" rows="4" placeholder="In-depth business analysis&#10;Custom technology roadmap&#10;Written action plan&#10;30-day email follow-up"></textarea></div>
           <button class="btn btn-primary" id="btnSaveCP">Save Pricing</button>
@@ -328,7 +328,7 @@
       </div>
       <div class="form-group"><label class="form-label">Description <span class="req">*</span></label><textarea class="form-control" id="svcDesc" rows="2"></textarea></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Price (₦) <span class="req">*</span></label><input type="number" class="form-control" id="svcPrice" min="0"></div>
+        <div class="form-group"><label class="form-label">Price ($) <span class="req">*</span></label><input type="number" class="form-control" id="svcPrice" min="0"></div>
         <div class="form-group"><label class="form-label">Billing Period</label><select class="form-control" id="svcPeriod"><option value="month">Monthly</option><option value="year">Yearly</option><option value="once">One-time</option></select></div>
       </div>
       <div class="form-row">
@@ -339,6 +339,10 @@
       <div class="form-row">
         <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer"><input type="checkbox" id="svcFeatured"> Mark as Featured</label>
         <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer"><input type="checkbox" id="svcIsNew"> Mark as New</label>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Sort Order <span style="font-weight:400;color:var(--text-faint)">(lower = shown first on pricing page)</span></label>
+        <input type="number" class="form-control" id="svcSortOrder" placeholder="1" min="0" style="max-width:160px">
       </div>
     </div>
     <div class="modal-footer">
@@ -361,13 +365,22 @@
       </div>
       <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" id="planDesc" rows="2"></textarea></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Monthly Price (₦) <span class="req">*</span></label><input type="number" class="form-control" id="planMonthly" min="0"></div>
-        <div class="form-group"><label class="form-label">Yearly Price (₦)</label><input type="number" class="form-control" id="planYearly" min="0" placeholder="Auto: 80% of monthly×12"></div>
+        <div class="form-group"><label class="form-label">Monthly Price ($) <span class="req">*</span></label><input type="number" class="form-control" id="planMonthly" min="0"></div>
+        <div class="form-group"><label class="form-label">Yearly Price ($)</label><input type="number" class="form-control" id="planYearly" min="0" placeholder="Auto: 80% of monthly×12"></div>
       </div>
       <div class="form-group"><label class="form-label">Features (one per line)</label><textarea class="form-control" id="planFeatures" rows="5" placeholder="Lead Generation&#10;Automation suite&#10;SEO service&#10;Save 20%"></textarea></div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="planActive"><option value="true">Active</option><option value="false">Inactive</option></select></div>
         <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer;margin-top:1.5rem"><input type="checkbox" id="planPopular"> Most Popular</label>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">CTA Button Text</label><input type="text" class="form-control" id="planCtaText" placeholder="Get Started"></div>
+        <div class="form-group"><label class="form-label">CTA Button Link</label><input type="text" class="form-control" id="planCtaLink" placeholder="./app/signup.html"></div>
+      </div>
+      <div class="form-group">
+        <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer">
+          <input type="checkbox" id="planCustomPricing"> Custom pricing (hides price, shows "Custom" on public pages)
+        </label>
       </div>
     </div>
     <div class="modal-footer">
@@ -470,7 +483,7 @@ async function loadOverview(){
   const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
   set("ovUsers",u.size);set("ovSubs",s.size);set("ovBookings",b.size);
   let rev=0;p.forEach(d=>rev+=Number(d.data().amountPaid||d.data().price||0));
-  set("ovRevenue","₦"+rev.toLocaleString());
+  set("ovRevenue","$"+rev.toLocaleString());
 
   const usrs=[];u.forEach(d=>usrs.push({id:d.id,...d.data()}));
   usrs.sort((a,b2)=>(b2.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
@@ -484,7 +497,7 @@ async function loadOverview(){
   document.getElementById("ovRecentPays").innerHTML=pays.map(pay=>`
     <div style="display:flex;align-items:center;justify-content:space-between;padding:.375rem 0;border-bottom:1px solid var(--border)">
       <div><div style="font-size:.8125rem;font-weight:600">${pay.itemName||"Payment"}</div><div style="font-size:.6875rem;color:var(--text-muted)">${pay.userEmail||"—"} · ${pay.provider||"paystack"}</div></div>
-      <div style="font-family:var(--ff-d);font-weight:700;color:var(--success);font-size:.875rem">₦${Number(pay.amountPaid||pay.price||0).toLocaleString()}</div>
+      <div style="font-family:var(--ff-d);font-weight:700;color:var(--success);font-size:.875rem">$${Number(pay.amountPaid||pay.price||0).toLocaleString()}</div>
     </div>`).join("")||"<div class='empty'><div class='empty-text'>No payments yet</div></div>";
 }
 
@@ -503,7 +516,7 @@ function renderSvcs(arr){
   if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-icon'>🔧</div><div class='empty-title'>No services</div><div class='empty-text'>Click + Add Service to create one.</div></div>";return;}
   el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Service</th><th>Price</th><th>Dashboard</th><th>Status</th><th>Featured</th><th></th></tr></thead><tbody>${arr.map(s=>`<tr>
     <td><div class="td-name">${s.icon||""} ${s.name||"—"}</div><div class="td-sub">${(s.description||"").substring(0,50)}...</div></td>
-    <td>₦${Number(s.price||0).toLocaleString()}/${s.pricePeriod||"mo"}</td>
+    <td>$${Number(s.price||0).toLocaleString()}/${s.pricePeriod||"mo"}</td>
     <td><span class="badge badge-brand">${s.dashboardType||"generic"}</span></td>
     <td><span class="badge ${s.active?"badge-active":"badge-inactive"}">${s.active?"Active":"Inactive"}</span></td>
     <td>${s.featured?"⭐":"—"}</td>
@@ -512,7 +525,7 @@ function renderSvcs(arr){
 }
 document.getElementById("btnAddService").addEventListener("click",()=>{
   document.getElementById("svcId").value="";document.getElementById("svcModalTitle").textContent="Add Service";document.getElementById("btnDelSvc").style.display="none";
-  ["svcName","svcIcon","svcDesc","svcPrice","svcFeatures"].forEach(i=>document.getElementById(i).value="");
+  ["svcName","svcIcon","svcDesc","svcPrice","svcFeatures","svcSortOrder"].forEach(i=>document.getElementById(i).value="");
   document.getElementById("svcPeriod").value="month";document.getElementById("svcDashType").value="lead_generation";document.getElementById("svcActive").value="true";
   document.getElementById("svcFeatured").checked=false;document.getElementById("svcIsNew").checked=false;
   openM("svcModal");
@@ -524,6 +537,7 @@ window.editSvc=function(id){
   document.getElementById("svcPrice").value=s.price||"";document.getElementById("svcPeriod").value=s.pricePeriod||"month";
   document.getElementById("svcDashType").value=s.dashboardType||"lead_generation";document.getElementById("svcActive").value=String(s.active!==false);
   document.getElementById("svcFeatured").checked=!!s.featured;document.getElementById("svcIsNew").checked=!!s.isNew;
+  document.getElementById("svcSortOrder").value=s.sortOrder??"";
   document.getElementById("svcFeatures").value=Array.isArray(s.features)?s.features.join("\n"):"";
   openM("svcModal");
 };
@@ -536,7 +550,7 @@ document.getElementById("btnSaveSvc").addEventListener("click",async()=>{
     price:Number(document.getElementById("svcPrice").value)||0,pricePeriod:document.getElementById("svcPeriod").value,
     dashboardType:document.getElementById("svcDashType").value,active:document.getElementById("svcActive").value==="true",
     featured:document.getElementById("svcFeatured").checked,isNew:document.getElementById("svcIsNew").checked,
-    features:document.getElementById("svcFeatures").value.split("\n").map(s=>s.trim()).filter(Boolean),updatedAt:serverTimestamp()};
+    features:document.getElementById("svcFeatures").value.split("\n").map(s=>s.trim()).filter(Boolean),sortOrder:Number(document.getElementById("svcSortOrder").value)||99,updatedAt:serverTimestamp()};
   try{
     const id=document.getElementById("svcId").value;
     if(id)await updateDoc(doc(db,"services",id),payload);
@@ -567,8 +581,8 @@ function renderPlans(arr){
   if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-icon'>📦</div><div class='empty-title'>No plans</div></div>";return;}
   el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Plan</th><th>Monthly</th><th>Yearly</th><th>Popular</th><th>Status</th><th></th></tr></thead><tbody>${arr.map(p=>`<tr>
     <td><div class="td-name">${p.name||"—"}</div><div class="td-sub">${p.tagline||""}</div></td>
-    <td>₦${Number(p.priceMonthly||0).toLocaleString()}</td>
-    <td>₦${Number(p.priceYearly||0).toLocaleString()}</td>
+    <td>$${Number(p.priceMonthly||0).toLocaleString()}</td>
+    <td>$${Number(p.priceYearly||0).toLocaleString()}</td>
     <td>${p.popular?"⭐ Yes":"—"}</td>
     <td><span class="badge ${p.active?"badge-active":"badge-inactive"}">${p.active?"Active":"Inactive"}</span></td>
     <td><button class="btn btn-ghost btn-sm" onclick="editPlan('${p.id}')">Edit</button></td>
@@ -576,8 +590,8 @@ function renderPlans(arr){
 }
 document.getElementById("btnAddPlan").addEventListener("click",()=>{
   document.getElementById("planId").value="";document.getElementById("planModalTitle").textContent="Add Plan";document.getElementById("btnDelPlan").style.display="none";
-  ["planName","planTagline","planDesc","planMonthly","planYearly","planFeatures"].forEach(i=>document.getElementById(i).value="");
-  document.getElementById("planActive").value="true";document.getElementById("planPopular").checked=false;
+  ["planName","planTagline","planDesc","planMonthly","planYearly","planFeatures","planCtaText","planCtaLink"].forEach(i=>document.getElementById(i).value="");
+  document.getElementById("planActive").value="true";document.getElementById("planPopular").checked=false;document.getElementById("planCustomPricing").checked=false;
   openM("planModal");
 });
 window.editPlan=function(id){
@@ -586,6 +600,8 @@ window.editPlan=function(id){
   document.getElementById("planName").value=p.name||"";document.getElementById("planTagline").value=p.tagline||"";document.getElementById("planDesc").value=p.description||"";
   document.getElementById("planMonthly").value=p.priceMonthly||"";document.getElementById("planYearly").value=p.priceYearly||"";
   document.getElementById("planActive").value=String(p.active!==false);document.getElementById("planPopular").checked=!!p.popular;
+  document.getElementById("planCustomPricing").checked=!!p.customPricing;
+  document.getElementById("planCtaText").value=p.ctaText||"";document.getElementById("planCtaLink").value=p.ctaLink||"";
   document.getElementById("planFeatures").value=Array.isArray(p.features)?p.features.join("\n"):"";
   openM("planModal");
 };
@@ -597,6 +613,9 @@ document.getElementById("btnSavePlan").addEventListener("click",async()=>{
   const payload={name,tagline:document.getElementById("planTagline").value.trim(),description:document.getElementById("planDesc").value.trim(),
     priceMonthly:m,priceYearly:Number(document.getElementById("planYearly").value)||Math.round(m*12*0.8),
     active:document.getElementById("planActive").value==="true",popular:document.getElementById("planPopular").checked,
+    customPricing:document.getElementById("planCustomPricing").checked,
+    ctaText:document.getElementById("planCtaText").value.trim()||null,
+    ctaLink:document.getElementById("planCtaLink").value.trim()||null,
     features:document.getElementById("planFeatures").value.split("\n").map(s=>s.trim()).filter(Boolean),updatedAt:serverTimestamp()};
   try{
     const id=document.getElementById("planId").value;
@@ -669,7 +688,7 @@ function renderSubTable(arr){
   el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>User</th><th>Service</th><th>Price</th><th>Provider</th><th>Status</th><th>Since</th><th></th></tr></thead><tbody>${arr.map(s=>`<tr>
     <td style="font-size:.75rem;color:var(--text-muted)">${s.userId||"—"}</td>
     <td><div class="td-name">${s.serviceName||"—"}</div></td>
-    <td>₦${Number(s.price||0).toLocaleString()}/${s.billing||"mo"}</td>
+    <td>$${Number(s.price||0).toLocaleString()}/${s.billing||"mo"}</td>
     <td><span class="badge badge-brand" style="text-transform:capitalize">${s.provider||"paystack"}</span></td>
     <td><span class="badge ${s.status==="active"?"badge-active":s.status==="canceled"?"badge-inactive":"badge-pending"}">${s.status||"active"}</span></td>
     <td style="font-size:.75rem;color:var(--text-muted)">${s.createdAt?.toDate?.().toLocaleDateString()||"—"}</td>
@@ -699,7 +718,7 @@ function renderBkgs(arr){
   el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Customer</th><th>Session</th><th>Fee</th><th>Preferred Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${arr.map(b=>`<tr>
     <td><div class="td-name">${b.userName||"—"}</div><div class="td-sub">${b.userEmail||"—"}</div></td>
     <td>${b.sessionType==="paid"?"💼 Strategy":"📞 Discovery"}</td>
-    <td>${b.price>0?"₦"+Number(b.price).toLocaleString():"Free"}</td>
+    <td>${b.price>0?"$"+Number(b.price).toLocaleString():"Free"}</td>
     <td style="font-size:.75rem;color:var(--text-muted)">${b.preferredDate?new Date(b.preferredDate).toLocaleString():"—"}</td>
     <td><span class="badge ${b.status==="confirmed"?"badge-active":b.status==="completed"?"badge-info":b.status==="pending_payment"?"badge-pending":"badge-inactive"}">${b.status||"pending"}</span></td>
     <td style="display:flex;gap:.25rem">
@@ -729,7 +748,7 @@ function renderPays(arr){
   el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Customer</th><th>Item</th><th>Amount</th><th>Provider</th><th>Reference</th><th>Status</th><th>Date</th></tr></thead><tbody>${arr.map(p=>`<tr>
     <td style="font-size:.75rem;color:var(--text-muted)">${p.userEmail||"—"}</td>
     <td><div class="td-name">${p.itemName||"—"}</div><div class="td-sub">${p.itemType||""}</div></td>
-    <td style="font-weight:700;color:var(--success)">₦${Number(p.amountPaid||p.price||0).toLocaleString()}</td>
+    <td style="font-weight:700;color:var(--success)>$${Number(p.amountPaid||p.price||0).toLocaleString()}</td>
     <td><span class="badge badge-brand" style="text-transform:capitalize">${p.provider||"paystack"}</span></td>
     <td style="font-family:monospace;font-size:.6875rem;color:var(--text-muted)">${(p.paystackReference||p.stripePaymentId||p.paypalOrderId||"—").substring(0,18)}</td>
     <td><span class="badge ${p.status==="completed"?"badge-active":p.status==="failed"?"badge-danger":"badge-pending"}">${p.status||"pending"}</span></td>
