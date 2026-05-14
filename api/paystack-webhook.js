@@ -39,7 +39,7 @@ module.exports = async function handler(req, res) {
       case "charge.success": {
         const ref       = data.reference;
         const email     = data.customer?.email;
-        const amountPaid = (data.amount || 0) / 100; // convert kobo to NGN
+        const amountPaid = (data.amount || 0) / 100; // convert cents to USD
 
         // Find checkout session
         const snap = await db.collection("checkoutSessions")
