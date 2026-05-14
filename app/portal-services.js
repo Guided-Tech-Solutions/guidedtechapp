@@ -16,7 +16,7 @@ import {
 /* ── State ─────────────────────────────────────────────────── */
 let allServices    = [];
 let allPlans       = [];
-let consultPricing = { free: 0, paid: 15000 };
+let consultPricing = { free: 0, paid: 15 };
 let activeSubs     = new Set();
 let billingMode    = "monthly";
 let planBilling    = "monthly";
@@ -199,7 +199,7 @@ async function loadConsultPricing() {
     const snap = await getDocs(collection(db,"consultationPricing"));
     snap.forEach(d => {
       const data = d.data();
-      if (data.type === "paid")  consultPricing.paid  = Number(data.price) || 15000;
+      if (data.type === "paid")  consultPricing.paid  = Number(data.price) || 15;
       if (data.type === "free")  consultPricing.free  = 0;
     });
   } catch(e) {}
