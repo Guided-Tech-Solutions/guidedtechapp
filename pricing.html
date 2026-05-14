@@ -124,8 +124,8 @@
   </div>
 </div>
 
-<!-- BUNDLE PLANS -->
-<section style="background:var(--surface)">
+<!-- BUNDLE PLANS — loaded live from Firestore (managed in Admin Panel) -->
+<section style="background:var(--surface)" id="bundlePlans">
   <div class="container">
     <div class="text-center">
       <div class="section-badge">Bundle Plans</div>
@@ -140,62 +140,17 @@
       </div>
     </div>
 
-    <div class="plans-grid">
-      <div class="plan-card">
-        <div class="plan-card-top">
-          <div class="plan-name">Starter</div>
-          <div class="plan-tagline">Perfect for solo businesses</div>
-          <div><span class="plan-price" id="starter-price">₦75,000</span><span class="plan-per"> / month</span><span class="plan-orig" id="starter-orig" style="display:none">₦900,000</span></div>
-        </div>
-        <div class="plan-card-body">
-          <div class="feat"><span class="feat-check">✓</span>1 service of your choice</div>
-          <div class="feat"><span class="feat-check">✓</span>Full analytics dashboard</div>
-          <div class="feat"><span class="feat-check">✓</span>Email &amp; chat support</div>
-          <div class="feat"><span class="feat-check">✓</span>Monthly performance report</div>
-          <div class="feat"><span class="feat-check">✓</span>Free discovery call included</div>
-          <div class="feat"><span class="feat-check">✓</span>Service setup wizard</div>
-          <a href="./app/signup.html" class="btn-plan btn-plan-outline">Get Started</a>
-        </div>
-      </div>
-      <div class="plan-card featured">
-        <div class="plan-card-top">
-          <div class="popular-tag">Most Popular</div>
-          <div class="plan-name">Growth</div>
-          <div class="plan-tagline">For growing businesses</div>
-          <div><span class="plan-price" id="growth-price">₦180,000</span><span class="plan-per"> / month</span><span class="plan-orig" id="growth-orig" style="display:none"></span></div>
-        </div>
-        <div class="plan-card-body">
-          <div class="feat"><span class="feat-check">✓</span>Lead Generation + Automation + SEO</div>
-          <div class="feat"><span class="feat-check">✓</span>All analytics dashboards</div>
-          <div class="feat"><span class="feat-check">✓</span>Priority support (48h SLA)</div>
-          <div class="feat"><span class="feat-check">✓</span>Bi-weekly performance calls</div>
-          <div class="feat"><span class="feat-check">✓</span>CRM integration setup</div>
-          <div class="feat"><span class="feat-check">✓</span>Save 20% vs individual pricing</div>
-          <a href="./app/signup.html" class="btn-plan btn-plan-primary">Get Started</a>
-        </div>
-      </div>
-      <div class="plan-card">
-        <div class="plan-card-top">
-          <div class="plan-name">Enterprise</div>
-          <div class="plan-tagline">For scaling organizations</div>
-          <div><span class="plan-price" style="font-size:1.75rem">Custom</span></div>
-        </div>
-        <div class="plan-card-body">
-          <div class="feat"><span class="feat-check">✓</span>All services included</div>
-          <div class="feat"><span class="feat-check">✓</span>Dedicated account manager</div>
-          <div class="feat"><span class="feat-check">✓</span>Custom API integrations</div>
-          <div class="feat"><span class="feat-check">✓</span>SLA &amp; uptime guarantees</div>
-          <div class="feat"><span class="feat-check">✓</span>On-site support available</div>
-          <div class="feat"><span class="feat-check">✓</span>Cloud migration project included</div>
-          <a href="./app/signup.html" class="btn-plan btn-plan-outline">Contact Sales</a>
-        </div>
-      </div>
+    <!-- Dynamically populated -->
+    <div class="plans-grid" id="plansGrid">
+      <div class="plan-card" style="min-height:360px;background:linear-gradient(90deg,#f0f4f8 25%,#e2e8f0 50%,#f0f4f8 75%);background-size:200% 100%;animation:shimmer 1.4s infinite"></div>
+      <div class="plan-card" style="min-height:360px;background:linear-gradient(90deg,#f0f4f8 25%,#e2e8f0 50%,#f0f4f8 75%);background-size:200% 100%;animation:shimmer 1.4s infinite 0.15s"></div>
+      <div class="plan-card" style="min-height:360px;background:linear-gradient(90deg,#f0f4f8 25%,#e2e8f0 50%,#f0f4f8 75%);background-size:200% 100%;animation:shimmer 1.4s infinite 0.3s"></div>
     </div>
   </div>
 </section>
 
-<!-- INDIVIDUAL SERVICES -->
-<section style="background:var(--bg)">
+<!-- INDIVIDUAL SERVICES — loaded live from Firestore -->
+<section style="background:var(--bg)" id="individualSvcs">
   <div class="container">
     <div class="text-center">
       <div class="section-badge">Individual Services</div>
@@ -203,21 +158,154 @@
       <p class="section-desc">Every service comes with a full real-time analytics dashboard and guided setup wizard.</p>
     </div>
     <div style="overflow-x:auto;margin-top:2rem">
-      <table class="svc-pricing-table">
+      <table class="svc-pricing-table" id="svcsTable">
         <thead><tr><th>Service</th><th>Monthly</th><th>Yearly (save 20%)</th><th>Billing</th><th>Dashboard</th><th></th></tr></thead>
-        <tbody>
-          <tr><td><div class="td-name">🎯 Lead Generation</div><div class="td-sub">Real-time lead capture, scoring & CRM sync</div></td><td><strong>₦50,000</strong></td><td><strong style="color:var(--success)">₦480,000</strong></td><td>Monthly / Yearly</td><td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">Live Dashboard</span></td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td></tr>
-          <tr><td><div class="td-name">☁️ Cloud Migration</div><div class="td-sub">Phase tracking, event log, multi-cloud support</div></td><td><strong>₦150,000</strong></td><td><strong style="color:var(--success)">₦1,440,000</strong></td><td>Per project</td><td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">Progress Tracker</span></td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td></tr>
-          <tr><td><div class="td-name">🤖 Business Automation</div><div class="td-sub">Workflow automation with run history & alerts</div></td><td><strong>₦75,000</strong></td><td><strong style="color:var(--success)">₦720,000</strong></td><td>Monthly / Yearly</td><td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">Run History</span></td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td></tr>
-          <tr><td><div class="td-name">🔍 SEO Optimization</div><div class="td-sub">Keyword tracking, DA monitoring, competitor analysis</div></td><td><strong>₦60,000</strong></td><td><strong style="color:var(--success)">₦576,000</strong></td><td>Monthly / Yearly</td><td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">Rankings Tracker</span></td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td></tr>
-          <tr><td><div class="td-name">💼 IT Consulting</div><div class="td-sub">Tech stack assessment, roadmap, vendor selection</div></td><td><strong>₦100,000</strong></td><td><strong style="color:var(--success)">₦960,000</strong></td><td>Monthly / Yearly</td><td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">Service Status</span></td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td></tr>
-          <tr><td><div class="td-name">📞 Free Discovery Call</div><div class="td-sub">30-minute expert consultation, no commitment</div></td><td><strong style="color:var(--success)">Free</strong></td><td><strong style="color:var(--success)">Free</strong></td><td>Anytime</td><td>—</td><td><a href="./app/signup.html" style="color:var(--success);font-weight:600;font-size:.875rem">Book Now →</a></td></tr>
-          <tr><td><div class="td-name">💼 Strategy Session</div><div class="td-sub">60-minute deep-dive with written action plan</div></td><td colspan="2"><strong>₦15,000</strong> per session</td><td>Per session</td><td>—</td><td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Book Now →</a></td></tr>
+        <tbody id="svcsBody">
+          <tr><td colspan="6" style="text-align:center;padding:2rem;color:#94A3B8">Loading services...</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </section>
+
+<style>@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}</style>
+
+<script type="module">
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import { getFirestore, collection, getDocs, query, where, orderBy }
+  from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyD0f7L_vf2HZjzzxTyH2-Xu9rC6KWzKUuU",
+  authDomain:"guidedtechapp.firebaseapp.com",
+  projectId:"guidedtechapp",
+  storageBucket:"guidedtechapp.firebasestorage.app",
+  messagingSenderId:"744645189282",
+  appId:"1:744645189282:web:00c134f4c91147818381fb",
+});
+const db = getFirestore(app);
+
+function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmt(n){ return n?'$'+Number(n).toLocaleString():'—'; }
+
+let allPlans = [];
+let billingMode = 'monthly';
+
+/* ── Plans ────────────────────────────────────────────────── */
+async function loadPlans() {
+  const grid = document.getElementById('plansGrid');
+  try {
+    const snap = await getDocs(query(collection(db,'plans'), where('active','==',true)));
+    allPlans = [];
+    snap.forEach(d => allPlans.push({ id:d.id, ...d.data() }));
+    allPlans.sort((a,b)=>{
+      if (a.popular && !b.popular) return -1;
+      if (!a.popular && b.popular) return  1;
+      return (a.priceMonthly||0) - (b.priceMonthly||0);
+    });
+    renderPlans();
+  } catch(e) {
+    console.warn('Plans load error:', e);
+    if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#64748B">Could not load plans. Please refresh.</div>`;
+  }
+}
+
+function renderPlans() {
+  const grid = document.getElementById('plansGrid');
+  if (!grid || !allPlans.length) return;
+  const isYearly = billingMode === 'yearly';
+
+  grid.innerHTML = allPlans.map(p => {
+    const isCustom  = p.customPricing === true;
+    const monthly   = Number(p.priceMonthly) || 0;
+    const yearly    = Number(p.priceYearly)  || Math.round(monthly * 12 * 0.8);
+    const price     = isCustom ? 'Custom' : (isYearly ? fmt(yearly) : fmt(monthly));
+    const origPrice = isYearly && !isCustom ? fmt(monthly * 12) : null;
+    const period    = isCustom ? '' : (isYearly ? ' / year' : ' / month');
+    const features  = Array.isArray(p.features) ? p.features : [];
+    const ctaText   = p.ctaText || (isCustom ? 'Contact Sales' : 'Get Started');
+    const ctaLink   = p.ctaLink || './app/signup.html';
+    const isPopular = !!p.popular;
+
+    return `
+    <div class="plan-card ${isPopular?'featured':''}">
+      <div class="plan-card-top">
+        ${isPopular?'<div class="popular-tag">Most Popular</div>':''}
+        <div class="plan-name">${esc(p.name)}</div>
+        <div class="plan-tagline">${esc(p.tagline||p.description||'')}</div>
+        <div>
+          <span class="plan-price" ${isCustom?'style="font-size:1.75rem"':''}>${esc(price)}</span>
+          <span class="plan-per">${period}</span>
+          ${origPrice?`<span class="plan-orig">${esc(origPrice)}</span>`:''}
+        </div>
+      </div>
+      <div class="plan-card-body">
+        ${features.map(f=>`<div class="feat"><span class="feat-check">✓</span>${esc(f)}</div>`).join('')}
+        <a href="${esc(ctaLink)}" class="btn-plan ${isPopular?'btn-plan-primary':'btn-plan-outline'}">${esc(ctaText)}</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── Services ─────────────────────────────────────────────── */
+async function loadServices() {
+  const tbody = document.getElementById('svcsBody');
+  try {
+    const snap = await getDocs(query(collection(db,'services'), where('active','==',true)));
+    const svcs = [];
+    snap.forEach(d => svcs.push({ id:d.id, ...d.data() }));
+    svcs.sort((a,b)=> (a.sortOrder||99) - (b.sortOrder||99) || (a.name||'').localeCompare(b.name||''));
+
+    if (!svcs.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:#94A3B8">No individual services configured yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = svcs.map(s => {
+      const monthly = Number(s.price) || 0;
+      const yearly  = Math.round(monthly * 12 * 0.8);
+      const period  = s.pricePeriod || 'month';
+      const isOnce  = period === 'once';
+      const dashMap = { lead_generation:'Live Dashboard', cloud_migration:'Progress Tracker', automation:'Run History', seo:'Rankings Tracker', consultation:'Booking History', generic:'Status Panel' };
+      const dashLabel = dashMap[s.dashboardType] || 'Dashboard';
+
+      return `<tr>
+        <td>
+          <div class="td-name">${esc(s.icon||'')} ${esc(s.name)}</div>
+          <div class="td-sub">${esc((s.description||'').substring(0,60))}...</div>
+        </td>
+        <td><strong>${fmt(monthly)}</strong></td>
+        <td><strong style="color:var(--success)">${isOnce?'N/A':fmt(yearly)}</strong></td>
+        <td>${esc(isOnce?'One-time':'Monthly / Yearly')}</td>
+        <td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">${esc(dashLabel)}</span></td>
+        <td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td>
+      </tr>`;
+    }).join('');
+  } catch(e) {
+    console.warn('Services load error:', e);
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:#94A3B8">Could not load services. Please refresh.</td></tr>`;
+  }
+}
+
+/* ── Billing toggle ────────────────────────────────────────── */
+document.getElementById('btnMonthly').addEventListener('click', () => {
+  billingMode = 'monthly';
+  document.getElementById('btnMonthly').classList.add('active');
+  document.getElementById('btnYearly').classList.remove('active');
+  renderPlans();
+});
+document.getElementById('btnYearly').addEventListener('click', () => {
+  billingMode = 'yearly';
+  document.getElementById('btnYearly').classList.add('active');
+  document.getElementById('btnMonthly').classList.remove('active');
+  renderPlans();
+});
+
+loadPlans();
+loadServices();
+</script>
+
+<!-- Individual Services section now rendered dynamically above via Firestore -->
 
 <!-- FAQ -->
 <section class="faq-section">
@@ -229,7 +317,7 @@
     <div class="faq-grid">
       <div class="faq-item"><div class="faq-q">Can I cancel anytime?</div><div class="faq-a">Yes. There are no lock-in contracts. You can cancel your subscription at any time and retain access until the end of your billing period.</div></div>
       <div class="faq-item"><div class="faq-q">Which payment methods are accepted?</div><div class="faq-a">We accept payments via Paystack (card, USSD, bank transfer — great for Nigeria), Stripe (global card payments in USD), and PayPal.</div></div>
-      <div class="faq-item"><div class="faq-q">Are prices in Naira or USD?</div><div class="faq-a">Paystack charges in Naira (₦). Stripe charges in USD. When you select your payment provider at checkout, the amount is shown in the correct currency.</div></div>
+      <div class="faq-item"><div class="faq-q">What currency are prices in?</div><div class="faq-a">All prices are in US Dollars ($). When you checkout with Paystack, the equivalent amount is charged in your local currency at the current exchange rate.</div></div>
       <div class="faq-item"><div class="faq-q">What happens after I subscribe?</div><div class="faq-a">After payment, your service is activated and a setup wizard guides you through configuration. Your analytics dashboard becomes live once setup is complete.</div></div>
       <div class="faq-item"><div class="faq-q">Is there a free trial?</div><div class="faq-a">We offer a free 30-minute discovery call so you can understand exactly what you'll get before subscribing. No trial period, but our consultants will walk you through everything.</div></div>
       <div class="faq-item"><div class="faq-q">Can I switch between plans?</div><div class="faq-a">Yes, you can upgrade or add more services at any time. Contact us and we'll prorate the difference. Downgrades take effect at the next billing cycle.</div></div>
@@ -263,30 +351,6 @@
   </div>
 </footer>
 
-<script>
-  const prices = {
-    monthly: { starter:"₦75,000", starterYear:null, growth:"₦180,000", growthYear:null },
-    yearly:  { starter:"₦720,000", starterYear:"₦900,000", growth:"₦1,728,000", growthYear:"₦2,160,000" },
-  };
-  let mode="monthly";
-  document.getElementById("btnMonthly").addEventListener("click",()=>{
-    mode="monthly";
-    document.getElementById("btnMonthly").classList.add("active");
-    document.getElementById("btnYearly").classList.remove("active");
-    document.getElementById("starter-price").textContent="₦75,000";
-    document.getElementById("growth-price").textContent="₦180,000";
-    document.getElementById("starter-orig").style.display="none";
-    document.getElementById("growth-orig").style.display="none";
-  });
-  document.getElementById("btnYearly").addEventListener("click",()=>{
-    mode="yearly";
-    document.getElementById("btnYearly").classList.add("active");
-    document.getElementById("btnMonthly").classList.remove("active");
-    document.getElementById("starter-price").textContent="₦720,000";
-    document.getElementById("growth-price").textContent="₦1,728,000";
-    document.getElementById("starter-orig").style.display="inline";document.getElementById("starter-orig").textContent="₦900,000";
-    document.getElementById("growth-orig").style.display="inline";document.getElementById("growth-orig").textContent="₦2,160,000";
-  });
-</script>
+<!-- Billing toggle and Firestore loading handled by module script above -->
 </body>
 </html>
