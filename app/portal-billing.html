@@ -98,7 +98,7 @@ async function loadBilling(uid) {
 
     // Next billing
     const nextDates = activeSubs.map(s => s.nextBillingDate?.toDate?.()).filter(Boolean).sort((a,b) => a-b);
-    set("statNextBilling", nextDates.length ? nextDates[0].toLocaleDateString("en-NG",{day:"numeric",month:"short"}) : "—");
+    set("statNextBilling", nextDates.length ? nextDates[0].toLocaleDateString("en-US",{day:"numeric",month:"short"}) : "—");
 
     document.getElementById("payCount").textContent = pays.length + " payments";
 
