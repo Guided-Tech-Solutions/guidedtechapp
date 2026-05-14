@@ -282,7 +282,7 @@
     <div class="stats-row">
       <div><div class="stat-num">500+</div><div class="stat-lbl">Businesses Served</div></div>
       <div><div class="stat-num">98%</div><div class="stat-lbl">Client Satisfaction</div></div>
-      <div><div class="stat-num">₦2B+</div><div class="stat-lbl">Revenue Generated</div></div>
+      <div><div class="stat-num">$50M+</div><div class="stat-lbl">Revenue Generated</div></div>
       <div><div class="stat-num">24/7</div><div class="stat-lbl">Dashboard Monitoring</div></div>
     </div>
   </div>
@@ -308,7 +308,7 @@
             <div class="svc-feature">CRM &amp; webhook integration</div>
             <div class="svc-feature">CSV export anytime</div>
           </div>
-          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">₦50,000</span><span class="svc-price-per">/ month</span></div>
+          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">$50</span><span class="svc-price-per">/ month</span></div>
           <a href="./app/signup.html" class="svc-card-cta">Get Started →</a>
         </div>
       </div>
@@ -323,7 +323,7 @@
             <div class="svc-feature">Data integrity validation</div>
             <div class="svc-feature">Live migration event log</div>
           </div>
-          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">₦150,000</span><span class="svc-price-per">/ project</span></div>
+          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">$150</span><span class="svc-price-per">/ project</span></div>
           <a href="./app/signup.html" class="svc-card-cta">Get Started →</a>
         </div>
       </div>
@@ -338,7 +338,7 @@
             <div class="svc-feature">Failure alerts &amp; notifications</div>
             <div class="svc-feature">Custom trigger scheduling</div>
           </div>
-          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">₦75,000</span><span class="svc-price-per">/ month</span></div>
+          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">$75</span><span class="svc-price-per">/ month</span></div>
           <a href="./app/signup.html" class="svc-card-cta">Get Started →</a>
         </div>
       </div>
@@ -353,7 +353,7 @@
             <div class="svc-feature">Backlink &amp; competitor analysis</div>
             <div class="svc-feature">Core Web Vitals tracking</div>
           </div>
-          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">₦60,000</span><span class="svc-price-per">/ month</span></div>
+          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">$60</span><span class="svc-price-per">/ month</span></div>
           <a href="./app/signup.html" class="svc-card-cta">Get Started →</a>
         </div>
       </div>
@@ -368,7 +368,7 @@
             <div class="svc-feature">Vendor selection support</div>
             <div class="svc-feature">Ongoing advisory retainer</div>
           </div>
-          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">₦100,000</span><span class="svc-price-per">/ month</span></div>
+          <div class="svc-price"><span class="svc-price-from">From</span><span class="svc-price-val">$100</span><span class="svc-price-per">/ month</span></div>
           <a href="./app/signup.html" class="svc-card-cta">Get Started →</a>
         </div>
       </div>
@@ -457,7 +457,7 @@
       <div class="provider-card">
         <div class="provider-logo">💳</div>
         <div class="provider-name">Paystack</div>
-        <div class="provider-desc">Nigeria's leading payment gateway. Pay with debit card, USSD, bank transfer, or mobile money. Prices displayed in Naira (₦).</div>
+        <div class="provider-desc">Nigeria's leading payment gateway. Pay with debit card, USSD, bank transfer, or mobile money. Prices displayed in USD ($).</div>
         <span class="provider-badge">🇳🇬 Recommended for Nigeria</span>
       </div>
       <div class="provider-card">
@@ -477,7 +477,7 @@
   </div>
 </section>
 
-<!-- PRICING -->
+<!-- PRICING — loaded live from Firestore (set in Admin Panel) -->
 <section class="pricing-section" id="pricing">
   <div class="container">
     <div class="text-center">
@@ -485,59 +485,130 @@
       <h2 class="section-title">Simple, transparent pricing</h2>
       <p class="section-desc">Choose individual services or save with a bundle plan. All subscriptions include full dashboard access.</p>
     </div>
-    <div class="pricing-grid">
-      <div class="pricing-card">
+    <!-- Dynamic pricing grid — populated by JS below -->
+    <div class="pricing-grid" id="homePricingGrid">
+      <!-- Skeleton loaders -->
+      <div class="pricing-card" style="min-height:380px;background:linear-gradient(90deg,#f0f4f8 25%,#e2e8f0 50%,#f0f4f8 75%);background-size:200% 100%;animation:shimmer 1.4s infinite"><div style="padding:1.75rem;height:100%"></div></div>
+      <div class="pricing-card" style="min-height:380px;background:linear-gradient(90deg,#f0f4f8 25%,#e2e8f0 50%,#f0f4f8 75%);background-size:200% 100%;animation:shimmer 1.4s infinite 0.15s"><div style="padding:1.75rem;height:100%"></div></div>
+      <div class="pricing-card" style="min-height:380px;background:linear-gradient(90deg,#f0f4f8 25%,#e2e8f0 50%,#f0f4f8 75%);background-size:200% 100%;animation:shimmer 1.4s infinite 0.3s"><div style="padding:1.75rem;height:100%"></div></div>
+    </div>
+    <div style="text-align:center;margin-top:1.5rem">
+      <a href="pricing.html" style="color:var(--brand);font-weight:600;font-size:.9375rem">View full pricing details →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+</style>
+
+<script type="module">
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import { getFirestore, collection, getDocs, query, where, orderBy }
+  from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyD0f7L_vf2HZjzzxTyH2-Xu9rC6KWzKUuU",
+  authDomain:"guidedtechapp.firebaseapp.com",
+  projectId:"guidedtechapp",
+  storageBucket:"guidedtechapp.firebasestorage.app",
+  messagingSenderId:"744645189282",
+  appId:"1:744645189282:web:00c134f4c91147818381fb",
+});
+const db = getFirestore(app);
+
+function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmtPrice(p){ return p===0||p==='0'?'Free':(typeof p==='number'?'$'+p.toLocaleString():String(p)); }
+
+async function loadPricingCards() {
+  const grid = document.getElementById('homePricingGrid');
+  if (!grid) return;
+  try {
+    const snap = await getDocs(query(collection(db,'plans'), where('active','==',true)));
+    let plans = [];
+    snap.forEach(d => plans.push({ id:d.id, ...d.data() }));
+
+    // Sort: popular first, then by priceMonthly ascending
+    plans.sort((a,b) => {
+      if (a.popular && !b.popular) return -1;
+      if (!a.popular && b.popular) return  1;
+      return (a.priceMonthly||0) - (b.priceMonthly||0);
+    });
+
+    if (!plans.length) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#64748B">
+        No plans configured yet. <a href="./app/signup.html" style="color:var(--brand);font-weight:600">Get in touch</a> for custom pricing.
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = plans.map((p, i) => {
+      const isPopular  = !!p.popular;
+      const monthly    = Number(p.priceMonthly) || 0;
+      const isCustom   = p.customPricing === true || p.priceMonthly === 'custom';
+      const priceLabel = isCustom ? 'Custom' : fmtPrice(monthly);
+      const priceSuffix= isCustom ? '' : ' / month';
+      const features   = Array.isArray(p.features) ? p.features : [];
+      const ctaText    = p.ctaText || (isCustom ? 'Contact Sales' : 'Get Started');
+      const ctaLink    = p.ctaLink || './app/signup.html';
+
+      return `
+      <div class="pricing-card ${isPopular?'popular':''}">
         <div class="pricing-card-top">
-          <div class="plan-name">Starter</div>
-          <div class="plan-tagline">Perfect for solo businesses</div>
-          <div><span class="plan-price">₦75,000</span><span class="plan-per"> / month</span></div>
+          ${isPopular?'<div class="popular-badge">Most Popular</div>':''}
+          <div class="plan-name">${esc(p.name)}</div>
+          <div class="plan-tagline">${esc(p.tagline||p.description||'')}</div>
+          <div>
+            <span class="plan-price" style="${isCustom?'font-size:1.75rem':''}">${esc(priceLabel)}</span>
+            <span class="plan-per">${esc(priceSuffix)}</span>
+          </div>
         </div>
+        <div class="pricing-card-body">
+          ${features.map(f=>`<div class="pricing-feat"><span class="pricing-check">✓</span>${esc(f)}</div>`).join('')}
+          <a href="${esc(ctaLink)}" class="btn-plan ${isPopular?'btn-plan-primary':'btn-plan-outline'}">${esc(ctaText)}</a>
+        </div>
+      </div>`;
+    }).join('');
+
+  } catch(e) {
+    console.warn('Could not load pricing from Firestore:', e);
+    // Graceful fallback — show static cards
+    grid.innerHTML = `
+      <div class="pricing-card">
+        <div class="pricing-card-top"><div class="plan-name">Starter</div><div class="plan-tagline">Perfect for solo businesses</div><div><span class="plan-price">$75</span><span class="plan-per"> / month</span></div></div>
         <div class="pricing-card-body">
           <div class="pricing-feat"><span class="pricing-check">✓</span>1 service of your choice</div>
           <div class="pricing-feat"><span class="pricing-check">✓</span>Real-time analytics dashboard</div>
           <div class="pricing-feat"><span class="pricing-check">✓</span>Email support</div>
-          <div class="pricing-feat"><span class="pricing-check">✓</span>Monthly performance report</div>
-          <div class="pricing-feat"><span class="pricing-check">✓</span>Free discovery call included</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Free discovery call</div>
           <a href="./app/signup.html" class="btn-plan btn-plan-outline">Get Started</a>
         </div>
       </div>
       <div class="pricing-card popular">
-        <div class="pricing-card-top">
-          <div class="popular-badge">Most Popular</div>
-          <div class="plan-name">Growth</div>
-          <div class="plan-tagline">For growing businesses</div>
-          <div><span class="plan-price">₦180,000</span><span class="plan-per"> / month</span></div>
-        </div>
+        <div class="pricing-card-top"><div class="popular-badge">Most Popular</div><div class="plan-name">Growth</div><div class="plan-tagline">For growing businesses</div><div><span class="plan-price">$180</span><span class="plan-per"> / month</span></div></div>
         <div class="pricing-card-body">
           <div class="pricing-feat"><span class="pricing-check">✓</span>Lead Gen + Automation + SEO</div>
           <div class="pricing-feat"><span class="pricing-check">✓</span>All analytics dashboards</div>
-          <div class="pricing-feat"><span class="pricing-check">✓</span>Priority support (48h response)</div>
-          <div class="pricing-feat"><span class="pricing-check">✓</span>Bi-weekly performance calls</div>
-          <div class="pricing-feat"><span class="pricing-check">✓</span>CRM integration setup</div>
-          <div class="pricing-feat"><span class="pricing-check">✓</span>Save 20% vs individual pricing</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Priority support</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Save 20% vs individual</div>
           <a href="./app/signup.html" class="btn-plan btn-plan-primary">Get Started</a>
         </div>
       </div>
       <div class="pricing-card">
-        <div class="pricing-card-top">
-          <div class="plan-name">Enterprise</div>
-          <div class="plan-tagline">For scaling organizations</div>
-          <div><span class="plan-price" style="font-size:1.75rem">Custom</span></div>
-        </div>
+        <div class="pricing-card-top"><div class="plan-name">Enterprise</div><div class="plan-tagline">For scaling organizations</div><div><span class="plan-price" style="font-size:1.75rem">Custom</span></div></div>
         <div class="pricing-card-body">
           <div class="pricing-feat"><span class="pricing-check">✓</span>All services included</div>
           <div class="pricing-feat"><span class="pricing-check">✓</span>Dedicated account manager</div>
-          <div class="pricing-feat"><span class="pricing-check">✓</span>Custom integrations</div>
           <div class="pricing-feat"><span class="pricing-check">✓</span>SLA &amp; uptime guarantees</div>
-          <div class="pricing-feat"><span class="pricing-check">✓</span>On-site support available</div>
-          <div class="pricing-feat"><span class="pricing-check">✓</span>Cloud migration included</div>
+          <div class="pricing-feat"><span class="pricing-check">✓</span>Custom integrations</div>
           <a href="./app/signup.html" class="btn-plan btn-plan-outline">Contact Sales</a>
         </div>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:1.5rem"><a href="pricing.html" style="color:var(--brand);font-weight:600;font-size:.9375rem">View full pricing details →</a></div>
-  </div>
-</section>
+      </div>`;
+  }
+}
+
+loadPricingCards();
+</script>
 
 <!-- CONSULTATION CTA -->
 <section class="cta-section" id="consultation">
