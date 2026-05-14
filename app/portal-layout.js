@@ -142,15 +142,15 @@ export function esc(s) {
   );
 }
 
-export function fmtMoney(amount, symbol = "₦") {
+export function fmtMoney(amount, symbol = "$") {
   const n = Number(amount) || 0;
-  return symbol + n.toLocaleString("en-NG", { minimumFractionDigits: n % 1 !== 0 ? 2 : 0 });
+  return symbol + n.toLocaleString("en-US", { minimumFractionDigits: n % 1 !== 0 ? 2 : 0 });
 }
 
 export function fmtDate(ts, opts = { day:"numeric", month:"short", year:"numeric" }) {
   if (!ts) return "—";
   const d = ts?.toDate ? ts.toDate() : new Date(ts);
-  return d.toLocaleDateString("en-NG", opts);
+  return d.toLocaleDateString("en-US", opts);
 }
 
 export function timeAgo(ts) {
