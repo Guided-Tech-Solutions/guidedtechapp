@@ -2,31 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Admin Dashboard — GTS Amplify</title>
+  <title>Admin — GTS Amplify</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root{--brand:#1B4F72;--brand-dark:#0F2E42;--brand-mid:#2471A3;--brand-light:#3498DB;--brand-pale:#EBF5FB;--accent:#E67E22;--success:#0F9D58;--success-pale:#E6F4EA;--warning:#F39C12;--warning-pale:#FEF9E7;--danger:#E53935;--danger-pale:#FDECEA;--info:#1565C0;--info-pale:#E3F2FD;--bg:#F2F5F9;--surface:#fff;--surface-alt:#F8FAFC;--border:#E2E8F0;--border-mid:#CBD5E1;--text:#0D1B2A;--text-mid:#334155;--text-muted:#64748B;--text-faint:#94A3B8;--sidebar-w:256px;--nav-h:60px;--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif;--r:8px;--r-lg:14px;--sh-xs:0 1px 2px rgba(0,0,0,.05);--sh-sm:0 2px 8px rgba(0,0,0,.08);--sh-md:0 8px 24px rgba(0,0,0,.1);--tr:all .2s cubic-bezier(.4,0,.2,1)}
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     body{font-family:var(--ff-b);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
     a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:var(--ff-b)}
-    ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border-mid);border-radius:3px}
+    ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:var(--border-mid);border-radius:3px}
 
     /* Topbar */
     .topbar{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--surface);border-bottom:1px solid var(--border);z-index:200;display:flex;align-items:center;box-shadow:var(--sh-xs)}
     .topbar-inner{width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem}
     .topbar-left{display:flex;align-items:center;gap:.75rem}
-    .hamburger{background:none;border:1px solid var(--border);border-radius:var(--r);padding:.3125rem .5rem;color:var(--text-mid);font-size:1.0625rem;cursor:pointer;transition:var(--tr);display:none}
-    .hamburger:hover{background:var(--bg);border-color:var(--brand);color:var(--brand)}
-    .topbar-logo{display:flex;align-items:center;gap:.5rem;font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:var(--brand)}
-    .topbar-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.875rem}
+    .hamburger{background:none;border:1px solid var(--border);border-radius:var(--r);padding:.3125rem .5rem;color:var(--text-mid);font-size:1rem;cursor:pointer;display:none}
+    .hamburger:hover{background:var(--bg);border-color:var(--brand)}
+    .logo{display:flex;align-items:center;gap:.5rem;font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:var(--brand)}
+    .logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.875rem}
     .admin-tag{font-size:.5625rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:var(--danger-pale);color:var(--danger);padding:1px 5px;border-radius:3px;margin-left:.25rem}
     .topbar-right{display:flex;align-items:center;gap:.625rem}
-    .topbar-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-mid));color:white;font-weight:700;font-size:.75rem;display:flex;align-items:center;justify-content:center;font-family:var(--ff-d)}
+    .avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-mid));color:white;font-weight:700;font-size:.75rem;display:flex;align-items:center;justify-content:center;font-family:var(--ff-d)}
     .topbar-email{font-size:.8125rem;color:var(--text-muted)}
     .btn-signout{padding:.3125rem .75rem;border-radius:var(--r);background:var(--danger-pale);color:var(--danger);border:1px solid rgba(229,57,53,.2);font-size:.8125rem;font-weight:600;cursor:pointer;transition:var(--tr)}
     .btn-signout:hover{background:var(--danger);color:white}
 
-    /* Layout */
+    /* Wrapper */
     .wrapper{padding-top:var(--nav-h);min-height:100vh;display:flex}
 
     /* Sidebar */
@@ -38,7 +38,7 @@
     .nav-link.active{background:rgba(52,152,219,.18);color:white;font-weight:600}
     .nav-link.active::before{content:'';position:absolute;left:0;top:25%;bottom:25%;width:3px;background:var(--brand-light);border-radius:0 2px 2px 0}
     .nav-icon{font-size:.8125rem;width:16px;text-align:center;flex-shrink:0}
-    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;backdrop-filter:blur(3px)}
+    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
     .overlay.open{display:block}
 
     /* Main */
@@ -65,7 +65,6 @@
     .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh-xs);overflow:hidden;margin-bottom:1.25rem}
     .card-header{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.25rem;border-bottom:1px solid var(--border);background:var(--surface-alt)}
     .card-title{font-family:var(--ff-d);font-size:.9375rem;font-weight:600;color:var(--text)}
-    .card-subtitle{font-size:.75rem;color:var(--text-muted);margin-top:1px}
     .card-body{padding:1.25rem}
 
     /* Buttons */
@@ -78,14 +77,15 @@
     .btn-ghost{background:transparent;color:var(--text-mid);border:1px solid var(--border)}.btn-ghost:hover{background:var(--bg)}
     .btn-danger{background:var(--danger-pale);color:var(--danger);border:1px solid rgba(229,57,53,.2)}.btn-danger:hover{background:var(--danger);color:white}
     .btn-success{background:var(--success);color:white}.btn-success:hover{background:#0a8a4d}
+    .btn-warning{background:var(--warning-pale);color:var(--warning);border:1px solid rgba(243,156,18,.2)}.btn-warning:hover{background:var(--warning);color:white}
     .btn.loading{position:relative;color:transparent!important;pointer-events:none}
     .btn.loading::after{content:'';position:absolute;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite}
 
     /* Badges */
     .badge{display:inline-flex;align-items:center;gap:.2rem;padding:.15rem .5rem;border-radius:20px;font-size:.625rem;font-weight:700;letter-spacing:.02em}
     .badge::before{content:'●';font-size:.375rem}
-    .badge-active{background:var(--success-pale);color:var(--success)}.badge-pending{background:var(--warning-pale);color:var(--warning)}
-    .badge-inactive,.badge-canceled{background:#f1f3f6;color:var(--text-muted)}.badge-danger{background:var(--danger-pale);color:var(--danger)}
+    .badge-active{background:var(--success-pale);color:var(--success)}.badge-inactive{background:#f1f3f6;color:var(--text-muted)}
+    .badge-pending{background:var(--warning-pale);color:var(--warning)}.badge-danger{background:var(--danger-pale);color:var(--danger)}
     .badge-info{background:var(--info-pale);color:var(--info)}.badge-brand{background:var(--brand-pale);color:var(--brand)}
 
     /* Table */
@@ -104,36 +104,61 @@
     .form-control:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(27,79,114,.1)}
     .form-control::placeholder{color:var(--text-faint)}
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.875rem}
+    .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.875rem}
     select.form-control{cursor:pointer}textarea.form-control{resize:vertical;min-height:70px}
     .form-hint{font-size:.75rem;color:var(--text-muted);margin-top:.2rem}
 
-    /* Filter bar */
-    .filter-bar{display:flex;gap:.625rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center}
-    .search-wrap{position:relative;flex:1;min-width:180px}
-    .search-wrap::before{content:'🔍';position:absolute;left:.625rem;top:50%;transform:translateY(-50%);font-size:.75rem;pointer-events:none}
-    .search-input{width:100%;padding:.5rem .875rem .5rem 2rem;border:1.5px solid var(--border);border-radius:var(--r);font-size:.8125rem;background:var(--surface);color:var(--text);transition:var(--tr)}
-    .search-input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(27,79,114,.1)}
+    /* Schema Builder */
+    .schema-builder{border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+    .schema-header{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1rem;background:var(--surface-alt);border-bottom:1px solid var(--border)}
+    .schema-header-title{font-family:var(--ff-d);font-weight:600;font-size:.9375rem;color:var(--text)}
+    .schema-header-desc{font-size:.75rem;color:var(--text-muted);margin-top:2px}
+    .schema-fields{padding:.75rem}
+    .schema-empty{text-align:center;padding:1.5rem;color:var(--text-faint);font-size:.875rem;background:var(--bg);border-radius:var(--r);border:1.5px dashed var(--border)}
+    .field-row{display:flex;align-items:center;gap:.625rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.625rem .875rem;margin-bottom:.5rem;transition:var(--tr)}
+    .field-row:hover{border-color:var(--border-mid);box-shadow:var(--sh-xs)}
+    .field-drag{color:var(--text-faint);cursor:grab;font-size:.9375rem;flex-shrink:0}
+    .field-info{flex:1;min-width:0}
+    .field-label-text{font-weight:600;font-size:.875rem;color:var(--text)}
+    .field-meta{font-size:.6875rem;color:var(--text-muted);margin-top:1px;display:flex;gap:.375rem;flex-wrap:wrap;align-items:center}
+    .field-type-tag{background:var(--brand-pale);color:var(--brand);padding:1px 6px;border-radius:20px;font-weight:700}
+    .field-tag{padding:1px 5px;border-radius:20px;font-weight:700}
+    .field-tag-req{background:var(--danger-pale);color:var(--danger)}
+    .field-tag-sens{background:var(--warning-pale);color:var(--warning)}
+    .field-actions{display:flex;gap:.25rem;flex-shrink:0}
+    .field-builder-form{background:var(--bg);border:1.5px solid var(--brand-pale);border-radius:var(--r);padding:1rem;margin-top:.5rem;display:none}
+    .field-builder-form.open{display:block}
+    .field-builder-title{font-family:var(--ff-d);font-weight:700;font-size:.875rem;color:var(--brand);margin-bottom:.75rem}
 
     /* Modals */
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
     .modal-overlay.open{display:flex}
-    .modal-box{background:var(--surface);border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:modalIn .25s cubic-bezier(.34,1.56,.64,1)}
-    .modal-box.lg{max-width:660px}.modal-box.sm{max-width:400px}
+    .modal-box{background:var(--surface);border-radius:16px;max-width:760px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:modalIn .25s cubic-bezier(.34,1.56,.64,1)}
+    .modal-box.sm{max-width:440px}
     @keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
     .modal-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1}
     .modal-title{font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:var(--text)}
     .modal-x{width:26px;height:26px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8125rem;color:var(--text-muted);cursor:pointer;transition:var(--tr)}
     .modal-x:hover{background:var(--danger-pale);color:var(--danger);border-color:var(--danger);transform:rotate(90deg)}
     .modal-body{padding:1.25rem}
+    .modal-section{padding:1rem 1.25rem;border-top:1px solid var(--border)}
+    .modal-section-title{font-family:var(--ff-d);font-weight:700;font-size:.875rem;color:var(--text);margin-bottom:.75rem}
     .modal-footer{padding:.875rem 1.25rem;border-top:1px solid var(--border);display:flex;gap:.625rem;justify-content:flex-end;position:sticky;bottom:0;background:var(--surface)}
+
+    /* Filter bar */
+    .filter-bar{display:flex;gap:.625rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center}
+    .search-wrap{position:relative;flex:1;min-width:180px}
+    .search-wrap::before{content:'🔍';position:absolute;left:.625rem;top:50%;transform:translateY(-50%);font-size:.75rem;pointer-events:none}
+    .search-input{width:100%;padding:.5rem .875rem .5rem 2rem;border:1.5px solid var(--border);border-radius:var(--r);font-size:.8125rem;background:var(--surface);color:var(--text);transition:var(--tr)}
+    .search-input:focus{outline:none;border-color:var(--brand)}
 
     /* Toast */
     #toastRoot{position:fixed;bottom:1rem;right:1rem;z-index:9999;display:flex;flex-direction:column;gap:.375rem}
     .toast{display:flex;align-items:flex-start;gap:.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.625rem .875rem;box-shadow:var(--sh-md);min-width:240px;max-width:320px;animation:toastIn .3s cubic-bezier(.34,1.56,.64,1)}
     @keyframes toastIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
-    .toast-icon{font-size:.9375rem;flex-shrink:0;margin-top:1px}.toast-body{flex:1}
-    .toast-title{font-weight:600;font-size:.8125rem;color:var(--text)}.toast-msg{font-size:.75rem;color:var(--text-muted);margin-top:1px}
     .toast.success{border-left:3px solid var(--success)}.toast.error{border-left:3px solid var(--danger)}.toast.info{border-left:3px solid var(--brand)}
+    .toast-icon{font-size:.9375rem;flex-shrink:0}.toast-body{flex:1}
+    .toast-title{font-weight:600;font-size:.8125rem;color:var(--text)}.toast-msg{font-size:.75rem;color:var(--text-muted)}
 
     /* Empty/Loading */
     .empty{text-align:center;padding:2rem 1rem}
@@ -143,10 +168,13 @@
     .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .75s linear infinite;margin:2rem auto}
     @keyframes spin{to{transform:rotate(360deg)}}
 
+    /* Divider */
+    .divider{height:1px;background:var(--border);margin:1rem 0}
+
     /* Responsive */
     @media(max-width:1200px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:1024px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.hamburger{display:inline-flex}}
-    @media(max-width:768px){.main{padding:1rem}.stats-grid{grid-template-columns:1fr 1fr}.form-row{grid-template-columns:1fr}.topbar-email{display:none}}
+    @media(max-width:768px){.main{padding:1rem}.stats-grid{grid-template-columns:1fr 1fr}.form-row,.form-row-3{grid-template-columns:1fr}.topbar-email{display:none}}
     @media(max-width:480px){.stats-grid{grid-template-columns:1fr}}
   </style>
 </head>
@@ -157,14 +185,14 @@
   <div class="topbar-inner">
     <div class="topbar-left">
       <button class="hamburger" id="hamburger">☰</button>
-      <div class="topbar-logo">
-        <div class="topbar-logo-icon">🚀</div>
+      <div class="logo">
+        <div class="logo-icon">🚀</div>
         GTS Amplify
         <span class="admin-tag">Admin</span>
       </div>
     </div>
     <div class="topbar-right">
-      <div class="topbar-avatar" id="topbarAvatar">A</div>
+      <div class="avatar" id="topbarAvatar">A</div>
       <span class="topbar-email" id="topbarEmail"></span>
       <button class="btn-signout" id="btnSignout">Sign Out</button>
     </div>
@@ -178,12 +206,13 @@
       <div class="nav-label">Overview</div>
       <button class="nav-link active" data-sec="overview"><span class="nav-icon">📊</span>Dashboard</button>
       <div class="nav-label">Catalog</div>
-      <button class="nav-link" data-sec="services"><span class="nav-icon">🔧</span>Services</button>
+      <button class="nav-link" data-sec="services"><span class="nav-icon">⚙️</span>Services</button>
       <button class="nav-link" data-sec="plans"><span class="nav-icon">📦</span>Plans & Bundles</button>
-      <button class="nav-link" data-sec="consultpricing"><span class="nav-icon">📅</span>Consultation Pricing</button>
+      <button class="nav-link" data-sec="consultpricing"><span class="nav-icon">📅</span>Consultation</button>
       <div class="nav-label">Customers</div>
       <button class="nav-link" data-sec="users"><span class="nav-icon">👥</span>Users</button>
       <button class="nav-link" data-sec="subscriptions"><span class="nav-icon">📋</span>Subscriptions</button>
+      <button class="nav-link" data-sec="runs"><span class="nav-icon">▶️</span>Workflow Runs</button>
       <button class="nav-link" data-sec="bookings"><span class="nav-icon">📞</span>Consultations</button>
       <div class="nav-label">Finance</div>
       <button class="nav-link" data-sec="payments"><span class="nav-icon">💳</span>Payments</button>
@@ -195,193 +224,340 @@
 
   <main class="main" id="mainArea">
 
-    <!-- ── OVERVIEW ──────────────────────────────────────── -->
+    <!-- ── OVERVIEW ──────────────────────────────────────────────── -->
     <div class="section active" id="sec-overview">
       <div class="page-header">
         <div><h1 class="page-title">Dashboard</h1><p class="page-subtitle">Platform overview</p></div>
         <button class="btn btn-ghost btn-sm" onclick="location.reload()">🔄 Refresh</button>
       </div>
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-label">Total Users</div><div class="stat-value" id="ovUsers">—</div></div>
-        <div class="stat-card"><div class="stat-icon g">⚡</div><div class="stat-label">Active Subscriptions</div><div class="stat-value" id="ovSubs">—</div></div>
-        <div class="stat-card"><div class="stat-icon a">💰</div><div class="stat-label">Revenue (Completed)</div><div class="stat-value sm" id="ovRevenue">—</div></div>
-        <div class="stat-card"><div class="stat-icon o">📞</div><div class="stat-label">Consultation Bookings</div><div class="stat-value" id="ovBookings">—</div></div>
+        <div class="stat-card"><div class="stat-icon">⚙️</div><div class="stat-label">Active Services</div><div class="stat-value" id="ovSvcs">—</div></div>
+        <div class="stat-card"><div class="stat-icon g">👥</div><div class="stat-label">Total Users</div><div class="stat-value" id="ovUsers">—</div></div>
+        <div class="stat-card"><div class="stat-icon a">💰</div><div class="stat-label">Active Subscriptions</div><div class="stat-value" id="ovSubs">—</div></div>
+        <div class="stat-card"><div class="stat-icon o">▶️</div><div class="stat-label">Workflow Runs (Today)</div><div class="stat-value" id="ovRuns">—</div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
-        <div class="card"><div class="card-header"><div class="card-title">Recent Users</div></div><div class="card-body" id="ovRecentUsers"><div class="spinner"></div></div></div>
-        <div class="card"><div class="card-header"><div class="card-title">Recent Payments</div></div><div class="card-body" id="ovRecentPays"><div class="spinner"></div></div></div>
+        <div class="card"><div class="card-header"><div class="card-title">Recent Subscriptions</div></div><div class="card-body" id="ovRecentSubs"><div class="spinner"></div></div></div>
+        <div class="card"><div class="card-header"><div class="card-title">Recent Workflow Runs</div></div><div class="card-body" id="ovRecentRuns"><div class="spinner"></div></div></div>
       </div>
     </div>
 
-    <!-- ── SERVICES ───────────────────────────────────────── -->
+    <!-- ── SERVICES ───────────────────────────────────────────────── -->
     <div class="section" id="sec-services">
       <div class="page-header">
-        <div><h1 class="page-title">Services</h1><p class="page-subtitle">Manage the service catalog</p></div>
-        <button class="btn btn-primary" id="btnAddService">+ Add Service</button>
+        <div><h1 class="page-title">Services</h1><p class="page-subtitle">Create and manage automation services with dynamic parameter schemas</p></div>
+        <button class="btn btn-primary" id="btnNewService">+ New Service</button>
       </div>
-      <div class="card"><div class="card-header"><div class="card-title">All Services</div><span class="badge badge-brand" id="svcCount">0</span></div><div class="card-body" id="svcBody"><div class="spinner"></div></div></div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">All Services</div>
+          <span class="badge badge-brand" id="svcCountBadge">0</span>
+        </div>
+        <div class="card-body">
+          <div class="filter-bar">
+            <div class="search-wrap" style="max-width:280px"><input type="text" class="search-input" id="svcSearch" placeholder="Search services..."></div>
+            <select class="form-control" id="svcStatusFilter" style="width:auto">
+              <option value="">All statuses</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          <div id="svcTableWrap"><div class="spinner"></div></div>
+        </div>
+      </div>
     </div>
 
-    <!-- ── PLANS ──────────────────────────────────────────── -->
-    <div class="section" id="sec-plans">
-      <div class="page-header">
-        <div><h1 class="page-title">Plans & Bundles</h1><p class="page-subtitle">Subscription bundle management</p></div>
-        <button class="btn btn-primary" id="btnAddPlan">+ Add Plan</button>
+    <!-- ── USERS ──────────────────────────────────────────────────── -->
+    <div class="section" id="sec-users">
+      <div class="page-header"><div><h1 class="page-title">Users</h1><p class="page-subtitle">All registered users and their subscriptions</p></div></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">All Users</div><span class="badge badge-brand" id="usrCountBadge">0</span></div>
+        <div class="card-body">
+          <div class="filter-bar"><div class="search-wrap" style="max-width:300px"><input type="text" class="search-input" id="usrSearch" placeholder="Search by name or email..."></div></div>
+          <div id="usrTableWrap"><div class="spinner"></div></div>
+        </div>
       </div>
-      <div class="card"><div class="card-header"><div class="card-title">All Plans</div><span class="badge badge-brand" id="planCount">0</span></div><div class="card-body" id="planBody"><div class="spinner"></div></div></div>
     </div>
 
-    <!-- ── CONSULTATION PRICING ───────────────────────────── -->
+    <!-- ── SUBSCRIPTIONS ──────────────────────────────────────────── -->
+    <div class="section" id="sec-subscriptions">
+      <div class="page-header"><div><h1 class="page-title">Subscriptions</h1><p class="page-subtitle">All user service subscriptions</p></div></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">User Services</div><span class="badge badge-active" id="subCountBadge">0</span></div>
+        <div class="card-body">
+          <div class="filter-bar">
+            <div class="search-wrap" style="max-width:260px"><input type="text" class="search-input" id="subSearch" placeholder="Search..."></div>
+            <select class="form-control" id="subStatusFilter" style="width:auto"><option value="">All sub statuses</option><option>active</option><option>trialing</option><option>expired</option><option>cancelled</option><option>payment_failed</option></select>
+            <select class="form-control" id="subSvcFilter"    style="width:auto"><option value="">All services</option></select>
+          </div>
+          <div id="subTableWrap"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── WORKFLOW RUNS ──────────────────────────────────────────── -->
+    <div class="section" id="sec-runs">
+      <div class="page-header"><div><h1 class="page-title">Workflow Runs</h1><p class="page-subtitle">All n8n workflow execution history</p></div></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">All Runs</div><span class="badge badge-brand" id="runCountBadge">0</span></div>
+        <div class="card-body">
+          <div class="filter-bar">
+            <div class="search-wrap" style="max-width:260px"><input type="text" class="search-input" id="runSearch" placeholder="Search by run ID or user..."></div>
+            <select class="form-control" id="runStatusFilter" style="width:auto"><option value="">All statuses</option><option>queued</option><option>running</option><option>success</option><option>failed</option><option>cancelled</option></select>
+          </div>
+          <div id="runTableWrap"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAYMENTS ───────────────────────────────────────────────── -->
+    <div class="section" id="sec-payments">
+      <div class="page-header"><div><h1 class="page-title">Payments</h1><p class="page-subtitle">All payment records</p></div></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Checkout Sessions</div><span class="badge badge-active" id="payCountBadge">0</span></div>
+        <div class="card-body">
+          <div class="filter-bar">
+            <div class="search-wrap" style="max-width:260px"><input type="text" class="search-input" id="paySearch" placeholder="Search email or ref..."></div>
+            <select class="form-control" id="payProviderFilter" style="width:auto"><option value="">All providers</option><option>stripe</option><option>paystack</option><option>paypal</option></select>
+          </div>
+          <div id="payTableWrap"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CONSULTATION PRICING ───────────────────────────────────── -->
     <div class="section" id="sec-consultpricing">
-      <div class="page-header"><div><h1 class="page-title">Consultation Pricing</h1><p class="page-subtitle">Set discovery call & strategy session prices</p></div></div>
+      <div class="page-header"><div><h1 class="page-title">Consultation Pricing</h1></div></div>
       <div class="card" style="max-width:520px">
         <div class="card-header"><div class="card-title">Session Pricing</div></div>
         <div class="card-body">
-          <div class="form-group"><label class="form-label">Free Discovery Call</label><input type="number" class="form-control" value="0" disabled><div class="form-hint">Discovery calls are always free</div></div>
           <div class="form-group"><label class="form-label">Strategy Session Price ($) <span class="req">*</span></label><input type="number" class="form-control" id="cpPaidPrice" placeholder="15" min="0"></div>
-          <div class="form-group"><label class="form-label">Session Duration</label><input type="text" class="form-control" id="cpDuration" placeholder="60 minutes"></div>
-          <div class="form-group"><label class="form-label">Includes (one per line)</label><textarea class="form-control" id="cpIncludes" rows="4" placeholder="In-depth business analysis&#10;Custom technology roadmap&#10;Written action plan&#10;30-day email follow-up"></textarea></div>
+          <div class="form-group"><label class="form-label">Duration</label><input type="text" class="form-control" id="cpDuration" placeholder="60 minutes"></div>
+          <div class="form-group"><label class="form-label">Includes (one per line)</label><textarea class="form-control" id="cpIncludes" rows="4"></textarea></div>
           <button class="btn btn-primary" id="btnSaveCP">Save Pricing</button>
         </div>
       </div>
     </div>
 
-    <!-- ── USERS ──────────────────────────────────────────── -->
-    <div class="section" id="sec-users">
-      <div class="page-header"><div><h1 class="page-title">Users</h1><p class="page-subtitle">All registered users</p></div></div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">All Users</div><span class="badge badge-brand" id="usrCount">0</span></div>
-        <div class="card-body">
-          <div class="filter-bar"><div class="search-wrap" style="max-width:300px"><input type="text" class="search-input" id="usrSearch" placeholder="Search name or email..."></div></div>
-          <div id="usrBody"><div class="spinner"></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── SUBSCRIPTIONS ──────────────────────────────────── -->
-    <div class="section" id="sec-subscriptions">
-      <div class="page-header"><div><h1 class="page-title">Subscriptions</h1><p class="page-subtitle">All service activations</p></div></div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">Service Activations</div><span class="badge badge-active" id="subCount">0</span></div>
-        <div class="card-body">
-          <div class="filter-bar">
-            <div class="search-wrap" style="max-width:260px"><input type="text" class="search-input" id="subSearch" placeholder="Search..."></div>
-            <select class="form-control" id="subStatus" style="width:auto"><option value="">All statuses</option><option>active</option><option>canceled</option><option>pending</option></select>
-          </div>
-          <div id="subBody"><div class="spinner"></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── BOOKINGS ───────────────────────────────────────── -->
+    <!-- ── BOOKINGS ───────────────────────────────────────────────── -->
     <div class="section" id="sec-bookings">
-      <div class="page-header"><div><h1 class="page-title">Consultations</h1><p class="page-subtitle">All booking requests</p></div></div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">All Bookings</div><span class="badge badge-brand" id="bkgCount">0</span></div>
-        <div class="card-body">
-          <div class="filter-bar">
-            <div class="search-wrap" style="max-width:260px"><input type="text" class="search-input" id="bkgSearch" placeholder="Search..."></div>
-            <select class="form-control" id="bkgStatus" style="width:auto"><option value="">All statuses</option><option>confirmed</option><option>pending_payment</option><option>completed</option></select>
-          </div>
-          <div id="bkgBody"><div class="spinner"></div></div>
-        </div>
+      <div class="page-header"><div><h1 class="page-title">Consultations</h1><p class="page-subtitle">Booking requests</p></div></div>
+      <div class="card"><div class="card-header"><div class="card-title">All Bookings</div><span class="badge badge-brand" id="bkgCountBadge">0</span></div>
+        <div class="card-body"><div id="bkgTableWrap"><div class="spinner"></div></div></div>
       </div>
     </div>
 
-    <!-- ── PAYMENTS ───────────────────────────────────────── -->
-    <div class="section" id="sec-payments">
-      <div class="page-header"><div><h1 class="page-title">Payments</h1><p class="page-subtitle">All payment records across providers</p></div></div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">Payment History</div><span class="badge badge-active" id="payCount">0</span></div>
-        <div class="card-body">
-          <div class="filter-bar">
-            <div class="search-wrap" style="max-width:260px"><input type="text" class="search-input" id="paySearch" placeholder="Search email or ref..."></div>
-            <select class="form-control" id="payStatus" style="width:auto"><option value="">All</option><option>completed</option><option>pending</option><option>failed</option></select>
-            <select class="form-control" id="payProvider" style="width:auto"><option value="">All providers</option><option>paystack</option><option>stripe</option><option>paypal</option></select>
-          </div>
-          <div id="payBody"><div class="spinner"></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── ADMIN USERS ────────────────────────────────────── -->
+    <!-- ── ADMIN USERS ─────────────────────────────────────────────── -->
     <div class="section" id="sec-admins">
       <div class="page-header">
-        <div><h1 class="page-title">Admin Users</h1><p class="page-subtitle">Manage admin access</p></div>
+        <div><h1 class="page-title">Admin Users</h1></div>
         <button class="btn btn-primary" id="btnAddAdmin">+ Add Admin</button>
       </div>
-      <div class="card"><div class="card-header"><div class="card-title">Admins</div></div><div class="card-body" id="admBody"><div class="spinner"></div></div></div>
+      <div class="card"><div class="card-header"><div class="card-title">Admins</div></div><div class="card-body" id="admTableWrap"><div class="spinner"></div></div></div>
+    </div>
+
+    <!-- ── PLANS ──────────────────────────────────────────────────── -->
+    <div class="section" id="sec-plans">
+      <div class="page-header">
+        <div><h1 class="page-title">Plans & Bundles</h1></div>
+        <button class="btn btn-primary" id="btnAddPlan">+ Add Plan</button>
+      </div>
+      <div class="card"><div class="card-header"><div class="card-title">All Plans</div><span class="badge badge-brand" id="planCountBadge">0</span></div><div class="card-body" id="planTableWrap"><div class="spinner"></div></div></div>
     </div>
 
   </main>
 </div>
 
-<!-- SERVICE MODAL -->
+<!-- ═══════════════════════════════════════════════════════════════
+     SERVICE MODAL — Full schema builder
+═══════════════════════════════════════════════════════════════ -->
 <div class="modal-overlay" id="svcModal">
-  <div class="modal-box lg">
-    <div class="modal-header"><h2 class="modal-title" id="svcModalTitle">Add Service</h2><button class="modal-x" data-close="svcModal">✕</button></div>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 class="modal-title" id="svcModalTitle">New Service</h2>
+      <button class="modal-x" data-close="svcModal">✕</button>
+    </div>
+
+    <!-- Basic Info -->
     <div class="modal-body">
+      <div class="modal-section-title">Basic Information</div>
       <input type="hidden" id="svcId">
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Service Name <span class="req">*</span></label><input type="text" class="form-control" id="svcName" placeholder="Lead Generation"></div>
-        <div class="form-group"><label class="form-label">Icon (emoji)</label><input type="text" class="form-control" id="svcIcon" placeholder="🎯"></div>
+        <div class="form-group"><label class="form-label">Service Name <span class="req">*</span></label><input type="text" class="form-control" id="svcName" placeholder="Lead Scraper"></div>
+        <div class="form-group"><label class="form-label">Category</label><input type="text" class="form-control" id="svcCategory" placeholder="Lead Generation"></div>
       </div>
-      <div class="form-group"><label class="form-label">Description <span class="req">*</span></label><textarea class="form-control" id="svcDesc" rows="2"></textarea></div>
+      <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" id="svcDesc" rows="2" placeholder="Describe what this service does..."></textarea></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Price ($) <span class="req">*</span></label><input type="number" class="form-control" id="svcPrice" min="0"></div>
-        <div class="form-group"><label class="form-label">Billing Period</label><select class="form-control" id="svcPeriod"><option value="month">Monthly</option><option value="year">Yearly</option><option value="once">One-time</option></select></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Dashboard Type</label><select class="form-control" id="svcDashType"><option value="lead_generation">Lead Generation</option><option value="cloud_migration">Cloud Migration</option><option value="automation">Automation</option><option value="seo">SEO</option><option value="consultation">Consultation</option><option value="generic">Generic</option></select></div>
-        <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="svcActive"><option value="true">Active</option><option value="false">Inactive</option></select></div>
-      </div>
-      <div class="form-group"><label class="form-label">Features (one per line)</label><textarea class="form-control" id="svcFeatures" rows="4" placeholder="Real-time dashboard&#10;Lead scoring&#10;CSV export"></textarea></div>
-      <div class="form-row">
-        <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer"><input type="checkbox" id="svcFeatured"> Mark as Featured</label>
-        <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer"><input type="checkbox" id="svcIsNew"> Mark as New</label>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Sort Order <span style="font-weight:400;color:var(--text-faint)">(lower = shown first on pricing page)</span></label>
-        <input type="number" class="form-control" id="svcSortOrder" placeholder="1" min="0" style="max-width:160px">
+        <div class="form-group"><label class="form-label">Status</label>
+          <select class="form-control" id="svcStatus"><option value="inactive">Inactive (draft)</option><option value="active">Active (live)</option></select></div>
+        <div class="form-group"><label class="form-label">Icon (emoji)</label><input type="text" class="form-control" id="svcIcon" placeholder="🎯" maxlength="4"></div>
       </div>
     </div>
+
+    <!-- Pricing -->
+    <div class="modal-section">
+      <div class="modal-section-title">Pricing</div>
+      <div class="form-row-3">
+        <div class="form-group"><label class="form-label">Price ($)</label><input type="number" class="form-control" id="svcPrice" placeholder="49" min="0" step="0.01"></div>
+        <div class="form-group"><label class="form-label">Interval</label>
+          <select class="form-control" id="svcInterval"><option value="month">Monthly</option><option value="year">Yearly</option><option value="week">Weekly</option><option value="once">One-time</option></select></div>
+        <div class="form-group"><label class="form-label">Currency</label>
+          <select class="form-control" id="svcCurrency"><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option></select></div>
+      </div>
+    </div>
+
+    <!-- n8n Config -->
+    <div class="modal-section">
+      <div class="modal-section-title" style="display:flex;align-items:center;justify-content:space-between">
+        <span>n8n Workflow Configuration</span>
+        <span style="font-size:.6875rem;background:var(--danger-pale);color:var(--danger);padding:1px 6px;border-radius:20px;font-weight:700">Backend only — never exposed to users</span>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Workflow ID</label><input type="text" class="form-control" id="svcWorkflowId" placeholder="lead-scraper-v1"></div>
+        <div class="form-group"><label class="form-label">Webhook URL <span class="req">*</span></label><input type="url" class="form-control" id="svcWebhookUrl" placeholder="https://n8n.yourserver.com/webhook/..."></div>
+      </div>
+      <div class="form-hint" style="margin-top:-.5rem">⚠️ The webhook URL is stored server-side only and never sent to the browser.</div>
+    </div>
+
+    <!-- Parameters Schema Builder -->
+    <div class="modal-section">
+      <div class="schema-builder">
+        <div class="schema-header">
+          <div>
+            <div class="schema-header-title">📋 Parameters Schema</div>
+            <div class="schema-header-desc">Non-sensitive settings users fill in (website URL, keywords, etc.)</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="btnAddParam">+ Add Field</button>
+        </div>
+        <div class="schema-fields">
+          <div id="paramFieldsList"></div>
+          <div class="schema-empty" id="paramEmpty">No parameter fields yet. Click "+ Add Field" to define what data to collect from users.</div>
+          <div class="field-builder-form" id="paramBuilder">
+            <div class="field-builder-title">New Parameter Field</div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Label <span class="req">*</span></label><input type="text" class="form-control" id="pb_label" placeholder="Website URL"></div>
+              <div class="form-group"><label class="form-label">Key (no spaces) <span class="req">*</span></label><input type="text" class="form-control" id="pb_key" placeholder="websiteUrl"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Field Type</label>
+                <select class="form-control" id="pb_type">
+                  <option value="text">Text</option><option value="number">Number</option>
+                  <option value="email">Email</option><option value="url">URL</option>
+                  <option value="textarea">Textarea (long text)</option>
+                  <option value="select">Dropdown (select)</option>
+                  <option value="multi-select">Multi-select</option>
+                  <option value="checkbox">Checkbox</option><option value="toggle">Toggle (on/off)</option>
+                  <option value="date">Date</option><option value="time">Time</option>
+                  <option value="file_instruction">File upload instruction</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Placeholder</label><input type="text" class="form-control" id="pb_placeholder" placeholder="e.g. https://example.com"></div>
+            </div>
+            <div class="form-group" id="pb_optionsGroup" style="display:none"><label class="form-label">Options (one per line) <span class="req">*</span></label><textarea class="form-control" id="pb_options" rows="3" placeholder="Option 1&#10;Option 2&#10;Option 3"></textarea></div>
+            <div class="form-group"><label class="form-label">Default Value</label><input type="text" class="form-control" id="pb_default" placeholder="Leave blank if none"></div>
+            <div class="form-group"><label class="form-label">Help Text</label><input type="text" class="form-control" id="pb_help" placeholder="Shown to user below the field"></div>
+            <div style="display:flex;align-items:center;gap:1.25rem;margin-bottom:.75rem">
+              <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer"><input type="checkbox" id="pb_required"> Required</label>
+            </div>
+            <div style="display:flex;gap:.5rem;justify-content:flex-end">
+              <button class="btn btn-ghost btn-sm" id="btnCancelParam">Cancel</button>
+              <button class="btn btn-primary btn-sm" id="btnConfirmParam">Add Field</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Credentials Schema Builder -->
+    <div class="modal-section">
+      <div class="schema-builder">
+        <div class="schema-header">
+          <div>
+            <div class="schema-header-title">🔑 Credentials Schema</div>
+            <div class="schema-header-desc">Sensitive secrets users provide (API keys, passwords — stored encrypted)</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="btnAddCred">+ Add Field</button>
+        </div>
+        <div class="schema-fields">
+          <div id="credFieldsList"></div>
+          <div class="schema-empty" id="credEmpty">No credential fields yet. Click "+ Add Field" to define what secrets to collect (e.g. API keys).</div>
+          <div class="field-builder-form" id="credBuilder">
+            <div class="field-builder-title">New Credential Field</div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Label <span class="req">*</span></label><input type="text" class="form-control" id="cb_label" placeholder="Apollo API Key"></div>
+              <div class="form-group"><label class="form-label">Key (no spaces) <span class="req">*</span></label><input type="text" class="form-control" id="cb_key" placeholder="apolloApiKey"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Field Type</label>
+                <select class="form-control" id="cb_type">
+                  <option value="password">Password / API Key (masked)</option>
+                  <option value="text">Text</option><option value="url">URL</option><option value="email">Email</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">Placeholder</label><input type="text" class="form-control" id="cb_placeholder" placeholder="sk_live_..."></div>
+            </div>
+            <div class="form-group"><label class="form-label">Help Text</label><input type="text" class="form-control" id="cb_help" placeholder="Where to find this credential"></div>
+            <div style="margin-bottom:.75rem">
+              <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer"><input type="checkbox" id="cb_required" checked> Required</label>
+            </div>
+            <div style="display:flex;gap:.5rem;justify-content:flex-end">
+              <button class="btn btn-ghost btn-sm" id="btnCancelCred">Cancel</button>
+              <button class="btn btn-primary btn-sm" id="btnConfirmCred">Add Credential Field</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activation Rules -->
+    <div class="modal-section">
+      <div class="modal-section-title">Activation Rules</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Cooldown (minutes between runs)</label><input type="number" class="form-control" id="svcCooldown" placeholder="0 = no limit" min="0"></div>
+        <div class="form-group"><label class="form-label">Max runs per day</label><input type="number" class="form-control" id="svcMaxRuns" placeholder="0 = unlimited" min="0"></div>
+      </div>
+    </div>
+
+    <!-- Features list for public page -->
+    <div class="modal-section">
+      <div class="modal-section-title">Features List (shown on pricing page)</div>
+      <textarea class="form-control" id="svcFeatures" rows="4" placeholder="Real-time lead tracking&#10;CRM integration&#10;CSV export"></textarea>
+      <div class="form-hint">One feature per line</div>
+    </div>
+
     <div class="modal-footer">
-      <button class="btn btn-danger btn-sm" id="btnDelSvc" style="display:none;margin-right:auto">Delete</button>
+      <button class="btn btn-danger btn-sm" id="btnDelSvc" style="display:none;margin-right:auto">Delete Service</button>
       <button class="btn btn-ghost" data-close="svcModal">Cancel</button>
       <button class="btn btn-primary" id="btnSaveSvc">Save Service</button>
     </div>
   </div>
 </div>
 
-<!-- PLAN MODAL -->
+<!-- PLAN MODAL (lightweight) -->
 <div class="modal-overlay" id="planModal">
-  <div class="modal-box lg">
+  <div class="modal-box" style="max-width:560px">
     <div class="modal-header"><h2 class="modal-title" id="planModalTitle">Add Plan</h2><button class="modal-x" data-close="planModal">✕</button></div>
     <div class="modal-body">
       <input type="hidden" id="planId">
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Plan Name <span class="req">*</span></label><input type="text" class="form-control" id="planName" placeholder="Growth Bundle"></div>
-        <div class="form-group"><label class="form-label">Tagline</label><input type="text" class="form-control" id="planTagline" placeholder="For growing businesses"></div>
+        <div class="form-group"><label class="form-label">Plan Name <span class="req">*</span></label><input type="text" class="form-control" id="planName"></div>
+        <div class="form-group"><label class="form-label">Tagline</label><input type="text" class="form-control" id="planTagline"></div>
       </div>
       <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" id="planDesc" rows="2"></textarea></div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Monthly Price ($) <span class="req">*</span></label><input type="number" class="form-control" id="planMonthly" min="0"></div>
-        <div class="form-group"><label class="form-label">Yearly Price ($)</label><input type="number" class="form-control" id="planYearly" min="0" placeholder="Auto: 80% of monthly×12"></div>
+        <div class="form-group"><label class="form-label">Yearly Price ($)</label><input type="number" class="form-control" id="planYearly" min="0"></div>
       </div>
-      <div class="form-group"><label class="form-label">Features (one per line)</label><textarea class="form-control" id="planFeatures" rows="5" placeholder="Lead Generation&#10;Automation suite&#10;SEO service&#10;Save 20%"></textarea></div>
+      <div class="form-group"><label class="form-label">Features (one per line)</label><textarea class="form-control" id="planFeatures" rows="5"></textarea></div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="planActive"><option value="true">Active</option><option value="false">Inactive</option></select></div>
         <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer;margin-top:1.5rem"><input type="checkbox" id="planPopular"> Most Popular</label>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">CTA Button Text</label><input type="text" class="form-control" id="planCtaText" placeholder="Get Started"></div>
-        <div class="form-group"><label class="form-label">CTA Button Link</label><input type="text" class="form-control" id="planCtaLink" placeholder="./app/signup.html"></div>
+        <div class="form-group"><label class="form-label">CTA Text</label><input type="text" class="form-control" id="planCtaText" placeholder="Get Started"></div>
+        <div class="form-group"><label class="form-label">CTA Link</label><input type="text" class="form-control" id="planCtaLink" placeholder="./app/signup.html"></div>
       </div>
-      <div class="form-group">
-        <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer">
-          <input type="checkbox" id="planCustomPricing"> Custom pricing (hides price, shows "Custom" on public pages)
-        </label>
-      </div>
+      <label style="display:flex;align-items:center;gap:.375rem;font-size:.8125rem;font-weight:600;color:var(--text-mid);cursor:pointer;margin-top:.5rem"><input type="checkbox" id="planCustomPricing"> Custom pricing</label>
     </div>
     <div class="modal-footer">
       <button class="btn btn-danger btn-sm" id="btnDelPlan" style="display:none;margin-right:auto">Delete</button>
@@ -394,12 +570,21 @@
 <!-- ADD ADMIN MODAL -->
 <div class="modal-overlay" id="adminModal">
   <div class="modal-box sm">
-    <div class="modal-header"><h2 class="modal-title">Add Admin User</h2><button class="modal-x" data-close="adminModal">✕</button></div>
+    <div class="modal-header"><h2 class="modal-title">Add Admin</h2><button class="modal-x" data-close="adminModal">✕</button></div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">Firebase UID <span class="req">*</span></label><input type="text" class="form-control" id="adminUid" placeholder="Firebase Auth UID"><div class="form-hint">Find UID in Firebase Console → Authentication</div></div>
-      <div class="form-group"><label class="form-label">Display Name</label><input type="text" class="form-control" id="adminName" placeholder="Admin name"></div>
+      <div class="form-group"><label class="form-label">Firebase UID <span class="req">*</span></label><input type="text" class="form-control" id="adminUid" placeholder="Firebase Auth UID"><div class="form-hint">Found in Firebase Console → Authentication</div></div>
+      <div class="form-group"><label class="form-label">Display Name</label><input type="text" class="form-control" id="adminName"></div>
     </div>
     <div class="modal-footer"><button class="btn btn-ghost" data-close="adminModal">Cancel</button><button class="btn btn-primary" id="btnSaveAdmin">Add Admin</button></div>
+  </div>
+</div>
+
+<!-- RUN DETAIL MODAL -->
+<div class="modal-overlay" id="runModal">
+  <div class="modal-box">
+    <div class="modal-header"><h2 class="modal-title">Run Details</h2><button class="modal-x" data-close="runModal">✕</button></div>
+    <div class="modal-body" id="runModalBody"></div>
+    <div class="modal-footer"><button class="btn btn-ghost" data-close="runModal">Close</button></div>
   </div>
 </div>
 
@@ -414,25 +599,26 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 /* ── Auth guard ─────────────────────────────────────────────── */
+let currentUser = null;
 onAuthStateChanged(auth, async user => {
-  if (!user) { window.location.href="./admin-login.html"; return; }
-  const snap = await getDoc(doc(db,"Admins",user.uid));
-  if (!snap.exists()) { await signOut(auth); window.location.href="./admin-login.html"; return; }
-  const initials=(user.displayName||user.email||"A").split(/[\s@]+/).slice(0,2).map(s=>s[0]?.toUpperCase()||"").join("")||"A";
-  document.getElementById("topbarAvatar").textContent=initials;
-  document.getElementById("topbarEmail").textContent=user.email;
+  if (!user) { window.location.href = "./admin-login.html"; return; }
+  const snap = await getDoc(doc(db, "Admins", user.uid));
+  if (!snap.exists() || !snap.data().active) { await signOut(auth); window.location.href = "./admin-login.html"; return; }
+  currentUser = user;
+  const initials = (user.displayName||user.email||"A").split(/[\s@]+/).slice(0,2).map(s=>s[0]?.toUpperCase()||"").join("")||"A";
+  document.getElementById("topbarAvatar").textContent = initials;
+  document.getElementById("topbarEmail").textContent  = user.email;
   loadOverview();
 });
 document.getElementById("btnSignout").addEventListener("click", async()=>{ await signOut(auth); window.location.href="./admin-login.html"; });
 
 /* ── Toast ─────────────────────────────────────────────────── */
-function toast(title,msg,type="info"){
+function toast(title, msg, type="info") {
   const icons={success:"✅",error:"❌",warning:"⚠️",info:"ℹ️"};
-  const el=document.createElement("div");
-  el.className=`toast ${type}`;
+  const el=document.createElement("div"); el.className=`toast ${type}`;
   el.innerHTML=`<span class="toast-icon">${icons[type]}</span><div class="toast-body"><div class="toast-title">${title}</div>${msg?`<div class="toast-msg">${msg}</div>`:""}</div>`;
   document.getElementById("toastRoot").appendChild(el);
-  setTimeout(()=>{ el.style.opacity="0"; el.style.transition="opacity .25s"; setTimeout(()=>el.remove(),250); },4000);
+  setTimeout(()=>{el.style.opacity="0";el.style.transition="opacity .25s";setTimeout(()=>el.remove(),250);},4500);
 }
 
 /* ── Modals ─────────────────────────────────────────────────── */
@@ -442,155 +628,496 @@ document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",
 document.querySelectorAll(".modal-overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o)closeM(o.id)}));
 
 /* ── Sidebar nav ─────────────────────────────────────────────── */
-const loaded=new Set();
+const loaded = new Set();
 document.querySelectorAll(".nav-link[data-sec]").forEach(btn=>{
   btn.addEventListener("click",()=>{
     document.querySelectorAll(".nav-link").forEach(b=>b.classList.remove("active"));
     document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
     btn.classList.add("active");
-    const id="sec-"+btn.dataset.sec;
-    document.getElementById(id)?.classList.add("active");
+    document.getElementById("sec-"+btn.dataset.sec)?.classList.add("active");
     closeSidebar();
-    if(!loaded.has(btn.dataset.sec)){loaded.add(btn.dataset.sec);loadSection(btn.dataset.sec);}
+    if (!loaded.has(btn.dataset.sec)) { loaded.add(btn.dataset.sec); loadSection(btn.dataset.sec); }
   });
 });
-
 const sidebar=document.getElementById("sidebar");
 const overlay=document.getElementById("overlay");
 document.getElementById("hamburger").addEventListener("click",()=>{sidebar.classList.add("open");overlay.classList.add("open")});
 function closeSidebar(){sidebar.classList.remove("open");overlay.classList.remove("open")}
 overlay.addEventListener("click",closeSidebar);
 
-function loadSection(sec){
+function loadSection(sec) {
   switch(sec){
-    case"services":loadServices();break;case"plans":loadPlans();break;
-    case"consultpricing":loadCP();break;case"users":loadUsers();break;
-    case"subscriptions":loadSubs();break;case"bookings":loadBookings();break;
-    case"payments":loadPayments();break;case"admins":loadAdmins();break;
+    case"services":      loadServices(); break;
+    case"plans":         loadPlans(); break;
+    case"users":         loadUsers(); break;
+    case"subscriptions": loadSubscriptions(); break;
+    case"runs":          loadRuns(); break;
+    case"payments":      loadPayments(); break;
+    case"bookings":      loadBookings(); break;
+    case"admins":        loadAdmins(); break;
+    case"consultpricing":loadCP(); break;
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function fmt(n){return n!=null?"$"+Number(n).toLocaleString():"—";}
+function fmtDate(ts){if(!ts)return"—";const d=ts?.toDate?.()||new Date(ts);return d.toLocaleDateString("en-US",{day:"numeric",month:"short",year:"numeric"});}
+function timeAgo(ts){if(!ts)return"—";const d=ts?.toDate?.()||new Date(ts);const diff=Date.now()-d;const m=Math.floor(diff/60000);if(m<1)return"just now";if(m<60)return m+"m ago";const h=Math.floor(m/60);if(h<24)return h+"h ago";return fmtDate(ts);}
+
+/* ═════════════════════════════════════════════════════════════
    OVERVIEW
-═══════════════════════════════════════════════════════════ */
-async function loadOverview(){
-  const [u,s,p,b]=await Promise.all([
-    getDocs(collection(db,"users")),
-    getDocs(query(collection(db,"serviceActivations"),where("status","==","active"))),
-    getDocs(query(collection(db,"checkoutSessions"),where("status","==","completed"),orderBy("createdAt","desc"),limit(5))),
-    getDocs(collection(db,"consultationBookings")),
-  ]);
-  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-  set("ovUsers",u.size);set("ovSubs",s.size);set("ovBookings",b.size);
-  let rev=0;p.forEach(d=>rev+=Number(d.data().amountPaid||d.data().price||0));
-  set("ovRevenue","$"+rev.toLocaleString());
+═════════════════════════════════════════════════════════════ */
+async function loadOverview() {
+  try {
+    const [svcs,users,subs,runs]=await Promise.all([
+      getDocs(query(collection(db,"services"),where("status","==","active"))),
+      getDocs(collection(db,"users")),
+      getDocs(query(db.collectionGroup?db.collectionGroup("services"):collection(db,"users"))),
+      getDocs(query(collection(db,"workflowRuns"),orderBy("createdAt","desc"),limit(5))),
+    ]);
+    const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+    set("ovSvcs",svcs.size);
+    set("ovUsers",users.size);
 
-  const usrs=[];u.forEach(d=>usrs.push({id:d.id,...d.data()}));
-  usrs.sort((a,b2)=>(b2.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  document.getElementById("ovRecentUsers").innerHTML=usrs.slice(0,5).map(u2=>`
-    <div style="display:flex;align-items:center;gap:.625rem;padding:.375rem 0;border-bottom:1px solid var(--border)">
-      <div style="width:28px;height:28px;border-radius:50%;background:var(--brand-pale);color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.6875rem;flex-shrink:0">${(u2.displayName||u2.email||"U")[0].toUpperCase()}</div>
-      <div style="flex:1;min-width:0"><div style="font-size:.8125rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u2.displayName||"—"}</div><div style="font-size:.6875rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u2.email||"—"}</div></div>
-    </div>`).join("")||"<div class='empty'><div class='empty-text'>No users yet</div></div>";
-
-  const pays=[];p.forEach(d=>pays.push({id:d.id,...d.data()}));
-  document.getElementById("ovRecentPays").innerHTML=pays.map(pay=>`
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:.375rem 0;border-bottom:1px solid var(--border)">
-      <div><div style="font-size:.8125rem;font-weight:600">${pay.itemName||"Payment"}</div><div style="font-size:.6875rem;color:var(--text-muted)">${pay.userEmail||"—"} · ${pay.provider||"paystack"}</div></div>
-      <div style="font-family:var(--ff-d);font-weight:700;color:var(--success);font-size:.875rem">$${Number(pay.amountPaid||pay.price||0).toLocaleString()}</div>
-    </div>`).join("")||"<div class='empty'><div class='empty-text'>No payments yet</div></div>";
+    // Recent runs
+    const runArr=[];runs.forEach(d=>runArr.push({id:d.id,...d.data()}));
+    document.getElementById("ovRecentRuns").innerHTML=!runArr.length
+      ?`<div class="empty"><div class="empty-text">No runs yet</div></div>`
+      :runArr.map(r=>`<div style="display:flex;align-items:center;gap:.625rem;padding:.375rem 0;border-bottom:1px solid var(--border)">
+          <span class="badge ${r.status==="success"?"badge-active":r.status==="failed"?"badge-danger":r.status==="running"?"badge-pending":"badge-inactive"}">${r.status}</span>
+          <div style="flex:1;min-width:0"><div style="font-size:.8125rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.serviceName||r.serviceId||"—")}</div></div>
+          <div style="font-size:.6875rem;color:var(--text-faint)">${timeAgo(r.createdAt)}</div>
+        </div>`).join("");
+  } catch(e){console.error("Overview error",e);}
 }
 
-/* ═══════════════════════════════════════════════════════════
-   SERVICES
-═══════════════════════════════════════════════════════════ */
-let allSvcs=[];
-async function loadServices(){
-  const snap=await getDocs(collection(db,"services"));
-  allSvcs=[];snap.forEach(d=>allSvcs.push({id:d.id,...d.data()}));
-  document.getElementById("svcCount").textContent=allSvcs.length;
-  renderSvcs(allSvcs);
+/* ═════════════════════════════════════════════════════════════
+   SERVICES — Full Schema Builder
+═════════════════════════════════════════════════════════════ */
+let allSvcs=[], paramFields=[], credFields=[], editingParamIdx=-1, editingCredIdx=-1;
+
+async function loadServices() {
+  const wrap = document.getElementById("svcTableWrap");
+  try {
+    const snap = await getDocs(query(collection(db,"services"),orderBy("createdAt","desc")));
+    allSvcs=[]; snap.forEach(d=>allSvcs.push({id:d.id,...d.data()}));
+    document.getElementById("svcCountBadge").textContent = allSvcs.filter(s=>s.status==="active").length+" active";
+    renderSvcs(allSvcs);
+  } catch(e){ wrap.innerHTML=`<div class="empty"><div class="empty-text">Error loading services</div></div>`; }
 }
-function renderSvcs(arr){
-  const el=document.getElementById("svcBody");
-  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-icon'>🔧</div><div class='empty-title'>No services</div><div class='empty-text'>Click + Add Service to create one.</div></div>";return;}
-  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Service</th><th>Price</th><th>Dashboard</th><th>Status</th><th>Featured</th><th></th></tr></thead><tbody>${arr.map(s=>`<tr>
-    <td><div class="td-name">${s.icon||""} ${s.name||"—"}</div><div class="td-sub">${(s.description||"").substring(0,50)}...</div></td>
-    <td>$${Number(s.price||0).toLocaleString()}/${s.pricePeriod||"mo"}</td>
-    <td><span class="badge badge-brand">${s.dashboardType||"generic"}</span></td>
-    <td><span class="badge ${s.active?"badge-active":"badge-inactive"}">${s.active?"Active":"Inactive"}</span></td>
-    <td>${s.featured?"⭐":"—"}</td>
-    <td><button class="btn btn-ghost btn-sm" onclick="editSvc('${s.id}')">Edit</button></td>
+
+function renderSvcs(arr) {
+  const wrap = document.getElementById("svcTableWrap");
+  if (!arr.length) { wrap.innerHTML=`<div class="empty"><div class="empty-icon">⚙️</div><div class="empty-title">No services yet</div><p class="empty-text">Click "+ New Service" to create your first automation service.</p></div>`; return; }
+  wrap.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr>
+    <th>Service</th><th>Category</th><th>Price</th><th>Parameters</th><th>Credentials</th><th>n8n</th><th>Status</th><th></th>
+  </tr></thead><tbody>${arr.map(s=>`<tr>
+    <td><div class="td-name">${esc(s.icon||"")} ${esc(s.name)}</div><div class="td-sub">${esc((s.description||"").substring(0,50))}${s.description?.length>50?"...":""}</div></td>
+    <td>${esc(s.category||"—")}</td>
+    <td>${s.pricing?.amount?fmt(s.pricing.amount)+"/"+esc(s.pricing.interval||"mo"):"Free"}</td>
+    <td><span class="badge badge-brand">${(s.parametersSchema||[]).length} fields</span></td>
+    <td><span class="badge badge-info">${(s.credentialsSchema||[]).length} fields</span></td>
+    <td>${s.n8n?.workflowId?`<span style="font-family:monospace;font-size:.6875rem">${esc(s.n8n.workflowId)}</span>`:"<span style='color:var(--text-faint)'>Not set</span>"}</td>
+    <td><span class="badge ${s.status==="active"?"badge-active":"badge-inactive"}">${s.status}</span></td>
+    <td style="display:flex;gap:.25rem">
+      <button class="btn btn-ghost btn-sm" onclick="editSvc('${s.id}')">Edit</button>
+      <button class="btn btn-${s.status==="active"?"warning":"success"} btn-sm" onclick="toggleSvc('${s.id}','${s.status}')">${s.status==="active"?"Pause":"Activate"}</button>
+    </td>
   </tr>`).join("")}</tbody></table></div>`;
 }
-document.getElementById("btnAddService").addEventListener("click",()=>{
-  document.getElementById("svcId").value="";document.getElementById("svcModalTitle").textContent="Add Service";document.getElementById("btnDelSvc").style.display="none";
-  ["svcName","svcIcon","svcDesc","svcPrice","svcFeatures","svcSortOrder"].forEach(i=>document.getElementById(i).value="");
-  document.getElementById("svcPeriod").value="month";document.getElementById("svcDashType").value="lead_generation";document.getElementById("svcActive").value="true";
-  document.getElementById("svcFeatured").checked=false;document.getElementById("svcIsNew").checked=false;
+
+/* Schema builder UI ─────────────────────────────────────── */
+function renderSchemaFields(fields, listId, emptyId) {
+  const list  = document.getElementById(listId);
+  const empty = document.getElementById(emptyId);
+  if (!list) return;
+  if (!fields.length) { list.innerHTML=""; if(empty)empty.style.display="block"; return; }
+  if (empty) empty.style.display="none";
+  const TYPES={"text":"Text","number":"Number","email":"Email","url":"URL","password":"Password","textarea":"Textarea","select":"Dropdown","multi-select":"Multi-select","checkbox":"Checkbox","toggle":"Toggle","date":"Date","time":"Time","file_instruction":"File Instruction"};
+  const isParam = listId==="paramFieldsList";
+  list.innerHTML=fields.map((f,i)=>`
+    <div class="field-row" id="fr_${listId}_${i}">
+      <span class="field-drag">⣿</span>
+      <div class="field-info">
+        <div class="field-label-text">${esc(f.label)}</div>
+        <div class="field-meta">
+          <span class="field-type-tag">${TYPES[f.type]||f.type}</span>
+          <code style="font-size:.625rem;background:var(--bg);padding:1px 4px;border-radius:3px">${esc(f.key)}</code>
+          ${f.required?`<span class="field-tag field-tag-req">Required</span>`:""}
+          ${f.sensitive||f.type==="password"?`<span class="field-tag field-tag-sens">🔒 Encrypted</span>`:""}
+          ${f.options?.length?`<span style="color:var(--text-faint)">${f.options.length} options</span>`:""}
+          ${f.help?`<span style="color:var(--text-faint)">· ${esc(f.help.substring(0,40))}</span>`:""}
+        </div>
+      </div>
+      <div class="field-actions">
+        <button class="btn btn-ghost btn-sm" onclick="${isParam?'editParamField':'editCredField'}(${i})">Edit</button>
+        <button class="btn btn-ghost btn-sm" onclick="moveField('${listId}',${i},-1)" ${i===0?"disabled":""}>↑</button>
+        <button class="btn btn-ghost btn-sm" onclick="moveField('${listId}',${i},1)" ${i===fields.length-1?"disabled":""}>↓</button>
+        <button class="btn btn-danger btn-sm" onclick="${isParam?'delParamField':'delCredField'}(${i})">✕</button>
+      </div>
+    </div>`).join("");
+}
+
+window.moveField=function(listId,i,dir){
+  const arr=listId==="paramFieldsList"?paramFields:credFields;
+  const j=i+dir;if(j<0||j>=arr.length)return;
+  [arr[i],arr[j]]=[arr[j],arr[i]];
+  renderSchemaFields(arr,listId,listId==="paramFieldsList"?"paramEmpty":"credEmpty");
+};
+window.delParamField=function(i){if(!confirm(`Remove "${paramFields[i]?.label}"?`))return;paramFields.splice(i,1);renderSchemaFields(paramFields,"paramFieldsList","paramEmpty");};
+window.delCredField=function(i){if(!confirm(`Remove "${credFields[i]?.label}"?`))return;credFields.splice(i,1);renderSchemaFields(credFields,"credFieldsList","credEmpty");};
+
+window.editParamField=function(i){
+  const f=paramFields[i];
+  document.getElementById("pb_label").value=f.label||"";document.getElementById("pb_key").value=f.key||"";
+  document.getElementById("pb_type").value=f.type||"text";document.getElementById("pb_placeholder").value=f.placeholder||"";
+  document.getElementById("pb_default").value=f.defaultValue??"";document.getElementById("pb_help").value=f.help||"";
+  document.getElementById("pb_required").checked=!!f.required;
+  document.getElementById("pb_options").value=Array.isArray(f.options)?f.options.join("\n"):"";
+  document.getElementById("pb_optionsGroup").style.display=["select","multi-select"].includes(f.type)?"block":"none";
+  paramFields.splice(i,1);renderSchemaFields(paramFields,"paramFieldsList","paramEmpty");
+  document.getElementById("paramBuilder").classList.add("open");
+  editingParamIdx=i;
+};
+window.editCredField=function(i){
+  const f=credFields[i];
+  document.getElementById("cb_label").value=f.label||"";document.getElementById("cb_key").value=f.key||"";
+  document.getElementById("cb_type").value=f.type||"password";document.getElementById("cb_placeholder").value=f.placeholder||"";
+  document.getElementById("cb_help").value=f.help||"";document.getElementById("cb_required").checked=f.required!==false;
+  credFields.splice(i,1);renderSchemaFields(credFields,"credFieldsList","credEmpty");
+  document.getElementById("credBuilder").classList.add("open");
+};
+
+/* Auto-generate key from label */
+function labelToKey(label){ return label.toLowerCase().replace(/[^a-z0-9 ]/g,"").replace(/\s+([a-z])/g,(_,c)=>c.toUpperCase()).replace(/\s/g,""); }
+document.getElementById("pb_label")?.addEventListener("input",function(){const k=document.getElementById("pb_key");if(!k.dataset.manual)k.value=labelToKey(this.value);});
+document.getElementById("pb_key")?.addEventListener("input",function(){this.dataset.manual=this.value?"1":"";this.value=this.value.replace(/[^a-zA-Z0-9_]/g,"");});
+document.getElementById("cb_label")?.addEventListener("input",function(){const k=document.getElementById("cb_key");if(!k.dataset.manual)k.value=labelToKey(this.value);});
+document.getElementById("cb_key")?.addEventListener("input",function(){this.dataset.manual=this.value?"1":"";this.value=this.value.replace(/[^a-zA-Z0-9_]/g,"");});
+document.getElementById("pb_type")?.addEventListener("change",function(){document.getElementById("pb_optionsGroup").style.display=["select","multi-select"].includes(this.value)?"block":"none";});
+
+/* Add Param field */
+document.getElementById("btnAddParam")?.addEventListener("click",()=>{
+  document.getElementById("paramBuilder").classList.add("open");
+  ["pb_label","pb_key","pb_placeholder","pb_default","pb_help","pb_options"].forEach(id=>{const e=document.getElementById(id);if(e){e.value="";e.dataset&&(e.dataset.manual="");}});
+  document.getElementById("pb_required").checked=false;
+  document.getElementById("pb_type").value="text";
+  document.getElementById("pb_optionsGroup").style.display="none";
+  editingParamIdx=-1;
+});
+document.getElementById("btnCancelParam")?.addEventListener("click",()=>document.getElementById("paramBuilder").classList.remove("open"));
+document.getElementById("btnConfirmParam")?.addEventListener("click",()=>{
+  const label=document.getElementById("pb_label").value.trim();
+  const key  =document.getElementById("pb_key").value.trim();
+  const type =document.getElementById("pb_type").value;
+  if(!label||!key){toast("Missing","Label and Key are required.","warning");return;}
+  const existing=paramFields.some(f=>f.key===key);
+  if(existing){toast("Duplicate","A field with this key already exists.","warning");return;}
+  const opts=type==="select"||type==="multi-select"?document.getElementById("pb_options").value.split("\n").map(s=>s.trim()).filter(Boolean):[];
+  if((type==="select"||type==="multi-select")&&!opts.length){toast("Missing","Options are required for dropdown/multi-select fields.","warning");return;}
+  paramFields.push({label,key,type,placeholder:document.getElementById("pb_placeholder").value.trim(),defaultValue:document.getElementById("pb_default").value.trim()||undefined,help:document.getElementById("pb_help").value.trim(),required:document.getElementById("pb_required").checked,options:opts.length?opts:undefined});
+  renderSchemaFields(paramFields,"paramFieldsList","paramEmpty");
+  document.getElementById("paramBuilder").classList.remove("open");
+  toast("Field added",`"${label}" added to parameters.`,"success");
+});
+
+/* Add Cred field */
+document.getElementById("btnAddCred")?.addEventListener("click",()=>{
+  document.getElementById("credBuilder").classList.add("open");
+  ["cb_label","cb_key","cb_placeholder","cb_help"].forEach(id=>{const e=document.getElementById(id);if(e){e.value="";e.dataset&&(e.dataset.manual="");}});
+  document.getElementById("cb_required").checked=true;
+  document.getElementById("cb_type").value="password";
+});
+document.getElementById("btnCancelCred")?.addEventListener("click",()=>document.getElementById("credBuilder").classList.remove("open"));
+document.getElementById("btnConfirmCred")?.addEventListener("click",()=>{
+  const label=document.getElementById("cb_label").value.trim();
+  const key  =document.getElementById("cb_key").value.trim();
+  if(!label||!key){toast("Missing","Label and Key are required.","warning");return;}
+  if(credFields.some(f=>f.key===key)){toast("Duplicate","A field with this key already exists.","warning");return;}
+  credFields.push({label,key,type:document.getElementById("cb_type").value,placeholder:document.getElementById("cb_placeholder").value.trim(),help:document.getElementById("cb_help").value.trim(),required:document.getElementById("cb_required").checked,sensitive:true});
+  renderSchemaFields(credFields,"credFieldsList","credEmpty");
+  document.getElementById("credBuilder").classList.remove("open");
+  toast("Credential field added",`"${label}" added.`,"success");
+});
+
+/* Open New Service modal */
+document.getElementById("btnNewService")?.addEventListener("click",()=>{
+  document.getElementById("svcId").value="";
+  document.getElementById("svcModalTitle").textContent="New Service";
+  document.getElementById("btnDelSvc").style.display="none";
+  ["svcName","svcCategory","svcDesc","svcIcon","svcWorkflowId","svcWebhookUrl","svcFeatures","svcCooldown","svcMaxRuns"].forEach(id=>{const e=document.getElementById(id);if(e)e.value="";});
+  document.getElementById("svcPrice").value="";
+  document.getElementById("svcStatus").value="inactive";
+  document.getElementById("svcInterval").value="month";
+  document.getElementById("svcCurrency").value="USD";
+  paramFields=[]; credFields=[];
+  renderSchemaFields(paramFields,"paramFieldsList","paramEmpty");
+  renderSchemaFields(credFields,"credFieldsList","credEmpty");
+  document.getElementById("paramBuilder").classList.remove("open");
+  document.getElementById("credBuilder").classList.remove("open");
   openM("svcModal");
 });
+
 window.editSvc=function(id){
   const s=allSvcs.find(x=>x.id===id);if(!s)return;
-  document.getElementById("svcId").value=s.id;document.getElementById("svcModalTitle").textContent="Edit Service";document.getElementById("btnDelSvc").style.display="inline-flex";
-  document.getElementById("svcName").value=s.name||"";document.getElementById("svcIcon").value=s.icon||"";document.getElementById("svcDesc").value=s.description||"";
-  document.getElementById("svcPrice").value=s.price||"";document.getElementById("svcPeriod").value=s.pricePeriod||"month";
-  document.getElementById("svcDashType").value=s.dashboardType||"lead_generation";document.getElementById("svcActive").value=String(s.active!==false);
-  document.getElementById("svcFeatured").checked=!!s.featured;document.getElementById("svcIsNew").checked=!!s.isNew;
-  document.getElementById("svcSortOrder").value=s.sortOrder??"";
+  document.getElementById("svcId").value=s.id;
+  document.getElementById("svcModalTitle").textContent="Edit Service";
+  document.getElementById("btnDelSvc").style.display="inline-flex";
+  document.getElementById("svcName").value=s.name||"";
+  document.getElementById("svcCategory").value=s.category||"";
+  document.getElementById("svcDesc").value=s.description||"";
+  document.getElementById("svcIcon").value=s.icon||"";
+  document.getElementById("svcStatus").value=s.status||"inactive";
+  document.getElementById("svcPrice").value=s.pricing?.amount||"";
+  document.getElementById("svcInterval").value=s.pricing?.interval||"month";
+  document.getElementById("svcCurrency").value=s.pricing?.currency||"USD";
+  document.getElementById("svcWorkflowId").value=s.n8n?.workflowId||"";
+  document.getElementById("svcWebhookUrl").value=s.n8n?.webhookUrl||"";
+  document.getElementById("svcCooldown").value=s.activationRules?.cooldownMinutes||"";
+  document.getElementById("svcMaxRuns").value=s.activationRules?.maxRunsPerDay||"";
   document.getElementById("svcFeatures").value=Array.isArray(s.features)?s.features.join("\n"):"";
+  paramFields=JSON.parse(JSON.stringify(s.parametersSchema||[]));
+  credFields =JSON.parse(JSON.stringify(s.credentialsSchema||[]));
+  renderSchemaFields(paramFields,"paramFieldsList","paramEmpty");
+  renderSchemaFields(credFields,"credFieldsList","credEmpty");
+  document.getElementById("paramBuilder").classList.remove("open");
+  document.getElementById("credBuilder").classList.remove("open");
   openM("svcModal");
 };
-document.getElementById("btnSaveSvc").addEventListener("click",async()=>{
+
+window.toggleSvc=async function(id,status){
+  try{
+    await updateDoc(doc(db,"services",id),{status:status==="active"?"inactive":"active",updatedAt:serverTimestamp()});
+    toast("Updated","Service status changed.","success");
+    allSvcs=[]; loadServices();
+  }catch(e){toast("Error",e.message,"error");}
+};
+
+document.getElementById("btnSaveSvc")?.addEventListener("click",async()=>{
   const btn=document.getElementById("btnSaveSvc");
   const name=document.getElementById("svcName").value.trim();
-  if(!name){toast("Missing","Service name required.","warning");return;}
+  const webhookUrl=document.getElementById("svcWebhookUrl").value.trim();
+  if(!name){toast("Missing","Service name is required.","warning");return;}
+  if(!webhookUrl){toast("Missing","n8n Webhook URL is required.","warning");return;}
   btn.classList.add("loading");btn.disabled=true;
-  const payload={name,icon:document.getElementById("svcIcon").value.trim(),description:document.getElementById("svcDesc").value.trim(),
-    price:Number(document.getElementById("svcPrice").value)||0,pricePeriod:document.getElementById("svcPeriod").value,
-    dashboardType:document.getElementById("svcDashType").value,active:document.getElementById("svcActive").value==="true",
-    featured:document.getElementById("svcFeatured").checked,isNew:document.getElementById("svcIsNew").checked,
-    features:document.getElementById("svcFeatures").value.split("\n").map(s=>s.trim()).filter(Boolean),sortOrder:Number(document.getElementById("svcSortOrder").value)||99,updatedAt:serverTimestamp()};
+  const payload={
+    name, description:document.getElementById("svcDesc").value.trim(),
+    category:document.getElementById("svcCategory").value.trim()||"General",
+    icon:document.getElementById("svcIcon").value.trim(),
+    status:document.getElementById("svcStatus").value,
+    parametersSchema:paramFields,
+    credentialsSchema:credFields,
+    n8n:{workflowId:document.getElementById("svcWorkflowId").value.trim(),webhookUrl},
+    pricing:{
+      type:"subscription",
+      amount:Number(document.getElementById("svcPrice").value)||0,
+      interval:document.getElementById("svcInterval").value,
+      currency:document.getElementById("svcCurrency").value,
+    },
+    activationRules:{
+      cooldownMinutes:Number(document.getElementById("svcCooldown").value)||null,
+      maxRunsPerDay:Number(document.getElementById("svcMaxRuns").value)||null,
+    },
+    features:document.getElementById("svcFeatures").value.split("\n").map(s=>s.trim()).filter(Boolean),
+    updatedAt:serverTimestamp(),
+  };
   try{
     const id=document.getElementById("svcId").value;
-    if(id)await updateDoc(doc(db,"services",id),payload);
-    else{payload.createdAt=serverTimestamp();await addDoc(collection(db,"services"),payload);}
-    closeM("svcModal");toast("Saved!","Service saved.","success");
-    allSvcs=[];loadServices();
+    if(id) await updateDoc(doc(db,"services",id),payload);
+    else   {payload.createdAt=serverTimestamp();await addDoc(collection(db,"services"),payload);}
+    closeM("svcModal");toast("Saved!","Service saved successfully.","success");
+    allSvcs=[]; loadServices();
   }catch(e){toast("Error",e.message,"error");}
   finally{btn.classList.remove("loading");btn.disabled=false;}
 });
-document.getElementById("btnDelSvc").addEventListener("click",async()=>{
+
+document.getElementById("btnDelSvc")?.addEventListener("click",async()=>{
   const id=document.getElementById("svcId").value;
-  if(!id||!confirm("Delete this service?"))return;
-  try{await deleteDoc(doc(db,"services",id));closeM("svcModal");toast("Deleted","","success");allSvcs=[];loadServices();}catch(e){toast("Error",e.message,"error");}
+  if(!id||!confirm("Delete this service? This cannot be undone."))return;
+  try{await updateDoc(doc(db,"services",id),{status:"deleted",deleted:true,updatedAt:serverTimestamp()});closeM("svcModal");toast("Deleted","Service deleted.","success");allSvcs=[];loadServices();}
+  catch(e){toast("Error",e.message,"error");}
 });
 
-/* ═══════════════════════════════════════════════════════════
+/* Search + filter */
+document.getElementById("svcSearch")?.addEventListener("input",function(){const q=this.value.toLowerCase();renderSvcs(allSvcs.filter(s=>(s.name||"").toLowerCase().includes(q)||(s.category||"").toLowerCase().includes(q)));});
+document.getElementById("svcStatusFilter")?.addEventListener("change",function(){renderSvcs(this.value?allSvcs.filter(s=>s.status===this.value):allSvcs);});
+
+/* ═════════════════════════════════════════════════════════════
+   USERS
+═════════════════════════════════════════════════════════════ */
+let allUsers=[];
+async function loadUsers(){
+  const snap=await getDocs(collection(db,"users"));
+  allUsers=[]; snap.forEach(d=>allUsers.push({id:d.id,...d.data()}));
+  document.getElementById("usrCountBadge").textContent=allUsers.length;
+  renderUsers(allUsers);
+}
+function renderUsers(arr){
+  const wrap=document.getElementById("usrTableWrap");
+  if(!arr.length){wrap.innerHTML=`<div class="empty"><div class="empty-text">No users yet</div></div>`;return;}
+  wrap.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>User</th><th>Company</th><th>Industry</th><th>Joined</th></tr></thead><tbody>${arr.map(u=>`<tr>
+    <td><div class="td-name">${esc(u.displayName||"—")}</div><div class="td-sub">${esc(u.email||"—")}</div></td>
+    <td>${esc(u.company||"—")}</td><td>${esc(u.industry||"—")}</td>
+    <td style="font-size:.75rem;color:var(--text-muted)">${fmtDate(u.createdAt)}</td>
+  </tr>`).join("")}</tbody></table></div>`;
+}
+document.getElementById("usrSearch")?.addEventListener("input",function(){const q=this.value.toLowerCase();renderUsers(allUsers.filter(u=>(u.displayName||"").toLowerCase().includes(q)||(u.email||"").toLowerCase().includes(q)));});
+
+/* ═════════════════════════════════════════════════════════════
+   SUBSCRIPTIONS (collectionGroup query on users/*/services)
+═════════════════════════════════════════════════════════════ */
+let allSubs=[];
+async function loadSubscriptions(){
+  try{
+    const snap=await getDocs(query(collection(db,"subscriptions"),orderBy("createdAt","desc"),limit(100)));
+    allSubs=[]; snap.forEach(d=>allSubs.push({id:d.id,...d.data()}));
+    const active=allSubs.filter(s=>s.status==="active").length;
+    document.getElementById("subCountBadge").textContent=active+" active";
+    renderSubs(allSubs);
+  }catch(e){document.getElementById("subTableWrap").innerHTML=`<div class="empty"><div class="empty-text">Error: ${esc(e.message)}</div></div>`;}
+}
+function renderSubs(arr){
+  const wrap=document.getElementById("subTableWrap");
+  if(!arr.length){wrap.innerHTML=`<div class="empty"><div class="empty-text">No subscriptions yet</div></div>`;return;}
+  wrap.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>User</th><th>Service</th><th>Provider</th><th>Status</th><th>Started</th><th>Expires</th></tr></thead><tbody>${arr.map(s=>`<tr>
+    <td style="font-size:.75rem;color:var(--text-muted)">${esc(s.userId?.substring(0,16)||"—")}</td>
+    <td>${esc(s.serviceId||"—")}</td>
+    <td><span class="badge badge-brand" style="text-transform:capitalize">${esc(s.provider||"—")}</span></td>
+    <td><span class="badge ${s.status==="active"?"badge-active":s.status==="cancelled"?"badge-inactive":"badge-pending"}">${esc(s.status)}</span></td>
+    <td style="font-size:.75rem;color:var(--text-muted)">${fmtDate(s.currentPeriodStart||s.createdAt)}</td>
+    <td style="font-size:.75rem;color:var(--text-muted)">${fmtDate(s.currentPeriodEnd||s.subscriptionExpiresAt)}</td>
+  </tr>`).join("")}</tbody></table></div>`;
+}
+
+/* ═════════════════════════════════════════════════════════════
+   WORKFLOW RUNS
+═════════════════════════════════════════════════════════════ */
+let allRuns=[];
+async function loadRuns(){
+  try{
+    const snap=await getDocs(query(collection(db,"workflowRuns"),orderBy("createdAt","desc"),limit(100)));
+    allRuns=[]; snap.forEach(d=>allRuns.push({id:d.id,...d.data()}));
+    document.getElementById("runCountBadge").textContent=allRuns.length;
+    renderRuns(allRuns);
+  }catch(e){document.getElementById("runTableWrap").innerHTML=`<div class="empty"><div class="empty-text">Error: ${esc(e.message)}</div></div>`;}
+}
+function renderRuns(arr){
+  const wrap=document.getElementById("runTableWrap");
+  if(!arr.length){wrap.innerHTML=`<div class="empty"><div class="empty-text">No workflow runs yet</div></div>`;return;}
+  wrap.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Run ID</th><th>Service</th><th>User</th><th>Status</th><th>Started</th><th>Duration</th><th></th></tr></thead><tbody>${arr.map(r=>{
+    let dur="—";
+    if(r.startedAt&&r.completedAt){const s=r.startedAt?.toDate?.();const e=r.completedAt?.toDate?.();if(s&&e){const ms=e-s;dur=ms<1000?ms+"ms":Math.round(ms/1000)+"s";}}
+    return`<tr>
+      <td style="font-family:monospace;font-size:.6875rem">${esc((r.runId||r.id).substring(0,20))}</td>
+      <td><div class="td-name">${esc(r.serviceName||r.serviceId||"—")}</div></td>
+      <td style="font-size:.6875rem;color:var(--text-muted)">${esc((r.userId||"").substring(0,16))}</td>
+      <td><span class="badge ${r.status==="success"?"badge-active":r.status==="failed"?"badge-danger":r.status==="running"?"badge-pending":"badge-inactive"}">${esc(r.status)}</span></td>
+      <td style="font-size:.75rem;color:var(--text-muted)">${timeAgo(r.createdAt)}</td>
+      <td style="font-size:.75rem">${dur}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="viewRun('${r.id}')">View</button></td>
+    </tr>`;}).join("")}</tbody></table></div>`;
+}
+window.viewRun=function(id){
+  const r=allRuns.find(x=>x.id===id);if(!r)return;
+  document.getElementById("runModalBody").innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem">
+      ${[["Run ID",r.runId||r.id],["Service",r.serviceName||r.serviceId],["User ID",r.userId],["Status",r.status],["Started",fmtDate(r.startedAt)],["Completed",fmtDate(r.completedAt)]]
+        .map(([l,v])=>`<div><div style="font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:2px">${l}</div><div style="font-size:.875rem;font-weight:600">${esc(String(v||"—"))}</div></div>`).join("")}
+    </div>
+    ${r.input?`<div style="margin-bottom:1rem"><div class="modal-section-title">Input</div><pre style="background:var(--bg);border-radius:var(--r);padding:.875rem;font-size:.75rem;overflow-x:auto;white-space:pre-wrap">${esc(JSON.stringify(r.input,null,2))}</pre></div>`:""}
+    ${r.output?`<div style="margin-bottom:1rem"><div class="modal-section-title">Output</div><pre style="background:var(--success-pale);border-radius:var(--r);padding:.875rem;font-size:.75rem;overflow-x:auto;white-space:pre-wrap">${esc(JSON.stringify(r.output,null,2))}</pre></div>`:""}
+    ${r.error?`<div><div class="modal-section-title">Error</div><pre style="background:var(--danger-pale);border-radius:var(--r);padding:.875rem;font-size:.75rem;overflow-x:auto;white-space:pre-wrap;color:var(--danger)">${esc(JSON.stringify(r.error,null,2))}</pre></div>`:""}`;
+  openM("runModal");
+};
+document.getElementById("runSearch")?.addEventListener("input",function(){const q=this.value.toLowerCase();renderRuns(allRuns.filter(r=>(r.runId||r.id||"").toLowerCase().includes(q)||(r.serviceId||"").toLowerCase().includes(q)||(r.userId||"").toLowerCase().includes(q)));});
+document.getElementById("runStatusFilter")?.addEventListener("change",function(){renderRuns(this.value?allRuns.filter(r=>r.status===this.value):allRuns);});
+
+/* ═════════════════════════════════════════════════════════════
+   PAYMENTS
+═════════════════════════════════════════════════════════════ */
+let allPays=[];
+async function loadPayments(){
+  const snap=await getDocs(query(collection(db,"checkoutSessions"),orderBy("createdAt","desc"),limit(100)));
+  allPays=[]; snap.forEach(d=>allPays.push({id:d.id,...d.data()}));
+  document.getElementById("payCountBadge").textContent=allPays.filter(p=>p.status==="completed").length+" completed";
+  renderPays(allPays);
+}
+function renderPays(arr){
+  const wrap=document.getElementById("payTableWrap");
+  if(!arr.length){wrap.innerHTML=`<div class="empty"><div class="empty-text">No payments yet</div></div>`;return;}
+  wrap.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>User</th><th>Service</th><th>Amount</th><th>Provider</th><th>Status</th><th>Date</th></tr></thead><tbody>${arr.map(p=>`<tr>
+    <td style="font-size:.75rem;color:var(--text-muted)">${esc(p.userId?.substring(0,16)||"—")}</td>
+    <td>${esc(p.serviceId||"—")}</td>
+    <td style="font-weight:700">${p.amount?fmt(p.amount):"—"}</td>
+    <td><span class="badge badge-brand" style="text-transform:capitalize">${esc(p.provider||"—")}</span></td>
+    <td><span class="badge ${p.status==="completed"?"badge-active":p.status==="pending"?"badge-pending":"badge-danger"}">${esc(p.status||"pending")}</span></td>
+    <td style="font-size:.75rem;color:var(--text-muted)">${fmtDate(p.createdAt)}</td>
+  </tr>`).join("")}</tbody></table></div>`;
+}
+document.getElementById("paySearch")?.addEventListener("input",function(){const q=this.value.toLowerCase();renderPays(allPays.filter(p=>(p.userId||"").toLowerCase().includes(q)));});
+document.getElementById("payProviderFilter")?.addEventListener("change",function(){renderPays(this.value?allPays.filter(p=>p.provider===this.value):allPays);});
+
+/* ═════════════════════════════════════════════════════════════
+   BOOKINGS
+═════════════════════════════════════════════════════════════ */
+let allBkgs=[];
+async function loadBookings(){
+  const snap=await getDocs(query(collection(db,"consultationBookings"),orderBy("createdAt","desc")));
+  allBkgs=[]; snap.forEach(d=>allBkgs.push({id:d.id,...d.data()}));
+  document.getElementById("bkgCountBadge").textContent=allBkgs.length;
+  const wrap=document.getElementById("bkgTableWrap");
+  if(!allBkgs.length){wrap.innerHTML=`<div class="empty"><div class="empty-text">No bookings yet</div></div>`;return;}
+  wrap.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Customer</th><th>Session</th><th>Fee</th><th>Preferred Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${allBkgs.map(b=>`<tr>
+    <td><div class="td-name">${esc(b.userName||"—")}</div><div class="td-sub">${esc(b.userEmail||"—")}</div></td>
+    <td>${b.sessionType==="paid"?"💼 Strategy":"📞 Discovery"}</td>
+    <td>${b.price>0?fmt(b.price):"Free"}</td>
+    <td style="font-size:.75rem;color:var(--text-muted)">${b.preferredDate?new Date(b.preferredDate).toLocaleString():"—"}</td>
+    <td><span class="badge ${b.status==="confirmed"?"badge-active":b.status==="completed"?"badge-info":"badge-pending"}">${esc(b.status||"pending")}</span></td>
+    <td style="display:flex;gap:.25rem">
+      ${b.status==="confirmed"?`<button class="btn btn-success btn-sm" onclick="completeBkg('${b.id}')">✓ Done</button>`:""}
+      ${b.status==="pending_payment"?`<button class="btn btn-ghost btn-sm" onclick="confirmBkg('${b.id}')">Confirm</button>`:""}
+    </td>
+  </tr>`).join("")}</tbody></table></div>`;
+}
+window.completeBkg=async function(id){try{await updateDoc(doc(db,"consultationBookings",id),{status:"completed",completedAt:serverTimestamp()});toast("Done","","success");allBkgs=[];loadBookings();}catch(e){toast("Error",e.message,"error");}};
+window.confirmBkg=async function(id){try{await updateDoc(doc(db,"consultationBookings",id),{status:"confirmed",confirmedAt:serverTimestamp()});toast("Done","","success");allBkgs=[];loadBookings();}catch(e){toast("Error",e.message,"error");}};
+
+/* ═════════════════════════════════════════════════════════════
+   CONSULTATION PRICING
+═════════════════════════════════════════════════════════════ */
+async function loadCP(){
+  try{const snap=await getDocs(collection(db,"consultationPricing"));snap.forEach(d=>{const dt=d.data();if(dt.type==="paid"){document.getElementById("cpPaidPrice").value=dt.price||"";document.getElementById("cpDuration").value=dt.duration||"";document.getElementById("cpIncludes").value=Array.isArray(dt.includes)?dt.includes.join("\n"):(dt.includes||"");}});}catch(e){}
+}
+document.getElementById("btnSaveCP")?.addEventListener("click",async()=>{
+  const btn=document.getElementById("btnSaveCP");btn.classList.add("loading");btn.disabled=true;
+  try{
+    await setDoc(doc(db,"consultationPricing","paid"),{type:"paid",price:Number(document.getElementById("cpPaidPrice").value)||0,duration:document.getElementById("cpDuration").value.trim()||"60 minutes",includes:document.getElementById("cpIncludes").value.split("\n").map(s=>s.trim()).filter(Boolean),updatedAt:serverTimestamp()});
+    await setDoc(doc(db,"consultationPricing","free"),{type:"free",price:0,updatedAt:serverTimestamp()});
+    toast("Saved!","","success");
+  }catch(e){toast("Error",e.message,"error");}
+  finally{btn.classList.remove("loading");btn.disabled=false;}
+});
+
+/* ═════════════════════════════════════════════════════════════
    PLANS
-═══════════════════════════════════════════════════════════ */
+═════════════════════════════════════════════════════════════ */
 let allPlans=[];
 async function loadPlans(){
   const snap=await getDocs(collection(db,"plans"));
-  allPlans=[];snap.forEach(d=>allPlans.push({id:d.id,...d.data()}));
-  document.getElementById("planCount").textContent=allPlans.length;
-  renderPlans(allPlans);
-}
-function renderPlans(arr){
-  const el=document.getElementById("planBody");
-  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-icon'>📦</div><div class='empty-title'>No plans</div></div>";return;}
-  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Plan</th><th>Monthly</th><th>Yearly</th><th>Popular</th><th>Status</th><th></th></tr></thead><tbody>${arr.map(p=>`<tr>
-    <td><div class="td-name">${p.name||"—"}</div><div class="td-sub">${p.tagline||""}</div></td>
-    <td>$${Number(p.priceMonthly||0).toLocaleString()}</td>
-    <td>$${Number(p.priceYearly||0).toLocaleString()}</td>
-    <td>${p.popular?"⭐ Yes":"—"}</td>
+  allPlans=[]; snap.forEach(d=>allPlans.push({id:d.id,...d.data()}));
+  document.getElementById("planCountBadge").textContent=allPlans.length;
+  const wrap=document.getElementById("planTableWrap");
+  if(!allPlans.length){wrap.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-title">No plans</div></div>`;return;}
+  wrap.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Plan</th><th>Monthly</th><th>Popular</th><th>Status</th><th></th></tr></thead><tbody>${allPlans.map(p=>`<tr>
+    <td><div class="td-name">${esc(p.name||"—")}</div><div class="td-sub">${esc(p.tagline||"")}</div></td>
+    <td>${fmt(p.priceMonthly)}</td><td>${p.popular?"⭐ Yes":"—"}</td>
     <td><span class="badge ${p.active?"badge-active":"badge-inactive"}">${p.active?"Active":"Inactive"}</span></td>
     <td><button class="btn btn-ghost btn-sm" onclick="editPlan('${p.id}')">Edit</button></td>
   </tr>`).join("")}</tbody></table></div>`;
 }
-document.getElementById("btnAddPlan").addEventListener("click",()=>{
+document.getElementById("btnAddPlan")?.addEventListener("click",()=>{
   document.getElementById("planId").value="";document.getElementById("planModalTitle").textContent="Add Plan";document.getElementById("btnDelPlan").style.display="none";
-  ["planName","planTagline","planDesc","planMonthly","planYearly","planFeatures","planCtaText","planCtaLink"].forEach(i=>document.getElementById(i).value="");
+  ["planName","planTagline","planDesc","planMonthly","planYearly","planFeatures","planCtaText","planCtaLink"].forEach(id=>document.getElementById(id).value="");
   document.getElementById("planActive").value="true";document.getElementById("planPopular").checked=false;document.getElementById("planCustomPricing").checked=false;
   openM("planModal");
 });
@@ -605,187 +1132,41 @@ window.editPlan=function(id){
   document.getElementById("planFeatures").value=Array.isArray(p.features)?p.features.join("\n"):"";
   openM("planModal");
 };
-document.getElementById("btnSavePlan").addEventListener("click",async()=>{
+document.getElementById("btnSavePlan")?.addEventListener("click",async()=>{
   const btn=document.getElementById("btnSavePlan");const name=document.getElementById("planName").value.trim();
   if(!name){toast("Missing","Plan name required.","warning");return;}
   btn.classList.add("loading");btn.disabled=true;
   const m=Number(document.getElementById("planMonthly").value)||0;
-  const payload={name,tagline:document.getElementById("planTagline").value.trim(),description:document.getElementById("planDesc").value.trim(),
-    priceMonthly:m,priceYearly:Number(document.getElementById("planYearly").value)||Math.round(m*12*0.8),
-    active:document.getElementById("planActive").value==="true",popular:document.getElementById("planPopular").checked,
-    customPricing:document.getElementById("planCustomPricing").checked,
-    ctaText:document.getElementById("planCtaText").value.trim()||null,
-    ctaLink:document.getElementById("planCtaLink").value.trim()||null,
-    features:document.getElementById("planFeatures").value.split("\n").map(s=>s.trim()).filter(Boolean),updatedAt:serverTimestamp()};
-  try{
-    const id=document.getElementById("planId").value;
-    if(id)await updateDoc(doc(db,"plans",id),payload);
-    else{payload.createdAt=serverTimestamp();await addDoc(collection(db,"plans"),payload);}
-    closeM("planModal");toast("Saved!","Plan saved.","success");allPlans=[];loadPlans();
-  }catch(e){toast("Error",e.message,"error");}
-  finally{btn.classList.remove("loading");btn.disabled=false;}
+  const payload={name,tagline:document.getElementById("planTagline").value.trim(),description:document.getElementById("planDesc").value.trim(),priceMonthly:m,priceYearly:Number(document.getElementById("planYearly").value)||Math.round(m*12*0.8),active:document.getElementById("planActive").value==="true",popular:document.getElementById("planPopular").checked,customPricing:document.getElementById("planCustomPricing").checked,ctaText:document.getElementById("planCtaText").value.trim()||null,ctaLink:document.getElementById("planCtaLink").value.trim()||null,features:document.getElementById("planFeatures").value.split("\n").map(s=>s.trim()).filter(Boolean),updatedAt:serverTimestamp()};
+  try{const id=document.getElementById("planId").value;if(id)await updateDoc(doc(db,"plans",id),payload);else{payload.createdAt=serverTimestamp();await addDoc(collection(db,"plans"),payload);}closeM("planModal");toast("Saved!","","success");allPlans=[];loadPlans();}
+  catch(e){toast("Error",e.message,"error");}finally{btn.classList.remove("loading");btn.disabled=false;}
 });
-document.getElementById("btnDelPlan").addEventListener("click",async()=>{
-  const id=document.getElementById("planId").value;
-  if(!id||!confirm("Delete this plan?"))return;
-  try{await deleteDoc(doc(db,"plans",id));closeM("planModal");toast("Deleted","","success");allPlans=[];loadPlans();}catch(e){toast("Error",e.message,"error");}
-});
+document.getElementById("btnDelPlan")?.addEventListener("click",async()=>{const id=document.getElementById("planId").value;if(!id||!confirm("Delete?"))return;try{await deleteDoc(doc(db,"plans",id));closeM("planModal");toast("Deleted","","success");allPlans=[];loadPlans();}catch(e){toast("Error",e.message,"error");}});
 
-/* ═══════════════════════════════════════════════════════════
-   CONSULTATION PRICING
-═══════════════════════════════════════════════════════════ */
-async function loadCP(){
-  try{
-    const snap=await getDocs(collection(db,"consultationPricing"));
-    snap.forEach(d=>{const dt=d.data();if(dt.type==="paid"){document.getElementById("cpPaidPrice").value=dt.price||"";document.getElementById("cpDuration").value=dt.duration||"";document.getElementById("cpIncludes").value=Array.isArray(dt.includes)?dt.includes.join("\n"):(dt.includes||"");}});
-  }catch(e){}
-}
-document.getElementById("btnSaveCP").addEventListener("click",async()=>{
-  const btn=document.getElementById("btnSaveCP");btn.classList.add("loading");btn.disabled=true;
-  try{
-    await setDoc(doc(db,"consultationPricing","paid"),{type:"paid",price:Number(document.getElementById("cpPaidPrice").value)||0,duration:document.getElementById("cpDuration").value.trim()||"60 minutes",includes:document.getElementById("cpIncludes").value.split("\n").map(s=>s.trim()).filter(Boolean),updatedAt:serverTimestamp()});
-    await setDoc(doc(db,"consultationPricing","free"),{type:"free",price:0,updatedAt:serverTimestamp()});
-    toast("Saved!","Consultation pricing updated.","success");
-  }catch(e){toast("Error",e.message,"error");}
-  finally{btn.classList.remove("loading");btn.disabled=false;}
-});
-
-/* ═══════════════════════════════════════════════════════════
-   USERS
-═══════════════════════════════════════════════════════════ */
-let allUsrs=[];
-async function loadUsers(){
-  const snap=await getDocs(collection(db,"users"));
-  allUsrs=[];snap.forEach(d=>allUsrs.push({id:d.id,...d.data()}));
-  document.getElementById("usrCount").textContent=allUsrs.length;renderUsrs(allUsrs);
-}
-function renderUsrs(arr){
-  const el=document.getElementById("usrBody");
-  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-text'>No users yet</div></div>";return;}
-  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>User</th><th>Company</th><th>Industry</th><th>Joined</th></tr></thead><tbody>${arr.map(u=>`<tr>
-    <td><div class="td-name">${u.displayName||"—"}</div><div class="td-sub">${u.email||"—"}</div></td>
-    <td>${u.company||"—"}</td><td>${u.industry||"—"}</td>
-    <td style="font-size:.75rem;color:var(--text-muted)">${u.createdAt?.toDate?.().toLocaleDateString()||"—"}</td>
-  </tr>`).join("")}</tbody></table></div>`;
-}
-document.getElementById("usrSearch")?.addEventListener("input",function(){
-  const q=this.value.toLowerCase();renderUsrs(allUsrs.filter(u=>(u.displayName||"").toLowerCase().includes(q)||(u.email||"").toLowerCase().includes(q)));
-});
-
-/* ═══════════════════════════════════════════════════════════
-   SUBSCRIPTIONS
-═══════════════════════════════════════════════════════════ */
-let allSubs=[];
-async function loadSubs(){
-  const snap=await getDocs(collection(db,"serviceActivations"));
-  allSubs=[];snap.forEach(d=>allSubs.push({id:d.id,...d.data()}));
-  const active=allSubs.filter(s=>s.status==="active").length;
-  document.getElementById("subCount").textContent=active+" active";renderSubTable(allSubs);
-}
-function renderSubTable(arr){
-  const el=document.getElementById("subBody");
-  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-text'>No subscriptions yet</div></div>";return;}
-  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>User</th><th>Service</th><th>Price</th><th>Provider</th><th>Status</th><th>Since</th><th></th></tr></thead><tbody>${arr.map(s=>`<tr>
-    <td style="font-size:.75rem;color:var(--text-muted)">${s.userId||"—"}</td>
-    <td><div class="td-name">${s.serviceName||"—"}</div></td>
-    <td>$${Number(s.price||0).toLocaleString()}/${s.billing||"mo"}</td>
-    <td><span class="badge badge-brand" style="text-transform:capitalize">${s.provider||"paystack"}</span></td>
-    <td><span class="badge ${s.status==="active"?"badge-active":s.status==="canceled"?"badge-inactive":"badge-pending"}">${s.status||"active"}</span></td>
-    <td style="font-size:.75rem;color:var(--text-muted)">${s.createdAt?.toDate?.().toLocaleDateString()||"—"}</td>
-    <td>${s.status==="active"?`<button class="btn btn-danger btn-sm" onclick="cancelSub('${s.id}')">Cancel</button>`:""}</td>
-  </tr>`).join("")}</tbody></table></div>`;
-}
-window.cancelSub=async function(id){
-  if(!confirm("Cancel this subscription?"))return;
-  try{await updateDoc(doc(db,"serviceActivations",id),{status:"canceled",canceledAt:serverTimestamp()});toast("Done","Subscription canceled.","success");allSubs=[];loadSubs();}
-  catch(e){toast("Error",e.message,"error");}
-};
-document.getElementById("subSearch")?.addEventListener("input",function(){const q=this.value.toLowerCase();renderSubTable(allSubs.filter(s=>(s.serviceName||"").toLowerCase().includes(q)||(s.userId||"").toLowerCase().includes(q)));});
-document.getElementById("subStatus")?.addEventListener("change",function(){renderSubTable(this.value?allSubs.filter(s=>s.status===this.value):allSubs);});
-
-/* ═══════════════════════════════════════════════════════════
-   BOOKINGS
-═══════════════════════════════════════════════════════════ */
-let allBkgs=[];
-async function loadBookings(){
-  const snap=await getDocs(query(collection(db,"consultationBookings"),orderBy("createdAt","desc")));
-  allBkgs=[];snap.forEach(d=>allBkgs.push({id:d.id,...d.data()}));
-  document.getElementById("bkgCount").textContent=allBkgs.length;renderBkgs(allBkgs);
-}
-function renderBkgs(arr){
-  const el=document.getElementById("bkgBody");
-  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-text'>No bookings yet</div></div>";return;}
-  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Customer</th><th>Session</th><th>Fee</th><th>Preferred Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${arr.map(b=>`<tr>
-    <td><div class="td-name">${b.userName||"—"}</div><div class="td-sub">${b.userEmail||"—"}</div></td>
-    <td>${b.sessionType==="paid"?"💼 Strategy":"📞 Discovery"}</td>
-    <td>${b.price>0?"$"+Number(b.price).toLocaleString():"Free"}</td>
-    <td style="font-size:.75rem;color:var(--text-muted)">${b.preferredDate?new Date(b.preferredDate).toLocaleString():"—"}</td>
-    <td><span class="badge ${b.status==="confirmed"?"badge-active":b.status==="completed"?"badge-info":b.status==="pending_payment"?"badge-pending":"badge-inactive"}">${b.status||"pending"}</span></td>
-    <td style="display:flex;gap:.25rem">
-      ${b.status==="confirmed"?`<button class="btn btn-success btn-sm" onclick="completeBkg('${b.id}')">✓ Done</button>`:""}
-      ${b.status==="pending_payment"?`<button class="btn btn-ghost btn-sm" onclick="confirmBkg('${b.id}')">Confirm</button>`:""}
-    </td>
-  </tr>`).join("")}</tbody></table></div>`;
-}
-window.completeBkg=async function(id){try{await updateDoc(doc(db,"consultationBookings",id),{status:"completed",completedAt:serverTimestamp()});toast("Done","Marked complete.","success");allBkgs=[];loadBookings();}catch(e){toast("Error",e.message,"error");}};
-window.confirmBkg=async function(id){try{await updateDoc(doc(db,"consultationBookings",id),{status:"confirmed",confirmedAt:serverTimestamp()});toast("Done","Booking confirmed.","success");allBkgs=[];loadBookings();}catch(e){toast("Error",e.message,"error");}};
-document.getElementById("bkgSearch")?.addEventListener("input",function(){const q=this.value.toLowerCase();renderBkgs(allBkgs.filter(b=>(b.userName||"").toLowerCase().includes(q)||(b.userEmail||"").toLowerCase().includes(q)));});
-document.getElementById("bkgStatus")?.addEventListener("change",function(){renderBkgs(this.value?allBkgs.filter(b=>b.status===this.value):allBkgs);});
-
-/* ═══════════════════════════════════════════════════════════
-   PAYMENTS
-═══════════════════════════════════════════════════════════ */
-let allPays=[];
-async function loadPayments(){
-  const snap=await getDocs(query(collection(db,"checkoutSessions"),orderBy("createdAt","desc")));
-  allPays=[];snap.forEach(d=>allPays.push({id:d.id,...d.data()}));
-  const comp=allPays.filter(p=>p.status==="completed").length;
-  document.getElementById("payCount").textContent=comp+" completed";renderPays(allPays);
-}
-function renderPays(arr){
-  const el=document.getElementById("payBody");
-  if(!arr.length){el.innerHTML="<div class='empty'><div class='empty-text'>No payments yet</div></div>";return;}
-  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Customer</th><th>Item</th><th>Amount</th><th>Provider</th><th>Reference</th><th>Status</th><th>Date</th></tr></thead><tbody>${arr.map(p=>`<tr>
-    <td style="font-size:.75rem;color:var(--text-muted)">${p.userEmail||"—"}</td>
-    <td><div class="td-name">${p.itemName||"—"}</div><div class="td-sub">${p.itemType||""}</div></td>
-    <td style="font-weight:700;color:var(--success)>$${Number(p.amountPaid||p.price||0).toLocaleString()}</td>
-    <td><span class="badge badge-brand" style="text-transform:capitalize">${p.provider||"paystack"}</span></td>
-    <td style="font-family:monospace;font-size:.6875rem;color:var(--text-muted)">${(p.paystackReference||p.stripePaymentId||p.paypalOrderId||"—").substring(0,18)}</td>
-    <td><span class="badge ${p.status==="completed"?"badge-active":p.status==="failed"?"badge-danger":"badge-pending"}">${p.status||"pending"}</span></td>
-    <td style="font-size:.6875rem;color:var(--text-muted)">${p.createdAt?.toDate?.().toLocaleDateString()||"—"}</td>
-  </tr>`).join("")}</tbody></table></div>`;
-}
-document.getElementById("paySearch")?.addEventListener("input",function(){const q=this.value.toLowerCase();renderPays(allPays.filter(p=>(p.userEmail||"").toLowerCase().includes(q)||(p.paystackReference||p.stripePaymentId||"").toLowerCase().includes(q)));});
-document.getElementById("payStatus")?.addEventListener("change",function(){renderPays(this.value?allPays.filter(p=>p.status===this.value):allPays);});
-document.getElementById("payProvider")?.addEventListener("change",function(){renderPays(this.value?allPays.filter(p=>p.provider===this.value):allPays);});
-
-/* ═══════════════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════════════════
    ADMIN USERS
-═══════════════════════════════════════════════════════════ */
+═════════════════════════════════════════════════════════════ */
 async function loadAdmins(){
   const snap=await getDocs(collection(db,"Admins"));
-  const adms=[];snap.forEach(d=>adms.push({id:d.id,...d.data()}));
-  const el=document.getElementById("admBody");
-  if(!adms.length){el.innerHTML="<div class='empty'><div class='empty-text'>No admins</div></div>";return;}
-  el.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>UID</th><th>Name</th><th>Added</th><th></th></tr></thead><tbody>${adms.map(a=>`<tr>
-    <td style="font-family:monospace;font-size:.6875rem">${a.id}</td>
-    <td>${a.displayName||"—"}</td>
-    <td style="font-size:.75rem;color:var(--text-muted)">${a.addedAt?.toDate?.().toLocaleDateString()||"—"}</td>
+  const adms=[]; snap.forEach(d=>adms.push({id:d.id,...d.data()}));
+  const wrap=document.getElementById("admTableWrap");
+  if(!adms.length){wrap.innerHTML=`<div class="empty"><div class="empty-text">No admins</div></div>`;return;}
+  wrap.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>UID</th><th>Name</th><th>Active</th><th>Added</th><th></th></tr></thead><tbody>${adms.map(a=>`<tr>
+    <td style="font-family:monospace;font-size:.6875rem">${esc(a.id)}</td>
+    <td>${esc(a.displayName||"—")}</td>
+    <td><span class="badge ${a.active?"badge-active":"badge-inactive"}">${a.active?"Active":"Inactive"}</span></td>
+    <td style="font-size:.75rem;color:var(--text-muted)">${fmtDate(a.addedAt)}</td>
     <td><button class="btn btn-danger btn-sm" onclick="removeAdmin('${a.id}')">Remove</button></td>
   </tr>`).join("")}</tbody></table></div>`;
 }
-window.removeAdmin=async function(id){
-  if(!confirm("Remove admin access?"))return;
-  try{await deleteDoc(doc(db,"Admins",id));toast("Removed","","success");loadAdmins();}catch(e){toast("Error",e.message,"error");}
-};
-document.getElementById("btnAddAdmin").addEventListener("click",()=>{document.getElementById("adminUid").value="";document.getElementById("adminName").value="";openM("adminModal");});
-document.getElementById("btnSaveAdmin").addEventListener("click",async()=>{
+window.removeAdmin=async function(id){if(!confirm("Remove admin access?"))return;try{await deleteDoc(doc(db,"Admins",id));toast("Removed","","success");loadAdmins();}catch(e){toast("Error",e.message,"error");}};
+document.getElementById("btnAddAdmin")?.addEventListener("click",()=>{document.getElementById("adminUid").value="";document.getElementById("adminName").value="";openM("adminModal");});
+document.getElementById("btnSaveAdmin")?.addEventListener("click",async()=>{
   const uid=document.getElementById("adminUid").value.trim();const name=document.getElementById("adminName").value.trim();
-  if(!uid){toast("Missing","Enter a Firebase UID.","warning");return;}
+  if(!uid){toast("Missing","UID required.","warning");return;}
   const btn=document.getElementById("btnSaveAdmin");btn.classList.add("loading");btn.disabled=true;
-  try{await setDoc(doc(db,"Admins",uid),{displayName:name,addedAt:serverTimestamp()});closeM("adminModal");toast("Added!","Admin user added.","success");loadAdmins();}
-  catch(e){toast("Error",e.message,"error");}
-  finally{btn.classList.remove("loading");btn.disabled=false;}
+  try{await setDoc(doc(db,"Admins",uid),{displayName:name,active:true,addedAt:serverTimestamp()});closeM("adminModal");toast("Added!","","success");loadAdmins();}
+  catch(e){toast("Error",e.message,"error");}finally{btn.classList.remove("loading");btn.disabled=false;}
 });
 </script>
 </body>
