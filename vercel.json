@@ -1,32 +1,3 @@
 {
-  "version": 2,
-  "functions": {
-    "api/services/create.js":              { "maxDuration": 10 },
-    "api/services/update.js":              { "maxDuration": 10 },
-    "api/services/delete.js":              { "maxDuration": 10 },
-    "api/services/list.js":               { "maxDuration": 10 },
-    "api/subscriptions/subscribe.js":      { "maxDuration": 10 },
-    "api/subscriptions/cancel.js":         { "maxDuration": 10 },
-    "api/user-services/save-params.js":    { "maxDuration": 10 },
-    "api/user-services/save-creds.js":     { "maxDuration": 10 },
-    "api/user-services/activate.js":       { "maxDuration": 30 },
-    "api/user-services/deactivate.js":     { "maxDuration": 10 },
-    "api/user-services/run-again.js":      { "maxDuration": 30 },
-    "api/user-services/dashboard.js":      { "maxDuration": 10 },
-    "api/user-services/run-history.js":    { "maxDuration": 10 },
-    "api/n8n-callback.js":                 { "maxDuration": 15 },
-    "api/webhooks/stripe.js":              { "maxDuration": 15 },
-    "api/webhooks/paystack.js":            { "maxDuration": 15 },
-    "api/webhooks/paypal.js":              { "maxDuration": 15 },
-    "api/checkout/create.js":              { "maxDuration": 10 },
-    "api/checkout/verify.js":              { "maxDuration": 10 }
-  },
-  "routes": [
-    {
-      "src": "/api/webhooks/(stripe|paystack|paypal)",
-      "dest": "/api/webhooks/$1"
-    },
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*)",     "dest": "/$1"     }
-  ]
+  "version": 2
 }
