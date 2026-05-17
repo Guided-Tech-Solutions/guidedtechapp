@@ -1,7 +1,7 @@
 {
   "name": "gts-amplify",
   "version": "3.0.0",
-  "engines": { "node": "18.x" },
+  "engines": { "node": "24.x" },
   "dependencies": {
     "firebase-admin": "11.11.1",
     "stripe": "14.25.0"
