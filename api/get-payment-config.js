@@ -9,7 +9,7 @@ module.exports = function handler(req, res) {
   const config = {
     paystack: {
       publicKey: process.env.PAYSTACK_PUBLIC_KEY || null,
-      currency:  "NGN",
+      currency:  "USD",
       available: !!process.env.PAYSTACK_PUBLIC_KEY,
     },
     stripe: {
