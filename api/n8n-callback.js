@@ -1,54 +1,31 @@
+/* FILE: api/n8n-callback.js */
 /* ================================================================
-   FILE: api/n8n-callback.js
    GTS Amplify — n8n Results Receiver
 
    n8n calls this endpoint to write results back to Firestore.
-   Every workflow type sends data in a standard envelope:
-
+   Payload envelope:
    {
      secret:       "your-internal-secret",
      userId:       "firebase-uid",
      serviceId:    "firestore-service-doc-id",
-     workflowType: "lead_generation" | "seo" | "automation" | ...,
-     action:       "add_lead" | "update_seo" | "log_run" | "update_migration" | "log_event",
+     workflowType: "lead_generation" | "seo" | "automation" | "cloud_migration",
+     action:       "add_lead" | "update_metrics" | "update_keywords" |
+                   "log_run" | "update_migration" | "log_event" |
+                   "set_status" | "send_notification",
      data:         { ...the actual payload }
    }
-
-   Supported actions per workflow type:
-   ─────────────────────────────────────────────────────────────────
-   LEAD GENERATION
-     action: "add_lead"         → adds a lead to serviceData/.../leads
-     action: "update_stats"     → updates aggregate lead stats
-
-   SEO
-     action: "update_metrics"   → updates seoMetrics (DA, traffic, etc.)
-     action: "update_keywords"  → upserts keyword rankings
-
-   AUTOMATION
-     action: "log_run"          → records an automation run result
-
-   CLOUD MIGRATION
-     action: "update_migration" → updates phase statuses + progress
-     action: "log_event"        → appends an event to the migration log
-
-   GENERAL
-     action: "set_status"       → updates workflowStatus on the config
-     action: "send_notification"→ creates a notification for the user
    ================================================================ */
 
 const admin = require("firebase-admin");
-
 if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId:   process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey:  process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-    }),
-  });
+  admin.initializeApp({ credential: admin.credential.cert({
+    projectId:   process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey:  (process.env.FIREBASE_PRIVATE_KEY || "").replace(/\\n/g, "\n"),
+  })});
 }
 const db = admin.firestore();
-const INTERNAL_SECRET = process.env.INTERNAL_API_SECRET || "change-me-in-env";
+const INTERNAL_SECRET = process.env.INTERNAL_API_SECRET || "";
 
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin",  "*");
@@ -56,10 +33,10 @@ module.exports = async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST")    return res.status(405).json({ error: "Method not allowed" });
 
-  // Verify secret (from header OR body — n8n supports both)
-  const headerSecret = req.headers["x-gts-secret"];
-  const bodySecret   = req.body?.secret;
-  if (headerSecret !== INTERNAL_SECRET && bodySecret !== INTERNAL_SECRET) {
+  // Verify secret — n8n sends it in header or body
+  const headerSecret = req.headers["x-gts-secret"] || req.headers["x-internal-secret"] || "";
+  const bodySecret   = req.body?.secret || req.body?.callbackSecret || "";
+  if (INTERNAL_SECRET && headerSecret !== INTERNAL_SECRET && bodySecret !== INTERNAL_SECRET) {
     console.warn("[n8n-callback] Invalid secret");
     return res.status(401).json({ error: "Unauthorized" });
   }
@@ -78,31 +55,27 @@ module.exports = async function handler(req, res) {
 
     switch (action) {
 
-      /* ════════════════════════════════════════════════════════
-         LEAD GENERATION
-         n8n sends one lead at a time whenever it captures one
-         ════════════════════════════════════════════════════════ */
+      /* ── LEAD GENERATION ─────────────────────────────────────── */
       case "add_lead": {
         const leadRef = db.collection("serviceData").doc(configKey)
                           .collection("leads").doc();
         await leadRef.set({
-          name:      data.name      || "Unknown",
-          email:     data.email     || "",
-          phone:     data.phone     || "",
-          company:   data.company   || "",
-          source:    data.source    || "website",
-          score:     data.score     || scoreLead(data),
-          status:    data.status    || "new",
-          message:   data.message   || "",
-          pageUrl:   data.pageUrl   || "",
-          utm:       data.utm       || {},
-          rawData:   data.rawData   || {},
+          name:      data.name    || "Unknown",
+          email:     data.email   || "",
+          phone:     data.phone   || "",
+          company:   data.company || "",
+          source:    data.source  || "website",
+          score:     data.score   || scoreLead(data),
+          status:    data.status  || "new",
+          message:   data.message || "",
+          pageUrl:   data.pageUrl || "",
+          utm:       data.utm     || {},
+          rawData:   data.rawData || {},
           createdAt: admin.firestore.FieldValue.serverTimestamp(),
         });
-        // Also notify the user
         await createNotification(userId, {
           title:   "New lead captured! 🎯",
-          message: `${data.name || "Someone"} just submitted a form on ${data.source || "your website"}`,
+          message: `${data.name || "Someone"} submitted a form on ${data.source || "your website"}`,
           type:    "lead",
           link:    "/app/portal-dashboard.html",
         });
@@ -110,46 +83,39 @@ module.exports = async function handler(req, res) {
         break;
       }
 
-      /* ════════════════════════════════════════════════════════
-         SEO — full metrics snapshot
-         n8n sends this after running an Ahrefs / SEMrush / GSC pull
-         ════════════════════════════════════════════════════════ */
+      /* ── SEO — full metrics snapshot ─────────────────────────── */
       case "update_metrics": {
         const metricRef = db.collection("serviceData").doc(configKey)
                             .collection("seoMetrics").doc();
         await metricRef.set({
-          domainAuthority:  Number(data.domainAuthority)  || 0,
-          organicVisitors:  Number(data.organicVisitors)  || 0,
-          keywordsRanked:   Number(data.keywordsRanked)   || 0,
-          backlinks:        Number(data.backlinks)         || 0,
-          pageSpeed:        Number(data.pageSpeed)         || 0,
-          coreWebVitals:    data.coreWebVitals             || "Pass",
-          source:           data.source                   || "manual",
-          createdAt:        admin.firestore.FieldValue.serverTimestamp(),
+          domainAuthority: Number(data.domainAuthority) || 0,
+          organicVisitors: Number(data.organicVisitors) || 0,
+          keywordsRanked:  Number(data.keywordsRanked)  || 0,
+          backlinks:       Number(data.backlinks)        || 0,
+          pageSpeed:       Number(data.pageSpeed)        || 0,
+          coreWebVitals:   data.coreWebVitals            || "Pass",
+          source:          data.source                  || "manual",
+          createdAt:       admin.firestore.FieldValue.serverTimestamp(),
         });
         result = { metricId: metricRef.id };
         break;
       }
 
-      /* ════════════════════════════════════════════════════════
-         SEO — keyword ranking updates
-         n8n sends an array of keyword objects
-         ════════════════════════════════════════════════════════ */
+      /* ── SEO — keyword ranking updates ───────────────────────── */
       case "update_keywords": {
         const keywords = Array.isArray(data.keywords) ? data.keywords : [data];
         const batch    = db.batch();
         keywords.forEach(kw => {
-          // Use keyword text as doc ID so it upserts (no duplicates)
           const kwId  = (kw.keyword || "").toLowerCase().replace(/\s+/g, "_").replace(/[^a-z0-9_]/g, "");
           const kwRef = db.collection("serviceData").doc(configKey)
                           .collection("keywords").doc(kwId || db.collection("_").doc().id);
           batch.set(kwRef, {
-            keyword:   kw.keyword  || "",
-            position:  Number(kw.position)  || 0,
-            prevPos:   Number(kw.prevPos)   || 0,
-            change:    Number(kw.change)    || (kw.prevPos ? kw.prevPos - kw.position : 0),
-            volume:    Number(kw.volume)    || 0,
-            url:       kw.url              || "",
+            keyword:   kw.keyword             || "",
+            position:  Number(kw.position)    || 0,
+            prevPos:   Number(kw.prevPos)     || 0,
+            change:    Number(kw.change)      || (kw.prevPos ? kw.prevPos - kw.position : 0),
+            volume:    Number(kw.volume)      || 0,
+            url:       kw.url                 || "",
             updatedAt: admin.firestore.FieldValue.serverTimestamp(),
           }, { merge: true });
         });
@@ -158,26 +124,22 @@ module.exports = async function handler(req, res) {
         break;
       }
 
-      /* ════════════════════════════════════════════════════════
-         AUTOMATION — log a workflow run result
-         n8n sends this after every automation execution
-         ════════════════════════════════════════════════════════ */
+      /* ── AUTOMATION — log a workflow run ─────────────────────── */
       case "log_run": {
         const runRef = db.collection("serviceData").doc(configKey)
                          .collection("automationRuns").doc();
         await runRef.set({
-          name:         data.name         || data.workflowName || "Automation Run",
-          workflowName: data.workflowName || "",
-          workflowId:   data.workflowId   || "",
-          trigger:      data.trigger      || "",
-          status:       data.status       || "success",   // "success" | "failed" | "skipped"
-          duration:     data.duration     || "",
-          error:        data.error        || null,
+          name:           data.name           || data.workflowName || "Automation Run",
+          workflowName:   data.workflowName   || "",
+          workflowId:     data.workflowId     || "",
+          trigger:        data.trigger        || "",
+          status:         data.status         || "success",
+          duration:       data.duration       || "",
+          error:          data.error          || null,
           itemsProcessed: Number(data.itemsProcessed) || 0,
-          detail:       data.detail       || "",
-          createdAt:    admin.firestore.FieldValue.serverTimestamp(),
+          detail:         data.detail         || "",
+          createdAt:      admin.firestore.FieldValue.serverTimestamp(),
         });
-        // Alert on failure
         if (data.status === "failed") {
           await createNotification(userId, {
             title:   "⚠️ Automation failed",
@@ -190,26 +152,20 @@ module.exports = async function handler(req, res) {
         break;
       }
 
-      /* ════════════════════════════════════════════════════════
-         CLOUD MIGRATION — update phase statuses
-         n8n sends this when a migration phase completes
-         ════════════════════════════════════════════════════════ */
+      /* ── CLOUD MIGRATION — update phase statuses ─────────────── */
       case "update_migration": {
-        const updates = {
-          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-        };
+        const updates = { updatedAt: admin.firestore.FieldValue.serverTimestamp() };
         if (Array.isArray(data.phases)) {
           updates.phases = data.phases;
         }
         if (data.phaseName) {
-          // Update a single phase by name
           const configDoc = await db.collection("serviceConfigs").doc(configKey).get();
-          const existing  = configDoc.exists() ? configDoc.data() : {};
+          const existing  = configDoc.exists ? configDoc.data() : {};
           const phases    = existing.phases || [];
           const idx       = phases.findIndex(p => p.name === data.phaseName);
           if (idx >= 0) {
-            phases[idx].status = data.phaseStatus || "done";
-            phases[idx].detail = data.detail || phases[idx].detail;
+            phases[idx].status      = data.phaseStatus || "done";
+            phases[idx].detail      = data.detail || phases[idx].detail;
             phases[idx].completedAt = new Date().toISOString();
           }
           updates.phases = phases;
@@ -218,26 +174,23 @@ module.exports = async function handler(req, res) {
           updates.overallProgress = Number(data.overallProgress);
         }
         await db.collection("serviceConfigs").doc(configKey).set(updates, { merge: true });
-
         await createNotification(userId, {
           title:   "☁️ Migration update",
-          message: data.detail || `Phase "${data.phaseName}" status: ${data.phaseStatus}`,
-          type:    "migration",
+          message: data.detail || `Phase "${data.phaseName}" is now ${data.phaseStatus}`,
+          type:    "info",
           link:    "/app/portal-dashboard.html",
         });
         result = { updated: true };
         break;
       }
 
-      /* ════════════════════════════════════════════════════════
-         CLOUD MIGRATION — append an event log entry
-         ════════════════════════════════════════════════════════ */
+      /* ── CLOUD MIGRATION — append event log entry ────────────── */
       case "log_event": {
         const eventRef = db.collection("serviceData").doc(configKey)
                            .collection("migrationEvents").doc();
         await eventRef.set({
           message:    data.message    || data.event || "",
-          type:       data.type       || "info",   // "info" | "success" | "warning" | "error"
+          type:       data.type       || "info",
           event:      data.event      || "",
           dataMoved:  data.dataMoved  || "",
           filesMoved: data.filesMoved || "",
@@ -248,10 +201,7 @@ module.exports = async function handler(req, res) {
         break;
       }
 
-      /* ════════════════════════════════════════════════════════
-         GENERAL — update workflow status
-         n8n sends this to update the running status shown in admin
-         ════════════════════════════════════════════════════════ */
+      /* ── GENERAL — update workflow status ────────────────────── */
       case "set_status": {
         await db.collection("serviceConfigs").doc(configKey).set({
           workflowStatus: data.status || "running",
@@ -262,9 +212,7 @@ module.exports = async function handler(req, res) {
         break;
       }
 
-      /* ════════════════════════════════════════════════════════
-         GENERAL — send a notification to the user
-         ════════════════════════════════════════════════════════ */
+      /* ── GENERAL — send in-app notification ──────────────────── */
       case "send_notification": {
         await createNotification(userId, {
           title:   data.title   || "Update from GTS Amplify",
@@ -280,43 +228,37 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: `Unknown action: ${action}` });
     }
 
-    // Always update the "last seen" timestamp on the config
+    // Update last activity timestamp
     await db.collection("serviceConfigs").doc(configKey).set({
       lastActivityAt: admin.firestore.FieldValue.serverTimestamp(),
-      workflowStatus: "running",
     }, { merge: true });
 
-    console.log(`[n8n-callback] ${action} completed for ${configKey}`, result);
+    console.log(`[n8n-callback] ${action} completed for ${configKey}`);
     return res.status(200).json({ success: true, action, result });
 
   } catch (err) {
-    console.error(`[n8n-callback] Error for ${configKey}:`, err);
+    console.error(`[n8n-callback] Error for ${configKey}:`, err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
 };
 
-/* ── Auto-score a lead based on available data ───────────────── */
+/* ── Score a lead based on message content ───────────────────── */
 function scoreLead(data) {
-  const email = (data.email || "").toLowerCase();
-  const msg   = (data.message || data.notes || "").toLowerCase();
-
-  const hotSignals  = ["demo", "pricing", "buy", "purchase", "asap", "urgent", "quote", "contract"];
-  const coldSignals = ["student", "just browsing", "research", "newsletter"];
-
-  if (hotSignals.some(s  => msg.includes(s))) return "hot";
-  if (coldSignals.some(s => msg.includes(s))) return "cold";
+  const msg  = (data.message || data.notes || "").toLowerCase();
+  const email= (data.email || "").toLowerCase();
+  const hot  = ["demo","pricing","buy","purchase","asap","urgent","quote","contract"];
+  const cold = ["student","just browsing","research","newsletter"];
+  if (hot.some(s  => msg.includes(s))) return "hot";
+  if (cold.some(s => msg.includes(s))) return "cold";
+  if (data.company) return "hot";
   if (email.includes("gmail") || email.includes("yahoo")) return "warm";
-  if (data.company) return "hot";    // Has a company = likely real prospect
   return "warm";
 }
 
-/* ── Create a notification doc for the user ──────────────────── */
+/* ── Create a notification for the user ──────────────────────── */
 async function createNotification(userId, { title, message, type, link }) {
   return db.collection("notifications").add({
-    userId,
-    title,
-    message,
-    type,
+    userId, title, message, type,
     link:      link || null,
     read:      false,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
