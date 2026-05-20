@@ -993,9 +993,9 @@ function renderUsers(arr){
 }
 document.getElementById("usrSearch")?.addEventListener("input",function(){const q=this.value.toLowerCase();renderUsers(allUsers.filter(u=>(u.displayName||"").toLowerCase().includes(q)||(u.email||"").toLowerCase().includes(q)));});
 
-/* ═════════════════════════════════════════════════════════════
-   SUBSCRIPTIONS (collectionGroup query on users/*/services)
-═════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   SUBSCRIPTIONS
+═══════════════════════════════════════════════════════════ */
 let allSubs=[];
 async function loadSubscriptions(){
   try{
