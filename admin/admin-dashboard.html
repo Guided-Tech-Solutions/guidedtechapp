@@ -179,7 +179,7 @@
   </style>
 </head>
 <body>
-  
+
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-inner">
@@ -668,48 +668,48 @@ function timeAgo(ts){if(!ts)return"—";const d=ts?.toDate?.()||new Date(ts);con
    OVERVIEW
 ═════════════════════════════════════════════════════════════ */
 async function loadOverview() {
+  const set = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  const empty = (id,msg) => { const e=document.getElementById(id); if(e) e.innerHTML=`<div style="padding:1rem;text-align:center;color:var(--text-muted);font-size:.875rem">${msg}</div>`; };
+
+  // Each query is independent — one failure won't break the rest
   try {
-    const [svcs, users, subsSnap, runsSnap] = await Promise.all([
-      getDocs(query(collection(db,"services"), where("status","==","active"))),
-      getDocs(collection(db,"users")),
-      getDocs(query(collection(db,"subscriptions"), limit(5))),
-      getDocs(query(collection(db,"workflowRuns"), limit(5))),
-    ]);
+    const svcs = await getDocs(query(collection(db,"services"), where("status","==","active")));
+    set("ovSvcs", svcs.size);
+  } catch(e) { set("ovSvcs","0"); }
 
-    const set = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
-    set("ovSvcs",  svcs.size);
+  try {
+    const users = await getDocs(collection(db,"users"));
     set("ovUsers", users.size);
-    set("ovSubs",  subsSnap.size);
-    set("ovRuns",  runsSnap.size);
+  } catch(e) { set("ovUsers","0"); }
 
-    // Recent subscriptions
+  try {
+    const subsSnap = await getDocs(query(collection(db,"subscriptions"), limit(5)));
+    set("ovSubs", subsSnap.size);
     const subArr=[]; subsSnap.forEach(d=>subArr.push({id:d.id,...d.data()}));
     const subWrap = document.getElementById("ovRecentSubs");
     if (subWrap) subWrap.innerHTML = !subArr.length
-      ? `<div class="empty"><div class="empty-text">No subscriptions yet</div></div>`
-      : subArr.map(s=>`<div style="display:flex;align-items:center;gap:.625rem;padding:.375rem 0;border-bottom:1px solid var(--border)">
+      ? `<div style="padding:1rem;text-align:center;color:var(--text-muted);font-size:.875rem">No subscriptions yet</div>`
+      : subArr.map(s=>`<div style="display:flex;align-items:center;gap:.625rem;padding:.5rem 0;border-bottom:1px solid var(--border)">
           <span class="badge ${s.status==="active"?"badge-active":"badge-pending"}">${esc(s.status||"pending")}</span>
-          <div style="flex:1;min-width:0"><div style="font-size:.8125rem;font-weight:600">${esc(s.serviceId||"—")}</div><div style="font-size:.6875rem;color:var(--text-muted)">${esc((s.userId||"").substring(0,20))}</div></div>
+          <div style="flex:1"><div style="font-size:.8125rem;font-weight:600">${esc(s.serviceId||"—")}</div>
+          <div style="font-size:.6875rem;color:var(--text-muted)">${esc((s.userId||"").substring(0,20))}</div></div>
           <div style="font-size:.6875rem;color:var(--text-faint)">${timeAgo(s.createdAt)}</div>
         </div>`).join("");
+  } catch(e) { set("ovSubs","0"); empty("ovRecentSubs","No subscription data yet"); }
 
-    // Recent runs
+  try {
+    const runsSnap = await getDocs(query(collection(db,"workflowRuns"), limit(5)));
+    set("ovRuns", runsSnap.size);
     const runArr=[]; runsSnap.forEach(d=>runArr.push({id:d.id,...d.data()}));
     const runWrap = document.getElementById("ovRecentRuns");
     if (runWrap) runWrap.innerHTML = !runArr.length
-      ? `<div class="empty"><div class="empty-text">No runs yet</div></div>`
-      : runArr.map(r=>`<div style="display:flex;align-items:center;gap:.625rem;padding:.375rem 0;border-bottom:1px solid var(--border)">
+      ? `<div style="padding:1rem;text-align:center;color:var(--text-muted);font-size:.875rem">No workflow runs yet</div>`
+      : runArr.map(r=>`<div style="display:flex;align-items:center;gap:.625rem;padding:.5rem 0;border-bottom:1px solid var(--border)">
           <span class="badge ${r.status==="success"?"badge-active":r.status==="failed"?"badge-danger":r.status==="running"?"badge-pending":"badge-inactive"}">${esc(r.status)}</span>
-          <div style="flex:1;min-width:0"><div style="font-size:.8125rem;font-weight:600">${esc(r.serviceName||r.serviceId||"—")}</div></div>
+          <div style="flex:1"><div style="font-size:.8125rem;font-weight:600">${esc(r.serviceName||r.serviceId||"—")}</div></div>
           <div style="font-size:.6875rem;color:var(--text-faint)">${timeAgo(r.createdAt)}</div>
         </div>`).join("");
-  } catch(e) {
-    console.error("Overview error:", e);
-    ["ovRecentSubs","ovRecentRuns"].forEach(id=>{
-      const el=document.getElementById(id);
-      if(el) el.innerHTML=`<div class="empty"><div class="empty-text">Error loading data</div></div>`;
-    });
-  }
+  } catch(e) { set("ovRuns","0"); empty("ovRecentRuns","No run data yet"); }
 }
 
 /* ═════════════════════════════════════════════════════════════
@@ -720,11 +720,14 @@ let allSvcs=[], paramFields=[], credFields=[], editingParamIdx=-1, editingCredId
 async function loadServices() {
   const wrap = document.getElementById("svcTableWrap");
   try {
-    const snap = await getDocs(query(collection(db,"services")));
-    allSvcs=[]; snap.forEach(d=>allSvcs.push({id:d.id,...d.data()}));
+    const snap = await getDocs(collection(db,"services"));
+    allSvcs=[]; snap.forEach(d=>{ if(!d.data().deleted) allSvcs.push({id:d.id,...d.data()}); });
     document.getElementById("svcCountBadge").textContent = allSvcs.filter(s=>s.status==="active").length+" active";
     renderSvcs(allSvcs);
-  } catch(e){ wrap.innerHTML=`<div class="empty"><div class="empty-text">Error loading services</div></div>`; }
+  } catch(e){
+    console.error("loadServices:",e.message);
+    if(wrap) wrap.innerHTML=`<div class="empty"><div class="empty-icon">⚙️</div><div class="empty-title">No services yet</div><p class="empty-text">Click "+ New Service" to create your first service.</p></div>`;
+  }
 }
 
 function renderSvcs(arr) {
@@ -968,10 +971,16 @@ document.getElementById("svcStatusFilter")?.addEventListener("change",function()
 ═════════════════════════════════════════════════════════════ */
 let allUsers=[];
 async function loadUsers(){
-  const snap=await getDocs(collection(db,"users"));
-  allUsers=[]; snap.forEach(d=>allUsers.push({id:d.id,...d.data()}));
-  document.getElementById("usrCountBadge").textContent=allUsers.length;
-  renderUsers(allUsers);
+  const wrap=document.getElementById("usrTableWrap");
+  try{
+    const snap=await getDocs(collection(db,"users"));
+    allUsers=[]; snap.forEach(d=>allUsers.push({id:d.id,...d.data()}));
+    document.getElementById("usrCountBadge").textContent=allUsers.length;
+    renderUsers(allUsers);
+  }catch(e){
+    console.error("loadUsers:",e.message);
+    if(wrap) wrap.innerHTML=`<div class="empty"><div class="empty-title">No users yet</div></div>`;
+  }
 }
 function renderUsers(arr){
   const wrap=document.getElementById("usrTableWrap");
@@ -1020,12 +1029,16 @@ function renderSubs(arr){
 ═════════════════════════════════════════════════════════════ */
 let allRuns=[];
 async function loadRuns(){
+  const wrap=document.getElementById("runTableWrap");
   try{
     const snap=await getDocs(query(collection(db,"workflowRuns"),limit(100)));
     allRuns=[]; snap.forEach(d=>allRuns.push({id:d.id,...d.data()}));
     document.getElementById("runCountBadge").textContent=allRuns.length;
     renderRuns(allRuns);
-  }catch(e){document.getElementById("runTableWrap").innerHTML=`<div class="empty"><div class="empty-text">Error: ${esc(e.message)}</div></div>`;}
+  }catch(e){
+    console.error("loadRuns:",e.message);
+    if(wrap) wrap.innerHTML=`<div class="empty"><div class="empty-title">No workflow runs yet</div></div>`;
+  }
 }
 function renderRuns(arr){
   const wrap=document.getElementById("runTableWrap");
@@ -1063,10 +1076,16 @@ document.getElementById("runStatusFilter")?.addEventListener("change",function()
 ═════════════════════════════════════════════════════════════ */
 let allPays=[];
 async function loadPayments(){
-  const snap=await getDocs(query(collection(db,"checkoutSessions"),limit(100)));
-  allPays=[]; snap.forEach(d=>allPays.push({id:d.id,...d.data()}));
-  document.getElementById("payCountBadge").textContent=allPays.filter(p=>p.status==="completed").length+" completed";
-  renderPays(allPays);
+  const wrap=document.getElementById("payTableWrap");
+  try{
+    const snap=await getDocs(query(collection(db,"checkoutSessions"),limit(100)));
+    allPays=[]; snap.forEach(d=>allPays.push({id:d.id,...d.data()}));
+    document.getElementById("payCountBadge").textContent=allPays.filter(p=>p.status==="completed").length+" completed";
+    renderPays(allPays);
+  }catch(e){
+    console.error("loadPayments:",e.message);
+    if(wrap) wrap.innerHTML=`<div class="empty"><div class="empty-title">No payments yet</div></div>`;
+  }
 }
 function renderPays(arr){
   const wrap=document.getElementById("payTableWrap");
@@ -1088,10 +1107,11 @@ document.getElementById("payProviderFilter")?.addEventListener("change",function
 ═════════════════════════════════════════════════════════════ */
 let allBkgs=[];
 async function loadBookings(){
-  const snap=await getDocs(query(collection(db,"consultationBookings")));
+  const wrap=document.getElementById("bkgTableWrap");
+  try{
+  const snap=await getDocs(collection(db,"consultationBookings"));
   allBkgs=[]; snap.forEach(d=>allBkgs.push({id:d.id,...d.data()}));
   document.getElementById("bkgCountBadge").textContent=allBkgs.length;
-  const wrap=document.getElementById("bkgTableWrap");
   if(!allBkgs.length){wrap.innerHTML=`<div class="empty"><div class="empty-text">No bookings yet</div></div>`;return;}
   wrap.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Customer</th><th>Session</th><th>Fee</th><th>Preferred Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${allBkgs.map(b=>`<tr>
     <td><div class="td-name">${esc(b.userName||"—")}</div><div class="td-sub">${esc(b.userEmail||"—")}</div></td>
@@ -1104,6 +1124,7 @@ async function loadBookings(){
       ${b.status==="pending_payment"?`<button class="btn btn-ghost btn-sm" onclick="confirmBkg('${b.id}')">Confirm</button>`:""}
     </td>
   </tr>`).join("")}</tbody></table></div>`;
+  }catch(e){ console.error("loadBookings:",e.message); if(wrap) wrap.innerHTML=`<div class="empty"><div class="empty-title">No bookings yet</div></div>`; }
 }
 window.completeBkg=async function(id){try{await updateDoc(doc(db,"consultationBookings",id),{status:"completed",completedAt:serverTimestamp()});toast("Done","","success");allBkgs=[];loadBookings();}catch(e){toast("Error",e.message,"error");}};
 window.confirmBkg=async function(id){try{await updateDoc(doc(db,"consultationBookings",id),{status:"confirmed",confirmedAt:serverTimestamp()});toast("Done","","success");allBkgs=[];loadBookings();}catch(e){toast("Error",e.message,"error");}};
@@ -1129,17 +1150,20 @@ document.getElementById("btnSaveCP")?.addEventListener("click",async()=>{
 ═════════════════════════════════════════════════════════════ */
 let allPlans=[];
 async function loadPlans(){
+  const wrap=document.getElementById("planTableWrap");
+  try{
   const snap=await getDocs(collection(db,"plans"));
   allPlans=[]; snap.forEach(d=>allPlans.push({id:d.id,...d.data()}));
   document.getElementById("planCountBadge").textContent=allPlans.length;
-  const wrap=document.getElementById("planTableWrap");
-  if(!allPlans.length){wrap.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-title">No plans</div></div>`;return;}
+  if(!allPlans.length){wrap.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-title">No plans yet</div></div>`;return;}
   wrap.innerHTML=`<div class="table-wrap"><table class="tbl"><thead><tr><th>Plan</th><th>Monthly</th><th>Popular</th><th>Status</th><th></th></tr></thead><tbody>${allPlans.map(p=>`<tr>
     <td><div class="td-name">${esc(p.name||"—")}</div><div class="td-sub">${esc(p.tagline||"")}</div></td>
     <td>${fmt(p.priceMonthly)}</td><td>${p.popular?"⭐ Yes":"—"}</td>
     <td><span class="badge ${p.active?"badge-active":"badge-inactive"}">${p.active?"Active":"Inactive"}</span></td>
     <td><button class="btn btn-ghost btn-sm" onclick="editPlan('${p.id}')">Edit</button></td>
   </tr>`).join("")}</tbody></table></div>`;
+}
+  }catch(e){ console.error('loadPlans:',e.message); if(wrap) wrap.innerHTML=`<div class='empty'><div class='empty-title'>No plans yet</div></div>`; }
 }
 document.getElementById("btnAddPlan")?.addEventListener("click",()=>{
   document.getElementById("planId").value="";document.getElementById("planModalTitle").textContent="Add Plan";document.getElementById("btnDelPlan").style.display="none";
@@ -1173,6 +1197,8 @@ document.getElementById("btnDelPlan")?.addEventListener("click",async()=>{const 
    ADMIN USERS
 ═════════════════════════════════════════════════════════════ */
 async function loadAdmins(){
+  const wrap=document.getElementById("admTableWrap");
+  try{
   const snap=await getDocs(collection(db,"Admins"));
   const adms=[]; snap.forEach(d=>adms.push({id:d.id,...d.data()}));
   const wrap=document.getElementById("admTableWrap");
@@ -1184,6 +1210,8 @@ async function loadAdmins(){
     <td style="font-size:.75rem;color:var(--text-muted)">${fmtDate(a.addedAt)}</td>
     <td><button class="btn btn-danger btn-sm" onclick="removeAdmin('${a.id}')">Remove</button></td>
   </tr>`).join("")}</tbody></table></div>`;
+}
+  }catch(e){ console.error('loadAdmins:',e.message); if(wrap) wrap.innerHTML=`<div class='empty'><div class='empty-title'>No admins found</div></div>`; }
 }
 window.removeAdmin=async function(id){if(!confirm("Remove admin access?"))return;try{await deleteDoc(doc(db,"Admins",id));toast("Removed","","success");loadAdmins();}catch(e){toast("Error",e.message,"error");}};
 document.getElementById("btnAddAdmin")?.addEventListener("click",()=>{document.getElementById("adminUid").value="";document.getElementById("adminName").value="";openM("adminModal");});
