@@ -1,3 +1,12 @@
 {
-  "version": 2
+  "version": 2,
+  "functions": {
+    "api/user-services/activate.js":  { "maxDuration": 60 },
+    "api/user-services/run-again.js": { "maxDuration": 60 },
+    "api/n8n-callback.js":            { "maxDuration": 30 },
+    "api/webhooks/stripe.js":         { "maxDuration": 30 },
+    "api/webhooks/paystack.js":       { "maxDuration": 30 },
+    "api/webhooks/paypal.js":         { "maxDuration": 30 },
+    "api/workflow-trigger.js":        { "maxDuration": 30 }
+  }
 }
