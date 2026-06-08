@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>About Us — GTS Amplify</title>
-  <meta name="description" content="GTS Amplify is the flagship platform of Guided Tech Solutions, a technology company based in Mississippi, USA. Learn about our mission to help businesses grow smarter.">
+  <meta name="description" content="GTS Amplify is powered by Guided Tech Solutions — a Mississippi-based technology company helping businesses, schools, and municipalities grow through innovative, dependable solutions.">
   <link rel="icon" href="./asset/logo-icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -17,43 +17,83 @@
     .nav-right{display:flex;gap:.625rem}
     .btn-outline{padding:.4375rem 1rem;border-radius:8px;font-weight:600;font-size:.875rem;color:var(--brand);border:1.5px solid var(--brand);background:transparent;cursor:pointer;transition:all .2s}.btn-outline:hover{background:var(--brand-pale)}
     .btn-solid{padding:.4375rem 1.125rem;border-radius:8px;font-weight:600;font-size:.875rem;color:white;background:var(--brand);border:none;cursor:pointer;transition:all .2s}.btn-solid:hover{background:var(--brand-dark)}
+    /* HERO */
     .hero{padding:6rem 0 4.5rem;background:linear-gradient(170deg,#08111C,#0F2E42,#1B4F72);text-align:center;margin-top:68px}
     .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:.3125rem .875rem;font-size:.8125rem;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:1.25rem}
+    .hero-accent{color:var(--accent)}
     .hero-title{font-family:var(--ff-d);font-size:clamp(2rem,5vw,3.5rem);font-weight:900;color:white;letter-spacing:-.04em;line-height:1.1;margin-bottom:1rem}
     .hero-desc{font-size:1.0625rem;color:rgba(255,255,255,.65);max-width:560px;margin:0 auto;line-height:1.7}
     section{padding:5rem 0}
     .container{max-width:1100px;margin:0 auto;padding:0 1.5rem}
-    .section-badge{display:inline-block;background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:.25rem .875rem;border-radius:100px;margin-bottom:.875rem}
+    .section-badge{display:inline-flex;align-items:center;gap:.5rem;font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.875rem}
+    .section-badge::before{content:'';display:block;width:2rem;height:2px;background:var(--accent)}
     .section-title{font-family:var(--ff-d);font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;color:var(--text);letter-spacing:-.03em;line-height:1.15;margin-bottom:.875rem}
     .section-desc{font-size:1rem;color:var(--text-muted);line-height:1.7}
-    .text-center{text-align:center}.text-center .section-desc{max-width:600px;margin:0 auto}
-    .mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-top:0}
-    .mission-text .section-desc{margin-bottom:1.25rem}
-    .mission-visual{background:linear-gradient(145deg,var(--brand-dark),var(--brand));border-radius:20px;padding:2.5rem;text-align:center;color:white}
-    .mv-stat{font-family:var(--ff-d);font-size:2.5rem;font-weight:900;letter-spacing:-.03em}
-    .mv-label{font-size:.9375rem;color:rgba(255,255,255,.65);margin-top:.25rem}
-    .mv-divider{height:1px;background:rgba(255,255,255,.1);margin:1.25rem 0}
-    .values-section{background:var(--bg)}
-    .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
-    .value-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:1.75rem;transition:all .3s}
+    .text-center{text-align:center}.text-center .section-desc{max-width:640px;margin:0 auto}
+    /* WHAT WE ARE */
+    .what-section{background:var(--bg)}
+    .what-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+    .what-left .section-title{font-size:clamp(1.75rem,4vw,2.75rem)}
+    /* TABS */
+    .tabs{display:flex;gap:0;margin-bottom:1.75rem;border-bottom:2px solid var(--border)}
+    .tab-btn{background:none;border:none;padding:.625rem 1.25rem;font-family:var(--ff-b);font-size:.9375rem;font-weight:600;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
+    .tab-btn.active{color:var(--brand);border-bottom-color:var(--brand)}
+    .tab-btn:hover:not(.active){color:var(--text)}
+    .tab-panel{display:none;font-size:.9375rem;color:var(--text-mid);line-height:1.75}
+    .tab-panel.active{display:block}
+    .tab-panel p+p{margin-top:.875rem}
+    /* WHY CHOOSE US */
+    .why-section{background:var(--surface)}
+    .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+    .why-left .section-desc{margin-bottom:1.75rem;font-size:1rem}
+    .accordion{display:flex;flex-direction:column;gap:.75rem}
+    .acc-item{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s}
+    .acc-item.open{border-color:var(--brand)}
+    .acc-header{width:100%;background:none;border:none;padding:1.125rem 1.25rem;display:flex;align-items:center;justify-content:space-between;font-family:var(--ff-b);font-size:.9375rem;font-weight:600;color:var(--text);cursor:pointer;transition:background .2s;text-align:left}
+    .acc-item.open .acc-header{background:var(--brand);color:white}
+    .acc-arrow{font-size:.75rem;transition:transform .25s}
+    .acc-item.open .acc-arrow{transform:rotate(90deg)}
+    .acc-body{display:none;padding:1rem 1.25rem 1.25rem;font-size:.875rem;color:var(--text-muted);line-height:1.7;background:var(--surface)}
+    .acc-item.open .acc-body{display:block}
+    .why-card{background:var(--brand-pale);border:1.5px solid var(--border);border-radius:16px;padding:2rem;font-size:.9375rem;color:var(--text-mid);line-height:1.75}
+    .why-card-title{font-family:var(--ff-d);font-size:1.125rem;font-weight:700;color:var(--text);margin-bottom:.75rem}
+    /* HISTORY */
+    .history-section{background:var(--bg)}
+    .history-inner{text-align:center;margin-bottom:3.5rem}
+    .history-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+    .history-text p+p{margin-top:1rem}
+    .history-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;background:var(--brand-dark);border-radius:14px;overflow:hidden;margin-top:2rem}
+    .stat-item{padding:1.5rem 1rem;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+    .stat-item:last-child{border-right:none}
+    .stat-num{font-family:var(--ff-d);font-size:2rem;font-weight:900;color:white;letter-spacing:-.02em}
+    .stat-label{font-size:.8125rem;color:rgba(255,255,255,.6);margin-top:.25rem}
+    .history-visual{display:flex;align-items:center;justify-content:center}
+    .history-img-placeholder{width:100%;max-width:420px;background:linear-gradient(145deg,var(--brand-dark),var(--brand-mid));border-radius:20px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center}
+    .history-img-placeholder svg{opacity:.25}
+    /* VALUES */
+    .values-section{background:var(--surface)}
+    .values-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.75rem;margin-top:3rem}
+    .value-card{display:flex;align-items:flex-start;gap:1.25rem;padding:1.75rem;border:1.5px solid var(--border);border-radius:14px;transition:all .3s}
     .value-card:hover{border-color:var(--brand);transform:translateY(-3px);box-shadow:0 8px 28px rgba(27,79,114,.1)}
-    .value-icon{font-size:2rem;margin-bottom:1rem}
-    .value-title{font-family:var(--ff-d);font-size:1.0625rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+    .value-icon-wrap{width:52px;height:52px;min-width:52px;background:var(--brand-dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+    .value-title{font-family:var(--ff-d);font-size:1.0625rem;font-weight:700;color:var(--text);margin-bottom:.375rem}
     .value-desc{font-size:.875rem;color:var(--text-muted);line-height:1.65}
+    /* CTA */
     .cta-section{background:linear-gradient(135deg,var(--brand-dark),var(--brand),var(--brand-mid));padding:5rem 0;text-align:center}
     .cta-title{font-family:var(--ff-d);font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;color:white;letter-spacing:-.03em;margin-bottom:1rem}
     .cta-desc{font-size:1rem;color:rgba(255,255,255,.7);max-width:480px;margin:0 auto 2rem;line-height:1.65}
     .cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
     .btn-white{padding:.875rem 2rem;border-radius:10px;font-weight:700;font-size:.9375rem;background:white;color:var(--brand);border:none;cursor:pointer;transition:all .25s}.btn-white:hover{background:var(--brand-pale);transform:translateY(-2px)}
     .btn-ghost-cta{padding:.875rem 2rem;border-radius:10px;font-weight:600;font-size:.9375rem;background:rgba(255,255,255,.1);color:white;border:1.5px solid rgba(255,255,255,.3);cursor:pointer;transition:all .25s}.btn-ghost-cta:hover{background:rgba(255,255,255,.2)}
+    /* FOOTER */
     .footer-mini{background:#0B1E30;padding:2rem 0;text-align:center}
     .footer-mini-logo{display:flex;align-items:center;justify-content:center;gap:.5rem;font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:white;margin-bottom:.75rem}
     .footer-mini-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.875rem}
     .footer-mini-links{display:flex;gap:1.25rem;justify-content:center;margin-bottom:.75rem}
     .footer-mini-link{font-size:.8125rem;color:rgba(255,255,255,.45);transition:color .2s}.footer-mini-link:hover{color:rgba(255,255,255,.8)}
     .footer-mini-copy{font-size:.8125rem;color:rgba(255,255,255,.28)}
-    @media(max-width:1024px){.mission-grid,.values-grid{grid-template-columns:1fr}}
-    @media(max-width:768px){section{padding:3.5rem 0}.hero{padding:4rem 0 3rem}.cta-btns{flex-direction:column;align-items:center}}
+    @media(max-width:1024px){.what-grid,.why-grid,.history-grid,.values-grid{grid-template-columns:1fr}}
+    @media(max-width:768px){section{padding:3.5rem 0}.hero{padding:4rem 0 3rem}.cta-btns{flex-direction:column;align-items:center}.history-stats{grid-template-columns:1fr;border-radius:14px}.stat-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.1)}.stat-item:last-child{border-bottom:none}}
   </style>
 </head>
 <body>
@@ -67,56 +107,164 @@
   </div>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
   <div class="container">
     <div class="hero-badge">🏢 About GTS Amplify</div>
-    <h1 class="hero-title">Technology that drives<br>real business growth</h1>
-    <p class="hero-desc">GTS Amplify is the flagship platform of Guided Tech Solutions — a Mississippi-based technology company helping businesses grow smarter with enterprise-grade digital services.</p>
+    <h1 class="hero-title">We help global brands<br>deliver great <span class="hero-accent">results</span></h1>
+    <p class="hero-desc">GTS Amplify is powered by Guided Tech Solutions — a Mississippi-based technology company empowering businesses, schools, and municipalities with innovative, dependable technology solutions.</p>
   </div>
 </div>
 
-<!-- MISSION -->
-<section>
+<!-- WHAT WE ARE -->
+<section class="what-section">
   <div class="container">
-    <div class="mission-grid">
-      <div class="mission-text">
-        <div class="section-badge">Our Mission</div>
-        <h2 class="section-title">Making enterprise technology accessible to every business</h2>
-        <p class="section-desc">GTS Amplify was built on a simple belief: the technology tools that large enterprises use to grow — lead generation systems, cloud infrastructure, marketing automation, SEO analytics — should be accessible to businesses of every size.</p>
-        <p class="section-desc">We combine expert execution with real-time transparency. Through GTS Amplify, every client gets a live analytics dashboard so they can see exactly what's happening with their services and measure results at any time.</p>
-        <div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap">
-          <a href="./app/signup.html" style="padding:.6875rem 1.5rem;background:var(--brand);color:white;border-radius:8px;font-weight:700;font-size:.875rem;transition:all .2s">Start Growing →</a>
-          <a href="./index.html#consultation" style="padding:.6875rem 1.5rem;background:transparent;color:var(--brand);border:1.5px solid var(--brand);border-radius:8px;font-weight:600;font-size:.875rem;transition:all .2s">Book Free Call</a>
-        </div>
+    <div class="what-grid">
+      <div class="what-left">
+        <div class="section-badge">What We Are</div>
+        <h2 class="section-title">We help global brands deliver great results</h2>
       </div>
-      <div class="mission-visual">
-        <div class="mv-stat">USA</div>
-        <div class="mv-label">Headquartered in Mississippi</div>
-        <div class="mv-divider"></div>
-        <div class="mv-stat">4</div>
-        <div class="mv-label">Core service offerings</div>
-        <div class="mv-divider"></div>
-        <div class="mv-stat">24/7</div>
-        <div class="mv-label">Real-time analytics dashboards</div>
+      <div class="what-right">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="mission">Mission</button>
+          <button class="tab-btn" data-tab="vision">Vision</button>
+          <button class="tab-btn" data-tab="story">Our Story</button>
+        </div>
+        <div class="tab-panel active" id="tab-mission">
+          <p>We simplify complex technology challenges, improve operational efficiency, and help organizations grow through innovative, dependable solutions. Our reliable systems empower clients to confidently navigate an evolving technology landscape.</p>
+          <p>Our mission is to modernize Mississippi's critical infrastructure one city, one school, and one business at a time. We deliver secure, compliant, and resilient technology with zero downtime and zero overwhelm, ensuring readiness for CJIS, NIST, and CMMC standards.</p>
+        </div>
+        <div class="tab-panel" id="tab-vision">
+          <p>We envision a Mississippi where every organization — from small businesses to municipal governments — has access to enterprise-grade technology that is secure, efficient, and built for long-term growth.</p>
+          <p>Our goal is to be the most trusted technology partner in the region, known for delivering results that last and relationships that endure.</p>
+        </div>
+        <div class="tab-panel" id="tab-story">
+          <p>Guided Tech Solutions began with a mission to transform the way organizations adapt to modern technology. Our focus has always been on empowering communities, teams, and leaders with tools that promote efficiency, security, and sustainable growth.</p>
+          <p>Over the years, our experience and passion have allowed us to deliver impactful solutions for municipalities, schools, and small businesses. We continue to evolve, innovate, and guide our partners toward a stronger digital future.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- VALUES -->
+<!-- WHY CHOOSE US -->
+<section class="why-section">
+  <div class="container">
+    <div class="why-grid">
+      <div class="why-left">
+        <div class="section-badge">Why Choose Us</div>
+        <h2 class="section-title">Powerful solutions for your business growth</h2>
+        <p class="section-desc">We handle the systems behind your business so you can focus on customers, sales, and profit.</p>
+        <div class="accordion">
+          <div class="acc-item open" id="acc-1">
+            <button class="acc-header" onclick="toggleAcc('acc-1')">We Keep Your Business Running Smoothly <span class="acc-arrow">›</span></button>
+            <div class="acc-body">We upgrade and modernize your technology without interrupting your daily operations. Our solutions are reliable, secure, and built to work smoothly from day one. We fix what's not working, modernize what's outdated, and keep everything running — result: less downtime, fewer mistakes, and a smoother business that's ready to grow.</div>
+          </div>
+          <div class="acc-item" id="acc-2">
+            <button class="acc-header" onclick="toggleAcc('acc-2')">We Help You Work Faster <span class="acc-arrow">›</span></button>
+            <div class="acc-body">We automate repetitive processes and streamline your workflows so your team spends less time on manual tasks and more time on what matters. From cloud migrations to custom integrations, we build systems that move at the speed of your business.</div>
+          </div>
+          <div class="acc-item" id="acc-3">
+            <button class="acc-header" onclick="toggleAcc('acc-3')">We're With You Every Step of the Way <span class="acc-arrow">›</span></button>
+            <div class="acc-body">From onboarding to ongoing support, our team is available when you need us. We don't disappear after deployment — we stay engaged, monitor your systems, and proactively address issues before they become problems. You get a real partner, not just a vendor.</div>
+          </div>
+        </div>
+      </div>
+      <div class="why-right">
+        <div class="why-card" id="why-detail">
+          <div class="why-card-title">We Keep Your Business Running Smoothly</div>
+          <p>We upgrade and modernize your technology without interrupting your daily operations. Our solutions are reliable, secure, and built to work smoothly from day one.</p>
+          <p style="margin-top:.75rem">When your systems are slow, outdated, or always breaking, your business loses time, customers, and money. We make sure your technology works the way it should — fast, stable, and secure. We fix what's not working, modernize what's outdated, and keep everything running without disrupting your daily operations.</p>
+          <p style="margin-top:.75rem"><strong>Result:</strong> less downtime, fewer mistakes, and a smoother business that's ready to grow.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUR HISTORY -->
+<section class="history-section">
+  <div class="container">
+    <div class="history-inner text-center">
+      <h2 class="section-title">Our History</h2>
+      <p class="section-desc">Empowering organizations with innovative technology solutions that support connection, growth, and long-lasting impact.</p>
+    </div>
+    <div class="history-grid">
+      <div class="history-text">
+        <p class="section-desc">Guided Tech Solutions began with a mission to transform the way organizations adapt to modern technology. Our focus has always been on empowering communities, teams, and leaders with tools that promote efficiency, security, and sustainable growth.</p>
+        <p class="section-desc">Over the years, our experience and passion have allowed us to deliver impactful solutions for municipalities, schools, and small businesses. We continue to evolve, innovate, and guide our partners toward a stronger digital future.</p>
+        <div class="history-stats">
+          <div class="stat-item">
+            <div class="stat-num">350+</div>
+            <div class="stat-label">Campaigns completed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">120+</div>
+            <div class="stat-label">Happy customers</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">06+</div>
+            <div class="stat-label">Years of experience</div>
+          </div>
+        </div>
+      </div>
+      <div class="history-visual">
+        <div class="history-img-placeholder">
+          <svg width="180" height="140" viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="90" cy="70" rx="60" ry="40" fill="white" opacity=".15"/>
+            <circle cx="90" cy="42" r="14" fill="white" opacity=".4"/>
+            <circle cx="42" cy="80" r="11" fill="white" opacity=".35"/>
+            <circle cx="138" cy="80" r="11" fill="white" opacity=".35"/>
+            <circle cx="62" cy="105" r="10" fill="white" opacity=".3"/>
+            <circle cx="118" cy="105" r="10" fill="white" opacity=".3"/>
+            <circle cx="90" cy="112" r="10" fill="white" opacity=".3"/>
+            <line x1="90" y1="56" x2="42" y2="80" stroke="white" stroke-width="1.5" opacity=".3"/>
+            <line x1="90" y1="56" x2="138" y2="80" stroke="white" stroke-width="1.5" opacity=".3"/>
+            <line x1="42" y1="80" x2="62" y2="105" stroke="white" stroke-width="1.5" opacity=".25"/>
+            <line x1="138" y1="80" x2="118" y2="105" stroke="white" stroke-width="1.5" opacity=".25"/>
+            <line x1="90" y1="56" x2="90" y2="112" stroke="white" stroke-width="1.5" opacity=".25"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUR VALUES -->
 <section class="values-section">
   <div class="container">
     <div class="text-center">
-      <div class="section-badge">Our Values</div>
-      <h2 class="section-title">What drives everything we do</h2>
+      <h2 class="section-title">Our Values</h2>
     </div>
     <div class="values-grid">
-      <div class="value-card"><div class="value-icon">📊</div><div class="value-title">Radical Transparency</div><div class="value-desc">Every service comes with a live dashboard. You see results in real time — not in a monthly PDF that obscures what actually happened.</div></div>
-      <div class="value-card"><div class="value-icon">🎯</div><div class="value-title">Results-Obsessed</div><div class="value-desc">We don't count activities; we count outcomes. Every KPI on your dashboard exists because it correlates directly with business growth.</div></div>
-      <div class="value-card"><div class="value-icon">🤝</div><div class="value-title">Partnership Mindset</div><div class="value-desc">We grow when our clients grow. That alignment means we're always pushing to improve your numbers — not just renew your contract.</div></div>
-      <div class="value-card"><div class="value-icon">🔧</div><div class="value-title">Technical Excellence</div><div class="value-desc">Every automation, cloud migration, or SEO campaign we deliver is built to a high technical standard by people who care about the craft.</div></div>
-      <div class="value-card"><div class="value-icon">🌐</div><div class="value-title">Client-First</div><div class="value-desc">We tailor our services to each client's goals and industry. Cookie-cutter solutions don't produce meaningful results — custom strategies do.</div></div>
-      <div class="value-card"><div class="value-icon">⚡</div><div class="value-title">Move Fast, Stay Honest</div><div class="value-desc">We onboard clients quickly and deliver results fast — but never at the cost of quality or clear, honest communication.</div></div>
+      <div class="value-card">
+        <div class="value-icon-wrap">🧘</div>
+        <div>
+          <div class="value-title">Respect</div>
+          <div class="value-desc">We support balanced, healthy life and well-being for every member of our team and the clients we serve.</div>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon-wrap">😇</div>
+        <div>
+          <div class="value-title">Collaboration</div>
+          <div class="value-desc">Partnership focused on ethical growth — we succeed together with our clients and each other.</div>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon-wrap">🙌</div>
+        <div>
+          <div class="value-title">Passion</div>
+          <div class="value-desc">We bring joy, creativity, and genuine commitment to every project we take on.</div>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon-wrap">👌</div>
+        <div>
+          <div class="value-title">Agility</div>
+          <div class="value-desc">Fast adaptation and high-quality results — we stay flexible so your business never slows down.</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -142,8 +290,53 @@
       <a href="./privacy.html" class="footer-mini-link">Privacy</a>
       <a href="./terms.html"   class="footer-mini-link">Terms</a>
     </div>
-    <div class="footer-mini-copy">© 2025 Guided Tech Solutions. All rights reserved. · Mississippi, USA · <a href="mailto:info@guidedtechms.com" style="color:rgba(255,255,255,.45);text-decoration:none">info@guidedtechms.com</a></div>
+    <div class="footer-mini-copy">© 2025 Guided Tech Solutions · Mississippi, United States · <a href="mailto:info@guidedtechms.com" style="color:rgba(255,255,255,.45);text-decoration:none">info@guidedtechms.com</a></div>
   </div>
 </footer>
+
+<script>
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Accordion
+  const accContent = {
+    'acc-1': {
+      title: 'We Keep Your Business Running Smoothly',
+      body: `<p>We upgrade and modernize your technology without interrupting your daily operations. Our solutions are reliable, secure, and built to work smoothly from day one.</p>
+             <p style="margin-top:.75rem">When your systems are slow, outdated, or always breaking, your business loses time, customers, and money. We make sure your technology works the way it should — fast, stable, and secure. We fix what's not working, modernize what's outdated, and keep everything running without disrupting your daily operations.</p>
+             <p style="margin-top:.75rem"><strong>Result:</strong> less downtime, fewer mistakes, and a smoother business that's ready to grow.</p>`
+    },
+    'acc-2': {
+      title: 'We Help You Work Faster',
+      body: `<p>We automate repetitive processes and streamline your workflows so your team spends less time on manual tasks and more time on what matters.</p>
+             <p style="margin-top:.75rem">From cloud migrations to custom integrations, we build systems that eliminate bottlenecks and accelerate every part of your operation — so your business moves at the speed you need to compete.</p>
+             <p style="margin-top:.75rem"><strong>Result:</strong> more output, lower operating costs, and a team that's focused on growth.</p>`
+    },
+    'acc-3': {
+      title: "We're With You Every Step of the Way",
+      body: `<p>From onboarding to ongoing support, our team is available when you need us. We don't disappear after deployment — we stay engaged, monitor your systems, and proactively address issues before they become problems.</p>
+             <p style="margin-top:.75rem">You get a real partner, not just a vendor. We're invested in your success because we know that when your business grows, so does ours.</p>
+             <p style="margin-top:.75rem"><strong>Result:</strong> peace of mind, faster issue resolution, and technology that keeps getting better.</p>`
+    }
+  };
+
+  function toggleAcc(id) {
+    const wasOpen = document.getElementById(id).classList.contains('open');
+    document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) {
+      document.getElementById(id).classList.add('open');
+      const detail = document.getElementById('why-detail');
+      detail.querySelector('.why-card-title').textContent = accContent[id].title;
+      detail.innerHTML = `<div class="why-card-title">${accContent[id].title}</div>${accContent[id].body}`;
+    }
+  }
+</script>
 </body>
 </html>
