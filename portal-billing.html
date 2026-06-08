@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Billing — GTS Amplify</title>
+  <link rel="icon" href="../asset/logo-icon.png">
+  <link rel="stylesheet" href="./portal.css">
+</head>
+<body>
+<nav class="navbar"><div class="navbar-inner">
+  <div class="navbar-left">
+    <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+    <a href="../index.html" class="brand-logo"><div class="brand-logo-icon"><img src="../asset/logo-icon.png" alt="GTS Amplify" style="width:28px;height:28px;object-fit:contain;border-radius:6px"></div>GTS Amplify</a>
+  </div>
+  <div class="navbar-right">
+    <button class="btn-nav btn-nav-ghost" id="btnLogin"  style="display:none">Log In</button>
+    <button class="btn-nav btn-nav-ghost" id="btnLogout" style="display:none">Log Out</button>
+  </div>
+</div></nav>
+<div class="portal-wrapper">
+  <aside class="portal-sidebar" id="portalSidebar">
+    <div class="sidebar-profile">
+      <div class="sidebar-avatar" id="sidebarAvatar">?</div>
+      <div class="sidebar-info">
+        <div class="sidebar-name"  id="sidebarName">Loading...</div>
+        <div class="sidebar-email" id="sidebarEmail">—</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Main</div>
+      <a href="./portal-dashboard.html"     class="sidebar-link" data-page="portal-dashboard.html"><span class="sidebar-icon">📊</span>Dashboard</a>
+      <a href="./portal-services.html"      class="sidebar-link" data-page="portal-services.html"><span class="sidebar-icon">🛍️</span>Services & Pricing</a>
+      <a href="./portal-subscriptions.html" class="sidebar-link" data-page="portal-subscriptions.html"><span class="sidebar-icon">📋</span>My Subscriptions</a>
+      <a href="./portal-onboarding.html"    class="sidebar-link" data-page="portal-onboarding.html"><span class="sidebar-icon">⚙️</span>Service Setup</a>
+      <div class="sidebar-section-label">Account</div>
+      <a href="./portal-profile.html"       class="sidebar-link" data-page="portal-profile.html"><span class="sidebar-icon">👤</span>My Profile</a>
+      <a href="./portal-billing.html"       class="sidebar-link" data-page="portal-billing.html"><span class="sidebar-icon">💳</span>Billing</a>
+    </nav>
+    <div class="sidebar-footer"><button class="btn-signout" id="btnSidebarSignout">🚪 Sign Out</button></div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <main class="portal-main">
+    <div class="page-header">
+      <div><h1 class="page-title">Billing & Payments</h1><p class="page-subtitle">Your payment history and invoices</p></div>
+    </div>
+
+    <!-- Summary stats -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon green">💰</div><div class="stat-label">Total Paid</div><div class="stat-value sm" id="statTotal">—</div></div>
+      <div class="stat-card"><div class="stat-icon">📄</div><div class="stat-label">Invoices</div><div class="stat-value" id="statInvoices">—</div></div>
+      <div class="stat-card"><div class="stat-icon orange">⚡</div><div class="stat-label">Active Services</div><div class="stat-value" id="statActive">—</div></div>
+      <div class="stat-card"><div class="stat-icon yellow">📅</div><div class="stat-label">Next Billing</div><div class="stat-value sm" id="statNextBilling">—</div></div>
+    </div>
+
+    <!-- Payment history -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Payment History</div>
+        <span class="badge badge-brand" id="payCount">0 payments</span>
+      </div>
+      <div class="card-body" id="payHistBody">
+        <div class="loading-box"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </main>
+</div>
+<div id="toastRoot"></div>
+<script type="module">
+import { db } from "./firebase.js";
+import { requireAuth, fmtMoney, fmtDate, esc } from "./portal-layout.js";
+import {
+  collection, getDocs, query, where, orderBy, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const user = await requireAuth();
+  if (!user) return;
+  await loadBilling(user.uid);
+});
+
+async function loadBilling(uid) {
+  try {
+    const [paySnap, subsSnap] = await Promise.all([
+      getDocs(query(collection(db,"checkoutSessions"), where("userId","==",uid), where("status","==","completed"), orderBy("createdAt","desc"))),
+      getDocs(query(collection(db,"serviceActivations"), where("userId","==",uid), where("status","==","active"))),
+    ]);
+
+    const pays = [];
+    paySnap.forEach(d => pays.push({ id:d.id, ...d.data() }));
+    const activeSubs = [];
+    subsSnap.forEach(d => activeSubs.push({ id:d.id, ...d.data() }));
+
+    const total = pays.reduce((sum,p) => sum + (Number(p.amountPaid)||Number(p.price)||0), 0);
+    const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+    set("statTotal",    fmtMoney(total));
+    set("statInvoices", pays.length);
+    set("statActive",   activeSubs.length);
+
+    // Next billing
+    const nextDates = activeSubs.map(s => s.nextBillingDate?.toDate?.()).filter(Boolean).sort((a,b) => a-b);
+    set("statNextBilling", nextDates.length ? nextDates[0].toLocaleDateString("en-US",{day:"numeric",month:"short"}) : "—");
+
+    document.getElementById("payCount").textContent = pays.length + " payments";
+
+    const body = document.getElementById("payHistBody");
+    if (!pays.length) {
+      body.innerHTML = `<div class="empty-state"><div class="empty-icon">📄</div><h3 class="empty-title">No Payments Yet</h3><p class="empty-text">Your payment history will appear here after your first subscription.</p><a href="./portal-services.html" class="btn btn-primary">Browse Services</a></div>`;
+      return;
+    }
+    body.innerHTML = `<div class="table-wrap"><table class="data-table">
+      <thead><tr><th>Description</th><th>Provider</th><th>Amount</th><th>Reference</th><th>Date</th><th>Status</th></tr></thead>
+      <tbody>${pays.map(p => `<tr>
+        <td><div class="td-name">${esc(p.itemName||"Payment")}</div><div class="td-sub">${esc(p.itemType||"")}</div></td>
+        <td><span class="badge badge-brand" style="text-transform:capitalize">${esc(p.provider||"paystack")}</span></td>
+        <td style="font-weight:700;color:var(--success)">${fmtMoney(p.amountPaid||p.price||0)}</td>
+        <td style="font-family:monospace;font-size:.75rem;color:var(--text-muted)">${(p.paystackReference||p.stripePaymentId||p.paypalOrderId||"—").substring(0,18)}</td>
+        <td style="font-size:.75rem;color:var(--text-muted)">${fmtDate(p.paidAt||p.createdAt)}</td>
+        <td><span class="badge badge-active">Paid</span></td>
+      </tr>`).join("")}</tbody>
+    </table></div>`;
+  } catch(e) {
+    document.getElementById("payHistBody").innerHTML = `<div class="empty-state"><p class="empty-text">Could not load billing history. Please refresh.</p></div>`;
+  }
+}
+</script>
+</body>
+</html>

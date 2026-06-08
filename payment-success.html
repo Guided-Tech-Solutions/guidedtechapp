@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Payment Confirmation — GTS Amplify</title>
+  <link rel="icon" href="../asset/logo-icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--brand:#1B4F72;--brand-dark:#0F2E42;--brand-pale:#EBF5FB;--success:#0F9D58;--success-pale:#E6F4EA;--danger:#E53935;--danger-pale:#FDECEA;--warning:#F39C12;--warning-pale:#FEF9E7;--border:#E2E8F0;--text:#0D1B2A;--text-muted:#64748B;--surface:#fff;--bg:#F2F5F9;--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:var(--ff-b);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:1.5rem;-webkit-font-smoothing:antialiased}
+    .card{background:var(--surface);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.1);max-width:480px;width:100%;padding:2.5rem;text-align:center}
+    .icon{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.25rem}
+    .icon.success{background:var(--success-pale);color:var(--success)}
+    .icon.error  {background:var(--danger-pale); color:var(--danger)}
+    .icon.pending{background:var(--warning-pale);color:var(--warning)}
+    h1{font-family:var(--ff-d);font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
+    p{font-size:.9375rem;color:var(--text-muted);line-height:1.65;margin-bottom:1.5rem}
+    .detail-box{background:var(--bg);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;text-align:left}
+    .detail-row{display:flex;justify-content:space-between;align-items:center;padding:.3125rem 0;border-bottom:1px solid var(--border);font-size:.875rem}
+    .detail-row:last-child{border-bottom:none}
+    .detail-label{color:var(--text-muted)}
+    .detail-value{font-weight:600;color:var(--text)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 1.5rem;border-radius:10px;font-weight:700;font-size:.9375rem;cursor:pointer;transition:all .2s;border:none;text-decoration:none;gap:.375rem;font-family:var(--ff-b)}
+    .btn-primary{background:var(--brand);color:white}
+    .btn-primary:hover{background:var(--brand-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(27,79,114,.3)}
+    .btn-ghost{background:var(--bg);color:var(--text-muted);border:1px solid var(--border)}
+    .btn-ghost:hover{background:var(--border)}
+    .btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+    .logo{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:1.875rem}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--brand),#2471A3);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+    .logo-text{font-family:var(--ff-d);font-size:1rem;font-weight:700;color:var(--brand)}
+    .spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 1rem}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+    .icon{animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon"><img src="../asset/logo-icon.png" alt="GTS Amplify" style="width:28px;height:28px;object-fit:contain;border-radius:6px"></div>
+    <div class="logo-text">GTS Amplify</div>
+  </div>
+
+  <!-- Verifying state -->
+  <div id="stateVerifying">
+    <div class="spinner"></div>
+    <h1>Verifying Payment...</h1>
+    <p>Please wait while we confirm your payment. Do not close this page.</p>
+  </div>
+
+  <!-- Success state -->
+  <div id="stateSuccess" style="display:none">
+    <div class="icon success">✓</div>
+    <h1>Payment Successful! 🎉</h1>
+    <p>Your subscription is now active. Your dashboard will update within a few moments.</p>
+    <div class="detail-box" id="successDetails"></div>
+    <div class="btns">
+      <a href="./portal-dashboard.html" class="btn btn-primary">📊 Open Dashboard</a>
+      <a href="./portal-subscriptions.html" class="btn btn-ghost">My Subscriptions</a>
+    </div>
+  </div>
+
+  <!-- Pending state -->
+  <div id="statePending" style="display:none">
+    <div class="icon pending">⏳</div>
+    <h1>Payment Pending</h1>
+    <p>Your payment is being processed. This may take a few minutes. We'll update your account automatically once confirmed.</p>
+    <div class="btns">
+      <a href="./portal-dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+      <a href="./portal-billing.html" class="btn btn-ghost">Check Billing</a>
+    </div>
+  </div>
+
+  <!-- Error state -->
+  <div id="stateError" style="display:none">
+    <div class="icon error">✕</div>
+    <h1>Payment Failed</h1>
+    <p id="errorMsg">Something went wrong with your payment. Please try again or choose a different payment method.</p>
+    <div class="btns">
+      <a href="./portal-services.html" class="btn btn-primary">Try Again</a>
+      <a href="./portal-billing.html" class="btn btn-ghost">View Billing</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { db } from "./firebase.js";
+import {
+  doc, getDoc, collection, query, where, getDocs, orderBy, limit
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+const params    = new URLSearchParams(window.location.search);
+const reference = params.get("reference") || params.get("trxref");          // Paystack
+const sessionId = params.get("session_id");                                  // Stripe
+const token     = params.get("token");                                       // PayPal
+const payerId   = params.get("PayerID");                                     // PayPal
+const canceled  = params.get("canceled");
+
+function show(id) {
+  ["stateVerifying","stateSuccess","statePending","stateError"].forEach(s => {
+    document.getElementById(s).style.display = s===id?"block":"none";
+  });
+}
+
+function renderSuccessDetails(data) {
+  const box = document.getElementById("successDetails");
+  if (!box) return;
+  box.innerHTML = [
+    ["Service",  data.itemName || "Subscription"],
+    ["Amount",   data.amountPaid ? "$"+Number(data.amountPaid).toLocaleString() : (data.price ? "$"+Number(data.price).toLocaleString() : "—")],
+    ["Provider", data.provider  || "—"],
+    ["Ref",      (data.paystackReference||data.stripePaymentId||data.paypalOrderId||reference||sessionId||"—").substring(0,20)],
+    ["Date",     new Date().toLocaleDateString("en-US",{day:"numeric",month:"long",year:"numeric"})],
+  ].map(([l,v]) => `<div class="detail-row"><span class="detail-label">${l}</span><span class="detail-value">${v}</span></div>`).join("");
+}
+
+async function verifyPaystack(ref) {
+  // Poll Firestore for session with matching reference
+  let attempts = 0;
+  while (attempts < 15) {
+    try {
+      const snap = await getDocs(query(
+        collection(db,"checkoutSessions"),
+        where("paystackReference","==", ref),
+        limit(1)
+      ));
+      if (!snap.empty) {
+        const data = snap.docs[0].data();
+        if (data.status === "completed") { renderSuccessDetails(data); show("stateSuccess"); return; }
+        if (data.status === "failed")    { show("stateError"); return; }
+      }
+    } catch(e) {}
+    attempts++;
+    await new Promise(r => setTimeout(r, 2500));
+  }
+  // Fallback — call verification API
+  try {
+    const res  = await fetch(`/api/verify-paystack?reference=${encodeURIComponent(ref)}`);
+    const data = await res.json();
+    if (data.success && data.status === "success") {
+      renderSuccessDetails(data);
+      show("stateSuccess");
+    } else if (data.status === "pending") {
+      show("statePending");
+    } else {
+      show("stateError");
+    }
+  } catch(e) {
+    show("statePending");
+  }
+}
+
+async function verifyStripe(sid) {
+  let attempts = 0;
+  while (attempts < 15) {
+    try {
+      const snap = await getDocs(query(
+        collection(db,"checkoutSessions"),
+        where("stripeSessionId","==", sid),
+        limit(1)
+      ));
+      if (!snap.empty) {
+        const data = snap.docs[0].data();
+        if (data.status === "completed") { renderSuccessDetails(data); show("stateSuccess"); return; }
+        if (data.status === "failed")    { show("stateError"); return; }
+      }
+    } catch(e) {}
+    attempts++;
+    await new Promise(r => setTimeout(r, 2500));
+  }
+  show("statePending");
+}
+
+async function verifyPayPal(token, payerId) {
+  try {
+    const res  = await fetch(`/api/verify-paypal?token=${encodeURIComponent(token)}&payerId=${encodeURIComponent(payerId||"")}`);
+    const data = await res.json();
+    if (data.success) { renderSuccessDetails(data||{}); show("stateSuccess"); }
+    else              { show("stateError"); }
+  } catch(e) {
+    show("statePending");
+  }
+}
+
+// Route to the right verification flow
+(async () => {
+  if (canceled) {
+    document.getElementById("errorMsg").textContent = "Payment was canceled. You have not been charged. Please try again.";
+    show("stateError"); return;
+  }
+  if (reference)        await verifyPaystack(reference);
+  else if (sessionId)   await verifyStripe(sessionId);
+  else if (token)       await verifyPayPal(token, payerId);
+  else                  show("statePending");
+})();
+</script>
+</body>
+</html>
