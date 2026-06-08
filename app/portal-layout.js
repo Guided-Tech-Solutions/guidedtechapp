@@ -23,6 +23,7 @@ export const authReady = new Promise(resolve => {
     if (user) {
       const initials = (user.displayName || user.email || "?")
         .split(/[\s@]+/).slice(0,2).map(s => s[0]?.toUpperCase() || "").join("") || "U";
+      const firstName = user.displayName ? user.displayName.split(" ")[0] : (user.email || "").split("@")[0];
 
       if (avatar) {
         if (user.photoURL) avatar.innerHTML = `<img src="${user.photoURL}" alt="">`;
@@ -32,6 +33,15 @@ export const authReady = new Promise(resolve => {
       if (email) email.textContent = user.email;
       if (btnL) btnL.style.display = "none";
       if (btnO) btnO.style.display = "inline-flex";
+
+      // Populate navbar avatar
+      const navAvatarCircle = document.getElementById("navAvatarCircle");
+      const navAvatarName   = document.getElementById("navAvatarName");
+      if (navAvatarCircle) {
+        if (user.photoURL) navAvatarCircle.innerHTML = `<img src="${user.photoURL}" alt="">`;
+        else navAvatarCircle.textContent = initials;
+      }
+      if (navAvatarName) navAvatarName.textContent = firstName;
     } else {
       if (avatar) avatar.textContent = "?";
       if (name)   name.textContent   = "Not signed in";
@@ -52,6 +62,7 @@ document.getElementById("btnLogin")?.addEventListener("click", () => {
 });
 document.getElementById("btnLogout")?.addEventListener("click", doSignOut);
 document.getElementById("btnSidebarSignout")?.addEventListener("click", doSignOut);
+document.getElementById("btnNavSignout")?.addEventListener("click", doSignOut);
 
 /* ── Mobile sidebar ──────────────────────────────────────────── */
 const sidebar  = document.querySelector(".portal-sidebar");
