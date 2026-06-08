@@ -88,7 +88,10 @@ button, input, select, textarea { font-family:var(--ff-b); }
   padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between;
 }
 .navbar-left  { display:flex; align-items:center; gap:.75rem; }
-.navbar-center { display:flex; align-items:center; gap:.125rem; flex:1; padding:0 1rem; }
+.navbar-center {
+  display:flex; align-items:center; gap:.125rem;
+  position:absolute; left:50%; transform:translateX(-50%);
+}
 .navbar-right { display:flex; align-items:center; gap:.625rem; }
 
 .nav-link-sm {
