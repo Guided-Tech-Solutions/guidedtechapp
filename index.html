@@ -34,6 +34,17 @@
     .btn-nav-outline:hover{background:var(--brand-pale)}
     .btn-nav-solid{padding:.5rem 1.25rem;border-radius:8px;font-weight:600;font-size:.875rem;color:white;background:var(--brand);border:none;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(27,79,114,.25)}
     .btn-nav-solid:hover{background:var(--brand-dark);transform:translateY(-1px)}
+    .nav-avatar-wrap{position:relative}
+    .nav-avatar-btn{display:flex;align-items:center;gap:.5rem;padding:.3125rem .75rem .3125rem .3125rem;border-radius:100px;border:1.5px solid var(--border);background:white;cursor:pointer;transition:all .2s;text-decoration:none}
+    .nav-avatar-btn:hover{border-color:var(--brand);background:var(--brand-pale)}
+    .nav-avatar-circle{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-mid));display:flex;align-items:center;justify-content:center;font-size:.8125rem;font-weight:700;color:white;overflow:hidden;flex-shrink:0}
+    .nav-avatar-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+    .nav-avatar-name{font-size:.8125rem;font-weight:600;color:var(--text);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .nav-dropdown{position:absolute;top:calc(100% + .5rem);right:0;background:white;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.12);min-width:200px;padding:.5rem;z-index:200;opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s}
+    .nav-avatar-wrap:hover .nav-dropdown,.nav-avatar-wrap:focus-within .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+    .nav-dropdown-item{display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:8px;font-size:.875rem;font-weight:500;color:var(--text-mid);transition:background .15s}
+    .nav-dropdown-item:hover{background:var(--bg);color:var(--brand)}
+    .nav-dropdown-divider{height:1px;background:var(--border);margin:.375rem 0}
     .nav-mobile-btn{display:none;background:none;border:none;font-size:1.375rem;cursor:pointer;color:var(--text-mid)}
     .mobile-nav{display:none;position:fixed;top:68px;left:0;right:0;background:white;border-bottom:1px solid var(--border);padding:1rem 1.5rem;z-index:99;flex-direction:column;gap:.25rem;box-shadow:0 8px 24px rgba(0,0,0,.1)}
     .mobile-nav.show{display:flex}
@@ -237,7 +248,7 @@
       <a href="#consultation" class="nav-link">Consultation</a>
       <a href="about.html"    class="nav-link">About</a>
     </div>
-    <div class="nav-cta">
+    <div class="nav-cta" id="navAuth">
       <a href="./app/login.html"  class="btn-nav-outline">Sign In</a>
       <a href="./app/signup.html" class="btn-nav-solid">Get Started Free →</a>
     </div>
@@ -252,8 +263,10 @@
   <a href="#consultation" class="mobile-nav-link">Consultation</a>
   <a href="about.html"    class="mobile-nav-link">About</a>
   <div class="mob-divider"></div>
-  <a href="./app/login.html"  class="mobile-nav-link" style="color:var(--brand);font-weight:600">Sign In</a>
-  <a href="./app/signup.html" class="mobile-nav-link" style="background:var(--brand);color:white;border-radius:8px;text-align:center;font-weight:700">Get Started Free →</a>
+  <div id="mobileAuthLinks">
+    <a href="./app/login.html"  class="mobile-nav-link" style="color:var(--brand);font-weight:600">Sign In</a>
+    <a href="./app/signup.html" class="mobile-nav-link" style="background:var(--brand);color:white;border-radius:8px;text-align:center;font-weight:700;display:block;padding:.625rem .75rem">Get Started Free →</a>
+  </div>
 </div>
 
 <!-- HERO -->
@@ -473,6 +486,7 @@
 import { initializeApp }  from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, where }
   from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 
 const app = initializeApp({
   apiKey:"AIzaSyD0f7L_vf2HZjzzxTyH2-Xu9rC6KWzKUuU",
@@ -482,7 +496,19 @@ const app = initializeApp({
   messagingSenderId:"744645189282",
   appId:"1:744645189282:web:00c134f4c91147818381fb",
 });
-const db = getFirestore(app);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+
+// Nav auth awareness
+onAuthStateChanged(auth, u => {
+  const el = document.getElementById('navAuth'), mob = document.getElementById('mobileAuthLinks');
+  if (!el || !u) return;
+  const init = (u.displayName||u.email||'?')[0].toUpperCase();
+  const name = u.displayName ? u.displayName.split(' ')[0] : (u.email||'').split('@')[0];
+  el.innerHTML = `<div class="nav-avatar-wrap"><a href="./app/portal-dashboard.html" class="nav-avatar-btn"><div class="nav-avatar-circle">${u.photoURL?`<img src="${u.photoURL}" alt="">`:init}</div><span class="nav-avatar-name">${name}</span><span style="font-size:.6rem;color:#64748B;margin-left:2px">▾</span></a><div class="nav-dropdown"><a href="./app/portal-dashboard.html" class="nav-dropdown-item">📊 Dashboard</a><a href="./app/portal-services.html" class="nav-dropdown-item">🛒 Services &amp; Pricing</a><a href="./app/portal-profile.html" class="nav-dropdown-item">👤 My Profile</a><div class="nav-dropdown-divider"></div><a href="#" class="nav-dropdown-item" style="color:#E53935" id="navOut">Sign Out</a></div></div>`;
+  document.getElementById('navOut').addEventListener('click', e => { e.preventDefault(); auth.signOut(); });
+  if (mob) mob.innerHTML = `<a href="./app/portal-dashboard.html" class="mobile-nav-link" style="color:var(--brand);font-weight:700">📊 Go to Dashboard</a>`;
+});
 
 function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function fmtPrice(p){ return p===0||p==='0'?'Free':(typeof p==='number'?'$'+p.toLocaleString():String(p)); }

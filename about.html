@@ -13,10 +13,34 @@
     .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(226,232,240,.8);height:68px}
     .nav-inner{max-width:1200px;margin:0 auto;padding:0 1.5rem;height:100%;display:flex;align-items:center;justify-content:space-between}
     .nav-logo{display:flex;align-items:center;gap:.5rem;font-family:var(--ff-d);font-size:1.0625rem;font-weight:700;color:var(--brand)}
-    .nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem}
-    .nav-right{display:flex;gap:.625rem}
-    .btn-outline{padding:.4375rem 1rem;border-radius:8px;font-weight:600;font-size:.875rem;color:var(--brand);border:1.5px solid var(--brand);background:transparent;cursor:pointer;transition:all .2s}.btn-outline:hover{background:var(--brand-pale)}
-    .btn-solid{padding:.4375rem 1.125rem;border-radius:8px;font-weight:600;font-size:.875rem;color:white;background:var(--brand);border:none;cursor:pointer;transition:all .2s}.btn-solid:hover{background:var(--brand-dark)}
+    .nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:8px;display:flex;align-items:center;justify-content:center}
+    .nav-links{display:flex;align-items:center;gap:.25rem}
+    .nav-link{padding:.4375rem .875rem;border-radius:8px;font-size:.875rem;font-weight:500;color:var(--text-mid);transition:all .2s}
+    .nav-link:hover{background:var(--bg);color:var(--brand)}
+    .nav-link.active{color:var(--brand);font-weight:600}
+    .nav-cta{display:flex;gap:.625rem;align-items:center}
+    .btn-nav-outline{padding:.5rem 1rem;border-radius:8px;font-weight:600;font-size:.875rem;color:var(--brand);border:1.5px solid var(--brand);background:transparent;cursor:pointer;transition:all .2s}
+    .btn-nav-outline:hover{background:var(--brand-pale)}
+    .btn-nav-solid{padding:.5rem 1.25rem;border-radius:8px;font-weight:600;font-size:.875rem;color:white;background:var(--brand);border:none;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(27,79,114,.2)}
+    .btn-nav-solid:hover{background:var(--brand-dark)}
+    .nav-avatar-wrap{position:relative}
+    .nav-avatar-btn{display:flex;align-items:center;gap:.5rem;padding:.3125rem .75rem .3125rem .3125rem;border-radius:100px;border:1.5px solid var(--border);background:white;cursor:pointer;transition:all .2s;text-decoration:none}
+    .nav-avatar-btn:hover{border-color:var(--brand);background:var(--brand-pale)}
+    .nav-avatar-circle{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-mid));display:flex;align-items:center;justify-content:center;font-size:.8125rem;font-weight:700;color:white;overflow:hidden;flex-shrink:0}
+    .nav-avatar-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+    .nav-avatar-name{font-size:.8125rem;font-weight:600;color:var(--text);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .nav-dropdown{position:absolute;top:calc(100% + .5rem);right:0;background:white;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.12);min-width:200px;padding:.5rem;z-index:200;opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s}
+    .nav-avatar-wrap:hover .nav-dropdown,.nav-avatar-wrap:focus-within .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+    .nav-dropdown-item{display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:8px;font-size:.875rem;font-weight:500;color:var(--text-mid);transition:background .15s}
+    .nav-dropdown-item:hover{background:var(--bg);color:var(--brand)}
+    .nav-dropdown-divider{height:1px;background:var(--border);margin:.375rem 0}
+    .nav-mobile-btn{display:none;background:none;border:none;font-size:1.375rem;cursor:pointer;color:var(--text-mid)}
+    .mobile-nav{display:none;position:fixed;top:68px;left:0;right:0;background:white;border-bottom:1px solid var(--border);padding:1rem 1.5rem;z-index:99;flex-direction:column;gap:.25rem;box-shadow:0 8px 24px rgba(0,0,0,.1)}
+    .mobile-nav.show{display:flex}
+    .mobile-nav-link{display:block;padding:.625rem .75rem;border-radius:8px;font-weight:500;color:var(--text-mid)}
+    .mobile-nav-link:hover{background:var(--bg);color:var(--brand)}
+    .mob-divider{height:1px;background:var(--border);margin:.5rem 0}
+    @media(max-width:768px){.nav-links,.nav-cta{display:none}.nav-mobile-btn{display:block}}
     /* HERO */
     .hero{padding:6rem 0 4.5rem;background:linear-gradient(170deg,#08111C,#0F2E42,#1B4F72);text-align:center;margin-top:68px}
     .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:.3125rem .875rem;font-size:.8125rem;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:1.25rem}
@@ -104,13 +128,34 @@
 <body>
 <nav class="nav">
   <div class="nav-inner">
-    <a href="./index.html" class="nav-logo"><div class="nav-logo-icon"><img src="./asset/logo-icon.png" alt="GTS Amplify" style="width:28px;height:28px;object-fit:contain;border-radius:6px"></div>GTS Amplify</a>
-    <div class="nav-right">
-      <a href="./app/login.html"  class="btn-outline">Sign In</a>
-      <a href="./app/signup.html" class="btn-solid">Get Started</a>
+    <a href="./index.html" class="nav-logo">
+      <div class="nav-logo-icon"><img src="./asset/logo-icon.png" alt="GTS Amplify" style="width:28px;height:28px;object-fit:contain;border-radius:6px"></div>
+      GTS Amplify
+    </a>
+    <div class="nav-links">
+      <a href="./index.html#services"     class="nav-link">Services</a>
+      <a href="./pricing.html"            class="nav-link">Pricing</a>
+      <a href="./index.html#consultation" class="nav-link">Consultation</a>
+      <a href="./about.html"              class="nav-link active">About</a>
     </div>
+    <div class="nav-cta" id="navAuth">
+      <a href="./app/login.html"  class="btn-nav-outline">Sign In</a>
+      <a href="./app/signup.html" class="btn-nav-solid">Get Started →</a>
+    </div>
+    <button class="nav-mobile-btn" id="mobileMenuToggle">☰</button>
   </div>
 </nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="./index.html#services"     class="mobile-nav-link">Services</a>
+  <a href="./pricing.html"            class="mobile-nav-link">Pricing</a>
+  <a href="./index.html#consultation" class="mobile-nav-link">Consultation</a>
+  <a href="./about.html"              class="mobile-nav-link">About</a>
+  <div class="mob-divider"></div>
+  <div id="mobileAuthLinks">
+    <a href="./app/login.html"  class="mobile-nav-link" style="color:var(--brand);font-weight:600">Sign In</a>
+    <a href="./app/signup.html" class="mobile-nav-link" style="background:var(--brand);color:white;border-radius:8px;text-align:center;font-weight:700;padding:.625rem .75rem;display:block">Get Started →</a>
+  </div>
+</div>
 
 <!-- HERO -->
 <div class="hero">
@@ -296,6 +341,23 @@
   </div>
 </footer>
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+const _a = initializeApp({apiKey:"AIzaSyD0f7L_vf2HZjzzxTyH2-Xu9rC6KWzKUuU",authDomain:"guidedtechapp.firebaseapp.com",projectId:"guidedtechapp",storageBucket:"guidedtechapp.firebasestorage.app",messagingSenderId:"744645189282",appId:"1:744645189282:web:00c134f4c91147818381fb"},'navApp');
+const _auth = getAuth(_a);
+onAuthStateChanged(_auth, u => {
+  const el = document.getElementById('navAuth'), mob = document.getElementById('mobileAuthLinks');
+  if (!el || !u) return;
+  const init = (u.displayName||u.email||'?')[0].toUpperCase();
+  const name = u.displayName ? u.displayName.split(' ')[0] : (u.email||'').split('@')[0];
+  el.innerHTML = `<div class="nav-avatar-wrap"><a href="./app/portal-dashboard.html" class="nav-avatar-btn"><div class="nav-avatar-circle">${u.photoURL?`<img src="${u.photoURL}" alt="">`:init}</div><span class="nav-avatar-name">${name}</span><span style="font-size:.6rem;color:#64748B;margin-left:2px">▾</span></a><div class="nav-dropdown"><a href="./app/portal-dashboard.html" class="nav-dropdown-item">📊 Dashboard</a><a href="./app/portal-services.html" class="nav-dropdown-item">🛒 Services &amp; Pricing</a><a href="./app/portal-profile.html" class="nav-dropdown-item">👤 My Profile</a><div class="nav-dropdown-divider"></div><a href="#" class="nav-dropdown-item" style="color:#E53935" id="navOut">Sign Out</a></div></div>`;
+  document.getElementById('navOut').addEventListener('click', e => { e.preventDefault(); _auth.signOut(); });
+  if (mob) mob.innerHTML = `<a href="./app/portal-dashboard.html" class="mobile-nav-link" style="color:var(--brand);font-weight:700">📊 Go to Dashboard</a>`;
+});
+document.getElementById('mobileMenuToggle').addEventListener('click', () => document.getElementById('mobileNav').classList.toggle('show'));
+document.querySelectorAll('#mobileNav a').forEach(a => a.addEventListener('click', () => document.getElementById('mobileNav').classList.remove('show')));
+</script>
 <script>
   // Tabs
   document.querySelectorAll('.tab-btn').forEach(btn => {

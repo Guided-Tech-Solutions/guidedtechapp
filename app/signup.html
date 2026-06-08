@@ -4,119 +4,181 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Account — GTS Amplify</title>
+  <meta name="description" content="Create your GTS Amplify account and start growing your business today.">
   <link rel="icon" href="../asset/logo-icon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root{--brand:#1B4F72;--brand-dark:#0F2E42;--brand-pale:#EBF5FB;--danger:#E53935;--danger-pale:#FDECEA;--border:#E2E8F0;--text:#0D1B2A;--text-mid:#334155;--text-muted:#64748B;--surface:#fff;--bg:#F2F5F9;--r:8px;--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif}
+    :root{--brand:#1B4F72;--brand-dark:#0F2E42;--brand-mid:#2471A3;--brand-pale:#EBF5FB;--accent:#E67E22;--danger:#E53935;--danger-pale:#FDECEA;--success:#0F9D58;--border:#E2E8F0;--text:#0D1B2A;--text-mid:#334155;--text-muted:#64748B;--surface:#fff;--bg:#F2F5F9;--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif}
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:var(--ff-b);min-height:100vh;display:flex;-webkit-font-smoothing:antialiased}
+    body{font-family:var(--ff-b);min-height:100vh;display:flex;background:var(--bg);-webkit-font-smoothing:antialiased}
+    a{text-decoration:none;color:inherit}
+
     .auth-split{display:flex;min-height:100vh;width:100%}
-    .auth-brand{flex:1;background:linear-gradient(145deg,#080F1A 0%,#0F2E42 40%,#1B4F72 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;position:relative;overflow:hidden}
-    .auth-brand::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(52,152,219,.12),transparent 70%)}
-    .auth-brand-inner{position:relative;z-index:1;max-width:380px;text-align:center}
-    .auth-logo{display:flex;align-items:center;justify-content:center;gap:.625rem;margin-bottom:2.5rem}
-    .auth-logo-icon{width:48px;height:48px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem}
-    .auth-logo-text{font-family:var(--ff-d);font-size:1.375rem;font-weight:700;color:white}
-    .auth-headline{font-family:var(--ff-d);font-size:clamp(1.75rem,3.5vw,2.375rem);font-weight:800;color:white;line-height:1.15;letter-spacing:-.03em;margin-bottom:.875rem}
-    .auth-headline span{color:#F4A946}
-    .auth-desc{font-size:.9375rem;color:rgba(255,255,255,.62);line-height:1.65}
-    .auth-panel{width:460px;flex-shrink:0;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2.5rem;overflow-y:auto}
-    .auth-panel-inner{width:100%;max-width:340px}
-    .auth-panel-title{font-family:var(--ff-d);font-size:1.5rem;font-weight:700;color:var(--text);letter-spacing:-.025em;margin-bottom:.25rem}
-    .auth-panel-subtitle{font-size:.875rem;color:var(--text-muted);margin-bottom:1.75rem}
-    .btn-social{width:100%;display:flex;align-items:center;justify-content:center;gap:.625rem;padding:.6875rem;border:1.5px solid var(--border);border-radius:var(--r);font-weight:600;font-size:.875rem;color:var(--text-mid);background:var(--surface);cursor:pointer;transition:all .2s ease;margin-bottom:.625rem}
-    .btn-social:hover{border-color:#c1cad6;background:var(--bg);transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.06)}
-    .btn-social:disabled{opacity:.5;cursor:not-allowed;transform:none}
-    .btn-social img{width:18px;height:18px}
-    .divider-or{display:flex;align-items:center;gap:.75rem;margin:1rem 0}
-    .divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--border)}
-    .divider-or span{font-size:.75rem;color:var(--text-muted);white-space:nowrap;font-weight:500}
-    .form-group{margin-bottom:.875rem}
-    .form-label{display:block;font-size:.8125rem;font-weight:600;color:var(--text-mid);margin-bottom:.3rem}
-    .form-label .req{color:var(--danger);margin-left:2px}
-    .form-control{width:100%;padding:.625rem .875rem;border:1.5px solid var(--border);border-radius:var(--r);font-size:.875rem;color:var(--text);background:var(--surface);transition:all .2s;font-family:var(--ff-b)}
-    .form-control:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(27,79,114,.1)}
-    .form-control::placeholder{color:#94A3B8}
+
+    /* Brand panel */
+    .auth-brand{flex:1;background:linear-gradient(150deg,#060D18 0%,#0F2E42 50%,#1B4F72 100%);display:flex;flex-direction:column;justify-content:space-between;padding:3rem;position:relative;overflow:hidden}
+    .b-orb1{position:absolute;top:-80px;right:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(52,152,219,.15),transparent 70%);pointer-events:none}
+    .b-orb2{position:absolute;bottom:-120px;left:-60px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(230,126,34,.1),transparent 70%);pointer-events:none}
+    .b-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+    .b-top{position:relative;z-index:1}
+    .b-logo{display:flex;align-items:center;gap:.625rem;margin-bottom:3rem}
+    .b-logo-icon{width:40px;height:40px;border-radius:10px;overflow:hidden;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center}
+    .b-logo-icon img{width:100%;height:100%;object-fit:contain}
+    .b-logo-name{font-family:var(--ff-d);font-size:1.125rem;font-weight:700;color:white}
+    .b-headline{font-family:var(--ff-d);font-size:clamp(1.875rem,3vw,2.75rem);font-weight:900;color:white;line-height:1.1;letter-spacing:-.04em;margin-bottom:1rem}
+    .b-headline span{color:var(--accent)}
+    .b-desc{font-size:.9375rem;color:rgba(255,255,255,.55);line-height:1.7;max-width:380px;margin-bottom:2.5rem}
+    .b-checklist{display:flex;flex-direction:column;gap:.875rem}
+    .b-check{display:flex;align-items:flex-start;gap:.75rem;font-size:.9375rem;color:rgba(255,255,255,.7)}
+    .b-check-icon{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:.625rem;flex-shrink:0;margin-top:1px}
+    .b-check-text strong{color:white;font-weight:600}
+    .b-bottom{position:relative;z-index:1}
+    .b-trust{font-size:.8125rem;color:rgba(255,255,255,.3)}
+    .b-trust strong{color:rgba(255,255,255,.55);font-weight:600}
+
+    /* Auth panel */
+    .auth-panel{width:520px;flex-shrink:0;background:var(--surface);display:flex;flex-direction:column;overflow-y:auto}
+    .panel-inner{flex:1;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 3.5rem;max-width:460px;margin:auto;width:100%}
+
+    .panel-back{display:inline-flex;align-items:center;gap:.375rem;font-size:.8125rem;color:var(--text-muted);margin-bottom:2rem;transition:color .2s}
+    .panel-back:hover{color:var(--brand)}
+
+    .panel-logo{display:flex;align-items:center;gap:.5rem;margin-bottom:1.75rem}
+    .panel-logo-icon{width:30px;height:30px;border-radius:7px;overflow:hidden;border:1px solid var(--border)}
+    .panel-logo-icon img{width:100%;height:100%;object-fit:contain}
+    .panel-logo-name{font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:var(--brand)}
+
+    .panel-title{font-family:var(--ff-d);font-size:1.875rem;font-weight:800;color:var(--text);letter-spacing:-.04em;line-height:1.1;margin-bottom:.375rem}
+    .panel-subtitle{font-size:.9375rem;color:var(--text-muted);margin-bottom:1.75rem}
+
+    .btn-google{width:100%;display:flex;align-items:center;justify-content:center;gap:.625rem;padding:.875rem 1.25rem;border:1.5px solid var(--border);border-radius:10px;font-family:var(--ff-b);font-weight:600;font-size:.9375rem;color:var(--text-mid);background:var(--surface);cursor:pointer;transition:all .2s;margin-bottom:1.25rem}
+    .btn-google:hover{border-color:#CBD5E1;background:var(--bg);box-shadow:0 2px 10px rgba(0,0,0,.07)}
+    .btn-google:disabled{opacity:.5;cursor:not-allowed}
+    .btn-google img{width:20px;height:20px}
+
+    .divider{display:flex;align-items:center;gap:.875rem;margin:0 0 1.25rem}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+    .divider span{font-size:.75rem;color:var(--text-muted);font-weight:500;white-space:nowrap}
+
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.875rem}
-    .btn-primary{width:100%;padding:.6875rem;background:var(--brand);color:white;border:none;border-radius:var(--r);font-weight:700;font-size:.9375rem;cursor:pointer;transition:all .2s;font-family:var(--ff-b);display:flex;align-items:center;justify-content:center;gap:.5rem}
-    .btn-primary:hover{background:var(--brand-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(27,79,114,.3)}
-    .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
-    .error-msg{background:var(--danger-pale);border:1px solid rgba(229,57,53,.2);border-radius:var(--r);padding:.625rem .875rem;font-size:.8125rem;color:var(--danger);margin-bottom:.875rem;display:none}
+    .form-group{margin-bottom:.875rem}
+    .form-label{display:block;font-size:.8125rem;font-weight:600;color:var(--text-mid);margin-bottom:.375rem}
+    .req{color:var(--danger);margin-left:2px}
+    .form-wrap{position:relative}
+    .form-control{width:100%;padding:.8125rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-size:.9375rem;color:var(--text);background:var(--surface);transition:all .2s;font-family:var(--ff-b)}
+    .form-control:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(27,79,114,.1)}
+    .form-control::placeholder{color:#B0BDCF}
+    .form-control.has-btn{padding-right:3rem}
+    .pw-toggle{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:1rem;padding:.25rem;transition:color .2s;display:flex;align-items:center}
+    .pw-toggle:hover{color:var(--brand)}
+
+    .btn-submit{width:100%;padding:.9375rem;background:var(--brand);color:white;border:none;border-radius:10px;font-family:var(--ff-d);font-weight:700;font-size:1rem;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:.5rem;box-shadow:0 4px 16px rgba(27,79,114,.25);margin-bottom:.875rem;letter-spacing:.01em;margin-top:.25rem}
+    .btn-submit:hover{background:var(--brand-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(27,79,114,.35)}
+    .btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+    .error-msg{background:var(--danger-pale);border:1px solid rgba(229,57,53,.2);border-radius:10px;padding:.75rem 1rem;font-size:.875rem;color:var(--danger);margin-bottom:1rem;display:none}
     .error-msg.show{display:block}
-    .email-form{display:none}
-    .email-form.show{display:block}
-    .btn-back{background:none;border:none;color:var(--text-muted);font-size:.8125rem;cursor:pointer;display:flex;align-items:center;gap:.25rem;margin-bottom:.875rem;font-weight:500;padding:0}
-    .btn-back:hover{color:var(--text)}
-    .auth-footer{font-size:.8125rem;color:var(--text-muted);text-align:center;margin-top:1.25rem}
-    .auth-footer a{color:var(--brand);font-weight:600;text-decoration:none}
-    .auth-footer a:hover{text-decoration:underline}
-    .terms-note{font-size:.75rem;color:var(--text-muted);text-align:center;margin-top:.75rem;line-height:1.5}
-    .terms-note a{color:var(--brand);text-decoration:none}
-    .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+
+    .terms-note{font-size:.75rem;color:var(--text-muted);text-align:center;margin-bottom:1.25rem;line-height:1.5}
+    .terms-note a{color:var(--brand);font-weight:600}
+    .terms-note a:hover{text-decoration:underline}
+
+    .panel-footer{text-align:center;font-size:.875rem;color:var(--text-muted)}
+    .panel-footer a{color:var(--brand);font-weight:600}
+    .panel-footer a:hover{text-decoration:underline}
+
+    .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .65s linear infinite;display:inline-block}
     @keyframes spin{to{transform:rotate(360deg)}}
-    @media(max-width:900px){.auth-brand{display:none}}
-    @media(max-width:500px){.auth-panel{width:100%;padding:2rem 1.25rem}.form-row{grid-template-columns:1fr}}
+
+    @media(max-width:960px){.auth-brand{display:none}}
+    @media(max-width:540px){.auth-panel{width:100%}.panel-inner{padding:2rem 1.5rem}.form-row{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 <div class="auth-split">
+
+  <!-- Brand panel -->
   <div class="auth-brand">
-    <div class="auth-brand-inner">
-      <div class="auth-logo">
-        <div class="auth-logo-icon">🚀</div>
-        <div class="auth-logo-text">GTS Amplify</div>
+    <div class="b-orb1"></div><div class="b-orb2"></div><div class="b-grid"></div>
+    <div class="b-top">
+      <a href="../index.html" class="b-logo">
+        <div class="b-logo-icon"><img src="../asset/logo-icon.png" alt="GTS Amplify"></div>
+        <span class="b-logo-name">GTS Amplify</span>
+      </a>
+      <h1 class="b-headline">Start growing your<br>business <span>today</span></h1>
+      <p class="b-desc">Join businesses using GTS Amplify for lead generation, cloud migrations, automation, and SEO — with live analytics for every service.</p>
+      <div class="b-checklist">
+        <div class="b-check"><div class="b-check-icon">✓</div><div class="b-check-text"><strong>Free to get started</strong> — no credit card required</div></div>
+        <div class="b-check"><div class="b-check-icon">📊</div><div class="b-check-text"><strong>Real-time dashboards</strong> for every service you subscribe to</div></div>
+        <div class="b-check"><div class="b-check-icon">🚀</div><div class="b-check-text"><strong>Onboard in minutes</strong> with a guided setup wizard</div></div>
+        <div class="b-check"><div class="b-check-icon">🔒</div><div class="b-check-text"><strong>Cancel anytime</strong> — no lock-in contracts</div></div>
       </div>
-      <h1 class="auth-headline">Start growing your business <span>today</span></h1>
-      <p class="auth-desc">Join businesses using GTS Amplify for lead generation, cloud migrations, automation, and SEO — with live analytics dashboards for every service.</p>
+    </div>
+    <div class="b-bottom">
+      <div class="b-trust">Trusted by businesses across the US · <strong>Mississippi, United States</strong></div>
     </div>
   </div>
 
+  <!-- Auth panel -->
   <div class="auth-panel">
-    <div class="auth-panel-inner">
-      <h2 class="auth-panel-title">Create your account</h2>
-      <p class="auth-panel-subtitle">Join GTS Amplify — free to get started</p>
+    <div class="panel-inner">
+      <a href="../index.html" class="panel-back">← Back to home</a>
+
+      <div class="panel-logo">
+        <div class="panel-logo-icon"><img src="../asset/logo-icon.png" alt="GTS Amplify"></div>
+        <span class="panel-logo-name">GTS Amplify</span>
+      </div>
+
+      <h2 class="panel-title">Create your account</h2>
+      <p class="panel-subtitle">Join GTS Amplify — free to get started</p>
 
       <div class="error-msg" id="errorBox"></div>
 
-      <button class="btn-social" id="googleBtn">
+      <button class="btn-google" id="googleBtn">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
         Continue with Google
       </button>
 
-      <button class="btn-social" id="emailToggleBtn" style="color:var(--brand);border-color:rgba(27,79,114,.3)">
-        📧 Sign Up with Email
-      </button>
+      <div class="divider"><span>or sign up with email</span></div>
 
-      <div class="email-form" id="emailForm">
-        <button class="btn-back" id="backBtn">← Back</button>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">First Name <span class="req">*</span></label>
-            <input type="text" class="form-control" id="firstName" placeholder="First" autocomplete="given-name">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Last Name <span class="req">*</span></label>
-            <input type="text" class="form-control" id="lastName" placeholder="Last" autocomplete="family-name">
-          </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name <span class="req">*</span></label>
+          <input type="text" class="form-control" id="firstName" placeholder="First" autocomplete="given-name">
         </div>
         <div class="form-group">
-          <label class="form-label">Email Address <span class="req">*</span></label>
-          <input type="email" class="form-control" id="emailInput" placeholder="you@example.com" autocomplete="email">
+          <label class="form-label">Last Name <span class="req">*</span></label>
+          <input type="text" class="form-control" id="lastName" placeholder="Last" autocomplete="family-name">
         </div>
-        <div class="form-group">
-          <label class="form-label">Password <span class="req">*</span></label>
-          <input type="password" class="form-control" id="passwordInput" placeholder="Min. 6 characters" autocomplete="new-password">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Confirm Password <span class="req">*</span></label>
-          <input type="password" class="form-control" id="confirmInput" placeholder="Repeat password">
-        </div>
-        <button class="btn-primary" id="submitBtn">Create Account</button>
-        <div class="terms-note">By creating an account you agree to our <a href="../terms.html">Terms of Service</a> and <a href="../privacy.html">Privacy Policy</a></div>
       </div>
 
-      <div class="auth-footer" style="margin-top:1rem">
-        Already have an account? <a href="./login.html" id="loginLink">Sign in</a>
+      <div class="form-group">
+        <label class="form-label">Email Address <span class="req">*</span></label>
+        <input type="email" class="form-control" id="emailInput" placeholder="you@example.com" autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password <span class="req">*</span></label>
+        <div class="form-wrap">
+          <input type="password" class="form-control has-btn" id="passwordInput" placeholder="Min. 6 characters" autocomplete="new-password">
+          <button class="pw-toggle" id="pwToggle" type="button">👁</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirm Password <span class="req">*</span></label>
+        <input type="password" class="form-control" id="confirmInput" placeholder="Repeat password" autocomplete="new-password">
+      </div>
+
+      <button class="btn-submit" id="submitBtn">Create Account</button>
+
+      <div class="terms-note">
+        By creating an account you agree to our
+        <a href="../terms.html">Terms of Service</a> and <a href="../privacy.html">Privacy Policy</a>
+      </div>
+
+      <div class="panel-footer">
+        Already have an account? <a href="./login.html" id="loginLink">Sign in →</a>
       </div>
     </div>
   </div>
@@ -131,13 +193,25 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
-const params  = new URLSearchParams(window.location.search);
-const redirect= params.get("redirect") || "./portal-dashboard.html";
-const errorBox= document.getElementById("errorBox");
+const params   = new URLSearchParams(window.location.search);
+const redirect = params.get("redirect") || "./portal-dashboard.html";
+const errorBox = document.getElementById("errorBox");
+const googleBtn= document.getElementById("googleBtn");
+const submitBtn= document.getElementById("submitBtn");
+const pwToggle = document.getElementById("pwToggle");
+const pwInput  = document.getElementById("passwordInput");
+
 document.getElementById("loginLink").href = "./login.html?redirect=" + encodeURIComponent(redirect);
 
-function showError(msg) { errorBox.textContent=msg; errorBox.classList.add("show"); }
-function clearError()   { errorBox.classList.remove("show"); }
+function showError(msg){ errorBox.textContent=msg; errorBox.style.cssText=''; errorBox.classList.add("show"); }
+function clearError()  { errorBox.classList.remove("show"); }
+
+// Password toggle
+pwToggle.addEventListener("click", () => {
+  const show = pwInput.type === "password";
+  pwInput.type = show ? "text" : "password";
+  pwToggle.textContent = show ? "🙈" : "👁";
+});
 
 async function createProfile(user, displayName) {
   try {
@@ -150,40 +224,27 @@ async function createProfile(user, displayName) {
 }
 
 // Google
-document.getElementById("googleBtn").addEventListener("click", async () => {
-  clearError();
-  const btn = document.getElementById("googleBtn");
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Creating account...';
+googleBtn.addEventListener("click", async () => {
+  clearError(); googleBtn.disabled = true;
+  googleBtn.innerHTML = '<span class="spinner"></span> Creating account...';
   try {
     const r = await signInWithPopup(auth, new GoogleAuthProvider());
     await createProfile(r.user, r.user.displayName);
     window.location.href = redirect;
   } catch(e) {
     showError(e.message || "Google sign-up failed.");
-    btn.disabled = false;
-    btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
+    googleBtn.disabled = false;
+    googleBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
   }
 });
 
-// Toggle
-document.getElementById("emailToggleBtn").addEventListener("click", () => {
-  document.getElementById("emailToggleBtn").style.display="none";
-  document.getElementById("emailForm").classList.add("show");
-  document.getElementById("firstName").focus();
-});
-document.getElementById("backBtn").addEventListener("click", () => {
-  document.getElementById("emailForm").classList.remove("show");
-  document.getElementById("emailToggleBtn").style.display="flex";
-  clearError();
-});
-
 // Email signup
-document.getElementById("submitBtn").addEventListener("click", async () => {
+submitBtn.addEventListener("click", async () => {
   clearError();
   const first   = document.getElementById("firstName").value.trim();
   const last    = document.getElementById("lastName").value.trim();
   const email   = document.getElementById("emailInput").value.trim();
-  const pwd     = document.getElementById("passwordInput").value;
+  const pwd     = pwInput.value;
   const confirm = document.getElementById("confirmInput").value;
 
   if (!first || !last) { showError("Please enter your first and last name."); return; }
@@ -192,8 +253,8 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
   if (pwd.length < 6)  { showError("Password must be at least 6 characters."); return; }
   if (pwd !== confirm) { showError("Passwords do not match."); return; }
 
-  const btn = document.getElementById("submitBtn");
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Creating account...';
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner"></span> Creating account...';
   try {
     const displayName = `${first} ${last}`;
     const cred = await createUserWithEmailAndPassword(auth, email, pwd);
@@ -203,11 +264,11 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
   } catch(e) {
     const msgs = {
       "auth/email-already-in-use":"This email is already registered. Try signing in.",
-      "auth/invalid-email":"Invalid email address.",
-      "auth/weak-password":"Password is too weak.",
+      "auth/invalid-email":       "Invalid email address.",
+      "auth/weak-password":       "Password is too weak.",
     };
     showError(msgs[e.code] || e.message);
-    btn.disabled = false; btn.textContent = "Create Account";
+    submitBtn.disabled = false; submitBtn.textContent = "Create Account";
   }
 });
 
