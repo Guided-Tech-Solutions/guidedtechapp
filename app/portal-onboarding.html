@@ -10,11 +10,28 @@
 <nav class="navbar"><div class="navbar-inner">
   <div class="navbar-left">
     <button class="hamburger-btn" id="hamburgerBtn">☰</button>
-    <a href="../index.html" class="brand-logo"><div class="brand-logo-icon">🚀</div>GTS Amplify</a>
+    <a href="../index.html" class="brand-logo"><div class="brand-logo-icon"><img src="../asset/logo-icon.png" alt="" style="width:26px;height:26px;object-fit:contain;border-radius:5px"></div>GTS Amplify</a>
+  </div>
+  <div class="navbar-center">
+    <a href="../index.html#services"     class="nav-link-sm">Services</a>
+    <a href="../pricing.html"            class="nav-link-sm">Pricing</a>
+    <a href="../index.html#consultation" class="nav-link-sm">Consultation</a>
+    <a href="../about.html"              class="nav-link-sm">About</a>
   </div>
   <div class="navbar-right">
-    <button class="btn-nav btn-nav-ghost" id="btnLogin"  style="display:none">Log In</button>
-    <button class="btn-nav btn-nav-ghost" id="btnLogout" style="display:none">Log Out</button>
+    <div class="nav-avatar-wrap">
+      <button class="nav-avatar-btn">
+        <div class="nav-avatar-circle" id="navAvatarCircle">?</div>
+        <span class="nav-avatar-name" id="navAvatarName">Account</span>
+      </button>
+      <div class="nav-dropdown">
+        <a href="./portal-dashboard.html" class="nav-dropdown-item">📊 Dashboard</a>
+        <a href="./portal-profile.html"   class="nav-dropdown-item">👤 My Profile</a>
+        <a href="./portal-billing.html"   class="nav-dropdown-item">💳 Billing</a>
+        <div class="nav-dropdown-divider"></div>
+        <a href="#" class="nav-dropdown-item danger" id="btnNavSignout">🚪 Sign Out</a>
+      </div>
+    </div>
   </div>
 </div></nav>
 <div class="portal-wrapper">
