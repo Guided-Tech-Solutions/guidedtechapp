@@ -53,9 +53,14 @@
     .acc-item.open .acc-header{background:var(--brand);color:white}
     .acc-arrow{font-size:.75rem;transition:transform .25s}
     .acc-item.open .acc-arrow{transform:rotate(90deg)}
-    .acc-body{display:none;padding:1rem 1.25rem 1.25rem;font-size:.875rem;color:var(--text-muted);line-height:1.7;background:var(--surface)}
-    .acc-item.open .acc-body{display:block}
-    .why-card{background:var(--brand-pale);border:1.5px solid var(--border);border-radius:16px;padding:2rem;font-size:.9375rem;color:var(--text-mid);line-height:1.75}
+    .why-card{border-radius:16px;padding:2rem;font-size:.9375rem;line-height:1.75;transition:background .3s,border-color .3s,color .3s}
+    .why-card.theme-1{background:var(--brand-pale);border:1.5px solid #bfdbf7;color:var(--text-mid)}
+    .why-card.theme-2{background:#1B4F72;border:1.5px solid #1B4F72;color:rgba(255,255,255,.9)}
+    .why-card.theme-2 .why-card-title{color:white}
+    .why-card.theme-2 strong{color:white}
+    .why-card.theme-3{background:#0F2E42;border:1.5px solid #0F2E42;color:rgba(255,255,255,.85)}
+    .why-card.theme-3 .why-card-title{color:white}
+    .why-card.theme-3 strong{color:white}
     .why-card-title{font-family:var(--ff-d);font-size:1.125rem;font-weight:700;color:var(--text);margin-bottom:.75rem}
     /* HISTORY */
     .history-section{background:var(--bg)}
@@ -158,20 +163,17 @@
         <div class="accordion">
           <div class="acc-item open" id="acc-1">
             <button class="acc-header" onclick="toggleAcc('acc-1')">We Keep Your Business Running Smoothly <span class="acc-arrow">›</span></button>
-            <div class="acc-body">We upgrade and modernize your technology without interrupting your daily operations. Our solutions are reliable, secure, and built to work smoothly from day one. We fix what's not working, modernize what's outdated, and keep everything running — result: less downtime, fewer mistakes, and a smoother business that's ready to grow.</div>
           </div>
           <div class="acc-item" id="acc-2">
             <button class="acc-header" onclick="toggleAcc('acc-2')">We Help You Work Faster <span class="acc-arrow">›</span></button>
-            <div class="acc-body">We automate repetitive processes and streamline your workflows so your team spends less time on manual tasks and more time on what matters. From cloud migrations to custom integrations, we build systems that move at the speed of your business.</div>
           </div>
           <div class="acc-item" id="acc-3">
             <button class="acc-header" onclick="toggleAcc('acc-3')">We're With You Every Step of the Way <span class="acc-arrow">›</span></button>
-            <div class="acc-body">From onboarding to ongoing support, our team is available when you need us. We don't disappear after deployment — we stay engaged, monitor your systems, and proactively address issues before they become problems. You get a real partner, not just a vendor.</div>
           </div>
         </div>
       </div>
       <div class="why-right">
-        <div class="why-card" id="why-detail">
+        <div class="why-card theme-1" id="why-detail">
           <div class="why-card-title">We Keep Your Business Running Smoothly</div>
           <p>We upgrade and modernize your technology without interrupting your daily operations. Our solutions are reliable, secure, and built to work smoothly from day one.</p>
           <p style="margin-top:.75rem">When your systems are slow, outdated, or always breaking, your business loses time, customers, and money. We make sure your technology works the way it should — fast, stable, and secure. We fix what's not working, modernize what's outdated, and keep everything running without disrupting your daily operations.</p>
@@ -327,15 +329,14 @@
     }
   };
 
+  const accTheme = { 'acc-1': 'theme-1', 'acc-2': 'theme-2', 'acc-3': 'theme-3' };
+
   function toggleAcc(id) {
-    const wasOpen = document.getElementById(id).classList.contains('open');
     document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
-    if (!wasOpen) {
-      document.getElementById(id).classList.add('open');
-      const detail = document.getElementById('why-detail');
-      detail.querySelector('.why-card-title').textContent = accContent[id].title;
-      detail.innerHTML = `<div class="why-card-title">${accContent[id].title}</div>${accContent[id].body}`;
-    }
+    document.getElementById(id).classList.add('open');
+    const detail = document.getElementById('why-detail');
+    detail.className = 'why-card ' + accTheme[id];
+    detail.innerHTML = `<div class="why-card-title">${accContent[id].title}</div>${accContent[id].body}`;
   }
 </script>
 </body>
