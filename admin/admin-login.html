@@ -31,6 +31,10 @@
     .back:hover{color:var(--brand)}
     .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
     @keyframes spin{to{transform:rotate(360deg)}}
+    .divider{display:flex;align-items:center;gap:.75rem;margin:.75rem 0;color:var(--text-muted);font-size:.8125rem}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+    .google-btn{background:white;color:var(--text);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;gap:.625rem;font-size:.875rem;font-weight:600;margin-top:0}
+    .google-btn:hover{background:var(--bg);border-color:var(--brand);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
   </style>
 </head>
 <body>
@@ -54,20 +58,34 @@
     <input type="password" id="pwdInput" placeholder="••••••••" autocomplete="current-password">
   </div>
   <button id="loginBtn">Sign In to Admin Panel</button>
+  <div class="divider"><span>or</span></div>
+  <button id="googleBtn" class="google-btn"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="Google"> Continue with Google</button>
   <div class="security-note">🔒 Secure area. All access is logged.</div>
   <a href="../index.html" class="back">← Back to website</a>
 </div>
 <script type="module">
 import { auth, db } from "./firebase-admin.js";
-import { signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 const errBox   = document.getElementById("errorBox");
 const loginBtn = document.getElementById("loginBtn");
+const googleBtn = document.getElementById("googleBtn");
 const emailEl  = document.getElementById("emailInput");
 const pwdEl    = document.getElementById("pwdInput");
 
 function showErr(msg){ errBox.textContent=msg; errBox.classList.add("show"); }
+
+async function checkAdminAndRedirect(user) {
+  const snap = await getDoc(doc(db,"Admins",user.uid));
+  if (!snap.exists()) {
+    await auth.signOut();
+    showErr("Access denied — your account is not an admin.");
+    return false;
+  }
+  window.location.href = "./admin-dashboard.html";
+  return true;
+}
 
 async function doLogin() {
   const email=emailEl.value.trim(), pwd=pwdEl.value;
@@ -76,27 +94,30 @@ async function doLogin() {
   loginBtn.disabled=true; loginBtn.innerHTML='<span class="spinner"></span> Signing in...';
   try {
     const cred = await signInWithEmailAndPassword(auth, email, pwd);
-    const snap = await getDoc(doc(db,"Admins",cred.user.uid));
-    if (!snap.exists()) {
-      await auth.signOut();
-      showErr("Access denied — your account is not an admin.");
-      loginBtn.disabled=false; loginBtn.textContent="Sign In to Admin Panel"; return;
-    }
-    window.location.href = "./admin-dashboard.html";
+    await checkAdminAndRedirect(cred.user);
   } catch(e) {
     const msgs={"auth/wrong-password":"Incorrect password.","auth/user-not-found":"No account with this email.","auth/invalid-credential":"Invalid email or password.","auth/too-many-requests":"Too many attempts. Try later."};
     showErr(msgs[e.code]||e.message);
-    loginBtn.disabled=false; loginBtn.textContent="Sign In to Admin Panel";
+  }
+  loginBtn.disabled=false; loginBtn.textContent="Sign In to Admin Panel";
+}
+
+async function doGoogleLogin() {
+  errBox.classList.remove("show");
+  googleBtn.disabled=true; googleBtn.innerHTML='<span class="spinner" style="border-color:rgba(0,0,0,.2);border-top-color:var(--brand)"></span> Signing in...';
+  try {
+    const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+    const ok = await checkAdminAndRedirect(cred.user);
+    if (!ok) { googleBtn.disabled=false; googleBtn.innerHTML='<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="Google"> Continue with Google'; }
+  } catch(e) {
+    if (e.code !== 'auth/popup-closed-by-user') showErr(e.message);
+    googleBtn.disabled=false; googleBtn.innerHTML='<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="Google"> Continue with Google';
   }
 }
+
 loginBtn.addEventListener("click", doLogin);
+googleBtn.addEventListener("click", doGoogleLogin);
 pwdEl.addEventListener("keydown", e=>{ if(e.key==="Enter") doLogin(); });
-onAuthStateChanged(auth, async user=>{
-  if (user) {
-    const snap=await getDoc(doc(db,"Admins",user.uid));
-    if (snap.exists()) window.location.href="./admin-dashboard.html";
-  }
-});
 </script>
 </body>
 </html>
