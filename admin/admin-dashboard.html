@@ -524,12 +524,13 @@ select.form-control{cursor:pointer}
   <div class="modal sm">
     <div class="modal-hdr"><div class="modal-title">Add Admin</div><div class="modal-x" onclick="closeModal('adminModal')">✕</div></div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">Firebase UID <span class="req">*</span></label><input type="text" class="form-control" id="adminUid" placeholder="Firebase Auth UID"><div class="form-hint">Found in Firebase Console → Authentication</div></div>
-      <div class="form-group"><label class="form-label">Display Name</label><input type="text" class="form-control" id="adminName"></div>
+      <div class="form-group"><label class="form-label">Full Name <span class="req">*</span></label><input type="text" class="form-control" id="adminName" placeholder="Jane Smith"></div>
+      <div class="form-group"><label class="form-label">Email Address <span class="req">*</span></label><input type="email" class="form-control" id="adminEmail" placeholder="jane@example.com"></div>
+      <div class="form-group"><label class="form-label">Password <span class="req">*</span></label><input type="password" class="form-control" id="adminPassword" placeholder="Min. 8 characters"><div class="form-hint">The admin will use this to log in.</div></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('adminModal')">Cancel</button>
-      <button class="btn btn-primary" id="btnSaveAdmin">Add Admin</button>
+      <button class="btn btn-primary" id="btnSaveAdmin">Create Admin</button>
     </div>
   </div>
 </div>
@@ -544,14 +545,15 @@ import {
   doc, getDoc, query, where, limit, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
-const app = initializeApp({
+const firebaseConfig = {
   apiKey:"AIzaSyD0f7L_vf2HZjzzxTyH2-Xu9rC6KWzKUuU",
   authDomain:"guidedtechapp.firebaseapp.com",
   projectId:"guidedtechapp",
   storageBucket:"guidedtechapp.firebasestorage.app",
   messagingSenderId:"744645189282",
   appId:"1:744645189282:web:00c134f4c91147818381fb",
-});
+};
+const app = initializeApp(firebaseConfig, 'admin');
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
@@ -1090,14 +1092,38 @@ async function loadAdmins(){
   }catch(e){ console.error("loadAdmins:",e.message); emptyState("adminTableWrap","🔐","Error loading admins",""); }
 }
 window.removeAdmin=async function(id){ if(!confirm("Remove admin access?"))return; try{ await deleteDoc(doc(db,"Admins",id)); toast("Removed","","success"); loadAdmins(); }catch(e){ toast("Error",e.message,"error"); } };
-document.getElementById("btnNewAdmin").addEventListener("click",()=>{ document.getElementById("adminUid").value=""; document.getElementById("adminName").value=""; openModal("adminModal"); });
+document.getElementById("btnNewAdmin").addEventListener("click",()=>{
+  document.getElementById("adminName").value="";
+  document.getElementById("adminEmail").value="";
+  document.getElementById("adminPassword").value="";
+  openModal("adminModal");
+});
 document.getElementById("btnSaveAdmin").addEventListener("click",async()=>{
-  const uid=document.getElementById("adminUid").value.trim(); const name=document.getElementById("adminName").value.trim();
-  if(!uid){ toast("Missing","UID is required.","warning"); return; }
-  const btn=document.getElementById("btnSaveAdmin"); btn.disabled=true;
-  try{ await setDoc(doc(db,"Admins",uid),{displayName:name,active:true,addedAt:serverTimestamp()}); closeModal("adminModal"); toast("Added!","","success"); loadAdmins(); }
-  catch(e){ toast("Error",e.message,"error"); }
-  finally{ btn.disabled=false; }
+  const name=document.getElementById("adminName").value.trim();
+  const email=document.getElementById("adminEmail").value.trim();
+  const password=document.getElementById("adminPassword").value;
+  if(!name||!email||!password){ toast("Missing fields","Please fill in all fields.","warning"); return; }
+  if(password.length<8){ toast("Weak password","Password must be at least 8 characters.","warning"); return; }
+  const btn=document.getElementById("btnSaveAdmin"); btn.disabled=true; btn.textContent="Creating...";
+  try {
+    // Use a secondary app instance so creating the new account doesn't sign out the current admin
+    const { initializeApp, getApp } = await import("https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js");
+    const { getAuth, createUserWithEmailAndPassword, updateProfile, signOut: _signOut } = await import("https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js");
+    let secondaryApp;
+    try { secondaryApp = getApp("adminCreate"); } catch { secondaryApp = initializeApp(firebaseConfig,"adminCreate"); }
+    const secondaryAuth = getAuth(secondaryApp);
+    const cred = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+    await updateProfile(cred.user,{displayName:name});
+    await _signOut(secondaryAuth);
+    await setDoc(doc(db,"Admins",cred.user.uid),{displayName:name,email,active:true,addedAt:serverTimestamp()});
+    closeModal("adminModal");
+    toast("Admin created!",`${name} can now log in at the admin panel.`,"success");
+    loadAdmins();
+  } catch(e) {
+    const msgs={"auth/email-already-in-use":"An account with this email already exists.","auth/invalid-email":"Invalid email address.","auth/weak-password":"Password is too weak."};
+    toast("Error",msgs[e.code]||e.message,"error");
+  }
+  finally{ btn.disabled=false; btn.textContent="Create Admin"; }
 });
 </script>
 </body>
