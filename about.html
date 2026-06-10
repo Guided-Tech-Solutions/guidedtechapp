@@ -322,7 +322,7 @@
     <h2 class="cta-title">Ready to amplify your business?</h2>
     <p class="cta-desc">Start with a free discovery call. Our team will assess your needs and recommend the right services — no commitment required.</p>
     <div class="cta-btns">
-      <a href="./app/signup.html"         class="btn-white">Get Started Free</a>
+      <a href="./app/signup.html" class="btn-white" id="ctaMain">Get Started Free</a>
       <a href="./index.html#consultation" class="btn-ghost-cta">📅 Book Free Call</a>
     </div>
   </div>
@@ -348,6 +348,11 @@ const _a = initializeApp({apiKey:"AIzaSyD0f7L_vf2HZjzzxTyH2-Xu9rC6KWzKUuU",authD
 const _auth = getAuth(_a);
 onAuthStateChanged(_auth, u => {
   const el = document.getElementById('navAuth'), mob = document.getElementById('mobileAuthLinks');
+  const ctaMain = document.getElementById('ctaMain');
+  if (ctaMain) {
+    if (u) { ctaMain.textContent = '📊 Go to Dashboard'; ctaMain.href = './app/portal-dashboard.html'; }
+    else   { ctaMain.textContent = 'Get Started Free'; ctaMain.href = './app/signup.html'; }
+  }
   if (!el || !u) return;
   const init = (u.displayName||u.email||'?')[0].toUpperCase();
   const name = u.displayName ? u.displayName.split(' ')[0] : (u.email||'').split('@')[0];

@@ -234,7 +234,29 @@ function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&
 function fmt(n){ return n?'$'+Number(n).toLocaleString():'—'; }
 
 // Nav auth
+let currentAuthUser = null;
+function updateCtaButtons() {
+  const u = currentAuthUser;
+  // Plan cards
+  document.querySelectorAll('.btn-plan[data-default-link]').forEach(a => {
+    if (u) { a.textContent = 'Subscribe'; a.href = './app/portal-services.html'; }
+    else   { a.textContent = a.dataset.defaultText; a.href = a.dataset.defaultLink; }
+  });
+  // Services table rows
+  document.querySelectorAll('a[data-svc-cta]').forEach(a => {
+    if (u) { a.textContent = 'Subscribe →'; a.href = './app/portal-services.html'; }
+    else   { a.textContent = 'Get Started →'; a.href = './app/signup.html'; }
+  });
+  // Bottom CTA
+  const ctaMain = document.getElementById('ctaMain');
+  if (ctaMain) {
+    if (u) { ctaMain.textContent = '📊 Go to Dashboard'; ctaMain.href = './app/portal-dashboard.html'; }
+    else   { ctaMain.textContent = '🚀 Start Free'; ctaMain.href = './app/signup.html'; }
+  }
+}
 onAuthStateChanged(auth, u => {
+  currentAuthUser = u;
+  updateCtaButtons();
   const el = document.getElementById('navAuth'), mob = document.getElementById('mobileAuthLinks');
   if (!el || !u) return;
   const init = (u.displayName||u.email||'?')[0].toUpperCase();
@@ -242,10 +264,6 @@ onAuthStateChanged(auth, u => {
   el.innerHTML = `<div class="nav-avatar-wrap"><a href="./app/portal-dashboard.html" class="nav-avatar-btn"><div class="nav-avatar-circle">${u.photoURL?`<img src="${u.photoURL}" alt="">`:init}</div><span class="nav-avatar-name">${name}</span><span style="font-size:.6rem;color:#64748B;margin-left:2px">▾</span></a><div class="nav-dropdown"><a href="./app/portal-dashboard.html" class="nav-dropdown-item">📊 Dashboard</a><a href="./app/portal-services.html" class="nav-dropdown-item">🛒 Services &amp; Pricing</a><a href="./app/portal-profile.html" class="nav-dropdown-item">👤 My Profile</a><div class="nav-dropdown-divider"></div><a href="#" class="nav-dropdown-item" style="color:#E53935" id="navOut">Sign Out</a></div></div>`;
   document.getElementById('navOut').addEventListener('click', e => { e.preventDefault(); auth.signOut(); });
   if (mob) mob.innerHTML = `<a href="./app/portal-dashboard.html" class="mobile-nav-link" style="color:var(--brand);font-weight:700">📊 Go to Dashboard</a>`;
-  // Update all "Get Started" CTA buttons to go to portal-services when logged in
-  document.querySelectorAll('a[href*="signup.html"]').forEach(a => {
-    if (!a.closest('.nav-cta') && !a.closest('.mobile-nav')) a.href = './app/portal-services.html';
-  });
 });
 
 let allPlans = [];
@@ -264,6 +282,7 @@ async function loadPlans() {
       return (a.priceMonthly||0) - (b.priceMonthly||0);
     });
     renderPlans();
+    updateCtaButtons();
   } catch(e) {
     console.warn('Plans load error:', e);
     if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#64748B">Could not load plans. Please refresh.</div>`;
@@ -283,8 +302,10 @@ function renderPlans() {
     const origPrice = isYearly && !isCustom ? fmt(monthly * 12) : null;
     const period    = isCustom ? '' : (isYearly ? ' / year' : ' / month');
     const features  = Array.isArray(p.features) ? p.features : [];
-    const ctaText   = p.ctaText || (isCustom ? 'Contact Sales' : 'Get Started');
-    const ctaLink   = p.ctaLink || './app/signup.html';
+    const defaultText = p.ctaText || (isCustom ? 'Contact Sales' : 'Get Started');
+    const defaultLink = p.ctaLink || './app/signup.html';
+    const ctaText     = (!isCustom && currentAuthUser) ? 'Subscribe' : defaultText;
+    const ctaLink     = (!isCustom && currentAuthUser) ? './app/portal-services.html' : defaultLink;
     const isPopular = !!p.popular;
 
     return `
@@ -301,7 +322,7 @@ function renderPlans() {
       </div>
       <div class="plan-card-body">
         ${features.map(f=>`<div class="feat"><span class="feat-check">✓</span>${esc(f)}</div>`).join('')}
-        <a href="${esc(ctaLink)}" class="btn-plan ${isPopular?'btn-plan-primary':'btn-plan-outline'}">${esc(ctaText)}</a>
+        <a href="${esc(ctaLink)}" class="btn-plan ${isPopular?'btn-plan-primary':'btn-plan-outline'}" ${!isCustom?`data-default-link="${esc(defaultLink)}" data-default-text="${esc(defaultText)}"`:''} >${esc(ctaText)}</a>
       </div>
     </div>`;
   }).join('');
@@ -338,7 +359,7 @@ async function loadServices() {
         <td><strong style="color:var(--success)">${isOnce?'N/A':fmt(yearly)}</strong></td>
         <td>${esc(isOnce?'One-time':'Monthly / Yearly')}</td>
         <td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">${esc(dashLabel)}</span></td>
-        <td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem">Get Started →</a></td>
+        <td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem" data-svc-cta="1">Get Started →</a></td>
       </tr>`;
     }).join('');
   } catch(e) {
@@ -352,13 +373,13 @@ document.getElementById('btnMonthly').addEventListener('click', () => {
   billingMode = 'monthly';
   document.getElementById('btnMonthly').classList.add('active');
   document.getElementById('btnYearly').classList.remove('active');
-  renderPlans();
+  renderPlans(); updateCtaButtons();
 });
 document.getElementById('btnYearly').addEventListener('click', () => {
   billingMode = 'yearly';
   document.getElementById('btnYearly').classList.add('active');
   document.getElementById('btnMonthly').classList.remove('active');
-  renderPlans();
+  renderPlans(); updateCtaButtons();
 });
 
 loadPlans();
@@ -394,7 +415,7 @@ document.querySelectorAll('#mobileNav a').forEach(a => a.addEventListener('click
     <h2 class="cta-title">Ready to get started?</h2>
     <p class="cta-desc">Sign up free and book your discovery call. No credit card required to explore the platform.</p>
     <div class="cta-btns">
-      <a href="./app/signup.html" class="btn-cta-white">🚀 Start Free</a>
+      <a href="./app/signup.html" class="btn-cta-white" id="ctaMain">🚀 Start Free</a>
       <a href="./app/signup.html" class="btn-cta-ghost">📅 Book Discovery Call</a>
     </div>
   </div>
