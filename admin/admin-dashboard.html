@@ -527,6 +527,7 @@ select.form-control{cursor:pointer}
       <div class="form-group"><label class="form-label">Full Name <span class="req">*</span></label><input type="text" class="form-control" id="adminName" placeholder="Jane Smith"></div>
       <div class="form-group"><label class="form-label">Email Address <span class="req">*</span></label><input type="email" class="form-control" id="adminEmail" placeholder="jane@example.com"></div>
       <div class="form-group"><label class="form-label">Password <span class="req">*</span></label><input type="password" class="form-control" id="adminPassword" placeholder="Min. 8 characters"><div class="form-hint">The admin will use this to log in.</div></div>
+      <div class="form-group"><label class="form-label">Role <span class="req">*</span></label><select class="form-control" id="adminRole"><option value="admin">Admin</option><option value="super_admin">Super Admin</option></select><div class="form-hint">Super Admins can create and remove other admins.</div></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('adminModal')">Cancel</button>
@@ -539,7 +540,7 @@ select.form-control{cursor:pointer}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 import {
   getFirestore, collection, getDocs, addDoc, setDoc, updateDoc, deleteDoc,
   doc, getDoc, query, where, limit, serverTimestamp
@@ -1082,31 +1083,67 @@ async function loadAdmins(){
     const snap=await getDocs(collection(db,"Admins"));
     const admins=[]; snap.forEach(d=>admins.push({id:d.id,...d.data()}));
     if(!admins.length){ emptyState("adminTableWrap","🔐","No admins yet",""); return; }
-    setHtml("adminTableWrap",`<div class="tbl-wrap"><table class="tbl"><thead><tr><th>UID</th><th>Name</th><th>Status</th><th>Added</th><th></th></tr></thead><tbody>${admins.map(a=>`<tr>
-      <td style="font-family:monospace;font-size:.6875rem">${esc(a.id)}</td>
-      <td>${esc(a.displayName||"—")}</td>
-      <td><span class="badge ${a.active?"b-active":"b-inactive"}">${a.active?"Active":"Inactive"}</span></td>
-      <td style="font-size:.75rem;color:var(--text-muted)">${fmtDate(a.addedAt)}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="removeAdmin('${a.id}')">Remove</button></td>
-    </tr>`).join("")}</tbody></table></div>`);
+    const currentUid = auth.currentUser?.uid;
+    setHtml("adminTableWrap",`<div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Added</th><th></th></tr></thead>
+      <tbody>${admins.map(a=>{
+        const name = esc(a.displayName||a.Name||"—");
+        const email = esc(a.email||"—");
+        const role = a.role||"admin";
+        const isSelf = a.id===currentUid;
+        const isSuperAdmin = role==="super_admin";
+        const roleBadge = isSuperAdmin
+          ? `<span class="badge b-brand">Super Admin</span>`
+          : `<span class="badge b-inactive">Admin</span>`;
+        const actions = isSuperAdmin
+          ? `<span style="font-size:.75rem;color:var(--text-muted)">${isSelf?"(you)":"Protected"}</span>`
+          : `<div style="display:flex;gap:.375rem">
+               <button class="btn btn-ghost btn-sm" onclick="sendSetupEmail('${esc(a.email||"")}')">Reset Password</button>
+               <button class="btn btn-danger btn-sm" onclick="removeAdmin('${a.id}')">Remove</button>
+             </div>`;
+        return `<tr>
+          <td><strong>${name}</strong>${isSelf?' <span style="font-size:.6875rem;color:var(--text-muted)">(you)</span>':''}</td>
+          <td style="font-size:.8125rem;color:var(--text-muted)">${email}</td>
+          <td>${roleBadge}</td>
+          <td><span class="badge ${a.active?"b-active":"b-inactive"}">${a.active?"Active":"Inactive"}</span></td>
+          <td style="font-size:.75rem;color:var(--text-muted)">${fmtDate(a.addedAt||a.createdAt)}</td>
+          <td>${actions}</td>
+        </tr>`;
+      }).join("")}</tbody></table></div>`);
   }catch(e){ console.error("loadAdmins:",e.message); emptyState("adminTableWrap","🔐","Error loading admins",""); }
 }
-window.removeAdmin=async function(id){ if(!confirm("Remove admin access?"))return; try{ await deleteDoc(doc(db,"Admins",id)); toast("Removed","","success"); loadAdmins(); }catch(e){ toast("Error",e.message,"error"); } };
+
+window.removeAdmin=async function(id){
+  if(!confirm("Remove this admin's access?")) return;
+  try{ await deleteDoc(doc(db,"Admins",id)); toast("Removed","Admin access revoked.","success"); loadAdmins(); }
+  catch(e){ toast("Error",e.message,"error"); }
+};
+
+window.sendSetupEmail=async function(email){
+  if(!email){ toast("No email","This admin has no email address on record.","warning"); return; }
+  try{
+    await sendPasswordResetEmail(auth, email);
+    toast("Email sent!",`Password reset email sent to ${email}.`,"success");
+  }catch(e){ toast("Error",e.message,"error"); }
+};
+
 document.getElementById("btnNewAdmin").addEventListener("click",()=>{
   document.getElementById("adminName").value="";
   document.getElementById("adminEmail").value="";
   document.getElementById("adminPassword").value="";
+  document.getElementById("adminRole").value="admin";
   openModal("adminModal");
 });
+
 document.getElementById("btnSaveAdmin").addEventListener("click",async()=>{
   const name=document.getElementById("adminName").value.trim();
   const email=document.getElementById("adminEmail").value.trim();
   const password=document.getElementById("adminPassword").value;
+  const role=document.getElementById("adminRole").value;
   if(!name||!email||!password){ toast("Missing fields","Please fill in all fields.","warning"); return; }
   if(password.length<8){ toast("Weak password","Password must be at least 8 characters.","warning"); return; }
   const btn=document.getElementById("btnSaveAdmin"); btn.disabled=true; btn.textContent="Creating...";
   try {
-    // Use a secondary app instance so creating the new account doesn't sign out the current admin
     const { initializeApp, getApp } = await import("https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js");
     const { getAuth, createUserWithEmailAndPassword, updateProfile, signOut: _signOut } = await import("https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js");
     let secondaryApp;
@@ -1115,7 +1152,7 @@ document.getElementById("btnSaveAdmin").addEventListener("click",async()=>{
     const cred = await createUserWithEmailAndPassword(secondaryAuth, email, password);
     await updateProfile(cred.user,{displayName:name});
     await _signOut(secondaryAuth);
-    await setDoc(doc(db,"Admins",cred.user.uid),{displayName:name,email,active:true,addedAt:serverTimestamp()});
+    await setDoc(doc(db,"Admins",cred.user.uid),{displayName:name,email,role,active:true,addedAt:serverTimestamp()});
     closeModal("adminModal");
     toast("Admin created!",`${name} can now log in at the admin panel.`,"success");
     loadAdmins();
