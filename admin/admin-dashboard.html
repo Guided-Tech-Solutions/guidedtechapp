@@ -536,6 +536,29 @@ select.form-control{cursor:pointer}
   </div>
 </div>
 
+<!-- EDIT ROLE MODAL -->
+<div class="modal-bg" id="editRoleModal">
+  <div class="modal sm">
+    <div class="modal-hdr"><div class="modal-title">Edit Role</div><div class="modal-x" onclick="closeModal('editRoleModal')">✕</div></div>
+    <div class="modal-body">
+      <p style="font-size:.875rem;color:var(--text-mid);margin-bottom:1rem">Changing the role for: <strong id="editRoleAdminName"></strong></p>
+      <input type="hidden" id="editRoleAdminId">
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select class="form-control" id="editRoleSelect">
+          <option value="admin">Admin</option>
+          <option value="super_admin">Super Admin</option>
+        </select>
+        <div class="form-hint">Promoting to Super Admin grants full access. Demoting a Super Admin removes their protected status.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('editRoleModal')">Cancel</button>
+      <button class="btn btn-primary" id="btnSaveRole">Save Role</button>
+    </div>
+  </div>
+</div>
+
 <div id="toastRoot"></div>
 
 <script type="module">
@@ -1095,11 +1118,10 @@ async function loadAdmins(){
         const roleBadge = isSuperAdmin
           ? `<span class="badge b-brand">Super Admin</span>`
           : `<span class="badge b-inactive">Admin</span>`;
-        const actions = isSuperAdmin
-          ? `<span style="font-size:.75rem;color:var(--text-muted)">${isSelf?"(you)":"Protected"}</span>`
-          : `<div style="display:flex;gap:.375rem">
-               <button class="btn btn-ghost btn-sm" onclick="sendSetupEmail('${esc(a.email||"")}')">Reset Password</button>
-               <button class="btn btn-danger btn-sm" onclick="removeAdmin('${a.id}')">Remove</button>
+        const actions = `<div style="display:flex;gap:.375rem;flex-wrap:wrap">
+               <button class="btn btn-ghost btn-sm" onclick="openEditRole('${a.id}','${role}','${name}')">Edit Role</button>
+               ${!isSuperAdmin?`<button class="btn btn-ghost btn-sm" onclick="sendSetupEmail('${esc(a.email||"")}')">Reset Password</button>`:''}
+               ${!isSuperAdmin?`<button class="btn btn-danger btn-sm" onclick="removeAdmin('${a.id}')">Remove</button>`:''}
              </div>`;
         return `<tr>
           <td><strong>${name}</strong>${isSelf?' <span style="font-size:.6875rem;color:var(--text-muted)">(you)</span>':''}</td>
@@ -1118,6 +1140,26 @@ window.removeAdmin=async function(id){
   try{ await deleteDoc(doc(db,"Admins",id)); toast("Removed","Admin access revoked.","success"); loadAdmins(); }
   catch(e){ toast("Error",e.message,"error"); }
 };
+
+window.openEditRole=function(id, currentRole, name){
+  document.getElementById("editRoleAdminId").value=id;
+  document.getElementById("editRoleAdminName").textContent=name;
+  document.getElementById("editRoleSelect").value=currentRole;
+  openModal("editRoleModal");
+};
+
+document.getElementById("btnSaveRole").addEventListener("click", async()=>{
+  const id=document.getElementById("editRoleAdminId").value;
+  const role=document.getElementById("editRoleSelect").value;
+  const btn=document.getElementById("btnSaveRole"); btn.disabled=true; btn.textContent="Saving...";
+  try{
+    await updateDoc(doc(db,"Admins",id),{role});
+    closeModal("editRoleModal");
+    toast("Role updated","The admin's role has been changed.","success");
+    loadAdmins();
+  }catch(e){ toast("Error",e.message,"error"); }
+  finally{ btn.disabled=false; btn.textContent="Save Role"; }
+});
 
 window.sendSetupEmail=async function(email){
   if(!email){ toast("No email","This admin has no email address on record.","warning"); return; }
