@@ -16,7 +16,7 @@
     .auth-split{display:flex;min-height:100vh;width:100%}
 
     /* Brand panel */
-    .auth-brand{flex:1;min-width:0;background:linear-gradient(150deg,#060D18 0%,#0F2E42 50%,#1B4F72 100%);display:flex;flex-direction:column;justify-content:space-between;padding:3rem;position:relative;overflow:hidden}
+    .auth-brand{flex:1;min-width:0;background:linear-gradient(150deg,#060D18 0%,#0F2E42 50%,#1B4F72 100%);display:flex;flex-direction:column;justify-content:center;padding:3rem;position:relative;overflow:hidden}
     .b-orb1{position:absolute;top:-80px;right:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(52,152,219,.15),transparent 70%);pointer-events:none}
     .b-orb2{position:absolute;bottom:-120px;left:-60px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(230,126,34,.1),transparent 70%);pointer-events:none}
     .b-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
@@ -100,7 +100,7 @@
   <!-- Brand panel -->
   <div class="auth-brand">
     <div class="b-orb1"></div><div class="b-orb2"></div><div class="b-grid"></div>
-    <div class="b-top">
+    <div class="b-top" style="position:relative;z-index:1;max-width:420px">
       <a href="../index.html" class="b-logo">
         <div class="b-logo-icon"><img src="../asset/logo-icon.png" alt="GTS Amplify"></div>
         <span class="b-logo-name">GTS Amplify</span>
@@ -110,12 +110,10 @@
       <div class="b-checklist">
         <div class="b-check"><div class="b-check-icon">✓</div><div class="b-check-text"><strong>Free to get started</strong> — no credit card required</div></div>
         <div class="b-check"><div class="b-check-icon">📊</div><div class="b-check-text"><strong>Real-time dashboards</strong> for every service you subscribe to</div></div>
-        <div class="b-check"><div class="b-check-icon">🚀</div><div class="b-check-text"><strong>Onboard in minutes</strong> with a guided setup wizard</div></div>
+        <div class="b-check"><div class="b-check-icon">⚙️</div><div class="b-check-text"><strong>Onboard in minutes</strong> with a guided setup wizard</div></div>
         <div class="b-check"><div class="b-check-icon">🔒</div><div class="b-check-text"><strong>Cancel anytime</strong> — no lock-in contracts</div></div>
       </div>
-    </div>
-    <div class="b-bottom">
-      <div class="b-trust">Trusted by businesses across the US · <strong>Mississippi, United States</strong></div>
+      <div class="b-trust" style="margin-top:2rem">Trusted by businesses across the US · <strong>Mississippi, United States</strong></div>
     </div>
   </div>
 
