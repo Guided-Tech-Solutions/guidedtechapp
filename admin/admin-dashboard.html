@@ -199,6 +199,7 @@ select.form-control{cursor:pointer}
       <div class="nav-label">Finance</div>
       <button class="nav-btn" data-sec="payments"><span class="nav-icon">💳</span>Payments</button>
       <div class="nav-label">Admin</div>
+      <button class="nav-btn" data-sec="payconfig"><span class="nav-icon">🔑</span>Payment Config</button>
       <button class="nav-btn" data-sec="admins"><span class="nav-icon">🔐</span>Admin Users</button>
     </nav>
   </aside>
@@ -343,6 +344,120 @@ select.form-control{cursor:pointer}
       <div class="card">
         <div class="card-hdr"><div class="card-title">Admins</div></div>
         <div class="card-body" id="adminTableWrap"><div class="empty"><div class="empty-text">Loading...</div></div></div>
+      </div>
+    </div>
+
+    <!-- PAYMENT CONFIG -->
+    <div class="sec" id="sec-payconfig">
+      <div class="page-hdr">
+        <div><div class="page-title">Payment Configuration</div><div class="page-sub">Slot in your payment provider keys — saved securely to Firestore</div></div>
+        <button class="btn btn-primary" id="btnSavePayConfig">💾 Save All</button>
+      </div>
+
+      <!-- Paystack -->
+      <div class="card" style="margin-bottom:1.25rem">
+        <div class="card-hdr">
+          <div>
+            <div class="card-title">Paystack</div>
+            <div class="card-sub" style="font-size:.75rem;color:var(--text-muted);margin-top:.125rem">West African payments · paystack.com</div>
+          </div>
+          <span class="badge" id="paystackBadge" style="background:var(--bg);color:var(--text-muted);font-size:.6875rem">Not configured</span>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Public Key</label>
+              <input type="text" class="form-control" id="cfg_paystack_public" placeholder="pk_live_...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Secret Key</label>
+              <div style="position:relative">
+                <input type="password" class="form-control" id="cfg_paystack_secret" placeholder="sk_live_..." style="padding-right:3rem">
+                <button type="button" onclick="toggleSecret('cfg_paystack_secret')" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:.875rem">👁</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mode</label>
+            <select class="form-control" id="cfg_paystack_mode" style="max-width:200px">
+              <option value="live">Live</option>
+              <option value="test">Test</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stripe -->
+      <div class="card" style="margin-bottom:1.25rem">
+        <div class="card-hdr">
+          <div>
+            <div class="card-title">Stripe</div>
+            <div class="card-sub" style="font-size:.75rem;color:var(--text-muted);margin-top:.125rem">Global card payments · stripe.com</div>
+          </div>
+          <span class="badge" id="stripeBadge" style="background:var(--bg);color:var(--text-muted);font-size:.6875rem">Not configured</span>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Publishable Key</label>
+              <input type="text" class="form-control" id="cfg_stripe_public" placeholder="pk_live_...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Secret Key</label>
+              <div style="position:relative">
+                <input type="password" class="form-control" id="cfg_stripe_secret" placeholder="sk_live_..." style="padding-right:3rem">
+                <button type="button" onclick="toggleSecret('cfg_stripe_secret')" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:.875rem">👁</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Webhook Secret</label>
+            <div style="position:relative">
+              <input type="password" class="form-control" id="cfg_stripe_webhook" placeholder="whsec_..." style="padding-right:3rem">
+              <button type="button" onclick="toggleSecret('cfg_stripe_webhook')" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:.875rem">👁</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mode</label>
+            <select class="form-control" id="cfg_stripe_mode" style="max-width:200px">
+              <option value="live">Live</option>
+              <option value="test">Test</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- PayPal -->
+      <div class="card">
+        <div class="card-hdr">
+          <div>
+            <div class="card-title">PayPal</div>
+            <div class="card-sub" style="font-size:.75rem;color:var(--text-muted);margin-top:.125rem">PayPal & card payments · paypal.com</div>
+          </div>
+          <span class="badge" id="paypalBadge" style="background:var(--bg);color:var(--text-muted);font-size:.6875rem">Not configured</span>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Client ID</label>
+              <input type="text" class="form-control" id="cfg_paypal_client_id" placeholder="AaBbCc...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Client Secret</label>
+              <div style="position:relative">
+                <input type="password" class="form-control" id="cfg_paypal_secret" placeholder="EeFfGg..." style="padding-right:3rem">
+                <button type="button" onclick="toggleSecret('cfg_paypal_secret')" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:.875rem">👁</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mode</label>
+            <select class="form-control" id="cfg_paypal_mode" style="max-width:200px">
+              <option value="live">Live</option>
+              <option value="sandbox">Sandbox</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -636,6 +751,7 @@ function loadSec(sec){
     runs:          loadRuns,
     bookings:      loadBookings,
     payments:      loadPayments,
+    payconfig:     loadPayConfig,
     admins:        loadAdmins,
   };
   if(fns[sec]) fns[sec]();
@@ -1204,6 +1320,63 @@ document.getElementById("btnSaveAdmin").addEventListener("click",async()=>{
   }
   finally{ btn.disabled=false; btn.textContent="Create Admin"; }
 });
+
+/* ═══════════════════════════════════════════════════════════
+   PAYMENT CONFIG
+═══════════════════════════════════════════════════════════ */
+const PAY_CFG_FIELDS = [
+  "cfg_paystack_public","cfg_paystack_secret","cfg_paystack_mode",
+  "cfg_stripe_public","cfg_stripe_secret","cfg_stripe_webhook","cfg_stripe_mode",
+  "cfg_paypal_client_id","cfg_paypal_secret","cfg_paypal_mode"
+];
+
+function setBadge(id, configured) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = configured ? "Configured ✓" : "Not configured";
+  el.style.background = configured ? "var(--success-pale)" : "var(--bg)";
+  el.style.color = configured ? "var(--success)" : "var(--text-muted)";
+}
+
+async function loadPayConfig() {
+  try {
+    const snap = await getDoc(doc(db, "config", "payments"));
+    if (!snap.exists()) return;
+    const data = snap.data();
+    PAY_CFG_FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      const key = id.replace("cfg_", "");
+      if (el && data[key] !== undefined) el.value = data[key];
+    });
+    setBadge("paystackBadge", !!(data.paystack_public && data.paystack_secret));
+    setBadge("stripeBadge",   !!(data.stripe_public && data.stripe_secret));
+    setBadge("paypalBadge",   !!(data.paypal_client_id && data.paypal_secret));
+  } catch(e) { console.error("loadPayConfig:", e.message); }
+}
+
+document.getElementById("btnSavePayConfig").addEventListener("click", async () => {
+  const btn = document.getElementById("btnSavePayConfig");
+  btn.disabled = true; btn.textContent = "Saving...";
+  try {
+    const payload = {};
+    PAY_CFG_FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) payload[id.replace("cfg_", "")] = el.value.trim();
+    });
+    payload.updatedAt = serverTimestamp();
+    await setDoc(doc(db, "config", "payments"), payload, { merge: true });
+    setBadge("paystackBadge", !!(payload.paystack_public && payload.paystack_secret));
+    setBadge("stripeBadge",   !!(payload.stripe_public && payload.stripe_secret));
+    setBadge("paypalBadge",   !!(payload.paypal_client_id && payload.paypal_secret));
+    toast("Saved!", "Payment configuration updated successfully.", "success");
+  } catch(e) { toast("Error", e.message, "error"); }
+  finally { btn.disabled = false; btn.textContent = "💾 Save All"; }
+});
+
+window.toggleSecret = function(id) {
+  const el = document.getElementById(id);
+  if (el) el.type = el.type === "password" ? "text" : "password";
+};
 </script>
 </body>
 </html>
