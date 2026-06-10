@@ -500,7 +500,23 @@ const db   = getFirestore(app);
 const auth = getAuth(app);
 
 // Nav auth awareness
+let currentAuthUser = null;
+function updateCtaButtons() {
+  const u = currentAuthUser;
+  document.querySelectorAll('.svc-card-cta[data-svc-id]').forEach(a => {
+    if (u) { a.textContent = 'Subscribe'; a.href = `./app/portal-services.html?service=${a.dataset.svcId}`; }
+    else   { a.textContent = 'Get Started'; a.href = `./app/signup.html?service=${a.dataset.svcId}`; }
+  });
+  document.querySelectorAll('.btn-plan[data-default-link]').forEach(a => {
+    if (!a.dataset.isCustom) {
+      if (u) { a.textContent = 'Subscribe'; a.href = './app/portal-services.html'; }
+      else   { a.textContent = a.dataset.defaultText; a.href = a.dataset.defaultLink; }
+    }
+  });
+}
 onAuthStateChanged(auth, u => {
+  currentAuthUser = u;
+  updateCtaButtons();
   const el = document.getElementById('navAuth'), mob = document.getElementById('mobileAuthLinks');
   if (!el || !u) return;
   const init = (u.displayName||u.email||'?')[0].toUpperCase();
@@ -570,7 +586,7 @@ async function loadServices() {
                  <span class="svc-price-per">/ ${esc(interval)}</span>`
             }
           </div>
-          <a href="./app/signup.html?service=${esc(svc.id)}" class="svc-card-cta">Get Started →</a>
+          <a href="${currentAuthUser?`./app/portal-services.html?service=${esc(svc.id)}`:`./app/signup.html?service=${esc(svc.id)}`}" class="svc-card-cta" data-svc-id="${esc(svc.id)}">${currentAuthUser?'Subscribe':'Get Started'}</a>
         </div>
       </div>`;
     }).join('');
@@ -612,8 +628,10 @@ async function loadPricingCards() {
       const priceLabel = isCustom ? 'Custom' : fmtPrice(monthly);
       const priceSuffix= isCustom ? '' : ' / month';
       const features   = Array.isArray(p.features) ? p.features : [];
-      const ctaText    = p.ctaText || (isCustom ? 'Contact Sales' : 'Get Started');
-      const ctaLink    = p.ctaLink || './app/signup.html';
+      const defaultText = p.ctaText || (isCustom ? 'Contact Sales' : 'Get Started');
+      const defaultLink = p.ctaLink || './app/signup.html';
+      const ctaText    = (!isCustom && currentAuthUser) ? 'Subscribe' : defaultText;
+      const ctaLink    = (!isCustom && currentAuthUser) ? './app/portal-services.html' : defaultLink;
 
       return `
       <div class="pricing-card ${isPopular?'popular':''}">
@@ -628,7 +646,7 @@ async function loadPricingCards() {
         </div>
         <div class="pricing-card-body">
           ${features.map(f=>`<div class="pricing-feat"><span class="pricing-check">✓</span>${esc(f)}</div>`).join('')}
-          <a href="${esc(ctaLink)}" class="btn-plan ${isPopular?'btn-plan-primary':'btn-plan-outline'}">${esc(ctaText)}</a>
+          <a href="${esc(ctaLink)}" class="btn-plan ${isPopular?'btn-plan-primary':'btn-plan-outline'}" ${!isCustom?`data-default-link="${esc(defaultLink)}" data-default-text="${esc(defaultText)}"`:'data-is-custom="1"'}>${esc(ctaText)}</a>
         </div>
       </div>`;
     }).join('');
@@ -643,7 +661,7 @@ async function loadPricingCards() {
           <div class="pricing-feat"><span class="pricing-check">✓</span>Real-time analytics dashboard</div>
           <div class="pricing-feat"><span class="pricing-check">✓</span>Email support</div>
           <div class="pricing-feat"><span class="pricing-check">✓</span>Free discovery call</div>
-          <a href="./app/signup.html" class="btn-plan btn-plan-outline">Get Started</a>
+          <a href="./app/signup.html" class="btn-plan btn-plan-outline" data-default-link="./app/signup.html" data-default-text="Get Started">Get Started</a>
         </div>
       </div>
       <div class="pricing-card popular">
@@ -653,7 +671,7 @@ async function loadPricingCards() {
           <div class="pricing-feat"><span class="pricing-check">✓</span>All analytics dashboards</div>
           <div class="pricing-feat"><span class="pricing-check">✓</span>Priority support</div>
           <div class="pricing-feat"><span class="pricing-check">✓</span>Save 20% vs individual</div>
-          <a href="./app/signup.html" class="btn-plan btn-plan-primary">Get Started</a>
+          <a href="./app/signup.html" class="btn-plan btn-plan-primary" data-default-link="./app/signup.html" data-default-text="Get Started">Get Started</a>
         </div>
       </div>
       <div class="pricing-card">
@@ -663,14 +681,14 @@ async function loadPricingCards() {
           <div class="pricing-feat"><span class="pricing-check">✓</span>Dedicated account manager</div>
           <div class="pricing-feat"><span class="pricing-check">✓</span>SLA &amp; uptime guarantees</div>
           <div class="pricing-feat"><span class="pricing-check">✓</span>Custom integrations</div>
-          <a href="./app/signup.html" class="btn-plan btn-plan-outline">Contact Sales</a>
+          <a href="./app/signup.html" class="btn-plan btn-plan-outline" data-is-custom="1">Contact Sales</a>
         </div>
       </div>`;
   }
 }
 
-loadServices();
-loadPricingCards();
+loadServices().then(updateCtaButtons);
+loadPricingCards().then(updateCtaButtons);
 </script>
 
 <script>
