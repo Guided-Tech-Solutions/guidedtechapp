@@ -145,6 +145,7 @@
     <button class="nav-mobile-btn" id="mobileMenuToggle">☰</button>
   </div>
 </nav>
+<script>!function(){try{var u=JSON.parse(localStorage.getItem('gts_user'));var el=document.getElementById('navAuth');if(!el)return;if(u){var i=(u.displayName||u.email||'?')[0].toUpperCase();var n=u.displayName?u.displayName.split(' ')[0]:(u.email||'').split('@')[0];var av=u.photoURL?'<img src="'+u.photoURL.replace(/"/g,'&quot;')+'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':i;el.innerHTML='<div class=\"nav-avatar-wrap\"><a href=\"./app/portal-dashboard.html\" class=\"nav-avatar-btn\"><div class=\"nav-avatar-circle\">'+av+'</div><span class=\"nav-avatar-name\">'+n+'</span><span style=\"font-size:.6rem;color:#64748B;margin-left:2px\">▾</span></a><div class=\"nav-dropdown\"><a href=\"./app/portal-dashboard.html\" class=\"nav-dropdown-item\">📊 Dashboard</a><a href=\"./app/portal-services.html\" class=\"nav-dropdown-item\">🛒 Services &amp; Pricing</a><a href=\"./app/portal-profile.html\" class=\"nav-dropdown-item\">👤 My Profile</a><div class=\"nav-dropdown-divider\"></div><a href=\"#\" class=\"nav-dropdown-item\" style=\"color:#E53935\" id=\"navOut\">Sign Out</a></div></div>';}el.style.visibility='visible';}catch(e){var x=document.getElementById('navAuth');if(x)x.style.visibility='visible';}}();</script>
 <div class="mobile-nav" id="mobileNav">
   <a href="./index.html#services"     class="mobile-nav-link">Services</a>
   <a href="./pricing.html"            class="mobile-nav-link">Pricing</a>

@@ -10,14 +10,6 @@ import {
 /* ── Auth state ─────────────────────────────────────────────── */
 export let currentUser = null;
 
-// Hide auth-dependent UI until state is known to prevent flash
-const _hideEls = ["sidebarAvatar","sidebarName","sidebarEmail","navAvatarCircle","navAvatarName"];
-document.addEventListener("DOMContentLoaded", () => {
-  _hideEls.forEach(id => { const el = document.getElementById(id); if (el) el.style.visibility = "hidden"; });
-  const sp = document.querySelector(".sidebar-profile"); if (sp) sp.style.visibility = "hidden";
-  const nw = document.querySelector(".nav-avatar-wrap");  if (nw) nw.style.visibility = "hidden";
-});
-
 export const authReady = new Promise(resolve => {
   onAuthStateChanged(auth, user => {
     currentUser = user;
@@ -42,7 +34,6 @@ export const authReady = new Promise(resolve => {
       if (btnL) btnL.style.display = "none";
       if (btnO) btnO.style.display = "inline-flex";
 
-      // Populate navbar avatar
       const navAvatarCircle = document.getElementById("navAvatarCircle");
       const navAvatarName   = document.getElementById("navAvatarName");
       if (navAvatarCircle) {
@@ -57,7 +48,7 @@ export const authReady = new Promise(resolve => {
       if (btnL) btnL.style.display = "inline-flex";
       if (btnO) btnO.style.display = "none";
     }
-    // Reveal auth-dependent UI now that correct state is populated
+    // Always reveal after auth resolves (covers first-load / no-cache case)
     const sp = document.querySelector(".sidebar-profile"); if (sp) sp.style.visibility = "visible";
     const nw = document.querySelector(".nav-avatar-wrap");  if (nw) nw.style.visibility = "visible";
     resolve(user);
@@ -66,7 +57,11 @@ export const authReady = new Promise(resolve => {
 
 /* ── Nav buttons ─────────────────────────────────────────────── */
 async function doSignOut() {
-  try { await signOut(auth); window.location.href = "./login.html"; } catch(e) {}
+  try {
+    localStorage.removeItem('gts_user');
+    await signOut(auth);
+    window.location.href = "./login.html";
+  } catch(e) {}
 }
 document.getElementById("btnLogin")?.addEventListener("click", () => {
   window.location.href = "./login.html?redirect=" + encodeURIComponent(window.location.pathname);

@@ -101,7 +101,7 @@ button, input, select, textarea { font-family:var(--ff-b); }
 }
 .nav-link-sm:hover { background:var(--bg); color:var(--brand); }
 
-.nav-avatar-wrap { position:relative; }
+.nav-avatar-wrap { position:relative; visibility:hidden; }
 .nav-avatar-btn {
   display:flex; align-items:center; gap:.5rem;
   padding:.3125rem .75rem .3125rem .3125rem;
@@ -181,6 +181,7 @@ button, input, select, textarea { font-family:var(--ff-b); }
 }
 
 .sidebar-profile {
+  visibility:hidden;
   margin:1rem .875rem .5rem;
   padding:.875rem; border-radius:var(--r);
   background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.07);
