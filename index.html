@@ -248,7 +248,7 @@
       <a href="#consultation" class="nav-link">Consultation</a>
       <a href="about.html"    class="nav-link">About</a>
     </div>
-    <div class="nav-cta" id="navAuth">
+    <div class="nav-cta" id="navAuth" style="visibility:hidden">
       <a href="./app/login.html"  class="btn-nav-outline">Sign In</a>
       <a href="./app/signup.html" class="btn-nav-solid">Get Started Free →</a>
     </div>
@@ -522,6 +522,7 @@ onAuthStateChanged(auth, u => {
   if (!u) {
     el.innerHTML = `<a href="./app/login.html" class="btn-nav-outline">Sign In</a><a href="./app/signup.html" class="btn-nav-solid">Get Started Free</a>`;
     if (mob) mob.innerHTML = `<a href="./app/login.html" class="mobile-nav-link">Sign In</a><a href="./app/signup.html" class="mobile-nav-link" style="background:var(--brand);color:white;border-radius:8px;text-align:center;font-weight:700;padding:.625rem .75rem;display:block">Get Started</a>`;
+    el.style.visibility = 'visible';
     return;
   }
   const init = (u.displayName||u.email||'?')[0].toUpperCase();
@@ -529,6 +530,7 @@ onAuthStateChanged(auth, u => {
   el.innerHTML = `<div class="nav-avatar-wrap"><a href="./app/portal-dashboard.html" class="nav-avatar-btn"><div class="nav-avatar-circle">${u.photoURL?`<img src="${u.photoURL}" alt="">`:init}</div><span class="nav-avatar-name">${name}</span><span style="font-size:.6rem;color:#64748B;margin-left:2px">▾</span></a><div class="nav-dropdown"><a href="./app/portal-dashboard.html" class="nav-dropdown-item">📊 Dashboard</a><a href="./app/portal-services.html" class="nav-dropdown-item">🛒 Services &amp; Pricing</a><a href="./app/portal-profile.html" class="nav-dropdown-item">👤 My Profile</a><div class="nav-dropdown-divider"></div><a href="#" class="nav-dropdown-item" style="color:#E53935" id="navOut">Sign Out</a></div></div>`;
   document.getElementById('navOut').addEventListener('click', e => { e.preventDefault(); auth.signOut(); });
   if (mob) mob.innerHTML = `<a href="./app/portal-dashboard.html" class="mobile-nav-link" style="color:var(--brand);font-weight:700">📊 Go to Dashboard</a>`;
+  el.style.visibility = 'visible';
 });
 
 function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
