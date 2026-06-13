@@ -344,7 +344,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-const _a = initializeApp({apiKey:"AIzaSyD0f7L_vf2HZjzzxTyH2-Xu9rC6KWzKUuU",authDomain:"guidedtechapp.firebaseapp.com",projectId:"guidedtechapp",storageBucket:"guidedtechapp.firebasestorage.app",messagingSenderId:"744645189282",appId:"1:744645189282:web:00c134f4c91147818381fb"},'navApp');
+const _a = initializeApp({apiKey:"AIzaSyD0f7L_vf2HZjzzxTyH2-Xu9rC6KWzKUuU",authDomain:"guidedtechapp.firebaseapp.com",projectId:"guidedtechapp",storageBucket:"guidedtechapp.firebasestorage.app",messagingSenderId:"744645189282",appId:"1:744645189282:web:00c134f4c91147818381fb"});
 const _auth = getAuth(_a);
 onAuthStateChanged(_auth, u => {
   const el = document.getElementById('navAuth'), mob = document.getElementById('mobileAuthLinks');
