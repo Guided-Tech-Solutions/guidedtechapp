@@ -2,7 +2,7 @@
    FILE: app/firebase.js  —  GTS Amplify Firebase initialization
    ================================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-import { getAuth, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 import { getFirestore }   from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -20,3 +20,16 @@ export const db   = getFirestore(app);
 
 // Keep session alive across tabs and browser restarts until explicit sign-out
 setPersistence(auth, browserLocalPersistence);
+
+// Cache user info for instant UI render on page load (no flash)
+onAuthStateChanged(auth, user => {
+  if (user) {
+    localStorage.setItem('gts_user', JSON.stringify({
+      displayName: user.displayName,
+      email:       user.email,
+      photoURL:    user.photoURL,
+    }));
+  } else {
+    localStorage.removeItem('gts_user');
+  }
+});

@@ -52,6 +52,7 @@
     <div class="sidebar-footer"><button class="btn-signout" id="btnSidebarSignout">🚪 Sign Out</button></div>
   </aside>
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <script>!function(){try{var u=JSON.parse(localStorage.getItem('gts_user'));if(!u)return;var i=((u.displayName||u.email||'?').split(/[\s@]+/).slice(0,2).map(function(s){return s[0]?s[0].toUpperCase():'';}).join(''))||'U';var fn=u.displayName?u.displayName.split(' ')[0]:(u.email||'').split('@')[0];var av=u.photoURL?'<img src="'+u.photoURL.replace(/"/g,'&quot;')+'">':i;var c=document.getElementById('navAvatarCircle');if(c)c.innerHTML=av;var nn=document.getElementById('navAvatarName');if(nn)nn.textContent=fn;var sa=document.getElementById('sidebarAvatar');if(sa)sa.innerHTML=av;var sn=document.getElementById('sidebarName');if(sn)sn.textContent=u.displayName||(u.email||'').split('@')[0];var se=document.getElementById('sidebarEmail');if(se)se.textContent=u.email||'';var sp=document.querySelector('.sidebar-profile');if(sp)sp.style.visibility='visible';var nw=document.querySelector('.nav-avatar-wrap');if(nw)nw.style.visibility='visible';}catch(e){}}();</script>
 
   <main class="portal-main">
 
