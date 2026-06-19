@@ -301,7 +301,9 @@
 
 <div id="toastRoot"></div>
 <script type="module">
-import { auth, db, storage } from "./firebase.js";
+import { auth, db } from "./firebase.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
+const storage = getStorage();
 import {
   requireAuth, esc, fmtDate, showToast, openModal, closeModal
 } from "./portal-layout.js";
