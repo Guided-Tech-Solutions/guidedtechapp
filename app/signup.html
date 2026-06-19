@@ -95,6 +95,7 @@
   </style>
 </head>
 <body>
+<script>!function(){try{var p=new URLSearchParams(location.search);var r=p.get('redirect')||'./portal-dashboard.html';if(localStorage.getItem('gts_user'))window.location.replace(r);}catch(e){}}();</script>
 <div class="auth-split">
 
   <!-- Brand panel -->
@@ -228,6 +229,7 @@ googleBtn.addEventListener("click", async () => {
   try {
     const r = await signInWithPopup(auth, new GoogleAuthProvider());
     await createProfile(r.user, r.user.displayName);
+    localStorage.setItem('gts_user', JSON.stringify({ displayName: r.user.displayName, email: r.user.email, photoURL: r.user.photoURL }));
     window.location.href = redirect;
   } catch(e) {
     showError(e.message || "Google sign-up failed.");
@@ -258,6 +260,7 @@ submitBtn.addEventListener("click", async () => {
     const cred = await createUserWithEmailAndPassword(auth, email, pwd);
     await updateProfile(cred.user, { displayName });
     await createProfile(cred.user, displayName);
+    localStorage.setItem('gts_user', JSON.stringify({ displayName, email: cred.user.email, photoURL: cred.user.photoURL }));
     window.location.href = redirect;
   } catch(e) {
     const msgs = {

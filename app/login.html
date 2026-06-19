@@ -97,6 +97,7 @@
   </style>
 </head>
 <body>
+<script>!function(){try{var p=new URLSearchParams(location.search);var r=p.get('redirect')||'./portal-dashboard.html';if(localStorage.getItem('gts_user'))window.location.replace(r);}catch(e){}}();</script>
 <div class="auth-split">
 
   <!-- Brand panel -->
@@ -209,7 +210,8 @@ googleBtn.addEventListener("click", async () => {
   clearError(); googleBtn.disabled = true;
   googleBtn.innerHTML = '<span class="spinner"></span> Signing in...';
   try {
-    await signInWithPopup(auth, new GoogleAuthProvider());
+    const r = await signInWithPopup(auth, new GoogleAuthProvider());
+    localStorage.setItem('gts_user', JSON.stringify({ displayName: r.user.displayName, email: r.user.email, photoURL: r.user.photoURL }));
     window.location.href = redirect;
   } catch(e) {
     showError(e.message || "Google sign-in failed.");
@@ -227,7 +229,8 @@ async function doEmailLogin() {
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<span class="spinner"></span> Signing in...';
   try {
-    await signInWithEmailAndPassword(auth, email, pwd);
+    const cred = await signInWithEmailAndPassword(auth, email, pwd);
+    localStorage.setItem('gts_user', JSON.stringify({ displayName: cred.user.displayName, email: cred.user.email, photoURL: cred.user.photoURL }));
     window.location.href = redirect;
   } catch(e) {
     const msgs = {

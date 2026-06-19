@@ -5,6 +5,30 @@
   <title>My Profile — GTS Amplify</title>
   <link rel="icon" href="../asset/logo-icon.png">
   <link rel="stylesheet" href="./portal.css">
+  <style>
+    /* ── Profile picture upload ───────────────────────── */
+    .avatar-upload-wrap{position:relative;display:inline-block;cursor:pointer}
+    .avatar-upload-wrap input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .avatar-upload-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:.7rem;color:#fff;font-weight:600;text-align:center;line-height:1.3}
+    .avatar-upload-wrap:hover .avatar-upload-overlay{opacity:1}
+
+    /* ── KYC ──────────────────────────────────────────── */
+    .kyc-status-bar{display:flex;align-items:center;gap:.75rem;padding:.875rem 1rem;border-radius:10px;margin-bottom:1.25rem;font-size:.875rem;font-weight:600}
+    .kyc-status-bar.not_started{background:#F8FAFC;border:1px solid var(--border);color:var(--text-muted)}
+    .kyc-status-bar.pending{background:var(--warning-pale);border:1px solid rgba(243,156,18,.3);color:var(--warning)}
+    .kyc-status-bar.approved{background:var(--success-pale);border:1px solid rgba(15,157,88,.3);color:var(--success)}
+    .kyc-status-bar.rejected{background:var(--danger-pale);border:1px solid rgba(229,57,53,.3);color:var(--danger)}
+    .kyc-status-icon{font-size:1.25rem;flex-shrink:0}
+
+    .doc-upload-zone{border:2px dashed var(--border);border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+    .doc-upload-zone:hover{border-color:var(--brand);background:var(--brand-pale)}
+    .doc-upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .doc-upload-zone .dz-icon{font-size:1.5rem;margin-bottom:.375rem}
+    .doc-upload-zone .dz-label{font-size:.8125rem;font-weight:600;color:var(--text-mid)}
+    .doc-upload-zone .dz-sub{font-size:.75rem;color:var(--text-muted);margin-top:.125rem}
+    .doc-upload-zone.has-file{border-color:var(--brand);background:var(--brand-pale)}
+    .doc-upload-zone.has-file .dz-icon::after{content:' ✓';font-size:1rem}
+  </style>
 </head>
 <body>
 <nav class="navbar"><div class="navbar-inner">
@@ -29,7 +53,7 @@
     </div>
   </div>
 </div></nav>
-<script>!function(){try{var u=JSON.parse(localStorage.getItem('gts_user'));if(!u)return;var i=((u.displayName||u.email||'?').split(/[\s@]+/).slice(0,2).map(function(s){return s[0]?s[0].toUpperCase():'';}).join(''))||'U';var fn=u.displayName?u.displayName.split(' ')[0]:(u.email||''). split('@')[0];var av=u.photoURL?'<img src="'+u.photoURL.replace(/"/g,'&quot;')+'">':i;var c=document.getElementById('navAvatarCircle');if(c)c.innerHTML=av;var nn=document.getElementById('navAvatarName');if(nn)nn.textContent=fn;var sa=document.getElementById('sidebarAvatar');if(sa)sa.innerHTML=av;var sn=document.getElementById('sidebarName');if(sn)sn.textContent=u.displayName||(u.email||''). split('@')[0];var se=document.getElementById('sidebarEmail');if(se)se.textContent=u.email||'';var sp=document.querySelector('.sidebar-profile');if(sp)sp.style.visibility='visible';var nw=document.querySelector('.nav-avatar-wrap');if(nw)nw.style.visibility='visible';}catch(e){}}();</script>
+<script>!function(){try{var u=JSON.parse(localStorage.getItem('gts_user'));if(!u)return;var i=((u.displayName||u.email||'?').split(/[\s@]+/).slice(0,2).map(function(s){return s[0]?s[0].toUpperCase():'';}).join(''))||'U';var fn=u.displayName?u.displayName.split(' ')[0]:(u.email||'').split('@')[0];var av=u.photoURL?'<img src="'+u.photoURL.replace(/"/g,'&quot;')+'">':i;var c=document.getElementById('navAvatarCircle');if(c)c.innerHTML=av;var nn=document.getElementById('navAvatarName');if(nn)nn.textContent=fn;var sa=document.getElementById('sidebarAvatar');if(sa)sa.innerHTML=av;var sn=document.getElementById('sidebarName');if(sn)sn.textContent=u.displayName||(u.email||'').split('@')[0];var se=document.getElementById('sidebarEmail');if(se)se.textContent=u.email||'';var sp=document.querySelector('.sidebar-profile');if(sp)sp.style.visibility='visible';var nw=document.querySelector('.nav-avatar-wrap');if(nw)nw.style.visibility='visible';}catch(e){}}();</script>
 
 <div class="portal-wrapper">
   <aside class="portal-sidebar" id="portalSidebar">
@@ -62,18 +86,33 @@
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.375rem;align-items:start">
 
-      <!-- Profile Info -->
-      <div>
+      <!-- Left column: Personal Info + KYC -->
+      <div style="display:flex;flex-direction:column;gap:1.375rem">
+
+        <!-- Profile Info -->
         <div class="card">
           <div class="card-header"><div class="card-title">👤 Personal Information</div></div>
           <div class="card-body">
-            <!-- Avatar -->
+            <!-- Avatar with upload -->
             <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)">
-              <div id="profileAvatarLarge" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-weight:700;font-size:1.375rem;color:white;flex-shrink:0;overflow:hidden"></div>
+              <div style="position:relative">
+                <div id="profileAvatarLarge" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-weight:700;font-size:1.5rem;color:white;flex-shrink:0;overflow:hidden"></div>
+                <label class="avatar-upload-wrap" id="avatarUploadLabel" title="Change profile photo" style="position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center">
+                  <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/webp,image/gif" style="position:absolute;inset:0;opacity:0;cursor:pointer;border-radius:50%">
+                  <div class="avatar-upload-overlay">📷<br>Change</div>
+                </label>
+              </div>
               <div>
                 <div style="font-weight:700;font-size:.9375rem" id="profileDisplayName">—</div>
                 <div style="font-size:.8125rem;color:var(--text-muted)" id="profileEmail">—</div>
-                <div style="margin-top:.25rem"><span class="badge badge-active">Verified</span></div>
+                <div style="margin-top:.375rem;display:flex;gap:.375rem;flex-wrap:wrap">
+                  <span class="badge badge-active" id="emailVerifiedBadge">Verified</span>
+                  <span id="kycBadgeInline"></span>
+                </div>
+                <div style="margin-top:.375rem">
+                  <button id="btnUploadPhoto" class="btn btn-secondary" style="font-size:.75rem;padding:.3rem .75rem" onclick="document.getElementById('avatarFileInput').click()">📷 Change Photo</button>
+                  <span id="uploadPhotoStatus" style="font-size:.75rem;color:var(--text-muted);margin-left:.5rem"></span>
+                </div>
               </div>
             </div>
             <div class="form-group">
@@ -113,9 +152,66 @@
             <button class="btn btn-primary" id="btnSaveProfile">Save Changes</button>
           </div>
         </div>
+
+        <!-- KYC Verification -->
+        <div class="card" id="kycCard">
+          <div class="card-header">
+            <div>
+              <div class="card-title">🪪 Identity Verification (KYC)</div>
+              <div class="card-subtitle">Verify your identity to unlock all platform features</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Status bar -->
+            <div class="kyc-status-bar not_started" id="kycStatusBar">
+              <span class="kyc-status-icon">📋</span>
+              <div>
+                <div id="kycStatusTitle">Not Started</div>
+                <div id="kycStatusDesc" style="font-size:.8125rem;font-weight:400;margin-top:.125rem;color:inherit;opacity:.8">Submit your government-issued ID to get verified.</div>
+              </div>
+            </div>
+
+            <!-- Form (hidden once approved) -->
+            <div id="kycFormWrap">
+              <div class="form-group">
+                <label class="form-label">ID Type</label>
+                <select class="form-control" id="kycIdType">
+                  <option value="">Select document type...</option>
+                  <option value="national_id">National ID Card</option>
+                  <option value="passport">International Passport</option>
+                  <option value="drivers_license">Driver's License</option>
+                  <option value="voters_card">Voter's Card</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">ID Number</label>
+                <input type="text" class="form-control" id="kycIdNumber" placeholder="Enter your ID number">
+              </div>
+              <div class="form-group">
+                <label class="form-label">ID Document — Front</label>
+                <div class="doc-upload-zone" id="kycFrontZone">
+                  <input type="file" id="kycFrontFile" accept="image/jpeg,image/png,image/webp,application/pdf">
+                  <div class="dz-icon">📄</div>
+                  <div class="dz-label">Click to upload front of ID</div>
+                  <div class="dz-sub">JPG, PNG, PDF · max 5 MB</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">ID Document — Back <span style="color:var(--text-muted);font-weight:400">(optional)</span></label>
+                <div class="doc-upload-zone" id="kycBackZone">
+                  <input type="file" id="kycBackFile" accept="image/jpeg,image/png,image/webp,application/pdf">
+                  <div class="dz-icon">📄</div>
+                  <div class="dz-label">Click to upload back of ID</div>
+                  <div class="dz-sub">JPG, PNG, PDF · max 5 MB</div>
+                </div>
+              </div>
+              <button class="btn btn-primary" id="btnSubmitKyc">Submit for Verification</button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Security & Danger -->
+      <!-- Right column: Security + Stats + Danger -->
       <div style="display:flex;flex-direction:column;gap:1.375rem">
 
         <!-- Change Password -->
@@ -154,9 +250,13 @@
               <span class="detail-label">Total Payments</span>
               <span class="detail-value" id="totalPaymentsCount">—</span>
             </div>
-            <div class="detail-row" style="padding:.375rem 0">
+            <div class="detail-row" style="padding:.375rem 0;border-bottom:1px solid var(--border)">
               <span class="detail-label">Account Type</span>
               <span class="badge badge-brand">Standard</span>
+            </div>
+            <div class="detail-row" style="padding:.375rem 0">
+              <span class="detail-label">KYC Status</span>
+              <span id="kycStatusBadge" class="badge">—</span>
             </div>
           </div>
         </div>
@@ -201,9 +301,9 @@
 
 <div id="toastRoot"></div>
 <script type="module">
-import { auth, db } from "./firebase.js";
+import { auth, db, storage } from "./firebase.js";
 import {
-  requireAuth, esc, fmtDate, fmtMoney, showToast, openModal, closeModal
+  requireAuth, esc, fmtDate, showToast, openModal, closeModal
 } from "./portal-layout.js";
 import {
   reauthenticateWithCredential, EmailAuthProvider,
@@ -212,17 +312,66 @@ import {
 import {
   doc, getDoc, setDoc, getDocs, collection, query, where, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+import {
+  ref, uploadBytesResumable, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
+/* ── helpers ──────────────────────────────────────────────── */
+function setAvatarEl(el, photoURL, initials) {
+  if (!el) return;
+  if (photoURL) el.innerHTML = `<img src="${photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  else el.textContent = initials;
+}
+
+function updateKycUI(status, notes) {
+  const bar   = document.getElementById("kycStatusBar");
+  const title = document.getElementById("kycStatusTitle");
+  const desc  = document.getElementById("kycStatusDesc");
+  const form  = document.getElementById("kycFormWrap");
+  const badge = document.getElementById("kycStatusBadge");
+  const inline= document.getElementById("kycBadgeInline");
+
+  const CFG = {
+    not_started: { icon:"📋", label:"Not Started",          desc:"Submit your government-issued ID to get verified.", badgeCls:"badge-pending" },
+    pending:     { icon:"⏳", label:"Verification Pending", desc:"Your documents are under review. This usually takes 1–2 business days.", badgeCls:"badge-pending" },
+    approved:    { icon:"✅", label:"Identity Verified",    desc:"Your identity has been successfully verified.", badgeCls:"badge-active" },
+    rejected:    { icon:"❌", label:"Verification Rejected",desc: notes || "Your submission was rejected. Please re-submit with a clearer document.", badgeCls:"badge-danger" },
+  };
+  const cfg = CFG[status] || CFG.not_started;
+
+  bar.className = `kyc-status-bar ${status || "not_started"}`;
+  bar.querySelector(".kyc-status-icon").textContent = cfg.icon;
+  title.textContent = cfg.label;
+  desc.textContent  = cfg.desc;
+
+  // Badge in stats
+  if (badge) { badge.className = `badge ${cfg.badgeCls}`; badge.textContent = cfg.label; }
+  // Inline badge next to name
+  if (inline) {
+    if (status === "approved") { inline.innerHTML = `<span class="badge badge-active">KYC Verified</span>`; }
+    else if (status === "pending") { inline.innerHTML = `<span class="badge badge-pending">KYC Pending</span>`; }
+    else { inline.innerHTML = ""; }
+  }
+
+  // Hide form if approved or pending
+  if (form) form.style.display = (status === "approved" || status === "pending") ? "none" : "";
+}
+
+/* ── main ─────────────────────────────────────────────────── */
 document.addEventListener("DOMContentLoaded", async () => {
   const user = await requireAuth();
   if (!user) return;
 
-  // Load profile from Firestore
+  const displayName = user.displayName || user.email;
+  const initials = displayName.split(/[\s@]+/).slice(0,2).map(s => s[0]?.toUpperCase() || "").join("") || "U";
+
+  /* Load Firestore profile */
+  let kycStatus = "not_started";
   try {
-    const snap = await getDoc(doc(db,"users",user.uid));
+    const snap = await getDoc(doc(db, "users", user.uid));
     const data = snap.exists() ? snap.data() : {};
 
-    const nameArr = (user.displayName||"").split(" ");
+    const nameArr = (user.displayName || "").split(" ");
     document.getElementById("pfFirstName").value = data.firstName || nameArr[0] || "";
     document.getElementById("pfLastName").value  = data.lastName  || nameArr.slice(1).join(" ") || "";
     document.getElementById("pfPhone").value     = data.phone     || "";
@@ -230,19 +379,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("pfWebsite").value   = data.website   || "";
     document.getElementById("pfBio").value       = data.bio       || "";
     document.getElementById("pfIndustry").value  = data.industry  || "";
+    document.getElementById("memberSince").textContent = fmtDate(data.createdAt || user.metadata.creationTime);
 
-    const displayName = user.displayName || user.email;
-    const initials = displayName.split(/[\s@]+/).slice(0,2).map(s=>s[0]?.toUpperCase()||"").join("") || "U";
-    const avatarEl = document.getElementById("profileAvatarLarge");
-    if (user.photoURL) avatarEl.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover">`;
-    else avatarEl.textContent = initials;
-
-    document.getElementById("profileDisplayName").textContent = user.displayName || "—";
-    document.getElementById("profileEmail").textContent       = user.email;
-    document.getElementById("memberSince").textContent        = fmtDate(data.createdAt || user.metadata.creationTime);
+    // KYC pre-fill
+    if (data.kyc) {
+      kycStatus = data.kyc.status || "not_started";
+      if (data.kyc.idType)   document.getElementById("kycIdType").value   = data.kyc.idType;
+      if (data.kyc.idNumber) document.getElementById("kycIdNumber").value = data.kyc.idNumber;
+    }
   } catch(e) {}
 
-  // Load stats
+  /* Avatar */
+  const avatarEl = document.getElementById("profileAvatarLarge");
+  setAvatarEl(avatarEl, user.photoURL, initials);
+  document.getElementById("profileDisplayName").textContent = user.displayName || "—";
+  document.getElementById("profileEmail").textContent       = user.email;
+  updateKycUI(kycStatus);
+
+  /* Stats */
   try {
     const [subs, pays] = await Promise.all([
       getDocs(query(collection(db,"serviceActivations"), where("userId","==",user.uid), where("status","==","active"))),
@@ -252,31 +406,141 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("totalPaymentsCount").textContent  = pays.size;
   } catch(e) {}
 
-  // Save profile
+  /* ── Profile picture upload ───────────────────────────── */
+  document.getElementById("avatarFileInput").addEventListener("change", async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showToast({ title:"File too large", message:"Max 5 MB.", type:"warning" }); return; }
+
+    const statusEl = document.getElementById("uploadPhotoStatus");
+    statusEl.textContent = "Uploading…";
+
+    try {
+      const storageRef = ref(storage, `profile-pictures/${user.uid}/${Date.now()}_${file.name}`);
+      const task = uploadBytesResumable(storageRef, file);
+
+      await new Promise((resolve, reject) => {
+        task.on("state_changed", snap => {
+          const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
+          statusEl.textContent = `Uploading… ${pct}%`;
+        }, reject, resolve);
+      });
+
+      const url = await getDownloadURL(storageRef);
+      await updateProfile(user, { photoURL: url });
+      await setDoc(doc(db, "users", user.uid), { photoURL: url, updatedAt: serverTimestamp() }, { merge: true });
+
+      // Update all avatar elements
+      setAvatarEl(avatarEl, url, initials);
+      const navCircle = document.getElementById("navAvatarCircle");
+      if (navCircle) navCircle.innerHTML = `<img src="${url}" alt="">`;
+      const sidebarAv = document.getElementById("sidebarAvatar");
+      if (sidebarAv) sidebarAv.innerHTML = `<img src="${url}" alt="">`;
+
+      // Update localStorage cache
+      const cached = JSON.parse(localStorage.getItem("gts_user") || "{}");
+      localStorage.setItem("gts_user", JSON.stringify({ ...cached, photoURL: url }));
+
+      statusEl.textContent = "";
+      showToast({ title:"Photo updated!", type:"success" });
+    } catch(err) {
+      statusEl.textContent = "";
+      showToast({ title:"Upload failed", message: err.message, type:"error" });
+    }
+  });
+
+  /* ── KYC doc-zone labels ──────────────────────────────── */
+  function wireDocZone(inputId, zoneId, label) {
+    const input = document.getElementById(inputId);
+    const zone  = document.getElementById(zoneId);
+    const lbl   = zone.querySelector(".dz-label");
+    input.addEventListener("change", () => {
+      const f = input.files[0];
+      if (f) { zone.classList.add("has-file"); lbl.textContent = f.name; }
+      else   { zone.classList.remove("has-file"); lbl.textContent = label; }
+    });
+  }
+  wireDocZone("kycFrontFile", "kycFrontZone", "Click to upload front of ID");
+  wireDocZone("kycBackFile",  "kycBackZone",  "Click to upload back of ID");
+
+  /* ── KYC submit ───────────────────────────────────────── */
+  document.getElementById("btnSubmitKyc").addEventListener("click", async () => {
+    const idType   = document.getElementById("kycIdType").value;
+    const idNumber = document.getElementById("kycIdNumber").value.trim();
+    const frontFile= document.getElementById("kycFrontFile").files[0];
+
+    if (!idType)    { showToast({ title:"Select an ID type",     type:"warning" }); return; }
+    if (!idNumber)  { showToast({ title:"Enter your ID number",  type:"warning" }); return; }
+    if (!frontFile) { showToast({ title:"Upload your ID document (front)", type:"warning" }); return; }
+    if (frontFile.size > 5 * 1024 * 1024) { showToast({ title:"Front image too large", message:"Max 5 MB.", type:"warning" }); return; }
+
+    const backFile = document.getElementById("kycBackFile").files[0];
+    if (backFile && backFile.size > 5 * 1024 * 1024) { showToast({ title:"Back image too large", message:"Max 5 MB.", type:"warning" }); return; }
+
+    const btn = document.getElementById("btnSubmitKyc");
+    btn.classList.add("is-loading"); btn.disabled = true;
+
+    try {
+      async function uploadKycDoc(file, side) {
+        const r = ref(storage, `kyc-documents/${user.uid}/${Date.now()}_${side}_${file.name}`);
+        await uploadBytesResumable(r, file);
+        return getDownloadURL(r);
+      }
+
+      const frontUrl = await uploadKycDoc(frontFile, "front");
+      const backUrl  = backFile ? await uploadKycDoc(backFile, "back") : null;
+
+      await setDoc(doc(db, "users", user.uid), {
+        kyc: {
+          status:      "pending",
+          idType,
+          idNumber,
+          frontDocUrl: frontUrl,
+          ...(backUrl ? { backDocUrl: backUrl } : {}),
+          submittedAt: serverTimestamp(),
+          notes:       null,
+        },
+        updatedAt: serverTimestamp(),
+      }, { merge: true });
+
+      updateKycUI("pending");
+      showToast({ title:"KYC submitted!", message:"We'll review your documents within 1–2 business days.", type:"success" });
+    } catch(err) {
+      showToast({ title:"Submission failed", message: err.message, type:"error" });
+    } finally {
+      btn.classList.remove("is-loading"); btn.disabled = false;
+    }
+  });
+
+  /* ── Save profile ─────────────────────────────────────── */
   document.getElementById("btnSaveProfile").addEventListener("click", async () => {
     const btn = document.getElementById("btnSaveProfile");
     btn.classList.add("is-loading"); btn.disabled = true;
     try {
       const first   = document.getElementById("pfFirstName").value.trim();
       const last    = document.getElementById("pfLastName").value.trim();
-      const displayName = [first, last].filter(Boolean).join(" ") || user.displayName;
+      const newName = [first, last].filter(Boolean).join(" ") || user.displayName;
 
-      await updateProfile(user, { displayName });
-      await setDoc(doc(db,"users",user.uid), {
-        displayName,
-        firstName:  first,
-        lastName:   last,
-        phone:      document.getElementById("pfPhone").value.trim(),
-        company:    document.getElementById("pfCompany").value.trim(),
-        website:    document.getElementById("pfWebsite").value.trim(),
-        bio:        document.getElementById("pfBio").value.trim(),
-        industry:   document.getElementById("pfIndustry").value,
-        email:      user.email,
-        updatedAt:  serverTimestamp(),
+      await updateProfile(user, { displayName: newName });
+      await setDoc(doc(db, "users", user.uid), {
+        displayName: newName,
+        firstName:   first,
+        lastName:    last,
+        phone:       document.getElementById("pfPhone").value.trim(),
+        company:     document.getElementById("pfCompany").value.trim(),
+        website:     document.getElementById("pfWebsite").value.trim(),
+        bio:         document.getElementById("pfBio").value.trim(),
+        industry:    document.getElementById("pfIndustry").value,
+        email:       user.email,
+        updatedAt:   serverTimestamp(),
       }, { merge: true });
 
-      document.getElementById("profileDisplayName").textContent = displayName;
-      document.getElementById("sidebarName").textContent        = displayName;
+      // Update localStorage cache
+      const cached = JSON.parse(localStorage.getItem("gts_user") || "{}");
+      localStorage.setItem("gts_user", JSON.stringify({ ...cached, displayName: newName }));
+
+      document.getElementById("profileDisplayName").textContent = newName;
+      document.getElementById("sidebarName").textContent        = newName;
       showToast({ title:"Profile updated!", type:"success" });
     } catch(e) {
       showToast({ title:"Update failed", message: e.message, type:"error" });
@@ -285,11 +549,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // Change password
+  /* ── Change password ──────────────────────────────────── */
   document.getElementById("btnChangePassword").addEventListener("click", async () => {
-    const current  = document.getElementById("pwdCurrent").value;
-    const newPwd   = document.getElementById("pwdNew").value;
-    const confirm  = document.getElementById("pwdConfirm").value;
+    const current = document.getElementById("pwdCurrent").value;
+    const newPwd  = document.getElementById("pwdNew").value;
+    const confirm = document.getElementById("pwdConfirm").value;
 
     if (!current || !newPwd) { showToast({ title:"Fill all fields", type:"warning" }); return; }
     if (newPwd.length < 6)   { showToast({ title:"Password too short", message:"Min. 6 characters", type:"warning" }); return; }
@@ -301,21 +565,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       const cred = EmailAuthProvider.credential(user.email, current);
       await reauthenticateWithCredential(user, cred);
       await updatePassword(user, newPwd);
-      ["pwdCurrent","pwdNew","pwdConfirm"].forEach(id => document.getElementById(id).value="");
+      ["pwdCurrent","pwdNew","pwdConfirm"].forEach(id => document.getElementById(id).value = "");
       showToast({ title:"Password updated!", type:"success" });
     } catch(e) {
       const msgs = {
-        "auth/wrong-password":     "Current password is incorrect.",
-        "auth/too-many-requests":  "Too many attempts. Try again later.",
+        "auth/wrong-password":       "Current password is incorrect.",
+        "auth/too-many-requests":    "Too many attempts. Try again later.",
         "auth/requires-recent-login":"Please sign out and sign in again first.",
       };
-      showToast({ title:"Update failed", message: msgs[e.code]||e.message, type:"error" });
+      showToast({ title:"Update failed", message: msgs[e.code] || e.message, type:"error" });
     } finally {
       btn.classList.remove("is-loading"); btn.disabled = false;
     }
   });
 
-  // Delete account
+  /* ── Delete account ───────────────────────────────────── */
   document.getElementById("btnDeleteAccount").addEventListener("click", () => {
     document.getElementById("deleteConfirmInput").value = "";
     openModal("deleteAccountModal");
@@ -323,17 +587,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("btnConfirmDelete").addEventListener("click", async () => {
     const input = document.getElementById("deleteConfirmInput").value.trim();
-    if (input !== "DELETE") {
-      showToast({ title:"Type DELETE to confirm", type:"warning" }); return;
-    }
+    if (input !== "DELETE") { showToast({ title:"Type DELETE to confirm", type:"warning" }); return; }
     const btn = document.getElementById("btnConfirmDelete");
     btn.classList.add("is-loading"); btn.disabled = true;
     try {
       await deleteUser(user);
+      localStorage.removeItem("gts_user");
       window.location.href = "../index.html";
     } catch(e) {
       const msgs = { "auth/requires-recent-login":"Please sign out and sign in again before deleting." };
-      showToast({ title:"Failed", message: msgs[e.code]||e.message, type:"error" });
+      showToast({ title:"Failed", message: msgs[e.code] || e.message, type:"error" });
       btn.classList.remove("is-loading"); btn.disabled = false;
     }
   });
