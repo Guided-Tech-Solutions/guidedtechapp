@@ -185,11 +185,12 @@
 <script type="module">
 import { auth, db } from "./firebase.js";
 import {
-  signInWithPopup, GoogleAuthProvider,
+  GoogleAuthProvider,
+  signInWithRedirect, getRedirectResult,
   createUserWithEmailAndPassword, updateProfile,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 const params   = new URLSearchParams(window.location.search);
 const redirect = params.get("redirect") || "./portal-dashboard.html";
@@ -221,15 +222,23 @@ async function createProfile(user, displayName) {
   } catch(e) {}
 }
 
-// Google
+// Handle return from Google redirect — create profile if new user
+getRedirectResult(auth).then(async result => {
+  if (!result?.user) return;
+  const snap = await getDoc(doc(db, "users", result.user.uid));
+  if (!snap.exists()) await createProfile(result.user, result.user.displayName);
+  // onAuthStateChanged will fire and handle the redirect
+}).catch(e => {
+  showError(e.message || "Google sign-up failed. Please try again.");
+  document.body.style.visibility = "visible";
+});
+
+// Google — use redirect (no popup needed)
 googleBtn.addEventListener("click", async () => {
   clearError(); googleBtn.disabled = true;
-  googleBtn.innerHTML = '<span class="spinner"></span> Creating account...';
+  googleBtn.innerHTML = '<span class="spinner"></span> Redirecting to Google...';
   try {
-    const r = await signInWithPopup(auth, new GoogleAuthProvider());
-    await createProfile(r.user, r.user.displayName);
-    localStorage.setItem('gts_user', JSON.stringify({ displayName: r.user.displayName, email: r.user.email, photoURL: r.user.photoURL }));
-    window.location.href = redirect;
+    await signInWithRedirect(auth, new GoogleAuthProvider());
   } catch(e) {
     showError(e.message || "Google sign-up failed.");
     googleBtn.disabled = false;
@@ -272,8 +281,10 @@ submitBtn.addEventListener("click", async () => {
   }
 });
 
+// Auth state: reveal page if no session, redirect if signed in
 onAuthStateChanged(auth, user => {
   if (user) {
+    localStorage.setItem('gts_user', JSON.stringify({ displayName: user.displayName, email: user.email, photoURL: user.photoURL }));
     window.location.href = redirect;
   } else {
     document.body.style.visibility = "visible";
