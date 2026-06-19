@@ -177,7 +177,8 @@
 <script type="module">
 import { auth } from "./firebase.js";
 import {
-  signInWithPopup, GoogleAuthProvider,
+  GoogleAuthProvider,
+  signInWithRedirect, getRedirectResult,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   onAuthStateChanged
@@ -204,14 +205,12 @@ pwToggle.addEventListener("click", () => {
   pwToggle.textContent = show ? "🙈" : "👁";
 });
 
-// Google
+// Google — use redirect (no popup, avoids firebaseapp.com popup timeout)
 googleBtn.addEventListener("click", async () => {
   clearError(); googleBtn.disabled = true;
-  googleBtn.innerHTML = '<span class="spinner"></span> Signing in...';
+  googleBtn.innerHTML = '<span class="spinner"></span> Redirecting to Google...';
   try {
-    const r = await signInWithPopup(auth, new GoogleAuthProvider());
-    localStorage.setItem('gts_user', JSON.stringify({ displayName: r.user.displayName, email: r.user.email, photoURL: r.user.photoURL }));
-    window.location.href = redirect;
+    await signInWithRedirect(auth, new GoogleAuthProvider());
   } catch(e) {
     showError(e.message || "Google sign-in failed.");
     googleBtn.disabled = false;
@@ -258,9 +257,10 @@ forgotLink.addEventListener("click", async e => {
   } catch(e) { showError("Could not send reset email. Check the address and try again."); }
 });
 
-// Redirect if already signed in, otherwise reveal the page
+// Auth state: handles both normal load and returning from Google redirect
 onAuthStateChanged(auth, user => {
   if (user) {
+    localStorage.setItem('gts_user', JSON.stringify({ displayName: user.displayName, email: user.email, photoURL: user.photoURL }));
     window.location.href = redirect;
   } else {
     document.body.style.visibility = "visible";
