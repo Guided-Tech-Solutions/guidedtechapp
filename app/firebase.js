@@ -7,7 +7,7 @@ import { getFirestore }   from "https://www.gstatic.com/firebasejs/12.12.1/fireb
 
 const firebaseConfig = {
   apiKey:            "AIzaSyD0f7L_vf2HZjzzxTyH2-Xu9rC6KWzKUuU",
-  authDomain:        "guidedtechapp.firebaseapp.com",
+  authDomain:        "guidedtechapp.vercel.app",
   projectId:         "guidedtechapp",
   storageBucket:     "guidedtechapp.firebasestorage.app",
   messagingSenderId: "744645189282",
