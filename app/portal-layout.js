@@ -146,6 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
 export async function requireAuth() {
   const user = await authReady;
   if (!user) {
+    localStorage.removeItem("gts_user");
     window.location.href = "./login.html?redirect=" + encodeURIComponent(window.location.pathname);
     return null;
   }

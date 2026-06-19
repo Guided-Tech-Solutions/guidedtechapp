@@ -94,8 +94,7 @@
     @media(max-width:540px){.auth-panel{width:100%}.panel-inner{padding:2rem 1.5rem}.form-row{grid-template-columns:1fr}}
   </style>
 </head>
-<body>
-<script>!function(){try{var p=new URLSearchParams(location.search);var r=p.get('redirect')||'./portal-dashboard.html';if(localStorage.getItem('gts_user'))window.location.replace(r);}catch(e){}}();</script>
+<body style="visibility:hidden">
 <div class="auth-split">
 
   <!-- Brand panel -->
@@ -273,7 +272,13 @@ submitBtn.addEventListener("click", async () => {
   }
 });
 
-onAuthStateChanged(auth, user => { if(user) window.location.href = redirect; });
+onAuthStateChanged(auth, user => {
+  if (user) {
+    window.location.href = redirect;
+  } else {
+    document.body.style.visibility = "visible";
+  }
+});
 </script>
 </body>
 </html>
