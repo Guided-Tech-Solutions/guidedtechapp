@@ -4,7 +4,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 import { getFirestore }   from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
-import { getStorage }     from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyD0f7L_vf2HZjzzxTyH2-Xu9rC6KWzKUuU",
@@ -16,9 +15,8 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth    = getAuth(app);
-export const db      = getFirestore(app);
-export const storage = getStorage(app);
+export const auth = getAuth(app);
+export const db   = getFirestore(app);
 
 // Keep session alive across tabs and browser restarts until explicit sign-out
 setPersistence(auth, browserLocalPersistence);
