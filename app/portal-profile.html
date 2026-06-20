@@ -11,23 +11,6 @@
     .avatar-upload-wrap input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
     .avatar-upload-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:.7rem;color:#fff;font-weight:600;text-align:center;line-height:1.3}
     .avatar-upload-wrap:hover .avatar-upload-overlay{opacity:1}
-
-    /* ── KYC ──────────────────────────────────────────── */
-    .kyc-status-bar{display:flex;align-items:center;gap:.75rem;padding:.875rem 1rem;border-radius:10px;margin-bottom:1.25rem;font-size:.875rem;font-weight:600}
-    .kyc-status-bar.not_started{background:#F8FAFC;border:1px solid var(--border);color:var(--text-muted)}
-    .kyc-status-bar.pending{background:var(--warning-pale);border:1px solid rgba(243,156,18,.3);color:var(--warning)}
-    .kyc-status-bar.approved{background:var(--success-pale);border:1px solid rgba(15,157,88,.3);color:var(--success)}
-    .kyc-status-bar.rejected{background:var(--danger-pale);border:1px solid rgba(229,57,53,.3);color:var(--danger)}
-    .kyc-status-icon{font-size:1.25rem;flex-shrink:0}
-
-    .doc-upload-zone{border:2px dashed var(--border);border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
-    .doc-upload-zone:hover{border-color:var(--brand);background:var(--brand-pale)}
-    .doc-upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-    .doc-upload-zone .dz-icon{font-size:1.5rem;margin-bottom:.375rem}
-    .doc-upload-zone .dz-label{font-size:.8125rem;font-weight:600;color:var(--text-mid)}
-    .doc-upload-zone .dz-sub{font-size:.75rem;color:var(--text-muted);margin-top:.125rem}
-    .doc-upload-zone.has-file{border-color:var(--brand);background:var(--brand-pale)}
-    .doc-upload-zone.has-file .dz-icon::after{content:' ✓';font-size:1rem}
   </style>
 </head>
 <body>
@@ -86,7 +69,7 @@
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.375rem;align-items:start">
 
-      <!-- Left column: Personal Info + KYC -->
+      <!-- Left column: Personal Info -->
       <div style="display:flex;flex-direction:column;gap:1.375rem">
 
         <!-- Profile Info -->
@@ -105,9 +88,8 @@
               <div>
                 <div style="font-weight:700;font-size:.9375rem" id="profileDisplayName">—</div>
                 <div style="font-size:.8125rem;color:var(--text-muted)" id="profileEmail">—</div>
-                <div style="margin-top:.375rem;display:flex;gap:.375rem;flex-wrap:wrap">
-                  <span class="badge badge-active" id="emailVerifiedBadge">Verified</span>
-                  <span id="kycBadgeInline"></span>
+                <div style="margin-top:.375rem">
+                  <span class="badge badge-active">Verified</span>
                 </div>
                 <div style="margin-top:.375rem">
                   <button id="btnUploadPhoto" class="btn btn-secondary" style="font-size:.75rem;padding:.3rem .75rem" onclick="document.getElementById('avatarFileInput').click()">📷 Change Photo</button>
@@ -153,62 +135,6 @@
           </div>
         </div>
 
-        <!-- KYC Verification -->
-        <div class="card" id="kycCard">
-          <div class="card-header">
-            <div>
-              <div class="card-title">🪪 Identity Verification (KYC)</div>
-              <div class="card-subtitle">Verify your identity to unlock all platform features</div>
-            </div>
-          </div>
-          <div class="card-body">
-            <!-- Status bar -->
-            <div class="kyc-status-bar not_started" id="kycStatusBar">
-              <span class="kyc-status-icon">📋</span>
-              <div>
-                <div id="kycStatusTitle">Not Started</div>
-                <div id="kycStatusDesc" style="font-size:.8125rem;font-weight:400;margin-top:.125rem;color:inherit;opacity:.8">Submit your government-issued ID to get verified.</div>
-              </div>
-            </div>
-
-            <!-- Form (hidden once approved) -->
-            <div id="kycFormWrap">
-              <div class="form-group">
-                <label class="form-label">ID Type</label>
-                <select class="form-control" id="kycIdType">
-                  <option value="">Select document type...</option>
-                  <option value="national_id">National ID Card</option>
-                  <option value="passport">International Passport</option>
-                  <option value="drivers_license">Driver's License</option>
-                  <option value="voters_card">Voter's Card</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">ID Number</label>
-                <input type="text" class="form-control" id="kycIdNumber" placeholder="Enter your ID number">
-              </div>
-              <div class="form-group">
-                <label class="form-label">ID Document — Front</label>
-                <div class="doc-upload-zone" id="kycFrontZone">
-                  <input type="file" id="kycFrontFile" accept="image/jpeg,image/png,image/webp,application/pdf">
-                  <div class="dz-icon">📄</div>
-                  <div class="dz-label">Click to upload front of ID</div>
-                  <div class="dz-sub">JPG, PNG, PDF · max 5 MB</div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">ID Document — Back <span style="color:var(--text-muted);font-weight:400">(optional)</span></label>
-                <div class="doc-upload-zone" id="kycBackZone">
-                  <input type="file" id="kycBackFile" accept="image/jpeg,image/png,image/webp,application/pdf">
-                  <div class="dz-icon">📄</div>
-                  <div class="dz-label">Click to upload back of ID</div>
-                  <div class="dz-sub">JPG, PNG, PDF · max 5 MB</div>
-                </div>
-              </div>
-              <button class="btn btn-primary" id="btnSubmitKyc">Submit for Verification</button>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Right column: Security + Stats + Danger -->
@@ -250,13 +176,9 @@
               <span class="detail-label">Total Payments</span>
               <span class="detail-value" id="totalPaymentsCount">—</span>
             </div>
-            <div class="detail-row" style="padding:.375rem 0;border-bottom:1px solid var(--border)">
+            <div class="detail-row" style="padding:.375rem 0">
               <span class="detail-label">Account Type</span>
               <span class="badge badge-brand">Standard</span>
-            </div>
-            <div class="detail-row" style="padding:.375rem 0">
-              <span class="detail-label">KYC Status</span>
-              <span id="kycStatusBadge" class="badge">—</span>
             </div>
           </div>
         </div>
@@ -325,40 +247,6 @@ function setAvatarEl(el, photoURL, initials) {
   else el.textContent = initials;
 }
 
-function updateKycUI(status, notes) {
-  const bar   = document.getElementById("kycStatusBar");
-  const title = document.getElementById("kycStatusTitle");
-  const desc  = document.getElementById("kycStatusDesc");
-  const form  = document.getElementById("kycFormWrap");
-  const badge = document.getElementById("kycStatusBadge");
-  const inline= document.getElementById("kycBadgeInline");
-
-  const CFG = {
-    not_started: { icon:"📋", label:"Not Started",          desc:"Submit your government-issued ID to get verified.", badgeCls:"badge-pending" },
-    pending:     { icon:"⏳", label:"Verification Pending", desc:"Your documents are under review. This usually takes 1–2 business days.", badgeCls:"badge-pending" },
-    approved:    { icon:"✅", label:"Identity Verified",    desc:"Your identity has been successfully verified.", badgeCls:"badge-active" },
-    rejected:    { icon:"❌", label:"Verification Rejected",desc: notes || "Your submission was rejected. Please re-submit with a clearer document.", badgeCls:"badge-danger" },
-  };
-  const cfg = CFG[status] || CFG.not_started;
-
-  bar.className = `kyc-status-bar ${status || "not_started"}`;
-  bar.querySelector(".kyc-status-icon").textContent = cfg.icon;
-  title.textContent = cfg.label;
-  desc.textContent  = cfg.desc;
-
-  // Badge in stats
-  if (badge) { badge.className = `badge ${cfg.badgeCls}`; badge.textContent = cfg.label; }
-  // Inline badge next to name
-  if (inline) {
-    if (status === "approved") { inline.innerHTML = `<span class="badge badge-active">KYC Verified</span>`; }
-    else if (status === "pending") { inline.innerHTML = `<span class="badge badge-pending">KYC Pending</span>`; }
-    else { inline.innerHTML = ""; }
-  }
-
-  // Hide form if approved or pending
-  if (form) form.style.display = (status === "approved" || status === "pending") ? "none" : "";
-}
-
 /* ── main ─────────────────────────────────────────────────── */
 document.addEventListener("DOMContentLoaded", async () => {
   const user = await requireAuth();
@@ -368,7 +256,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const initials = displayName.split(/[\s@]+/).slice(0,2).map(s => s[0]?.toUpperCase() || "").join("") || "U";
 
   /* Load Firestore profile */
-  let kycStatus = "not_started";
   try {
     const snap = await getDoc(doc(db, "users", user.uid));
     const data = snap.exists() ? snap.data() : {};
@@ -382,13 +269,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("pfBio").value       = data.bio       || "";
     document.getElementById("pfIndustry").value  = data.industry  || "";
     document.getElementById("memberSince").textContent = fmtDate(data.createdAt || user.metadata.creationTime);
-
-    // KYC pre-fill
-    if (data.kyc) {
-      kycStatus = data.kyc.status || "not_started";
-      if (data.kyc.idType)   document.getElementById("kycIdType").value   = data.kyc.idType;
-      if (data.kyc.idNumber) document.getElementById("kycIdNumber").value = data.kyc.idNumber;
-    }
   } catch(e) {}
 
   /* Avatar */
@@ -396,7 +276,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   setAvatarEl(avatarEl, user.photoURL, initials);
   document.getElementById("profileDisplayName").textContent = user.displayName || "—";
   document.getElementById("profileEmail").textContent       = user.email;
-  updateKycUI(kycStatus);
 
   /* Stats */
   try {
@@ -448,69 +327,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch(err) {
       statusEl.textContent = "";
       showToast({ title:"Upload failed", message: err.message, type:"error" });
-    }
-  });
-
-  /* ── KYC doc-zone labels ──────────────────────────────── */
-  function wireDocZone(inputId, zoneId, label) {
-    const input = document.getElementById(inputId);
-    const zone  = document.getElementById(zoneId);
-    const lbl   = zone.querySelector(".dz-label");
-    input.addEventListener("change", () => {
-      const f = input.files[0];
-      if (f) { zone.classList.add("has-file"); lbl.textContent = f.name; }
-      else   { zone.classList.remove("has-file"); lbl.textContent = label; }
-    });
-  }
-  wireDocZone("kycFrontFile", "kycFrontZone", "Click to upload front of ID");
-  wireDocZone("kycBackFile",  "kycBackZone",  "Click to upload back of ID");
-
-  /* ── KYC submit ───────────────────────────────────────── */
-  document.getElementById("btnSubmitKyc").addEventListener("click", async () => {
-    const idType   = document.getElementById("kycIdType").value;
-    const idNumber = document.getElementById("kycIdNumber").value.trim();
-    const frontFile= document.getElementById("kycFrontFile").files[0];
-
-    if (!idType)    { showToast({ title:"Select an ID type",     type:"warning" }); return; }
-    if (!idNumber)  { showToast({ title:"Enter your ID number",  type:"warning" }); return; }
-    if (!frontFile) { showToast({ title:"Upload your ID document (front)", type:"warning" }); return; }
-    if (frontFile.size > 5 * 1024 * 1024) { showToast({ title:"Front image too large", message:"Max 5 MB.", type:"warning" }); return; }
-
-    const backFile = document.getElementById("kycBackFile").files[0];
-    if (backFile && backFile.size > 5 * 1024 * 1024) { showToast({ title:"Back image too large", message:"Max 5 MB.", type:"warning" }); return; }
-
-    const btn = document.getElementById("btnSubmitKyc");
-    btn.classList.add("is-loading"); btn.disabled = true;
-
-    try {
-      async function uploadKycDoc(file, side) {
-        const r = ref(storage, `kyc-documents/${user.uid}/${Date.now()}_${side}_${file.name}`);
-        await uploadBytesResumable(r, file);
-        return getDownloadURL(r);
-      }
-
-      const frontUrl = await uploadKycDoc(frontFile, "front");
-      const backUrl  = backFile ? await uploadKycDoc(backFile, "back") : null;
-
-      await setDoc(doc(db, "users", user.uid), {
-        kyc: {
-          status:      "pending",
-          idType,
-          idNumber,
-          frontDocUrl: frontUrl,
-          ...(backUrl ? { backDocUrl: backUrl } : {}),
-          submittedAt: serverTimestamp(),
-          notes:       null,
-        },
-        updatedAt: serverTimestamp(),
-      }, { merge: true });
-
-      updateKycUI("pending");
-      showToast({ title:"KYC submitted!", message:"We'll review your documents within 1–2 business days.", type:"success" });
-    } catch(err) {
-      showToast({ title:"Submission failed", message: err.message, type:"error" });
-    } finally {
-      btn.classList.remove("is-loading"); btn.disabled = false;
     }
   });
 
