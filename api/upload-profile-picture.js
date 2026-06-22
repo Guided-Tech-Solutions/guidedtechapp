@@ -44,7 +44,8 @@ module.exports = async function handler(req, res) {
 
     const ext  = mimeType.split("/")[1].replace("jpeg", "jpg");
     const name = `profile-pictures/${decoded.uid}/${Date.now()}.${ext}`;
-    const bucket = admin.storage().bucket();
+    const bucketName = process.env.FIREBASE_STORAGE_BUCKET || "guidedtechapp.firebasestorage.app";
+    const bucket = admin.storage().bucket(bucketName);
     const file   = bucket.file(name);
 
     await file.save(buffer, { metadata: { contentType: mimeType }, resumable: false });
