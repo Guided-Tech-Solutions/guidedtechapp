@@ -224,8 +224,6 @@
 <div id="toastRoot"></div>
 <script type="module">
 import { auth, db } from "./firebase.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
-const storage = getStorage();
 import {
   requireAuth, esc, fmtDate, showToast, openModal, closeModal
 } from "./portal-layout.js";
@@ -236,9 +234,6 @@ import {
 import {
   doc, getDoc, setDoc, getDocs, collection, query, where, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
-import {
-  ref, uploadBytesResumable, getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
 
 /* ── helpers ──────────────────────────────────────────────── */
 function setAvatarEl(el, photoURL, initials) {
@@ -297,17 +292,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     statusEl.textContent = "Uploading…";
 
     try {
-      const storageRef = ref(storage, `profile-pictures/${user.uid}/${Date.now()}_${file.name}`);
-      const task = uploadBytesResumable(storageRef, file);
-
-      await new Promise((resolve, reject) => {
-        task.on("state_changed", snap => {
-          const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
-          statusEl.textContent = `Uploading… ${pct}%`;
-        }, reject, resolve);
+      const idToken = await user.getIdToken();
+      const base64  = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload  = () => resolve(reader.result.split(",")[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
 
-      const url = await getDownloadURL(storageRef);
+      const resp = await fetch("/api/upload-profile-picture", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${idToken}` },
+        body:    JSON.stringify({ base64, mimeType: file.type, fileName: file.name }),
+      });
+      const json = await resp.json();
+      if (!resp.ok) throw new Error(json.error || "Upload failed");
+      const url = json.url;
       await updateProfile(user, { photoURL: url });
       await setDoc(doc(db, "users", user.uid), { photoURL: url, updatedAt: serverTimestamp() }, { merge: true });
 
