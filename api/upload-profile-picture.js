@@ -1,15 +1,22 @@
 /* FILE: api/upload-profile-picture.js */
 const admin = require("firebase-admin");
 
-if (!admin.apps.length) {
-  admin.initializeApp({
+const BUCKET = process.env.FIREBASE_STORAGE_BUCKET || "guidedtechapp.firebasestorage.app";
+
+// Use a dedicated named app so we always have storageBucket configured,
+// regardless of what other functions initialised the default app first.
+function getApp() {
+  const name = "upload-app";
+  const existing = admin.apps.find(a => a && a.name === name);
+  if (existing) return existing;
+  return admin.initializeApp({
     credential: admin.credential.cert({
       projectId:   process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
       privateKey:  (process.env.FIREBASE_PRIVATE_KEY || "").replace(/\\n/g, "\n"),
     }),
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "guidedtechapp.firebasestorage.app",
-  });
+    storageBucket: BUCKET,
+  }, name);
 }
 
 function cors(res) {
@@ -25,14 +32,16 @@ module.exports = async function handler(req, res) {
   const token = (req.headers.authorization || "").replace("Bearer ", "");
   if (!token) return res.status(401).json({ error: "Unauthorized" });
 
+  const app = getApp();
+
   let decoded;
   try {
-    decoded = await admin.auth().verifyIdToken(token);
+    decoded = await admin.auth(app).verifyIdToken(token);
   } catch {
     return res.status(401).json({ error: "Invalid token" });
   }
 
-  const { base64, mimeType, fileName } = req.body || {};
+  const { base64, mimeType } = req.body || {};
   if (!base64 || !mimeType) return res.status(400).json({ error: "base64 and mimeType are required" });
 
   const allowed = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -42,16 +51,15 @@ module.exports = async function handler(req, res) {
     const buffer = Buffer.from(base64, "base64");
     if (buffer.length > 5 * 1024 * 1024) return res.status(400).json({ error: "File too large (max 5 MB)" });
 
-    const ext  = mimeType.split("/")[1].replace("jpeg", "jpg");
-    const name = `profile-pictures/${decoded.uid}/${Date.now()}.${ext}`;
-    const bucketName = process.env.FIREBASE_STORAGE_BUCKET || "guidedtechapp.firebasestorage.app";
-    const bucket = admin.storage().bucket(bucketName);
+    const ext    = mimeType.split("/")[1].replace("jpeg", "jpg");
+    const name   = `profile-pictures/${decoded.uid}/${Date.now()}.${ext}`;
+    const bucket = admin.storage(app).bucket();
     const file   = bucket.file(name);
 
     await file.save(buffer, { metadata: { contentType: mimeType }, resumable: false });
     await file.makePublic();
 
-    const url = `https://storage.googleapis.com/${bucket.name}/${name}`;
+    const url = `https://storage.googleapis.com/${BUCKET}/${name}`;
     return res.status(200).json({ url });
   } catch (err) {
     console.error("upload-profile-picture error:", err);
