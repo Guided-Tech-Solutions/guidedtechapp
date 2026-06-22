@@ -70,8 +70,8 @@ module.exports = async function handler(req, res) {
   } catch (err) {
     console.error(`upload-profile-picture [${step}] error:`, err);
     return res.status(500).json({
-      error:  err.message || "Upload failed",
-      code:   err.code,
+      error: err.message || "Upload failed",
+      code:  err.code,
       step,
     });
   }
