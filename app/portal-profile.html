@@ -303,10 +303,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       const resp = await fetch("/api/upload-profile-picture", {
         method:  "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${idToken}` },
-        body:    JSON.stringify({ base64, mimeType: file.type, fileName: file.name }),
+        body:    JSON.stringify({ base64, mimeType: file.type }),
       });
       const json = await resp.json();
-      if (!resp.ok) throw new Error(json.error || "Upload failed");
+      if (!resp.ok) throw new Error(`[${json.step || "?"}] ${json.error || "Upload failed"}`);
       const url = json.url;
       await updateProfile(user, { photoURL: url });
       await setDoc(doc(db, "users", user.uid), { photoURL: url, updatedAt: serverTimestamp() }, { merge: true });
