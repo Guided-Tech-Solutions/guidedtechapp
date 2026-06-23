@@ -65,7 +65,6 @@
     .run-status-dot.queued{background:var(--warning)}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
     .form-label{display:block;font-size:.8125rem;font-weight:600;margin-bottom:.3rem;color:var(--text-mid)}
-    #modalCreateService.open{display:flex!important}
   </style>
 </head>
 <body style="visibility:hidden">
@@ -111,7 +110,7 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">Admin Panel</h1>
-        <p class="page-subtitle">Grant test access to users so you can test workflows without payment</p>
+        <p class="page-subtitle">Manage users, test workflows, and control what services are published</p>
       </div>
     </div>
 
@@ -424,11 +423,10 @@ function buildParamFields(svcId, svc) {
 function renderAdminServices() {
   const el = document.getElementById("servicesList");
   if (!adminServices.length) {
-    el.innerHTML = `<div style="text-align:center;padding:2.5rem 1rem">
-      <div style="font-size:2.5rem;margin-bottom:.75rem">⚙️</div>
-      <div style="font-weight:600;margin-bottom:.375rem">No services yet</div>
-      <div style="color:var(--text-muted);font-size:.875rem;margin-bottom:1.25rem">Create your first service to start the testing pipeline.</div>
-      <button class="btn btn-primary" onclick="openCreateModal()">+ Create First Service</button>
+    el.innerHTML = `<div style="text-align:center;padding:2.5rem 1rem;color:var(--text-muted)">
+      <div style="font-size:2.5rem;margin-bottom:.75rem">📭</div>
+      <div style="font-weight:600;color:var(--text);margin-bottom:.375rem">No services found</div>
+      <div style="font-size:.875rem">Add a service to your Firestore <code>services</code> collection and it will appear here with the full lifecycle pipeline.</div>
     </div>`;
     return;
   }
@@ -523,6 +521,51 @@ window.runTest = async function(serviceId) {
   } catch (e) {
     statusEl.innerHTML = `<span class="run-status-dot failed"></span>${e.message}`;
     showToast({ title:"Test run failed", message:e.message, type:"error" });
+  } finally {
+    btn.disabled = false; btn.textContent = "▶ Run Test";
+  }
+};
+
+/* ── Quick webhook test ─────────────────────────────────────── */
+window.runQuickTest = async function() {
+  const webhookUrl = document.getElementById("qt-webhook")?.value.trim();
+  const paramsRaw  = document.getElementById("qt-params")?.value.trim();
+  const statusEl   = document.getElementById("qt-status");
+  const resultEl   = document.getElementById("qt-result");
+  const btn        = document.getElementById("btnQuickTest");
+
+  if (!webhookUrl) { showToast({ title:"Enter a webhook URL", type:"warning" }); return; }
+
+  let parameters = {};
+  if (paramsRaw) {
+    try { parameters = JSON.parse(paramsRaw); }
+    catch { showToast({ title:"Invalid JSON in parameters", type:"error" }); return; }
+  }
+
+  btn.disabled = true; btn.textContent = "Running…";
+  statusEl.innerHTML = `<span class="run-status-dot running"></span>Sending…`;
+  resultEl.innerHTML = "";
+
+  try {
+    const resp = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-gts-secret": "" },
+      body: JSON.stringify({ ...parameters, isTestRun: true, source: "admin-quick-test" }),
+    });
+    const text = await resp.text();
+    let display;
+    try { display = JSON.stringify(JSON.parse(text), null, 2); } catch { display = text; }
+
+    if (resp.ok) {
+      statusEl.innerHTML = `<span class="run-status-dot success"></span>Webhook responded ${resp.status}`;
+      resultEl.innerHTML = `<div class="test-run-result"><strong>Response (${resp.status}):</strong><pre>${display || "(empty)"}</pre></div>`;
+    } else {
+      statusEl.innerHTML = `<span class="run-status-dot failed"></span>Webhook returned ${resp.status}`;
+      resultEl.innerHTML = `<div class="test-run-result" style="border-color:var(--danger)"><strong style="color:var(--danger)">Error ${resp.status}:</strong><pre>${display || "(empty)"}</pre></div>`;
+    }
+  } catch (e) {
+    statusEl.innerHTML = `<span class="run-status-dot failed"></span>${e.message}`;
+    resultEl.innerHTML = `<div class="test-run-result" style="border-color:var(--danger)"><strong style="color:var(--danger)">Failed to reach webhook:</strong><pre>${e.message}</pre></div>`;
   } finally {
     btn.disabled = false; btn.textContent = "▶ Run Test";
   }
