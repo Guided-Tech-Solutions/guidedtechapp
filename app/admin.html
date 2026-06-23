@@ -64,6 +64,8 @@
     .run-status-dot.failed{background:var(--danger)}
     .run-status-dot.queued{background:var(--warning)}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .form-label{display:block;font-size:.8125rem;font-weight:600;margin-bottom:.3rem;color:var(--text-mid)}
+    #modalCreateService.open{display:flex!important}
   </style>
 </head>
 <body style="visibility:hidden">
@@ -133,12 +135,39 @@
       </div>
     </div>
 
-    <!-- Services lifecycle tab -->
+    <!-- Testing tab -->
     <div class="tab-panel" id="tab-services">
+      <!-- Quick test: paste a webhook URL directly -->
+      <div class="card" style="margin-bottom:1.25rem">
+        <div class="card-header">
+          <div class="card-title">🧪 Quick Webhook Test</div>
+          <div class="card-subtitle">Paste any n8n webhook URL and fire a test run directly — no service setup needed</div>
+        </div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:.875rem">
+          <div>
+            <label class="form-label">Webhook URL *</label>
+            <input type="url" id="qt-webhook" class="form-control" placeholder="https://your-n8n.com/webhook/...">
+          </div>
+          <div>
+            <label class="form-label">Parameters <span style="font-weight:400;color:var(--text-muted)">(JSON)</span></label>
+            <textarea id="qt-params" class="form-control" rows="4" placeholder='{"email":"test@example.com","name":"Test User"}' style="resize:vertical;font-family:monospace;font-size:.8125rem"></textarea>
+          </div>
+          <div style="display:flex;gap:.75rem;align-items:center">
+            <button class="btn btn-primary" id="btnQuickTest" onclick="runQuickTest()">▶ Run Test</button>
+            <span id="qt-status" style="font-size:.8rem;color:var(--text-muted)"></span>
+          </div>
+          <div id="qt-result"></div>
+        </div>
+      </div>
+
+      <!-- Per-service test runs (shows if services exist) -->
       <div class="card">
         <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
-          <div><div class="card-title">Service Lifecycle</div><div class="card-subtitle">Test workflows before publishing them to users</div></div>
-          <button class="btn btn-primary btn-sm" id="btnRefreshServices">↺ Refresh</button>
+          <div>
+            <div class="card-title">⚙️ Service Lifecycle</div>
+            <div class="card-subtitle">Manage status and run tests per service — draft → testing → live</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="btnRefreshServices">↺ Refresh</button>
         </div>
         <div class="card-body" style="padding:0">
           <div id="servicesLoading" style="color:var(--text-muted);font-size:.875rem;padding:1.5rem 1rem">Loading services…</div>
@@ -394,7 +423,15 @@ function buildParamFields(svcId, svc) {
 
 function renderAdminServices() {
   const el = document.getElementById("servicesList");
-  if (!adminServices.length) { el.innerHTML = `<div class="empty-msg">No services found. Create services in Firestore.</div>`; return; }
+  if (!adminServices.length) {
+    el.innerHTML = `<div style="text-align:center;padding:2.5rem 1rem">
+      <div style="font-size:2.5rem;margin-bottom:.75rem">⚙️</div>
+      <div style="font-weight:600;margin-bottom:.375rem">No services yet</div>
+      <div style="color:var(--text-muted);font-size:.875rem;margin-bottom:1.25rem">Create your first service to start the testing pipeline.</div>
+      <button class="btn btn-primary" onclick="openCreateModal()">+ Create First Service</button>
+    </div>`;
+    return;
+  }
   el.innerHTML = adminServices.map(svc => `
     <div class="svc-card" id="svc-card-${svc.id}">
       <div class="svc-card-head" onclick="toggleSvcCard('${svc.id}')">
