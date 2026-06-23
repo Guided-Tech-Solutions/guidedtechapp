@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Admin — GTS Amplify</title>
+  <link rel="icon" href="../asset/logo-icon.png">
+  <link rel="stylesheet" href="./portal.css">
+  <style>
+    .admin-badge{display:inline-flex;align-items:center;gap:.375rem;background:var(--danger-pale);color:var(--danger);font-size:.7rem;font-weight:700;padding:.25rem .6rem;border-radius:99px;border:1px solid rgba(229,57,53,.2);letter-spacing:.04em;text-transform:uppercase}
+    .user-row{display:grid;grid-template-columns:1fr 1fr auto;gap:.75rem;align-items:center;padding:.75rem 1rem;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--surface);margin-bottom:.5rem;transition:var(--tr)}
+    .user-row:hover{border-color:var(--brand-light);background:var(--brand-xpale)}
+    .user-meta{font-size:.8rem;color:var(--text-muted)}
+    .grant-form{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    .grant-form select,.grant-form input[type=number]{font-size:.8125rem;padding:.35rem .6rem;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--text);min-width:0}
+    .grant-form select{flex:1;min-width:160px}
+    .sub-tag{display:inline-block;font-size:.7rem;font-weight:600;padding:.15rem .5rem;border-radius:99px;white-space:nowrap}
+    .sub-tag.trialing{background:var(--info-pale);color:var(--info)}
+    .sub-tag.active{background:var(--success-pale);color:var(--success)}
+    .sub-tag.canceled,.sub-tag.expired{background:var(--danger-pale);color:var(--danger)}
+    .sub-tag.pending{background:var(--warning-pale);color:var(--warning)}
+    .subs-list{display:flex;flex-direction:column;gap:.375rem;margin-top:.5rem}
+    .sub-row{display:flex;align-items:center;gap:.5rem;font-size:.8rem;flex-wrap:wrap}
+    .empty-msg{color:var(--text-muted);font-size:.875rem;padding:2rem;text-align:center}
+    #usersLoading{color:var(--text-muted);font-size:.875rem;padding:1rem}
+    .section-tabs{display:flex;gap:.25rem;margin-bottom:1.25rem;border-bottom:2px solid var(--border);padding-bottom:0}
+    .tab-btn{padding:.5rem 1.125rem;font-size:.875rem;font-weight:600;color:var(--text-muted);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;transition:var(--tr)}
+    .tab-btn.active{color:var(--brand);border-bottom-color:var(--brand)}
+    .tab-panel{display:none}.tab-panel.active{display:block}
+    .action-log-row{display:flex;gap:.75rem;align-items:flex-start;padding:.625rem 0;border-bottom:1px solid var(--border);font-size:.8125rem}
+    .action-log-row:last-child{border-bottom:none}
+    .log-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem}
+    .log-body{flex:1;min-width:0}
+    .log-time{font-size:.75rem;color:var(--text-muted);flex-shrink:0}
+  </style>
+</head>
+<body style="visibility:hidden">
+<nav class="navbar"><div class="navbar-inner">
+  <div class="navbar-left">
+    <button class="hamburger-btn" id="hamburgerBtn">☰</button>
+    <a href="../index.html" class="brand-logo"><div class="brand-logo-icon"><img src="../asset/logo-icon.png" alt="" style="width:26px;height:26px;object-fit:contain;border-radius:5px"></div>GTS Amplify</a>
+    <span class="admin-badge">🔐 Admin</span>
+  </div>
+  <div class="navbar-right">
+    <a href="./portal-dashboard.html" class="btn-nav btn-nav-ghost" style="font-size:.8125rem">Portal</a>
+    <div class="nav-avatar-wrap" style="visibility:hidden">
+      <button class="nav-avatar-btn">
+        <div class="nav-avatar-circle" id="navAvatarCircle">?</div>
+        <span class="nav-avatar-name" id="navAvatarName">Account</span>
+      </button>
+      <div class="nav-dropdown">
+        <div class="nav-dropdown-divider"></div>
+        <a href="#" class="nav-dropdown-item danger" id="btnNavSignout">🚪 Sign Out</a>
+      </div>
+    </div>
+  </div>
+</div></nav>
+
+<div class="portal-wrapper">
+  <aside class="portal-sidebar" id="portalSidebar">
+    <div class="sidebar-profile" style="visibility:hidden">
+      <div class="sidebar-avatar" id="sidebarAvatar">?</div>
+      <div class="sidebar-info">
+        <div class="sidebar-name" id="sidebarName">Loading...</div>
+        <div class="sidebar-email" id="sidebarEmail">—</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Admin</div>
+      <a href="./admin.html"             class="sidebar-link active" data-page="admin.html"><span class="sidebar-icon">🔐</span>Test Access</a>
+    </nav>
+    <div class="sidebar-footer"><button class="btn-signout" id="btnSidebarSignout">🚪 Sign Out</button></div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <main class="portal-main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Admin Panel</h1>
+        <p class="page-subtitle">Grant test access to users so you can test workflows without payment</p>
+      </div>
+    </div>
+
+    <div class="section-tabs">
+      <button class="tab-btn active" data-tab="users">👥 Users & Test Access</button>
+      <button class="tab-btn" data-tab="log">📋 Action Log</button>
+    </div>
+
+    <!-- Users tab -->
+    <div class="tab-panel active" id="tab-users">
+      <div class="card">
+        <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+          <div><div class="card-title">Registered Users</div><div class="card-subtitle">Grant or revoke test access per service</div></div>
+          <input type="search" id="userSearch" class="form-control" placeholder="Search by name or email…" style="max-width:240px;font-size:.8125rem">
+        </div>
+        <div class="card-body" style="padding:0">
+          <div id="usersLoading">Loading users…</div>
+          <div id="usersList" style="padding:.75rem"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action log tab -->
+    <div class="tab-panel" id="tab-log">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Admin Action Log</div><div class="card-subtitle">Recent grant / revoke actions</div></div>
+        <div class="card-body">
+          <div id="actionLog"><span style="color:var(--text-muted);font-size:.875rem">Loading…</span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="toastRoot"></div>
+
+<script type="module">
+import { auth, db } from "./firebase.js";
+import { requireAuth, showToast, avatarColor } from "./portal-layout.js";
+import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+import { collection, getDocs, query, orderBy, limit, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+/* ── Admin guard ────────────────────────────────────────────── */
+async function requireAdminAccess() {
+  const user = await requireAuth();
+  if (!user) return null;
+  const snap = await getDoc(doc(db, "Admins", user.uid));
+  if (!snap.exists() || !snap.data().active) {
+    document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:1rem;font-family:sans-serif">
+      <div style="font-size:3rem">🚫</div>
+      <h2 style="margin:0">Access Denied</h2>
+      <p style="color:#64748b">You don't have admin privileges.</p>
+      <a href="./portal-dashboard.html" style="color:#1B4F72">← Back to Portal</a>
+    </div>`;
+    return null;
+  }
+  document.body.style.visibility = "visible";
+  return user;
+}
+
+/* ── Hydrate nav avatar ─────────────────────────────────────── */
+function hydrateNav(user) {
+  const initials = (user.displayName || user.email || "?").split(/[\s@]+/).slice(0,2).map(s => s[0]?.toUpperCase() || "").join("") || "U";
+  const color    = avatarColor(user.displayName || user.email);
+  const firstName = user.displayName ? user.displayName.split(" ")[0] : (user.email || "").split("@")[0];
+  const c = document.getElementById("navAvatarCircle");
+  if (c) { c.textContent = initials; c.style.background = color; }
+  const nn = document.getElementById("navAvatarName"); if (nn) nn.textContent = firstName;
+  const sa = document.getElementById("sidebarAvatar");
+  if (sa) { sa.textContent = initials; sa.style.background = color; }
+  const sn = document.getElementById("sidebarName");   if (sn) sn.textContent = user.displayName || firstName;
+  const se = document.getElementById("sidebarEmail");  if (se) se.textContent = user.email;
+  const sp = document.querySelector(".sidebar-profile"); if (sp) sp.style.visibility = "visible";
+  const nw = document.querySelector(".nav-avatar-wrap"); if (nw) nw.style.visibility = "visible";
+}
+
+/* ── Helpers ────────────────────────────────────────────────── */
+function fmtDate(ts) {
+  if (!ts) return "—";
+  const d = ts?.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" });
+}
+function statusTag(s) {
+  const map = { trialing:"trialing", active:"active", canceled:"canceled", expired:"expired", pending_payment:"pending" };
+  const cls = map[s] || "pending";
+  const label = { trialing:"Test Access", active:"Active", canceled:"Revoked", expired:"Expired", pending_payment:"Awaiting Payment" }[s] || s;
+  return `<span class="sub-tag ${cls}">${label}</span>`;
+}
+
+/* ── State ──────────────────────────────────────────────────── */
+let allUsers = [];
+let services = [];
+let idToken   = "";
+
+/* ── Load services ──────────────────────────────────────────── */
+async function loadServices() {
+  const snap = await getDocs(collection(db, "services"));
+  services = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => s.status === "active" || true);
+  services.sort((a,b) => (a.name||"").localeCompare(b.name||""));
+}
+
+/* ── Load users ─────────────────────────────────────────────── */
+async function loadUsers() {
+  document.getElementById("usersLoading").textContent = "Loading users…";
+  const resp = await fetch("/api/admin/list-users", { headers: { Authorization: `Bearer ${idToken}` } });
+  const json = await resp.json();
+  if (!resp.ok) { document.getElementById("usersLoading").textContent = "Failed to load users: " + json.error; return; }
+  allUsers = json.users;
+  document.getElementById("usersLoading").style.display = "none";
+  renderUsers(allUsers);
+}
+
+/* ── Render users ───────────────────────────────────────────── */
+function renderUsers(users) {
+  const list = document.getElementById("usersList");
+  if (!users.length) { list.innerHTML = `<div class="empty-msg">No users found.</div>`; return; }
+
+  list.innerHTML = users.map(u => {
+    const serviceOptions = services.map(s => `<option value="${s.id}">${s.icon || "⚙️"} ${s.name}</option>`).join("");
+    const initials = ((u.displayName || u.email || "?").split(/[\s@]+/).slice(0,2).map(s => s[0]?.toUpperCase()||"").join("")) || "U";
+    const color    = avatarColor(u.displayName || u.email || "?");
+    return `
+    <div class="user-row" id="user-${u.uid}">
+      <div style="display:flex;align-items:center;gap:.75rem;min-width:0">
+        <div style="width:36px;height:36px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:white;flex-shrink:0">${initials}</div>
+        <div style="min-width:0">
+          <div style="font-weight:600;font-size:.875rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${u.displayName || "—"}</div>
+          <div class="user-meta">${u.email}${u.company ? " · " + u.company : ""}</div>
+        </div>
+      </div>
+      <div class="grant-form">
+        <select id="svc-${u.uid}" title="Select service">${serviceOptions}</select>
+        <input type="number" id="days-${u.uid}" value="30" min="1" max="365" style="width:68px" title="Duration (days)">
+        <span style="font-size:.8rem;color:var(--text-muted)">days</span>
+      </div>
+      <div style="display:flex;gap:.5rem;flex-shrink:0">
+        <button class="btn btn-primary btn-sm" onclick="grantAccess('${u.uid}')">✅ Grant</button>
+      </div>
+    </div>
+    <div id="subs-${u.uid}" style="padding:0 1rem .75rem 3.5rem;display:none"></div>
+    `;
+  }).join("");
+
+  // Load each user's subscriptions
+  users.forEach(u => loadUserSubs(u.uid));
+}
+
+/* ── Load user subscriptions ────────────────────────────────── */
+async function loadUserSubs(uid) {
+  try {
+    const snap = await getDocs(collection(db, "users", uid, "services"));
+    const container = document.getElementById(`subs-${uid}`);
+    if (!snap.empty) {
+      const items = snap.docs.map(d => {
+        const s = d.data();
+        const svcName = services.find(sv => sv.id === s.serviceId)?.name || s.serviceId;
+        const revokeBtn = (s.subscriptionStatus === "trialing" && s.testAccess)
+          ? `<button class="btn btn-ghost btn-sm" style="font-size:.7rem;padding:.2rem .5rem;color:var(--danger)" onclick="revokeAccess('${uid}','${d.id}')">✕ Revoke</button>`
+          : "";
+        return `<div class="sub-row">${statusTag(s.subscriptionStatus)} <span style="color:var(--text-mid)">${svcName}</span>${s.testAccess ? ' <span style="color:var(--text-faint);font-size:.75rem">(test)</span>' : ""} ${s.subscriptionExpiresAt ? `<span style="color:var(--text-faint);font-size:.75rem">expires ${fmtDate(s.subscriptionExpiresAt)}</span>` : ""} ${revokeBtn}</div>`;
+      });
+      container.innerHTML = `<div class="subs-list">${items.join("")}</div>`;
+      container.style.display = "block";
+    }
+  } catch {}
+}
+
+/* ── Grant access ───────────────────────────────────────────── */
+window.grantAccess = async function(uid) {
+  const serviceId   = document.getElementById(`svc-${uid}`)?.value;
+  const durationDays = document.getElementById(`days-${uid}`)?.value || 30;
+  if (!serviceId) { showToast({ title:"Select a service", type:"warning" }); return; }
+
+  const btn = document.querySelector(`#user-${uid} .btn-primary`);
+  btn.disabled = true; btn.textContent = "Granting…";
+
+  try {
+    const resp = await fetch("/api/admin/grant-test-access", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+      body: JSON.stringify({ userId: uid, serviceId, durationDays: Number(durationDays) }),
+    });
+    const json = await resp.json();
+    if (!resp.ok) throw new Error(json.error);
+    showToast({ title: "Test access granted!", type: "success" });
+    // Reload that user's subs
+    document.getElementById(`subs-${uid}`).innerHTML = "";
+    await loadUserSubs(uid);
+  } catch (e) {
+    showToast({ title: "Failed", message: e.message, type: "error" });
+  } finally {
+    btn.disabled = false; btn.textContent = "✅ Grant";
+  }
+};
+
+/* ── Revoke access ──────────────────────────────────────────── */
+window.revokeAccess = async function(uid, userServiceId) {
+  if (!confirm("Revoke this test access?")) return;
+  try {
+    const resp = await fetch("/api/admin/revoke-test-access", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+      body: JSON.stringify({ userId: uid, userServiceId }),
+    });
+    const json = await resp.json();
+    if (!resp.ok) throw new Error(json.error);
+    showToast({ title: "Access revoked", type: "success" });
+    document.getElementById(`subs-${uid}`).innerHTML = "";
+    await loadUserSubs(uid);
+  } catch (e) {
+    showToast({ title: "Failed", message: e.message, type: "error" });
+  }
+};
+
+/* ── Action log ─────────────────────────────────────────────── */
+async function loadActionLog() {
+  try {
+    const snap = await getDocs(query(collection(db, "adminActions"), orderBy("createdAt","desc"), limit(50)));
+    const el = document.getElementById("actionLog");
+    if (snap.empty) { el.innerHTML = `<div class="empty-msg">No actions logged yet.</div>`; return; }
+    el.innerHTML = snap.docs.map(d => {
+      const a = d.data();
+      const icon = a.action === "grant_test_access" ? "✅" : "🚫";
+      const desc = a.action === "grant_test_access"
+        ? `Granted <strong>${a.serviceName || a.serviceId}</strong> test access to <code>${a.targetUserId}</code> for ${a.durationDays} days`
+        : `Revoked test access for <code>${a.targetUserId}</code>`;
+      return `<div class="action-log-row"><div class="log-icon">${icon}</div><div class="log-body">${desc}</div><div class="log-time">${fmtDate(a.createdAt)}</div></div>`;
+    }).join("");
+  } catch (e) {
+    document.getElementById("actionLog").innerHTML = `<span style="color:var(--danger)">${e.message}</span>`;
+  }
+}
+
+/* ── Search ─────────────────────────────────────────────────── */
+document.getElementById("userSearch").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  const filtered = allUsers.filter(u => (u.displayName||"").toLowerCase().includes(q) || (u.email||"").toLowerCase().includes(q) || (u.company||"").toLowerCase().includes(q));
+  renderUsers(filtered);
+});
+
+/* ── Tabs ───────────────────────────────────────────────────── */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+    if (btn.dataset.tab === "log") loadActionLog();
+  });
+});
+
+/* ── Sign out ───────────────────────────────────────────────── */
+async function doSignOut() {
+  localStorage.removeItem("gts_user");
+  await signOut(auth);
+  window.location.href = "./login.html";
+}
+document.getElementById("btnNavSignout")?.addEventListener("click", doSignOut);
+document.getElementById("btnSidebarSignout")?.addEventListener("click", doSignOut);
+document.getElementById("hamburgerBtn")?.addEventListener("click", () => {
+  document.querySelector(".portal-sidebar")?.classList.add("open");
+  document.getElementById("sidebarOverlay")?.classList.add("open");
+  document.body.style.overflow = "hidden";
+});
+document.getElementById("sidebarOverlay")?.addEventListener("click", () => {
+  document.querySelector(".portal-sidebar")?.classList.remove("open");
+  document.getElementById("sidebarOverlay")?.classList.remove("open");
+  document.body.style.overflow = "";
+});
+
+/* ── Boot ───────────────────────────────────────────────────── */
+(async () => {
+  const user = await requireAdminAccess();
+  if (!user) return;
+  hydrateNav(user);
+  idToken = await user.getIdToken();
+  await loadServices();
+  await loadUsers();
+})();
+</script>
+</body>
+</html>
