@@ -64,6 +64,7 @@
     .run-status-dot.failed{background:var(--danger)}
     .run-status-dot.queued{background:var(--warning)}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .form-label{display:block;font-size:.8125rem;font-weight:600;margin-bottom:.3rem;color:var(--text-mid)}
   </style>
 </head>
 <body style="visibility:hidden">
@@ -109,7 +110,7 @@
     <div class="page-header">
       <div>
         <h1 class="page-title">Admin Panel</h1>
-        <p class="page-subtitle">Grant test access to users so you can test workflows without payment</p>
+        <p class="page-subtitle">Manage users, test workflows, and control what services are published</p>
       </div>
     </div>
 
@@ -133,12 +134,39 @@
       </div>
     </div>
 
-    <!-- Services lifecycle tab -->
+    <!-- Testing tab -->
     <div class="tab-panel" id="tab-services">
+      <!-- Quick test: paste a webhook URL directly -->
+      <div class="card" style="margin-bottom:1.25rem">
+        <div class="card-header">
+          <div class="card-title">🧪 Quick Webhook Test</div>
+          <div class="card-subtitle">Paste any n8n webhook URL and fire a test run directly — no service setup needed</div>
+        </div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:.875rem">
+          <div>
+            <label class="form-label">Webhook URL *</label>
+            <input type="url" id="qt-webhook" class="form-control" placeholder="https://your-n8n.com/webhook/...">
+          </div>
+          <div>
+            <label class="form-label">Parameters <span style="font-weight:400;color:var(--text-muted)">(JSON)</span></label>
+            <textarea id="qt-params" class="form-control" rows="4" placeholder='{"email":"test@example.com","name":"Test User"}' style="resize:vertical;font-family:monospace;font-size:.8125rem"></textarea>
+          </div>
+          <div style="display:flex;gap:.75rem;align-items:center">
+            <button class="btn btn-primary" id="btnQuickTest" onclick="runQuickTest()">▶ Run Test</button>
+            <span id="qt-status" style="font-size:.8rem;color:var(--text-muted)"></span>
+          </div>
+          <div id="qt-result"></div>
+        </div>
+      </div>
+
+      <!-- Per-service test runs (shows if services exist) -->
       <div class="card">
         <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
-          <div><div class="card-title">Service Lifecycle</div><div class="card-subtitle">Test workflows before publishing them to users</div></div>
-          <button class="btn btn-primary btn-sm" id="btnRefreshServices">↺ Refresh</button>
+          <div>
+            <div class="card-title">⚙️ Service Lifecycle</div>
+            <div class="card-subtitle">Manage status and run tests per service — draft → testing → live</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="btnRefreshServices">↺ Refresh</button>
         </div>
         <div class="card-body" style="padding:0">
           <div id="servicesLoading" style="color:var(--text-muted);font-size:.875rem;padding:1.5rem 1rem">Loading services…</div>
@@ -394,7 +422,14 @@ function buildParamFields(svcId, svc) {
 
 function renderAdminServices() {
   const el = document.getElementById("servicesList");
-  if (!adminServices.length) { el.innerHTML = `<div class="empty-msg">No services found. Create services in Firestore.</div>`; return; }
+  if (!adminServices.length) {
+    el.innerHTML = `<div style="text-align:center;padding:2.5rem 1rem;color:var(--text-muted)">
+      <div style="font-size:2.5rem;margin-bottom:.75rem">📭</div>
+      <div style="font-weight:600;color:var(--text);margin-bottom:.375rem">No services found</div>
+      <div style="font-size:.875rem">Add a service to your Firestore <code>services</code> collection and it will appear here with the full lifecycle pipeline.</div>
+    </div>`;
+    return;
+  }
   el.innerHTML = adminServices.map(svc => `
     <div class="svc-card" id="svc-card-${svc.id}">
       <div class="svc-card-head" onclick="toggleSvcCard('${svc.id}')">
@@ -486,6 +521,51 @@ window.runTest = async function(serviceId) {
   } catch (e) {
     statusEl.innerHTML = `<span class="run-status-dot failed"></span>${e.message}`;
     showToast({ title:"Test run failed", message:e.message, type:"error" });
+  } finally {
+    btn.disabled = false; btn.textContent = "▶ Run Test";
+  }
+};
+
+/* ── Quick webhook test ─────────────────────────────────────── */
+window.runQuickTest = async function() {
+  const webhookUrl = document.getElementById("qt-webhook")?.value.trim();
+  const paramsRaw  = document.getElementById("qt-params")?.value.trim();
+  const statusEl   = document.getElementById("qt-status");
+  const resultEl   = document.getElementById("qt-result");
+  const btn        = document.getElementById("btnQuickTest");
+
+  if (!webhookUrl) { showToast({ title:"Enter a webhook URL", type:"warning" }); return; }
+
+  let parameters = {};
+  if (paramsRaw) {
+    try { parameters = JSON.parse(paramsRaw); }
+    catch { showToast({ title:"Invalid JSON in parameters", type:"error" }); return; }
+  }
+
+  btn.disabled = true; btn.textContent = "Running…";
+  statusEl.innerHTML = `<span class="run-status-dot running"></span>Sending…`;
+  resultEl.innerHTML = "";
+
+  try {
+    const resp = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-gts-secret": "" },
+      body: JSON.stringify({ ...parameters, isTestRun: true, source: "admin-quick-test" }),
+    });
+    const text = await resp.text();
+    let display;
+    try { display = JSON.stringify(JSON.parse(text), null, 2); } catch { display = text; }
+
+    if (resp.ok) {
+      statusEl.innerHTML = `<span class="run-status-dot success"></span>Webhook responded ${resp.status}`;
+      resultEl.innerHTML = `<div class="test-run-result"><strong>Response (${resp.status}):</strong><pre>${display || "(empty)"}</pre></div>`;
+    } else {
+      statusEl.innerHTML = `<span class="run-status-dot failed"></span>Webhook returned ${resp.status}`;
+      resultEl.innerHTML = `<div class="test-run-result" style="border-color:var(--danger)"><strong style="color:var(--danger)">Error ${resp.status}:</strong><pre>${display || "(empty)"}</pre></div>`;
+    }
+  } catch (e) {
+    statusEl.innerHTML = `<span class="run-status-dot failed"></span>${e.message}`;
+    resultEl.innerHTML = `<div class="test-run-result" style="border-color:var(--danger)"><strong style="color:var(--danger)">Failed to reach webhook:</strong><pre>${e.message}</pre></div>`;
   } finally {
     btn.disabled = false; btn.textContent = "▶ Run Test";
   }
