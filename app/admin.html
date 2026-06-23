@@ -31,6 +31,39 @@
     .log-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem}
     .log-body{flex:1;min-width:0}
     .log-time{font-size:.75rem;color:var(--text-muted);flex-shrink:0}
+    /* Services lifecycle */
+    .svc-card{border:1px solid var(--border);border-radius:var(--r);background:var(--surface);margin-bottom:1rem;overflow:hidden}
+    .svc-card-head{display:flex;align-items:center;gap:.75rem;padding:.875rem 1rem;cursor:pointer;user-select:none}
+    .svc-card-head:hover{background:var(--brand-xpale)}
+    .svc-icon{font-size:1.5rem;flex-shrink:0}
+    .svc-info{flex:1;min-width:0}
+    .svc-name{font-weight:700;font-size:.9375rem}
+    .svc-desc{font-size:.8rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .svc-status-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:700;padding:.25rem .6rem;border-radius:99px;border:1px solid currentColor;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+    .svc-status-badge.draft{color:#94a3b8;border-color:#cbd5e1;background:#f8fafc}
+    .svc-status-badge.testing{color:var(--info);border-color:var(--info);background:var(--info-pale)}
+    .svc-status-badge.active{color:var(--success);border-color:var(--success);background:var(--success-pale)}
+    .svc-body{border-top:1px solid var(--border);padding:1rem;display:none}
+    .svc-body.open{display:block}
+    .svc-lifecycle{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+    .lifecycle-step{display:flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:600;padding:.3rem .7rem;border-radius:99px}
+    .lifecycle-step.done{background:var(--success-pale);color:var(--success)}
+    .lifecycle-step.current{background:var(--info-pale);color:var(--info)}
+    .lifecycle-step.future{background:var(--surface-alt);color:var(--text-faint)}
+    .lifecycle-arrow{color:var(--text-faint);font-size:.75rem}
+    .test-run-form{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--r-sm);padding:.875rem;margin-bottom:.75rem}
+    .test-run-form h4{margin:0 0 .625rem;font-size:.875rem}
+    .param-row{display:grid;grid-template-columns:1fr 2fr;gap:.5rem;align-items:center;margin-bottom:.375rem}
+    .param-row label{font-size:.8rem;font-weight:600;color:var(--text-mid)}
+    .param-row input{font-size:.8125rem;padding:.35rem .6rem;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);color:var(--text);width:100%}
+    .test-run-result{border:1px solid var(--border);border-radius:var(--r-sm);padding:.75rem;font-size:.8125rem;margin-top:.75rem;background:var(--surface)}
+    .test-run-result pre{margin:0;white-space:pre-wrap;word-break:break-all;font-size:.75rem;color:var(--text-mid)}
+    .run-status-dot{display:inline-block;width:.5rem;height:.5rem;border-radius:50%;margin-right:.375rem}
+    .run-status-dot.running{background:var(--info);animation:pulse 1s infinite}
+    .run-status-dot.success{background:var(--success)}
+    .run-status-dot.failed{background:var(--danger)}
+    .run-status-dot.queued{background:var(--warning)}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
   </style>
 </head>
 <body style="visibility:hidden">
@@ -82,6 +115,7 @@
 
     <div class="section-tabs">
       <button class="tab-btn active" data-tab="users">👥 Users & Test Access</button>
+      <button class="tab-btn" data-tab="services">⚙️ Services</button>
       <button class="tab-btn" data-tab="log">📋 Action Log</button>
     </div>
 
@@ -95,6 +129,20 @@
         <div class="card-body" style="padding:0">
           <div id="usersLoading">Loading users…</div>
           <div id="usersList" style="padding:.75rem"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services lifecycle tab -->
+    <div class="tab-panel" id="tab-services">
+      <div class="card">
+        <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+          <div><div class="card-title">Service Lifecycle</div><div class="card-subtitle">Test workflows before publishing them to users</div></div>
+          <button class="btn btn-primary btn-sm" id="btnRefreshServices">↺ Refresh</button>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div id="servicesLoading" style="color:var(--text-muted);font-size:.875rem;padding:1.5rem 1rem">Loading services…</div>
+          <div id="servicesList" style="padding:.75rem"></div>
         </div>
       </div>
     </div>
@@ -291,6 +339,160 @@ window.revokeAccess = async function(uid, userServiceId) {
   }
 };
 
+/* ── Services lifecycle ─────────────────────────────────────── */
+let adminServices = [];
+
+async function loadAdminServices() {
+  document.getElementById("servicesLoading").style.display = "block";
+  document.getElementById("servicesLoading").textContent = "Loading services…";
+  try {
+    const resp = await fetch("/api/admin/list-services", { headers: { Authorization: `Bearer ${idToken}` } });
+    const json = await resp.json();
+    if (!resp.ok) throw new Error(json.error);
+    adminServices = json.services;
+    document.getElementById("servicesLoading").style.display = "none";
+    renderAdminServices();
+  } catch (e) {
+    document.getElementById("servicesLoading").textContent = "Failed: " + e.message;
+  }
+}
+
+function svcStatusBadge(status) {
+  const labels = { draft: "📝 Draft", testing: "🧪 Testing", active: "✅ Live" };
+  return `<span class="svc-status-badge ${status}">${labels[status] || status}</span>`;
+}
+
+function lifecycleSteps(current) {
+  const steps = ["draft", "testing", "active"];
+  const labels = { draft: "📝 Draft", testing: "🧪 Testing", active: "✅ Live" };
+  const idx = steps.indexOf(current);
+  return steps.map((s, i) => {
+    const cls = i < idx ? "done" : i === idx ? "current" : "future";
+    return `<span class="lifecycle-step ${cls}">${labels[s]}</span>${i < steps.length - 1 ? '<span class="lifecycle-arrow">→</span>' : ""}`;
+  }).join("");
+}
+
+function svcActionButtons(svc) {
+  const s = svc.status || "draft";
+  const btns = [];
+  if (s === "draft")    btns.push(`<button class="btn btn-sm" style="background:var(--info);color:#fff" onclick="setServiceStatus('${svc.id}','testing')">Move to Testing →</button>`);
+  if (s === "testing")  btns.push(`<button class="btn btn-primary btn-sm" onclick="setServiceStatus('${svc.id}','active')">✅ Publish</button>`);
+  if (s === "active")   btns.push(`<button class="btn btn-ghost btn-sm" style="color:var(--text-muted)" onclick="setServiceStatus('${svc.id}','draft')">Unpublish</button>`);
+  if (s === "draft")    btns.push(`<button class="btn btn-ghost btn-sm" style="color:var(--text-muted)" onclick="setServiceStatus('${svc.id}','draft')" disabled>Already Draft</button>`);
+  return btns.join("");
+}
+
+function buildParamFields(svcId, svc) {
+  const fields = svc.parameterSchema || [];
+  if (!fields.length) return `<p style="font-size:.8rem;color:var(--text-muted);margin:0">No parameters defined for this service.</p>`;
+  return fields.map(f => `
+    <div class="param-row">
+      <label for="param-${svcId}-${f.key}">${f.label || f.key}${f.required ? " *" : ""}</label>
+      <input type="text" id="param-${svcId}-${f.key}" placeholder="${f.placeholder || ""}" data-key="${f.key}">
+    </div>`).join("");
+}
+
+function renderAdminServices() {
+  const el = document.getElementById("servicesList");
+  if (!adminServices.length) { el.innerHTML = `<div class="empty-msg">No services found. Create services in Firestore.</div>`; return; }
+  el.innerHTML = adminServices.map(svc => `
+    <div class="svc-card" id="svc-card-${svc.id}">
+      <div class="svc-card-head" onclick="toggleSvcCard('${svc.id}')">
+        <div class="svc-icon">${svc.icon || "⚙️"}</div>
+        <div class="svc-info">
+          <div class="svc-name">${svc.name || svc.id}</div>
+          <div class="svc-desc">${svc.shortDescription || svc.description || "No description"}</div>
+        </div>
+        ${svcStatusBadge(svc.status || "draft")}
+        <span style="color:var(--text-faint);font-size:.75rem;margin-left:.25rem">▼</span>
+      </div>
+      <div class="svc-body" id="svc-body-${svc.id}">
+        <div class="svc-lifecycle">${lifecycleSteps(svc.status || "draft")}</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem">${svcActionButtons(svc)}</div>
+
+        ${svc.n8n?.webhookUrl ? `
+        <div class="test-run-form">
+          <h4>🧪 Test Run</h4>
+          <div id="params-${svc.id}">${buildParamFields(svc.id, svc)}</div>
+          <div style="margin-top:.625rem;display:flex;gap:.5rem;align-items:center">
+            <button class="btn btn-sm" style="background:var(--info);color:#fff" id="btn-testrun-${svc.id}" onclick="runTest('${svc.id}')">▶ Run Test</button>
+            <span id="testrun-status-${svc.id}" style="font-size:.8rem;color:var(--text-muted)"></span>
+          </div>
+          <div id="testrun-result-${svc.id}"></div>
+        </div>` : `<p style="font-size:.8rem;color:var(--warning);margin:0 0 .75rem">⚠️ No webhook URL configured — set <code>n8n.webhookUrl</code> on this service to enable test runs.</p>`}
+
+        <div style="font-size:.75rem;color:var(--text-faint)">Service ID: <code>${svc.id}</code></div>
+      </div>
+    </div>`).join("");
+}
+
+window.toggleSvcCard = function(id) {
+  const body = document.getElementById(`svc-body-${id}`);
+  body?.classList.toggle("open");
+};
+
+window.setServiceStatus = async function(serviceId, status) {
+  const card = document.getElementById(`svc-card-${serviceId}`);
+  const label = { draft:"draft", testing:"testing", active:"active" }[status];
+  if (status === "active" && !confirm(`Publish this service? It will become visible to users.`)) return;
+  if (status === "draft"  && !confirm(`Unpublish this service? It will be hidden from users.`)) return;
+  try {
+    const resp = await fetch("/api/admin/set-service-status", {
+      method: "POST",
+      headers: { "Content-Type":"application/json", Authorization:`Bearer ${idToken}` },
+      body: JSON.stringify({ serviceId, status }),
+    });
+    const json = await resp.json();
+    if (!resp.ok) throw new Error(json.error);
+    showToast({ title:`Service moved to ${label}`, type:"success" });
+    await loadAdminServices();
+  } catch (e) {
+    showToast({ title:"Failed", message:e.message, type:"error" });
+  }
+};
+
+window.runTest = async function(serviceId) {
+  const btn = document.getElementById(`btn-testrun-${serviceId}`);
+  const statusEl = document.getElementById(`testrun-status-${serviceId}`);
+  const resultEl = document.getElementById(`testrun-result-${serviceId}`);
+
+  // Collect parameters from inputs
+  const parameters = {};
+  document.querySelectorAll(`#params-${serviceId} input[data-key]`).forEach(inp => {
+    if (inp.value.trim()) parameters[inp.dataset.key] = inp.value.trim();
+  });
+
+  btn.disabled = true; btn.textContent = "Running…";
+  statusEl.innerHTML = `<span class="run-status-dot running"></span>Sending to n8n…`;
+  resultEl.innerHTML = "";
+
+  try {
+    const resp = await fetch("/api/admin/test-run", {
+      method: "POST",
+      headers: { "Content-Type":"application/json", Authorization:`Bearer ${idToken}` },
+      body: JSON.stringify({ serviceId, parameters }),
+    });
+    const json = await resp.json();
+    if (!resp.ok) throw new Error(json.error);
+
+    const dotCls = json.status === "running" ? "running" : json.status === "failed" ? "failed" : "queued";
+    statusEl.innerHTML = `<span class="run-status-dot ${dotCls}"></span>${json.status === "running" ? "Sent — workflow is running" : "n8n returned an error"}`;
+    resultEl.innerHTML = `<div class="test-run-result">
+      <strong>Run ID:</strong> <code>${json.runId}</code><br>
+      <strong>Status:</strong> ${json.status}
+      ${json.error ? `<br><strong style="color:var(--danger)">Error:</strong> ${json.error}` : ""}
+      <br><span style="font-size:.75rem;color:var(--text-faint)">Check <code>testRuns/${json.runId}</code> in Firestore for live updates.</span>
+    </div>`;
+  } catch (e) {
+    statusEl.innerHTML = `<span class="run-status-dot failed"></span>${e.message}`;
+    showToast({ title:"Test run failed", message:e.message, type:"error" });
+  } finally {
+    btn.disabled = false; btn.textContent = "▶ Run Test";
+  }
+};
+
+document.getElementById("btnRefreshServices")?.addEventListener("click", loadAdminServices);
+
 /* ── Action log ─────────────────────────────────────────────── */
 async function loadActionLog() {
   try {
@@ -299,10 +501,17 @@ async function loadActionLog() {
     if (snap.empty) { el.innerHTML = `<div class="empty-msg">No actions logged yet.</div>`; return; }
     el.innerHTML = snap.docs.map(d => {
       const a = d.data();
-      const icon = a.action === "grant_test_access" ? "✅" : "🚫";
-      const desc = a.action === "grant_test_access"
-        ? `Granted <strong>${a.serviceName || a.serviceId}</strong> test access to <code>${a.targetUserId}</code> for ${a.durationDays} days`
-        : `Revoked test access for <code>${a.targetUserId}</code>`;
+      let icon, desc;
+      if (a.action === "grant_test_access") {
+        icon = "✅"; desc = `Granted <strong>${a.serviceName || a.serviceId}</strong> test access to <code>${a.targetUserId}</code> for ${a.durationDays} days`;
+      } else if (a.action === "revoke_test_access") {
+        icon = "🚫"; desc = `Revoked test access for <code>${a.targetUserId}</code>`;
+      } else if (a.action === "set_service_status") {
+        const statusLabel = { draft:"📝 Draft", testing:"🧪 Testing", active:"✅ Live" }[a.newStatus] || a.newStatus;
+        icon = "⚙️"; desc = `Set <strong>${a.serviceName || a.serviceId}</strong> status to <strong>${statusLabel}</strong>`;
+      } else {
+        icon = "📋"; desc = `${a.action}`;
+      }
       return `<div class="action-log-row"><div class="log-icon">${icon}</div><div class="log-body">${desc}</div><div class="log-time">${fmtDate(a.createdAt)}</div></div>`;
     }).join("");
   } catch (e) {
@@ -324,7 +533,8 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
     document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
     btn.classList.add("active");
     document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
-    if (btn.dataset.tab === "log") loadActionLog();
+    if (btn.dataset.tab === "log")      loadActionLog();
+    if (btn.dataset.tab === "services") loadAdminServices();
   });
 });
 
