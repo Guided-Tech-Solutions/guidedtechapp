@@ -27,7 +27,6 @@ onAuthStateChanged(auth, user => {
     localStorage.setItem('gts_user', JSON.stringify({
       displayName: user.displayName,
       email:       user.email,
-      photoURL:    user.photoURL,
     }));
   } else {
     localStorage.removeItem('gts_user');
