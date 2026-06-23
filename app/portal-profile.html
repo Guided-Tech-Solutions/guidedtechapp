@@ -5,13 +5,6 @@
   <title>My Profile — GTS Amplify</title>
   <link rel="icon" href="../asset/logo-icon.png">
   <link rel="stylesheet" href="./portal.css">
-  <style>
-    /* ── Profile picture upload ───────────────────────── */
-    .avatar-upload-wrap{position:relative;display:inline-block;cursor:pointer}
-    .avatar-upload-wrap input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-    .avatar-upload-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:.7rem;color:#fff;font-weight:600;text-align:center;line-height:1.3}
-    .avatar-upload-wrap:hover .avatar-upload-overlay{opacity:1}
-  </style>
 </head>
 <body>
 <nav class="navbar"><div class="navbar-inner">
@@ -36,7 +29,7 @@
     </div>
   </div>
 </div></nav>
-<script>!function(){try{var u=JSON.parse(localStorage.getItem('gts_user'));if(!u)return;var i=((u.displayName||u.email||'?').split(/[\s@]+/).slice(0,2).map(function(s){return s[0]?s[0].toUpperCase():'';}).join(''))||'U';var fn=u.displayName?u.displayName.split(' ')[0]:(u.email||'').split('@')[0];var av=u.photoURL?'<img src="'+u.photoURL.replace(/"/g,'&quot;')+'">':i;var c=document.getElementById('navAvatarCircle');if(c)c.innerHTML=av;var nn=document.getElementById('navAvatarName');if(nn)nn.textContent=fn;var sa=document.getElementById('sidebarAvatar');if(sa)sa.innerHTML=av;var sn=document.getElementById('sidebarName');if(sn)sn.textContent=u.displayName||(u.email||'').split('@')[0];var se=document.getElementById('sidebarEmail');if(se)se.textContent=u.email||'';var sp=document.querySelector('.sidebar-profile');if(sp)sp.style.visibility='visible';var nw=document.querySelector('.nav-avatar-wrap');if(nw)nw.style.visibility='visible';}catch(e){}}();</script>
+<script>!function(){try{var COLORS=["#3B82F6","#10B981","#8B5CF6","#F59E0B","#EF4444","#06B6D4","#EC4899","#84CC16"];function ac(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return COLORS[h%COLORS.length];}var u=JSON.parse(localStorage.getItem('gts_user'));if(!u)return;var i=((u.displayName||u.email||'?').split(/[\s@]+/).slice(0,2).map(function(s){return s[0]?s[0].toUpperCase():'';}).join(''))||'U';var fn=u.displayName?u.displayName.split(' ')[0]:(u.email||'').split('@')[0];var col=ac(u.displayName||u.email||'?');var c=document.getElementById('navAvatarCircle');if(c){c.textContent=i;c.style.background=col;}var nn=document.getElementById('navAvatarName');if(nn)nn.textContent=fn;var sa=document.getElementById('sidebarAvatar');if(sa){sa.textContent=i;sa.style.background=col;}var sn=document.getElementById('sidebarName');if(sn)sn.textContent=u.displayName||(u.email||'').split('@')[0];var se=document.getElementById('sidebarEmail');if(se)se.textContent=u.email||'';var sp=document.querySelector('.sidebar-profile');if(sp)sp.style.visibility='visible';var nw=document.querySelector('.nav-avatar-wrap');if(nw)nw.style.visibility='visible';}catch(e){}}();</script>
 
 <div class="portal-wrapper">
   <aside class="portal-sidebar" id="portalSidebar">
@@ -60,7 +53,7 @@
     <div class="sidebar-footer"><button class="btn-signout" id="btnSidebarSignout">🚪 Sign Out</button></div>
   </aside>
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
-  <script>!function(){try{var u=JSON.parse(localStorage.getItem('gts_user'));if(!u)return;var i=((u.displayName||u.email||'?').split(/[\s@]+/).slice(0,2).map(function(s){return s[0]?s[0].toUpperCase():'';}).join(''))||'U';var fn=u.displayName?u.displayName.split(' ')[0]:(u.email||'').split('@')[0];var av=u.photoURL?'<img src="'+u.photoURL.replace(/"/g,'&quot;')+'">':i;var c=document.getElementById('navAvatarCircle');if(c)c.innerHTML=av;var nn=document.getElementById('navAvatarName');if(nn)nn.textContent=fn;var sa=document.getElementById('sidebarAvatar');if(sa)sa.innerHTML=av;var sn=document.getElementById('sidebarName');if(sn)sn.textContent=u.displayName||(u.email||'').split('@')[0];var se=document.getElementById('sidebarEmail');if(se)se.textContent=u.email||'';var sp=document.querySelector('.sidebar-profile');if(sp)sp.style.visibility='visible';var nw=document.querySelector('.nav-avatar-wrap');if(nw)nw.style.visibility='visible';}catch(e){}}();</script>
+  <script>!function(){try{var COLORS=["#3B82F6","#10B981","#8B5CF6","#F59E0B","#EF4444","#06B6D4","#EC4899","#84CC16"];function ac(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return COLORS[h%COLORS.length];}var u=JSON.parse(localStorage.getItem('gts_user'));if(!u)return;var i=((u.displayName||u.email||'?').split(/[\s@]+/).slice(0,2).map(function(s){return s[0]?s[0].toUpperCase():'';}).join(''))||'U';var fn=u.displayName?u.displayName.split(' ')[0]:(u.email||'').split('@')[0];var col=ac(u.displayName||u.email||'?');var c=document.getElementById('navAvatarCircle');if(c){c.textContent=i;c.style.background=col;}var nn=document.getElementById('navAvatarName');if(nn)nn.textContent=fn;var sa=document.getElementById('sidebarAvatar');if(sa){sa.textContent=i;sa.style.background=col;}var sn=document.getElementById('sidebarName');if(sn)sn.textContent=u.displayName||(u.email||'').split('@')[0];var se=document.getElementById('sidebarEmail');if(se)se.textContent=u.email||'';var sp=document.querySelector('.sidebar-profile');if(sp)sp.style.visibility='visible';var nw=document.querySelector('.nav-avatar-wrap');if(nw)nw.style.visibility='visible';}catch(e){}}();</script>
 
   <main class="portal-main">
     <div class="page-header">
@@ -76,24 +69,14 @@
         <div class="card">
           <div class="card-header"><div class="card-title">👤 Personal Information</div></div>
           <div class="card-body">
-            <!-- Avatar with upload -->
+            <!-- Avatar -->
             <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)">
-              <div style="position:relative">
-                <div id="profileAvatarLarge" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-weight:700;font-size:1.5rem;color:white;flex-shrink:0;overflow:hidden"></div>
-                <label class="avatar-upload-wrap" id="avatarUploadLabel" title="Change profile photo" style="position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center">
-                  <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/webp,image/gif" style="position:absolute;inset:0;opacity:0;cursor:pointer;border-radius:50%">
-                  <div class="avatar-upload-overlay">📷<br>Change</div>
-                </label>
-              </div>
+              <div id="profileAvatarLarge" style="width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-weight:700;font-size:1.5rem;color:white;flex-shrink:0;overflow:hidden"></div>
               <div>
                 <div style="font-weight:700;font-size:.9375rem" id="profileDisplayName">—</div>
                 <div style="font-size:.8125rem;color:var(--text-muted)" id="profileEmail">—</div>
                 <div style="margin-top:.375rem">
                   <span class="badge badge-active">Verified</span>
-                </div>
-                <div style="margin-top:.375rem">
-                  <button id="btnUploadPhoto" class="btn btn-secondary" style="font-size:.75rem;padding:.3rem .75rem" onclick="document.getElementById('avatarFileInput').click()">📷 Change Photo</button>
-                  <span id="uploadPhotoStatus" style="font-size:.75rem;color:var(--text-muted);margin-left:.5rem"></span>
                 </div>
               </div>
             </div>
@@ -224,10 +207,8 @@
 <div id="toastRoot"></div>
 <script type="module">
 import { auth, db } from "./firebase.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
-const storage = getStorage();
 import {
-  requireAuth, esc, fmtDate, showToast, openModal, closeModal
+  requireAuth, esc, fmtDate, showToast, openModal, closeModal, avatarColor
 } from "./portal-layout.js";
 import {
   reauthenticateWithCredential, EmailAuthProvider,
@@ -236,16 +217,6 @@ import {
 import {
   doc, getDoc, setDoc, getDocs, collection, query, where, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
-import {
-  ref, uploadBytesResumable, getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-storage.js";
-
-/* ── helpers ──────────────────────────────────────────────── */
-function setAvatarEl(el, photoURL, initials) {
-  if (!el) return;
-  if (photoURL) el.innerHTML = `<img src="${photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-  else el.textContent = initials;
-}
 
 /* ── main ─────────────────────────────────────────────────── */
 document.addEventListener("DOMContentLoaded", async () => {
@@ -273,7 +244,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   /* Avatar */
   const avatarEl = document.getElementById("profileAvatarLarge");
-  setAvatarEl(avatarEl, user.photoURL, initials);
+  if (avatarEl) { avatarEl.textContent = initials; avatarEl.style.background = avatarColor(user.displayName || user.email); }
   document.getElementById("profileDisplayName").textContent = user.displayName || "—";
   document.getElementById("profileEmail").textContent       = user.email;
 
@@ -286,49 +257,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("activeServicesCount").textContent = subs.size;
     document.getElementById("totalPaymentsCount").textContent  = pays.size;
   } catch(e) {}
-
-  /* ── Profile picture upload ───────────────────────────── */
-  document.getElementById("avatarFileInput").addEventListener("change", async e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { showToast({ title:"File too large", message:"Max 5 MB.", type:"warning" }); return; }
-
-    const statusEl = document.getElementById("uploadPhotoStatus");
-    statusEl.textContent = "Uploading…";
-
-    try {
-      const storageRef = ref(storage, `profile-pictures/${user.uid}/${Date.now()}_${file.name}`);
-      const task = uploadBytesResumable(storageRef, file);
-
-      await new Promise((resolve, reject) => {
-        task.on("state_changed", snap => {
-          const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
-          statusEl.textContent = `Uploading… ${pct}%`;
-        }, reject, resolve);
-      });
-
-      const url = await getDownloadURL(storageRef);
-      await updateProfile(user, { photoURL: url });
-      await setDoc(doc(db, "users", user.uid), { photoURL: url, updatedAt: serverTimestamp() }, { merge: true });
-
-      // Update all avatar elements
-      setAvatarEl(avatarEl, url, initials);
-      const navCircle = document.getElementById("navAvatarCircle");
-      if (navCircle) navCircle.innerHTML = `<img src="${url}" alt="">`;
-      const sidebarAv = document.getElementById("sidebarAvatar");
-      if (sidebarAv) sidebarAv.innerHTML = `<img src="${url}" alt="">`;
-
-      // Update localStorage cache
-      const cached = JSON.parse(localStorage.getItem("gts_user") || "{}");
-      localStorage.setItem("gts_user", JSON.stringify({ ...cached, photoURL: url }));
-
-      statusEl.textContent = "";
-      showToast({ title:"Photo updated!", type:"success" });
-    } catch(err) {
-      statusEl.textContent = "";
-      showToast({ title:"Upload failed", message: err.message, type:"error" });
-    }
-  });
 
   /* ── Save profile ─────────────────────────────────────── */
   document.getElementById("btnSaveProfile").addEventListener("click", async () => {

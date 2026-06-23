@@ -7,6 +7,24 @@ import {
   onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 
+/* ── Avatar color ────────────────────────────────────────────── */
+const AVATAR_COLORS = [
+  "#3B82F6", // blue
+  "#10B981", // emerald
+  "#8B5CF6", // violet
+  "#F59E0B", // amber
+  "#EF4444", // red
+  "#06B6D4", // cyan
+  "#EC4899", // pink
+  "#84CC16", // lime
+];
+export function avatarColor(str) {
+  const s = str || "?";
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return AVATAR_COLORS[h % AVATAR_COLORS.length];
+}
+
 /* ── Auth state ─────────────────────────────────────────────── */
 export let currentUser = null;
 
@@ -21,14 +39,12 @@ export const authReady = new Promise(resolve => {
     const btnO   = document.getElementById("btnLogout");
 
     if (user) {
-      const initials = (user.displayName || user.email || "?")
+      const initials  = (user.displayName || user.email || "?")
         .split(/[\s@]+/).slice(0,2).map(s => s[0]?.toUpperCase() || "").join("") || "U";
       const firstName = user.displayName ? user.displayName.split(" ")[0] : (user.email || "").split("@")[0];
+      const color     = avatarColor(user.displayName || user.email);
 
-      if (avatar) {
-        if (user.photoURL) avatar.innerHTML = `<img src="${user.photoURL}" alt="">`;
-        else avatar.textContent = initials;
-      }
+      if (avatar) { avatar.textContent = initials; avatar.style.background = color; }
       if (name)  name.textContent  = user.displayName || user.email.split("@")[0];
       if (email) email.textContent = user.email;
       if (btnL) btnL.style.display = "none";
@@ -36,10 +52,7 @@ export const authReady = new Promise(resolve => {
 
       const navAvatarCircle = document.getElementById("navAvatarCircle");
       const navAvatarName   = document.getElementById("navAvatarName");
-      if (navAvatarCircle) {
-        if (user.photoURL) navAvatarCircle.innerHTML = `<img src="${user.photoURL}" alt="">`;
-        else navAvatarCircle.textContent = initials;
-      }
+      if (navAvatarCircle) { navAvatarCircle.textContent = initials; navAvatarCircle.style.background = color; }
       if (navAvatarName) navAvatarName.textContent = firstName;
     } else {
       if (avatar) avatar.textContent = "?";
