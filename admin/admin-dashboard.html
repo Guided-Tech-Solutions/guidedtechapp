@@ -228,17 +228,47 @@ select.form-control{cursor:pointer}
     <!-- SERVICES -->
     <div class="sec" id="sec-services">
       <div class="page-hdr">
-        <div><div class="page-title">Services</div><div class="page-sub">Create and manage automation services</div></div>
+        <div><div class="page-title">Services</div><div class="page-sub">Create, test, and publish automation services</div></div>
         <button class="btn btn-primary" id="btnNewSvc">+ New Service</button>
       </div>
-      <div class="card">
-        <div class="card-hdr"><div class="card-title">All Services</div><span class="badge b-brand" id="svcBadge">0</span></div>
-        <div class="card-body">
-          <div class="filter-bar">
-            <div class="search-wrap"><input type="text" class="search-input" id="svcSearch" placeholder="Search services..."></div>
-            <select class="form-control" id="svcFilter" style="width:auto"><option value="">All statuses</option><option value="draft">Draft</option><option value="testing">Testing</option><option value="active">Active</option></select>
+
+      <!-- Subtabs -->
+      <div style="display:flex;gap:0;margin-bottom:1.25rem;border-bottom:2px solid var(--border)">
+        <button class="svc-subtab active" data-stab="all" style="padding:.5rem 1.25rem;background:none;border:none;border-bottom:2px solid var(--brand);margin-bottom:-2px;font-weight:700;font-size:.875rem;color:var(--brand);cursor:pointer">📋 All Services</button>
+        <button class="svc-subtab" data-stab="lifecycle" style="padding:.5rem 1.25rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;font-weight:600;font-size:.875rem;color:var(--text-muted);cursor:pointer">🧪 Lifecycle & Testing</button>
+      </div>
+
+      <!-- Subtab: All Services -->
+      <div class="svc-stab-panel" id="stab-all">
+        <div class="card">
+          <div class="card-hdr"><div class="card-title">All Services</div><span class="badge b-brand" id="svcBadge">0</span></div>
+          <div class="card-body">
+            <div class="filter-bar">
+              <div class="search-wrap"><input type="text" class="search-input" id="svcSearch" placeholder="Search services..."></div>
+              <select class="form-control" id="svcFilter" style="width:auto"><option value="">All statuses</option><option value="draft">Draft</option><option value="testing">Testing</option><option value="active">Active</option></select>
+            </div>
+            <div id="svcTableWrap"><div class="empty"><div class="empty-text">Loading...</div></div></div>
           </div>
-          <div id="svcTableWrap"><div class="empty"><div class="empty-text">Loading...</div></div></div>
+        </div>
+      </div>
+
+      <!-- Subtab: Lifecycle & Testing -->
+      <div class="svc-stab-panel" id="stab-lifecycle" style="display:none">
+        <div class="card" style="margin-bottom:1.25rem">
+          <div class="card-hdr">
+            <div>
+              <div class="card-title">Service Pipeline</div>
+              <div style="font-size:.75rem;color:var(--text-muted);margin-top:2px">Move services through the lifecycle before users can see them</div>
+            </div>
+            <div style="display:flex;gap:.375rem;align-items:center;font-size:.8125rem">
+              <span style="background:#f1f3f6;color:var(--text-muted);padding:.2rem .6rem;border-radius:99px;font-weight:700;font-size:.7rem">📝 DRAFT</span>
+              <span style="color:var(--text-faint)">→</span>
+              <span style="background:var(--warning-pale);color:var(--warning);padding:.2rem .6rem;border-radius:99px;font-weight:700;font-size:.7rem">🧪 TESTING</span>
+              <span style="color:var(--text-faint)">→</span>
+              <span style="background:var(--success-pale);color:var(--success);padding:.2rem .6rem;border-radius:99px;font-weight:700;font-size:.7rem">✅ LIVE</span>
+            </div>
+          </div>
+          <div class="card-body" id="lifecycleList"><div class="empty"><div class="empty-text">Loading...</div></div></div>
         </div>
       </div>
     </div>
@@ -838,6 +868,25 @@ async function loadOverview(){
   }else{ setEl("ovRuns","0"); setHtml("ovRunsEl",`<div class="empty"><div class="empty-text">No workflow runs yet</div></div>`); }
 }
 
+/* ── Service subtabs ─────────────────────────────────────── */
+document.querySelectorAll(".svc-subtab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".svc-subtab").forEach(b=>{
+      b.style.borderBottomColor="transparent";
+      b.style.color="var(--text-muted)";
+      b.style.fontWeight="600";
+      b.classList.remove("active");
+    });
+    document.querySelectorAll(".svc-stab-panel").forEach(p=>p.style.display="none");
+    btn.style.borderBottomColor="var(--brand)";
+    btn.style.color="var(--brand)";
+    btn.style.fontWeight="700";
+    btn.classList.add("active");
+    document.getElementById("stab-"+btn.dataset.stab).style.display="block";
+    if(btn.dataset.stab==="lifecycle") renderLifecycle();
+  });
+});
+
 /* ═══════════════════════════════════════════════════════════
    SERVICES
 ═══════════════════════════════════════════════════════════ */
@@ -888,6 +937,44 @@ function renderSvcs(arr){
   </tr>`).join("")}</tbody></table></div>`);
 }
 
+function renderLifecycle(){
+  const el=document.getElementById("lifecycleList"); if(!el) return;
+  if(!allSvcs.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">⚙️</div><div class="empty-title">No services yet</div><div class="empty-text">Click "+ New Service" to create your first service.</div></div>`; return; }
+  const groups={draft:[],testing:[],active:[]};
+  allSvcs.forEach(s=>{ const g=s.status||"draft"; if(groups[g]) groups[g].push(s); });
+  const sections=[
+    {key:"draft",  label:"📝 Draft",  desc:"Hidden from users. Not yet ready for testing.",      color:"#f1f3f6",   tc:"var(--text-muted)"},
+    {key:"testing",label:"🧪 Testing",desc:"Hidden from users. Fire test runs to verify it works.",color:"var(--warning-pale)", tc:"var(--warning)"},
+    {key:"active", label:"✅ Live",   desc:"Visible to all users on the services page.",           color:"var(--success-pale)",tc:"var(--success)"},
+  ];
+  el.innerHTML=sections.map(sec=>`
+    <div style="margin-bottom:1.5rem">
+      <div style="display:flex;align-items:center;gap:.625rem;margin-bottom:.75rem">
+        <span style="background:${sec.color};color:${sec.tc};padding:.25rem .75rem;border-radius:99px;font-weight:700;font-size:.75rem">${sec.label}</span>
+        <span style="font-size:.75rem;color:var(--text-muted)">${sec.desc}</span>
+        <span style="margin-left:auto;font-size:.75rem;font-weight:700;color:var(--text-muted)">${groups[sec.key].length} service${groups[sec.key].length!==1?"s":""}</span>
+      </div>
+      ${!groups[sec.key].length
+        ? `<div style="padding:.75rem 1rem;border:1.5px dashed var(--border);border-radius:var(--r);color:var(--text-faint);font-size:.8125rem;text-align:center">No services in this stage</div>`
+        : groups[sec.key].map(s=>`
+        <div style="display:flex;align-items:center;gap:.875rem;padding:.75rem 1rem;border:1px solid var(--border);border-radius:var(--r);background:#fff;margin-bottom:.5rem">
+          <div style="font-size:1.5rem;flex-shrink:0">${s.icon||"⚙️"}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:.9375rem">${esc(s.name||s.id)}</div>
+            <div style="font-size:.75rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.description||s.category||"")}</div>
+            ${!s.n8n?.webhookUrl?`<div style="font-size:.7rem;color:var(--danger);margin-top:2px">⚠️ No webhook URL — set one before testing</div>`:""}
+          </div>
+          <div style="display:flex;gap:.375rem;flex-wrap:wrap;justify-content:flex-end">
+            ${s.n8n?.webhookUrl&&(sec.key==="testing"||sec.key==="active")?`<button class="btn btn-ghost btn-sm" style="border-color:var(--info);color:var(--info)" onclick="openTestRun('${s.id}')">🧪 Test Run</button>`:""}
+            ${sec.key==="draft"   ?`<button class="btn btn-ghost btn-sm" style="border-color:var(--warning);color:var(--warning)" onclick="advanceSvcStatus('${s.id}','testing')">Move to Testing →</button>`:""}
+            ${sec.key==="testing" ?`<button class="btn btn-success btn-sm" onclick="advanceSvcStatus('${s.id}','active')">✅ Publish</button>`:""}
+            ${sec.key==="active"  ?`<button class="btn btn-danger btn-sm" onclick="advanceSvcStatus('${s.id}','draft')">Unpublish</button>`:""}
+            <button class="btn btn-ghost btn-sm" onclick="editSvc('${s.id}')">Edit</button>
+          </div>
+        </div>`).join("")}
+    </div>`).join("");
+}
+
 document.getElementById("svcSearch").addEventListener("input",function(){ const q=this.value.toLowerCase(); renderSvcs(allSvcs.filter(s=>(s.name||"").toLowerCase().includes(q)||(s.category||"").toLowerCase().includes(q))); });
 document.getElementById("svcFilter").addEventListener("change",function(){ renderSvcs(this.value?allSvcs.filter(s=>s.status===this.value):allSvcs); });
 
@@ -925,7 +1012,8 @@ window.advanceSvcStatus=async function(id, newStatus){
       updatedAt: serverTimestamp()
     });
     toast("Updated", `Service is now ${newStatus}.`, "success");
-    loadServices();
+    await loadServices();
+    if(document.getElementById("stab-lifecycle")?.style.display!=="none") renderLifecycle();
   }catch(e){ toast("Error",e.message,"error"); }
 };
 
