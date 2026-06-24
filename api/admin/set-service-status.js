@@ -21,7 +21,7 @@ async function requireAdmin(req) {
 }
 function cors(res) { res.setHeader("Access-Control-Allow-Origin","*"); res.setHeader("Access-Control-Allow-Headers","Content-Type,Authorization"); }
 
-const VALID = ["draft", "testing", "active"];
+const VALID = ["draft", "testing", "ready", "active"];
 
 module.exports = async function handler(req, res) {
   cors(res);
