@@ -236,7 +236,7 @@ select.form-control{cursor:pointer}
         <div class="card-body">
           <div class="filter-bar">
             <div class="search-wrap"><input type="text" class="search-input" id="svcSearch" placeholder="Search services..."></div>
-            <select class="form-control" id="svcFilter" style="width:auto"><option value="">All statuses</option><option value="active">Active</option><option value="inactive">Inactive</option></select>
+            <select class="form-control" id="svcFilter" style="width:auto"><option value="">All statuses</option><option value="draft">Draft</option><option value="testing">Testing</option><option value="active">Active</option></select>
           </div>
           <div id="svcTableWrap"><div class="empty"><div class="empty-text">Loading...</div></div></div>
         </div>
@@ -485,7 +485,7 @@ select.form-control{cursor:pointer}
       </div>
       <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" id="svcDesc" rows="2"></textarea></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="svcStatus"><option value="inactive">Inactive (draft)</option><option value="active">Active (live)</option></select></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-control" id="svcStatus"><option value="draft">Draft (hidden)</option><option value="testing">Testing (hidden, testable)</option><option value="active">Active (published to users)</option></select></div>
         <div class="form-group"><label class="form-label">Icon (emoji)</label><input type="text" class="form-control" id="svcIcon" placeholder="⚙️" maxlength="4"></div>
       </div>
     </div>
@@ -674,6 +674,32 @@ select.form-control{cursor:pointer}
   </div>
 </div>
 
+<!-- TEST RUN MODAL -->
+<div class="modal-bg" id="testRunModal">
+  <div class="modal sm">
+    <div class="modal-hdr"><div class="modal-title">🧪 Test Run — <span id="testRunSvcName"></span></div><div class="modal-x" onclick="closeModal('testRunModal')">✕</div></div>
+    <div class="modal-body">
+      <input type="hidden" id="testRunSvcId">
+      <div style="margin-bottom:1rem;padding:.625rem .875rem;background:var(--info-pale);border-radius:var(--r);font-size:.8125rem;color:var(--info)">
+        ℹ️ This fires the n8n webhook directly with <code>isTestRun: true</code>. Results are stored in <code>testRuns</code> collection.
+      </div>
+      <div id="testRunParamFields"></div>
+      <div style="margin-top:.75rem">
+        <label class="form-label">Extra JSON Parameters (optional)</label>
+        <textarea class="form-control" id="testRunExtraParams" rows="3" placeholder='{"key":"value"}' style="font-family:monospace;font-size:.8125rem"></textarea>
+      </div>
+    </div>
+    <div id="testRunResultWrap" style="display:none;padding:1rem 1.25rem;border-top:1px solid var(--border)">
+      <div style="font-weight:700;font-size:.875rem;margin-bottom:.5rem">Result</div>
+      <div id="testRunResult" style="font-size:.8125rem"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('testRunModal')">Close</button>
+      <button class="btn btn-primary" id="btnFireTest" onclick="fireTestRun()">▶ Fire Test</button>
+    </div>
+  </div>
+</div>
+
 <div id="toastRoot"></div>
 
 <script type="module">
@@ -822,7 +848,9 @@ async function loadServices(){
     const snap=await getDocs(collection(db,"services"));
     allSvcs=[];
     snap.forEach(d=>{ const data=d.data(); if(!data.deleted) allSvcs.push({id:d.id,...data}); });
-    setEl("svcBadge",allSvcs.filter(s=>s.status==="active").length+" active");
+    const live=allSvcs.filter(s=>s.status==="active").length;
+    const testing=allSvcs.filter(s=>s.status==="testing").length;
+    setEl("svcBadge",`${live} live · ${testing} testing`);
     renderSvcs(allSvcs);
   }catch(e){
     console.error("loadServices:",e.message);
@@ -830,21 +858,33 @@ async function loadServices(){
   }
 }
 
+function svcLifecycleBadge(status){
+  if(status==="active")  return `<span class="badge b-active">✅ Live</span>`;
+  if(status==="testing") return `<span class="badge b-pending">🧪 Testing</span>`;
+  return `<span class="badge b-inactive">📝 Draft</span>`;
+}
+
+function svcLifecycleBtn(id, status){
+  if(status==="draft")   return `<button class="btn btn-ghost btn-sm" style="color:var(--info);border-color:var(--info)" onclick="advanceSvcStatus('${id}','testing')">→ Testing</button>`;
+  if(status==="testing") return `<button class="btn btn-success btn-sm" onclick="advanceSvcStatus('${id}','active')">✅ Publish</button>`;
+  if(status==="active")  return `<button class="btn btn-danger btn-sm" onclick="advanceSvcStatus('${id}','draft')">Unpublish</button>`;
+  return `<button class="btn btn-ghost btn-sm" onclick="advanceSvcStatus('${id}','testing')">→ Testing</button>`;
+}
+
 function renderSvcs(arr){
   if(!arr.length){ emptyState("svcTableWrap","⚙️","No services yet","Click '+ New Service' to create your first service."); return; }
   setHtml("svcTableWrap",`<div class="tbl-wrap"><table class="tbl"><thead><tr>
-    <th>Service</th><th>Category</th><th>Price</th><th>Params</th><th>Creds</th><th>Status</th><th></th>
+    <th>Service</th><th>Price</th><th>Params</th><th>Status</th><th>Lifecycle</th><th></th>
   </tr></thead><tbody>${arr.map(s=>`<tr>
-    <td><div class="td-name">${esc(s.icon||"")} ${esc(s.name||"—")}</div><div class="td-sub">${esc((s.description||"").substring(0,50))}</div></td>
-    <td>${esc(s.category||"—")}</td>
+    <td><div class="td-name">${esc(s.icon||"")} ${esc(s.name||"—")}</div><div class="td-sub">${esc(s.category||"")}${s.n8n?.webhookUrl?"":" ⚠️ No webhook"}</div></td>
     <td>${s.pricing?.amount?fmt(s.pricing.amount)+"/"+esc(s.pricing.interval||"mo"):"Free"}</td>
-    <td><span class="badge b-brand">${(s.parametersSchema||[]).length}</span></td>
-    <td><span class="badge b-info">${(s.credentialsSchema||[]).length}</span></td>
-    <td><span class="badge ${s.status==="active"?"b-active":"b-inactive"}">${s.status||"inactive"}</span></td>
-    <td style="display:flex;gap:.25rem">
-      <button class="btn btn-ghost btn-sm" onclick="editSvc('${s.id}')">Edit</button>
-      <button class="btn ${s.status==="active"?"btn-danger":"btn-success"} btn-sm" onclick="toggleSvc('${s.id}','${s.status}')">${s.status==="active"?"Pause":"Activate"}</button>
+    <td><span class="badge b-brand">${(s.parametersSchema||[]).length} params</span></td>
+    <td>${svcLifecycleBadge(s.status)}</td>
+    <td style="display:flex;gap:.25rem;flex-wrap:wrap">
+      ${svcLifecycleBtn(s.id, s.status)}
+      ${s.n8n?.webhookUrl?`<button class="btn btn-ghost btn-sm" onclick="openTestRun('${s.id}')">🧪 Test</button>`:""}
     </td>
+    <td><button class="btn btn-ghost btn-sm" onclick="editSvc('${s.id}')">Edit</button></td>
   </tr>`).join("")}</tbody></table></div>`);
 }
 
@@ -858,7 +898,7 @@ window.editSvc=function(id){
   document.getElementById("svcName").value=s.name||"";
   document.getElementById("svcCategory").value=s.category||"";
   document.getElementById("svcDesc").value=s.description||"";
-  document.getElementById("svcStatus").value=s.status||"inactive";
+  document.getElementById("svcStatus").value=s.status||"draft";
   document.getElementById("svcIcon").value=s.icon||"";
   document.getElementById("svcPrice").value=s.pricing?.amount||"";
   document.getElementById("svcInterval").value=s.pricing?.interval||"month";
@@ -875,9 +915,87 @@ window.editSvc=function(id){
   openModal("svcModal");
 };
 
-window.toggleSvc=async function(id,status){
-  try{ await updateDoc(doc(db,"services",id),{status:status==="active"?"inactive":"active",updatedAt:serverTimestamp()}); toast("Updated","Service status changed.","success"); loadServices(); }
-  catch(e){ toast("Error",e.message,"error"); }
+window.advanceSvcStatus=async function(id, newStatus){
+  const labels={draft:"Draft (hidden from users)",testing:"Testing (hidden, you can fire test runs)",active:"Live — visible to all users"};
+  if(!confirm(`Move service to: ${labels[newStatus]}?`)) return;
+  try{
+    await updateDoc(doc(db,"services",id),{
+      status: newStatus,
+      active: newStatus==="active",
+      updatedAt: serverTimestamp()
+    });
+    toast("Updated", `Service is now ${newStatus}.`, "success");
+    loadServices();
+  }catch(e){ toast("Error",e.message,"error"); }
+};
+
+window.openTestRun=function(id){
+  const s=allSvcs.find(x=>x.id===id); if(!s)return;
+  document.getElementById("testRunSvcId").value=id;
+  document.getElementById("testRunSvcName").textContent=s.name||id;
+  document.getElementById("testRunExtraParams").value="";
+  document.getElementById("testRunResultWrap").style.display="none";
+  document.getElementById("testRunResult").innerHTML="";
+  // Build param fields
+  const fields=s.parametersSchema||[];
+  document.getElementById("testRunParamFields").innerHTML=fields.length
+    ?fields.map(f=>`<div class="form-group">
+        <label class="form-label">${esc(f.label||f.key)}${f.required?' <span style="color:var(--danger)">*</span>':""}</label>
+        <input type="text" class="form-control" id="trp_${esc(f.key)}" placeholder="${esc(f.placeholder||"")}" data-key="${esc(f.key)}">
+        ${f.help?`<div class="form-hint">${esc(f.help)}</div>`:""}
+      </div>`).join("")
+    :`<p style="font-size:.8125rem;color:var(--text-muted);margin-bottom:.75rem">No parameter fields defined for this service. Use the extra JSON field below if needed.</p>`;
+  openModal("testRunModal");
+};
+
+window.fireTestRun=async function(){
+  const serviceId=document.getElementById("testRunSvcId").value;
+  const s=allSvcs.find(x=>x.id===serviceId); if(!s)return;
+  const btn=document.getElementById("btnFireTest");
+  btn.disabled=true; btn.textContent="Firing…";
+
+  // Collect named param inputs
+  const parameters={};
+  document.querySelectorAll("#testRunParamFields input[data-key]").forEach(inp=>{
+    if(inp.value.trim()) parameters[inp.dataset.key]=inp.value.trim();
+  });
+  // Merge extra JSON
+  const extra=document.getElementById("testRunExtraParams").value.trim();
+  if(extra){
+    try{ Object.assign(parameters,JSON.parse(extra)); }
+    catch{ toast("Invalid JSON","Fix the extra parameters field.","error"); btn.disabled=false; btn.textContent="▶ Fire Test"; return; }
+  }
+
+  try{
+    const webhookUrl=s.n8n?.webhookUrl;
+    const crypto=Math.random().toString(36).slice(2);
+    const runId="test_"+crypto+Date.now().toString(36);
+
+    const r=await fetch(webhookUrl,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({runId, serviceId, serviceName:s.name, parameters, isTestRun:true}),
+    });
+    const text=await r.text();
+    let display; try{ display=JSON.stringify(JSON.parse(text),null,2); }catch{ display=text; }
+
+    const wrap=document.getElementById("testRunResultWrap");
+    const res=document.getElementById("testRunResult");
+    wrap.style.display="block";
+    if(r.ok){
+      res.innerHTML=`<div style="padding:.625rem;background:var(--success-pale);border-radius:var(--r);margin-bottom:.5rem;color:var(--success);font-weight:600">✅ Webhook responded ${r.status}</div><pre style="background:var(--bg);border-radius:var(--r);padding:.75rem;font-size:.75rem;overflow-x:auto;white-space:pre-wrap;max-height:200px">${esc(display||"(empty)")}</pre>`;
+      toast("Test sent!","Webhook fired successfully.","success");
+    }else{
+      res.innerHTML=`<div style="padding:.625rem;background:var(--danger-pale);border-radius:var(--r);margin-bottom:.5rem;color:var(--danger);font-weight:600">❌ Webhook returned ${r.status}</div><pre style="background:var(--bg);border-radius:var(--r);padding:.75rem;font-size:.75rem;overflow-x:auto;white-space:pre-wrap;max-height:200px">${esc(display||"(empty)")}</pre>`;
+    }
+  }catch(e){
+    const wrap=document.getElementById("testRunResultWrap");
+    wrap.style.display="block";
+    document.getElementById("testRunResult").innerHTML=`<div style="padding:.625rem;background:var(--danger-pale);border-radius:var(--r);color:var(--danger);font-weight:600">❌ ${esc(e.message)}</div>`;
+    toast("Failed",e.message,"error");
+  }finally{
+    btn.disabled=false; btn.textContent="▶ Fire Test";
+  }
 };
 
 document.getElementById("btnNewSvc").addEventListener("click",()=>{
