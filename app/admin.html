@@ -65,6 +65,22 @@
     .run-status-dot.queued{background:var(--warning)}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
     .form-label{display:block;font-size:.8125rem;font-weight:600;margin-bottom:.3rem;color:var(--text-mid)}
+    /* Pipeline board */
+    .pipeline-col{display:flex;flex-direction:column;gap:.625rem;min-height:80px}
+    .svc-pipe-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:.75rem;transition:var(--tr)}
+    .svc-pipe-card:hover{border-color:var(--brand-light);box-shadow:0 2px 8px rgba(0,0,0,.07)}
+    .svc-pipe-name{font-weight:700;font-size:.875rem;margin-bottom:.2rem}
+    .svc-pipe-desc{font-size:.75rem;color:var(--text-muted);margin-bottom:.625rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .svc-pipe-actions{display:flex;gap:.375rem;flex-wrap:wrap}
+    .pipe-empty{color:var(--text-faint);font-size:.8rem;text-align:center;padding:1.25rem .5rem;border:1.5px dashed var(--border);border-radius:var(--r-sm)}
+    /* Service modal */
+    .svc-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;padding:1rem}
+    .svc-modal-overlay.open{display:flex}
+    .svc-modal-box{background:var(--surface);border-radius:var(--r);max-width:560px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+    .svc-modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1}
+    .svc-modal-body{padding:1.25rem;display:flex;flex-direction:column;gap:.875rem}
+    .svc-modal-footer{padding:.875rem 1.25rem;border-top:1px solid var(--border);display:flex;gap:.5rem;justify-content:flex-end;position:sticky;bottom:0;background:var(--surface)}
+    @media(max-width:860px){#pipelineGrid{grid-template-columns:1fr 1fr}}
   </style>
 </head>
 <body style="visibility:hidden">
@@ -134,45 +150,61 @@
       </div>
     </div>
 
-    <!-- Testing tab -->
+    <!-- Services tab -->
     <div class="tab-panel" id="tab-services">
-      <!-- Quick test: paste a webhook URL directly -->
-      <div class="card" style="margin-bottom:1.25rem">
-        <div class="card-header">
-          <div class="card-title">🧪 Quick Webhook Test</div>
-          <div class="card-subtitle">Paste any n8n webhook URL and fire a test run directly — no service setup needed</div>
+
+      <!-- Header row -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem">
+        <div>
+          <div style="font-weight:700;font-size:1rem">Service Pipeline</div>
+          <div style="font-size:.8125rem;color:var(--text-muted)">Create services and move them through the pipeline before users can see them</div>
         </div>
-        <div class="card-body" style="display:flex;flex-direction:column;gap:.875rem">
-          <div>
-            <label class="form-label">Webhook URL *</label>
-            <input type="url" id="qt-webhook" class="form-control" placeholder="https://your-n8n.com/webhook/...">
-          </div>
-          <div>
-            <label class="form-label">Parameters <span style="font-weight:400;color:var(--text-muted)">(JSON)</span></label>
-            <textarea id="qt-params" class="form-control" rows="4" placeholder='{"email":"test@example.com","name":"Test User"}' style="resize:vertical;font-family:monospace;font-size:.8125rem"></textarea>
-          </div>
-          <div style="display:flex;gap:.75rem;align-items:center">
-            <button class="btn btn-primary" id="btnQuickTest" onclick="runQuickTest()">▶ Run Test</button>
-            <span id="qt-status" style="font-size:.8rem;color:var(--text-muted)"></span>
-          </div>
-          <div id="qt-result"></div>
+        <div style="display:flex;gap:.5rem">
+          <button class="btn btn-ghost btn-sm" id="btnRefreshServices">↺ Refresh</button>
+          <button class="btn btn-primary btn-sm" onclick="openSvcModal()">+ New Service</button>
         </div>
       </div>
 
-      <!-- Per-service test runs (shows if services exist) -->
-      <div class="card">
-        <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
-          <div>
-            <div class="card-title">⚙️ Service Lifecycle</div>
-            <div class="card-subtitle">Manage status and run tests per service — draft → testing → live</div>
+      <!-- Pipeline columns -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;align-items:start" id="pipelineGrid">
+        <!-- Draft -->
+        <div>
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;padding:.5rem .75rem;background:#f1f3f6;border-radius:var(--r-sm)">
+            <span style="font-size:.8rem">📝</span>
+            <span style="font-weight:700;font-size:.8125rem;color:var(--text-mid)">DRAFT</span>
+            <span class="pipeline-count" id="count-draft" style="margin-left:auto;background:#e2e8f0;color:var(--text-muted);font-size:.7rem;font-weight:700;padding:.1rem .45rem;border-radius:99px">0</span>
           </div>
-          <button class="btn btn-ghost btn-sm" id="btnRefreshServices">↺ Refresh</button>
+          <div class="pipeline-col" id="col-draft"></div>
         </div>
-        <div class="card-body" style="padding:0">
-          <div id="servicesLoading" style="color:var(--text-muted);font-size:.875rem;padding:1.5rem 1rem">Loading services…</div>
-          <div id="servicesList" style="padding:.75rem"></div>
+        <!-- Testing -->
+        <div>
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;padding:.5rem .75rem;background:var(--warning-pale);border-radius:var(--r-sm)">
+            <span style="font-size:.8rem">🧪</span>
+            <span style="font-weight:700;font-size:.8125rem;color:var(--warning)">TESTING</span>
+            <span class="pipeline-count" id="count-testing" style="margin-left:auto;background:rgba(243,156,18,.2);color:var(--warning);font-size:.7rem;font-weight:700;padding:.1rem .45rem;border-radius:99px">0</span>
+          </div>
+          <div class="pipeline-col" id="col-testing"></div>
+        </div>
+        <!-- Ready -->
+        <div>
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;padding:.5rem .75rem;background:var(--info-pale);border-radius:var(--r-sm)">
+            <span style="font-size:.8rem">🚀</span>
+            <span style="font-weight:700;font-size:.8125rem;color:var(--info)">READY</span>
+            <span class="pipeline-count" id="count-ready" style="margin-left:auto;background:rgba(21,101,192,.15);color:var(--info);font-size:.7rem;font-weight:700;padding:.1rem .45rem;border-radius:99px">0</span>
+          </div>
+          <div class="pipeline-col" id="col-ready"></div>
+        </div>
+        <!-- Published -->
+        <div>
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;padding:.5rem .75rem;background:var(--success-pale);border-radius:var(--r-sm)">
+            <span style="font-size:.8rem">✅</span>
+            <span style="font-weight:700;font-size:.8125rem;color:var(--success)">PUBLISHED</span>
+            <span class="pipeline-count" id="count-active" style="margin-left:auto;background:rgba(15,157,88,.15);color:var(--success);font-size:.7rem;font-weight:700;padding:.1rem .45rem;border-radius:99px">0</span>
+          </div>
+          <div class="pipeline-col" id="col-active"></div>
         </div>
       </div>
+      <div id="servicesLoading" style="display:none;color:var(--text-muted);font-size:.875rem;padding:1rem;text-align:center">Loading services…</div>
     </div>
 
     <!-- Action log tab -->
@@ -187,13 +219,77 @@
   </main>
 </div>
 
+<!-- Service create/edit modal -->
+<div class="svc-modal-overlay" id="svcModal">
+  <div class="svc-modal-box">
+    <div class="svc-modal-hdr">
+      <span id="svcModalTitle" style="font-weight:700;font-size:1rem">New Service</span>
+      <button onclick="closeSvcModal()" style="background:none;border:none;font-size:1.25rem;cursor:pointer;color:var(--text-muted);line-height:1">✕</button>
+    </div>
+    <div class="svc-modal-body">
+      <input type="hidden" id="svcEditId">
+      <div style="display:grid;grid-template-columns:1fr 80px;gap:.75rem">
+        <div><label class="form-label">Service Name *</label><input type="text" id="svcName" class="form-control" placeholder="e.g. Lead Generation AI"></div>
+        <div><label class="form-label">Icon</label><input type="text" id="svcIcon" class="form-control" placeholder="🤖" maxlength="4" style="text-align:center;font-size:1.25rem"></div>
+      </div>
+      <div><label class="form-label">Short Description</label><input type="text" id="svcShortDesc" class="form-control" placeholder="One-line summary shown to users"></div>
+      <div><label class="form-label">Full Description</label><textarea id="svcDesc" class="form-control" rows="3" style="resize:vertical"></textarea></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div><label class="form-label">Price (USD)</label><input type="number" id="svcPrice" class="form-control" placeholder="99" min="0"></div>
+        <div><label class="form-label">Billing</label>
+          <select id="svcInterval" class="form-control"><option value="month">Monthly</option><option value="year">Yearly</option><option value="once">One-time</option></select>
+        </div>
+      </div>
+      <div><label class="form-label">n8n Webhook URL</label><input type="url" id="svcWebhook" class="form-control" placeholder="https://your-n8n.com/webhook/..."></div>
+      <div><label class="form-label">Stage / Status</label>
+        <select id="svcStatus" class="form-control">
+          <option value="draft">📝 Draft — still being worked on, hidden from users</option>
+          <option value="testing">🧪 Testing — ready to test, hidden from users</option>
+          <option value="ready">🚀 Ready — tested and approved, awaiting publish</option>
+          <option value="active">✅ Published — live and visible to users</option>
+        </select>
+      </div>
+      <div><label class="form-label">Features <span style="font-weight:400;color:var(--text-muted);font-size:.75rem">(one per line, shown on services page)</span></label>
+        <textarea id="svcFeatures" class="form-control" rows="4" placeholder="Automated lead capture&#10;CRM integration&#10;Daily email reports" style="resize:vertical"></textarea>
+      </div>
+    </div>
+    <div class="svc-modal-footer">
+      <button id="btnDeleteSvc" class="btn btn-ghost btn-sm" style="margin-right:auto;color:var(--danger);display:none" onclick="deleteSvc()">🗑 Delete</button>
+      <button onclick="closeSvcModal()" class="btn btn-ghost">Cancel</button>
+      <button id="btnSaveSvc" class="btn btn-primary" onclick="saveSvc()">Save Service</button>
+    </div>
+  </div>
+</div>
+
+<!-- Test run modal -->
+<div class="svc-modal-overlay" id="testModal">
+  <div class="svc-modal-box" style="max-width:480px">
+    <div class="svc-modal-hdr">
+      <span style="font-weight:700;font-size:1rem">🧪 Test Run — <span id="testModalName"></span></span>
+      <button onclick="closeTestModal()" style="background:none;border:none;font-size:1.25rem;cursor:pointer;color:var(--text-muted)">✕</button>
+    </div>
+    <div class="svc-modal-body">
+      <div style="background:var(--info-pale);border-radius:var(--r-sm);padding:.625rem .875rem;font-size:.8125rem;color:var(--info)">Fires the n8n webhook with <code>isTestRun: true</code>. Results are saved to Firestore under <code>testRuns</code>.</div>
+      <div id="testModalParams"></div>
+      <div><label class="form-label">Extra Parameters <span style="font-weight:400;color:var(--text-muted)">(JSON, optional)</span></label>
+        <textarea id="testExtraParams" class="form-control" rows="3" placeholder='{"key":"value"}' style="font-family:monospace;font-size:.8125rem;resize:vertical"></textarea>
+      </div>
+      <div id="testRunOutput" style="display:none"></div>
+    </div>
+    <div class="svc-modal-footer">
+      <button onclick="closeTestModal()" class="btn btn-ghost">Close</button>
+      <button id="btnFireTest" class="btn btn-primary" onclick="fireTest()">▶ Fire Test</button>
+    </div>
+  </div>
+</div>
+
 <div id="toastRoot"></div>
 
 <script type="module">
 import { auth, db } from "./firebase.js";
 import { requireAuth, showToast, avatarColor } from "./portal-layout.js";
 import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-import { collection, getDocs, query, orderBy, limit, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+import { collection, getDocs, query, orderBy, limit, doc, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 /* ── Admin guard ────────────────────────────────────────────── */
 async function requireAdminAccess() {
@@ -367,208 +463,201 @@ window.revokeAccess = async function(uid, userServiceId) {
   }
 };
 
-/* ── Services lifecycle ─────────────────────────────────────── */
+/* ── Services pipeline ──────────────────────────────────────── */
 let adminServices = [];
+let editingSvcId  = null;
 
 async function loadAdminServices() {
   document.getElementById("servicesLoading").style.display = "block";
-  document.getElementById("servicesLoading").textContent = "Loading services…";
   try {
     const resp = await fetch("/api/admin/list-services", { headers: { Authorization: `Bearer ${idToken}` } });
     const json = await resp.json();
     if (!resp.ok) throw new Error(json.error);
     adminServices = json.services;
-    document.getElementById("servicesLoading").style.display = "none";
-    renderAdminServices();
+    renderPipeline();
   } catch (e) {
-    document.getElementById("servicesLoading").textContent = "Failed: " + e.message;
+    showToast({ title:"Failed to load services", message:e.message, type:"error" });
+  } finally {
+    document.getElementById("servicesLoading").style.display = "none";
   }
 }
 
-function svcStatusBadge(status) {
-  const labels = { draft: "📝 Draft", testing: "🧪 Testing", active: "✅ Live" };
-  return `<span class="svc-status-badge ${status}">${labels[status] || status}</span>`;
-}
+function renderPipeline() {
+  const cols   = { draft:[], testing:[], ready:[], active:[] };
+  adminServices.forEach(s => {
+    const st = s.status || "draft";
+    if (cols[st]) cols[st].push(s); else cols.draft.push(s);
+  });
 
-function lifecycleSteps(current) {
-  const steps = ["draft", "testing", "active"];
-  const labels = { draft: "📝 Draft", testing: "🧪 Testing", active: "✅ Live" };
-  const idx = steps.indexOf(current);
-  return steps.map((s, i) => {
-    const cls = i < idx ? "done" : i === idx ? "current" : "future";
-    return `<span class="lifecycle-step ${cls}">${labels[s]}</span>${i < steps.length - 1 ? '<span class="lifecycle-arrow">→</span>' : ""}`;
-  }).join("");
-}
-
-function svcActionButtons(svc) {
-  const s = svc.status || "draft";
-  const btns = [];
-  if (s === "draft")    btns.push(`<button class="btn btn-sm" style="background:var(--info);color:#fff" onclick="setServiceStatus('${svc.id}','testing')">Move to Testing →</button>`);
-  if (s === "testing")  btns.push(`<button class="btn btn-primary btn-sm" onclick="setServiceStatus('${svc.id}','active')">✅ Publish</button>`);
-  if (s === "active")   btns.push(`<button class="btn btn-ghost btn-sm" style="color:var(--text-muted)" onclick="setServiceStatus('${svc.id}','draft')">Unpublish</button>`);
-  if (s === "draft")    btns.push(`<button class="btn btn-ghost btn-sm" style="color:var(--text-muted)" onclick="setServiceStatus('${svc.id}','draft')" disabled>Already Draft</button>`);
-  return btns.join("");
-}
-
-function buildParamFields(svcId, svc) {
-  const fields = svc.parameterSchema || [];
-  if (!fields.length) return `<p style="font-size:.8rem;color:var(--text-muted);margin:0">No parameters defined for this service.</p>`;
-  return fields.map(f => `
-    <div class="param-row">
-      <label for="param-${svcId}-${f.key}">${f.label || f.key}${f.required ? " *" : ""}</label>
-      <input type="text" id="param-${svcId}-${f.key}" placeholder="${f.placeholder || ""}" data-key="${f.key}">
-    </div>`).join("");
-}
-
-function renderAdminServices() {
-  const el = document.getElementById("servicesList");
-  if (!adminServices.length) {
-    el.innerHTML = `<div style="text-align:center;padding:2.5rem 1rem;color:var(--text-muted)">
-      <div style="font-size:2.5rem;margin-bottom:.75rem">📭</div>
-      <div style="font-weight:600;color:var(--text);margin-bottom:.375rem">No services found</div>
-      <div style="font-size:.875rem">Add a service to your Firestore <code>services</code> collection and it will appear here with the full lifecycle pipeline.</div>
-    </div>`;
-    return;
-  }
-  el.innerHTML = adminServices.map(svc => `
-    <div class="svc-card" id="svc-card-${svc.id}">
-      <div class="svc-card-head" onclick="toggleSvcCard('${svc.id}')">
-        <div class="svc-icon">${svc.icon || "⚙️"}</div>
-        <div class="svc-info">
-          <div class="svc-name">${svc.name || svc.id}</div>
-          <div class="svc-desc">${svc.shortDescription || svc.description || "No description"}</div>
+  ["draft","testing","ready","active"].forEach(st => {
+    document.getElementById(`count-${st}`).textContent = cols[st].length;
+    const col = document.getElementById(`col-${st}`);
+    if (!cols[st].length) {
+      col.innerHTML = `<div class="pipe-empty">No services here</div>`;
+      return;
+    }
+    col.innerHTML = cols[st].map(s => {
+      const hasWebhook = !!s.n8n?.webhookUrl;
+      const nextBtns = {
+        draft:   `<button class="btn btn-ghost btn-sm" style="font-size:.72rem;border-color:var(--warning);color:var(--warning)" onclick="moveSvc('${s.id}','testing')">→ Testing</button>`,
+        testing: `<button class="btn btn-ghost btn-sm" style="font-size:.72rem;border-color:var(--info);color:var(--info)" onclick="moveSvc('${s.id}','ready')">→ Ready</button>`,
+        ready:   `<button class="btn btn-primary btn-sm" style="font-size:.72rem" onclick="moveSvc('${s.id}','active')">✅ Publish</button>`,
+        active:  `<button class="btn btn-ghost btn-sm" style="font-size:.72rem;color:var(--danger)" onclick="moveSvc('${s.id}','draft')">Unpublish</button>`,
+      }[st] || "";
+      const testBtn = hasWebhook && (st==="testing"||st==="ready"||st==="active")
+        ? `<button class="btn btn-ghost btn-sm" style="font-size:.72rem" onclick="openTestModal('${s.id}')">🧪 Test</button>`
+        : "";
+      return `<div class="svc-pipe-card">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.375rem">
+          <span style="font-size:1.25rem">${s.icon||"⚙️"}</span>
+          <span class="svc-pipe-name" style="flex:1">${esc(s.name||s.id)}</span>
         </div>
-        ${svcStatusBadge(svc.status || "draft")}
-        <span style="color:var(--text-faint);font-size:.75rem;margin-left:.25rem">▼</span>
-      </div>
-      <div class="svc-body" id="svc-body-${svc.id}">
-        <div class="svc-lifecycle">${lifecycleSteps(svc.status || "draft")}</div>
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem">${svcActionButtons(svc)}</div>
-
-        ${svc.n8n?.webhookUrl ? `
-        <div class="test-run-form">
-          <h4>🧪 Test Run</h4>
-          <div id="params-${svc.id}">${buildParamFields(svc.id, svc)}</div>
-          <div style="margin-top:.625rem;display:flex;gap:.5rem;align-items:center">
-            <button class="btn btn-sm" style="background:var(--info);color:#fff" id="btn-testrun-${svc.id}" onclick="runTest('${svc.id}')">▶ Run Test</button>
-            <span id="testrun-status-${svc.id}" style="font-size:.8rem;color:var(--text-muted)"></span>
-          </div>
-          <div id="testrun-result-${svc.id}"></div>
-        </div>` : `<p style="font-size:.8rem;color:var(--warning);margin:0 0 .75rem">⚠️ No webhook URL configured — set <code>n8n.webhookUrl</code> on this service to enable test runs.</p>`}
-
-        <div style="font-size:.75rem;color:var(--text-faint)">Service ID: <code>${svc.id}</code></div>
-      </div>
-    </div>`).join("");
+        <div class="svc-pipe-desc">${esc(s.shortDescription||s.description||"")}</div>
+        ${!hasWebhook?`<div style="font-size:.7rem;color:var(--danger);margin-bottom:.5rem">⚠️ No webhook URL</div>`:""}
+        <div class="svc-pipe-actions">
+          ${nextBtns}${testBtn}
+          <button class="btn btn-ghost btn-sm" style="font-size:.72rem" onclick="openSvcModal('${s.id}')">Edit</button>
+        </div>
+      </div>`;
+    }).join("");
+  });
 }
 
-window.toggleSvcCard = function(id) {
-  const body = document.getElementById(`svc-body-${id}`);
-  body?.classList.toggle("open");
-};
-
-window.setServiceStatus = async function(serviceId, status) {
-  const card = document.getElementById(`svc-card-${serviceId}`);
-  const label = { draft:"draft", testing:"testing", active:"active" }[status];
-  if (status === "active" && !confirm(`Publish this service? It will become visible to users.`)) return;
-  if (status === "draft"  && !confirm(`Unpublish this service? It will be hidden from users.`)) return;
+window.moveSvc = async function(serviceId, status) {
+  const labels = { draft:"Draft", testing:"Testing", ready:"Ready to Publish", active:"Published" };
+  if (status === "active" && !confirm("Publish this service? It will become visible to all users.")) return;
+  if (status === "draft"  && !confirm("Unpublish? This will hide the service from users.")) return;
   try {
     const resp = await fetch("/api/admin/set-service-status", {
-      method: "POST",
-      headers: { "Content-Type":"application/json", Authorization:`Bearer ${idToken}` },
+      method:"POST",
+      headers:{ "Content-Type":"application/json", Authorization:`Bearer ${idToken}` },
       body: JSON.stringify({ serviceId, status }),
     });
     const json = await resp.json();
     if (!resp.ok) throw new Error(json.error);
-    showToast({ title:`Service moved to ${label}`, type:"success" });
+    showToast({ title:`Moved to ${labels[status]}`, type:"success" });
     await loadAdminServices();
-  } catch (e) {
-    showToast({ title:"Failed", message:e.message, type:"error" });
-  }
+  } catch(e) { showToast({ title:"Failed", message:e.message, type:"error" }); }
 };
 
-window.runTest = async function(serviceId) {
-  const btn = document.getElementById(`btn-testrun-${serviceId}`);
-  const statusEl = document.getElementById(`testrun-status-${serviceId}`);
-  const resultEl = document.getElementById(`testrun-result-${serviceId}`);
+/* ── Service create / edit modal ────────────────────────────── */
+window.openSvcModal = function(id) {
+  editingSvcId = id || null;
+  const svc = id ? adminServices.find(s=>s.id===id) : null;
+  document.getElementById("svcModalTitle").textContent = svc ? "Edit Service" : "New Service";
+  document.getElementById("svcEditId").value = id || "";
+  document.getElementById("svcName").value        = svc?.name || "";
+  document.getElementById("svcIcon").value        = svc?.icon || "";
+  document.getElementById("svcShortDesc").value   = svc?.shortDescription || "";
+  document.getElementById("svcDesc").value        = svc?.description || "";
+  document.getElementById("svcPrice").value       = svc?.pricing?.amount || "";
+  document.getElementById("svcInterval").value    = svc?.pricing?.interval || "month";
+  document.getElementById("svcWebhook").value     = svc?.n8n?.webhookUrl || "";
+  document.getElementById("svcStatus").value      = svc?.status || "draft";
+  document.getElementById("svcFeatures").value    = Array.isArray(svc?.features) ? svc.features.join("\n") : "";
+  document.getElementById("btnDeleteSvc").style.display = svc ? "inline-flex" : "none";
+  document.getElementById("svcModal").classList.add("open");
+};
 
-  // Collect parameters from inputs
+window.closeSvcModal = function() { document.getElementById("svcModal").classList.remove("open"); };
+
+window.saveSvc = async function() {
+  const name = document.getElementById("svcName").value.trim();
+  if (!name) { showToast({ title:"Service name is required", type:"warning" }); return; }
+  const btn = document.getElementById("btnSaveSvc");
+  btn.disabled = true; btn.textContent = "Saving…";
+  const payload = {
+    name,
+    icon:             document.getElementById("svcIcon").value.trim() || "⚙️",
+    shortDescription: document.getElementById("svcShortDesc").value.trim(),
+    description:      document.getElementById("svcDesc").value.trim(),
+    status:           document.getElementById("svcStatus").value,
+    active:           document.getElementById("svcStatus").value === "active",
+    features:         document.getElementById("svcFeatures").value.split("\n").map(s=>s.trim()).filter(Boolean),
+    pricing: {
+      amount:   Number(document.getElementById("svcPrice").value) || 0,
+      interval: document.getElementById("svcInterval").value,
+      currency: "USD",
+    },
+    n8n: { webhookUrl: document.getElementById("svcWebhook").value.trim() },
+    updatedAt: serverTimestamp(),
+  };
+  try {
+    const id = document.getElementById("svcEditId").value;
+    if (id) {
+      await updateDoc(doc(db, "services",id), payload);
+    } else {
+      payload.createdAt = serverTimestamp();
+      await addDoc(collection(db, "services"), payload);
+    }
+    closeSvcModal();
+    showToast({ title: id ? "Service updated" : "Service created", type:"success" });
+    await loadAdminServices();
+  } catch(e) { showToast({ title:"Failed", message:e.message, type:"error" }); }
+  finally { btn.disabled = false; btn.textContent = "Save Service"; }
+};
+
+window.deleteSvc = async function() {
+  const id = document.getElementById("svcEditId").value;
+  if (!id || !confirm("Delete this service? This cannot be undone.")) return;
+  try {
+    await updateDoc(doc(db, "services",id), { deleted:true, active:false, status:"draft", updatedAt:serverTimestamp() });
+    closeSvcModal();
+    showToast({ title:"Service deleted", type:"success" });
+    await loadAdminServices();
+  } catch(e) { showToast({ title:"Failed", message:e.message, type:"error" }); }
+};
+
+/* ── Test run modal ─────────────────────────────────────────── */
+let _testSvcId = null;
+window.openTestModal = function(id) {
+  const svc = adminServices.find(s=>s.id===id); if(!svc) return;
+  _testSvcId = id;
+  document.getElementById("testModalName").textContent = svc.name || id;
+  document.getElementById("testExtraParams").value = "";
+  document.getElementById("testRunOutput").style.display = "none";
+  document.getElementById("testRunOutput").innerHTML = "";
+  const fields = svc.parametersSchema || svc.parameterSchema || [];
+  document.getElementById("testModalParams").innerHTML = fields.length
+    ? fields.map(f=>`<div style="margin-bottom:.625rem">
+        <label class="form-label">${esc(f.label||f.key)}${f.required?' <span style="color:var(--danger)">*</span>':""}</label>
+        <input type="text" class="form-control" data-key="${esc(f.key)}" placeholder="${esc(f.placeholder||"")}">
+      </div>`).join("")
+    : `<p style="font-size:.8rem;color:var(--text-muted);margin:0 0 .5rem">No parameter fields defined. Use extra parameters below if needed.</p>`;
+  document.getElementById("testModal").classList.add("open");
+};
+window.closeTestModal = function() { document.getElementById("testModal").classList.remove("open"); };
+
+window.fireTest = async function() {
+  const svc = adminServices.find(s=>s.id===_testSvcId); if(!svc) return;
+  const btn = document.getElementById("btnFireTest");
+  btn.disabled = true; btn.textContent = "Firing…";
   const parameters = {};
-  document.querySelectorAll(`#params-${serviceId} input[data-key]`).forEach(inp => {
+  document.querySelectorAll("#testModalParams input[data-key]").forEach(inp => {
     if (inp.value.trim()) parameters[inp.dataset.key] = inp.value.trim();
   });
-
-  btn.disabled = true; btn.textContent = "Running…";
-  statusEl.innerHTML = `<span class="run-status-dot running"></span>Sending to n8n…`;
-  resultEl.innerHTML = "";
-
+  const extra = document.getElementById("testExtraParams").value.trim();
+  if (extra) { try { Object.assign(parameters, JSON.parse(extra)); } catch { showToast({ title:"Invalid JSON", type:"error" }); btn.disabled=false; btn.textContent="▶ Fire Test"; return; } }
+  const out = document.getElementById("testRunOutput");
   try {
     const resp = await fetch("/api/admin/test-run", {
-      method: "POST",
-      headers: { "Content-Type":"application/json", Authorization:`Bearer ${idToken}` },
-      body: JSON.stringify({ serviceId, parameters }),
+      method:"POST",
+      headers:{ "Content-Type":"application/json", Authorization:`Bearer ${idToken}` },
+      body: JSON.stringify({ serviceId:_testSvcId, parameters }),
     });
     const json = await resp.json();
     if (!resp.ok) throw new Error(json.error);
-
-    const dotCls = json.status === "running" ? "running" : json.status === "failed" ? "failed" : "queued";
-    statusEl.innerHTML = `<span class="run-status-dot ${dotCls}"></span>${json.status === "running" ? "Sent — workflow is running" : "n8n returned an error"}`;
-    resultEl.innerHTML = `<div class="test-run-result">
-      <strong>Run ID:</strong> <code>${json.runId}</code><br>
-      <strong>Status:</strong> ${json.status}
-      ${json.error ? `<br><strong style="color:var(--danger)">Error:</strong> ${json.error}` : ""}
-      <br><span style="font-size:.75rem;color:var(--text-faint)">Check <code>testRuns/${json.runId}</code> in Firestore for live updates.</span>
+    out.style.display = "block";
+    out.innerHTML = `<div style="padding:.625rem;background:${json.status==="running"?"var(--success-pale)":"var(--danger-pale)"};border-radius:var(--r-sm);font-size:.8125rem">
+      <strong>${json.status==="running"?"✅ Sent!":"❌ Failed"}</strong> Run ID: <code>${json.runId}</code><br>
+      Status: <strong>${json.status}</strong>${json.error?` — ${esc(json.error)}`:""}
     </div>`;
-  } catch (e) {
-    statusEl.innerHTML = `<span class="run-status-dot failed"></span>${e.message}`;
-    showToast({ title:"Test run failed", message:e.message, type:"error" });
-  } finally {
-    btn.disabled = false; btn.textContent = "▶ Run Test";
-  }
-};
-
-/* ── Quick webhook test ─────────────────────────────────────── */
-window.runQuickTest = async function() {
-  const webhookUrl = document.getElementById("qt-webhook")?.value.trim();
-  const paramsRaw  = document.getElementById("qt-params")?.value.trim();
-  const statusEl   = document.getElementById("qt-status");
-  const resultEl   = document.getElementById("qt-result");
-  const btn        = document.getElementById("btnQuickTest");
-
-  if (!webhookUrl) { showToast({ title:"Enter a webhook URL", type:"warning" }); return; }
-
-  let parameters = {};
-  if (paramsRaw) {
-    try { parameters = JSON.parse(paramsRaw); }
-    catch { showToast({ title:"Invalid JSON in parameters", type:"error" }); return; }
-  }
-
-  btn.disabled = true; btn.textContent = "Running…";
-  statusEl.innerHTML = `<span class="run-status-dot running"></span>Sending…`;
-  resultEl.innerHTML = "";
-
-  try {
-    const resp = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-gts-secret": "" },
-      body: JSON.stringify({ ...parameters, isTestRun: true, source: "admin-quick-test" }),
-    });
-    const text = await resp.text();
-    let display;
-    try { display = JSON.stringify(JSON.parse(text), null, 2); } catch { display = text; }
-
-    if (resp.ok) {
-      statusEl.innerHTML = `<span class="run-status-dot success"></span>Webhook responded ${resp.status}`;
-      resultEl.innerHTML = `<div class="test-run-result"><strong>Response (${resp.status}):</strong><pre>${display || "(empty)"}</pre></div>`;
-    } else {
-      statusEl.innerHTML = `<span class="run-status-dot failed"></span>Webhook returned ${resp.status}`;
-      resultEl.innerHTML = `<div class="test-run-result" style="border-color:var(--danger)"><strong style="color:var(--danger)">Error ${resp.status}:</strong><pre>${display || "(empty)"}</pre></div>`;
-    }
-  } catch (e) {
-    statusEl.innerHTML = `<span class="run-status-dot failed"></span>${e.message}`;
-    resultEl.innerHTML = `<div class="test-run-result" style="border-color:var(--danger)"><strong style="color:var(--danger)">Failed to reach webhook:</strong><pre>${e.message}</pre></div>`;
-  } finally {
-    btn.disabled = false; btn.textContent = "▶ Run Test";
-  }
+    showToast({ title:"Test fired!", type:"success" });
+  } catch(e) {
+    out.style.display="block";
+    out.innerHTML=`<div style="padding:.625rem;background:var(--danger-pale);border-radius:var(--r-sm);font-size:.8125rem;color:var(--danger)">❌ ${esc(e.message)}</div>`;
+    showToast({ title:"Test failed", message:e.message, type:"error" });
+  } finally { btn.disabled=false; btn.textContent="▶ Fire Test"; }
 };
 
 document.getElementById("btnRefreshServices")?.addEventListener("click", loadAdminServices);
