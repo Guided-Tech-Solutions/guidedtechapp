@@ -1121,6 +1121,11 @@ document.getElementById("btnClearSvc")?.addEventListener("click",clearSvcForm);
 
 window.advanceSvcStatus=async function(id, newStatus){
   const labels={draft:"Draft",testing:"Testing",ready:"Ready to Publish",active:"Published — live for all users"};
+  // Validate required fields before allowing move out of draft
+  if(newStatus!=="draft"){
+    const s=allSvcs.find(x=>x.id===id);
+    if(!s?.n8n?.webhookUrl){ toast("Incomplete","Please add the n8n Webhook URL before moving to "+labels[newStatus]+".","warning"); return; }
+  }
   if(newStatus==="active"&&!confirm(`Publish this service? It will become visible to all users.`)) return;
   if(newStatus==="draft"&&!confirm(`This will hide the service from users. Continue?`)) return;
   try{
@@ -1203,9 +1208,10 @@ window.fireTestRun=async function(){
 document.getElementById("btnSaveSvc").addEventListener("click",async()=>{
   const name=document.getElementById("svcName").value.trim();
   const webhookUrl=document.getElementById("svcWebhook").value.trim();
-  if(!name){ toast("Missing","Service name is required.","warning"); return; }
-  if(!webhookUrl){ toast("Missing","n8n Webhook URL is required.","warning"); return; }
   const status=document.getElementById("svcStatus").value;
+  if(!name){ toast("Missing","Service name is required.","warning"); return; }
+  // Webhook and full details only required for stages beyond draft
+  if(status!=="draft"&&!webhookUrl){ toast("Missing","n8n Webhook URL is required before moving past Draft.","warning"); return; }
   const btn=document.getElementById("btnSaveSvc"); btn.disabled=true; btn.textContent="Saving...";
   const payload={
     name, description:document.getElementById("svcDesc").value.trim(),
