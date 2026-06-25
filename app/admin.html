@@ -65,22 +65,37 @@
     .run-status-dot.queued{background:var(--warning)}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
     .form-label{display:block;font-size:.8125rem;font-weight:600;margin-bottom:.3rem;color:var(--text-mid)}
-    /* Pipeline board */
-    .pipeline-col{display:flex;flex-direction:column;gap:.625rem;min-height:80px}
-    .svc-pipe-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:.75rem;transition:var(--tr)}
-    .svc-pipe-card:hover{border-color:var(--brand-light);box-shadow:0 2px 8px rgba(0,0,0,.07)}
-    .svc-pipe-name{font-weight:700;font-size:.875rem;margin-bottom:.2rem}
-    .svc-pipe-desc{font-size:.75rem;color:var(--text-muted);margin-bottom:.625rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .svc-pipe-actions{display:flex;gap:.375rem;flex-wrap:wrap}
-    .pipe-empty{color:var(--text-faint);font-size:.8rem;text-align:center;padding:1.25rem .5rem;border:1.5px dashed var(--border);border-radius:var(--r-sm)}
-    /* Service modal */
+    /* Service inner subtabs */
+    .svc-subtab-bar{display:flex;align-items:center;gap:.125rem;border-bottom:2px solid var(--border);margin-bottom:1.25rem;flex-wrap:wrap;padding-bottom:0}
+    .svc-subtab-btn{background:none;border:none;padding:.5rem .875rem;font-size:.8125rem;font-weight:600;color:var(--text-muted);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-2px;border-radius:var(--r-sm) var(--r-sm) 0 0;transition:var(--tr);white-space:nowrap}
+    .svc-subtab-btn:hover{color:var(--text);background:var(--hover)}
+    .svc-subtab-btn.active{color:var(--brand);border-bottom-color:var(--brand)}
+    .svc-stab-count{display:inline-block;background:var(--border);color:var(--text-muted);font-size:.65rem;font-weight:700;padding:.05rem .375rem;border-radius:99px;margin-left:.3rem;vertical-align:middle;transition:var(--tr)}
+    .svc-subtab-btn.active .svc-stab-count{background:var(--brand);color:#fff}
+    .svc-stage-panel{display:none}
+    .svc-stage-panel.active{display:block}
+    .svc-stage-hdr{display:flex;align-items:center;gap:1rem;padding:.625rem .875rem;border-radius:var(--r-sm);font-weight:700;font-size:.9375rem;margin-bottom:1.25rem;flex-wrap:wrap}
+    .svc-stage-note{font-weight:400;font-size:.8rem;opacity:.8}
+    .draft-hdr{background:#f1f3f6;color:var(--text-mid)}
+    .testing-hdr{background:var(--warning-pale);color:var(--warning)}
+    .ready-hdr{background:var(--info-pale);color:var(--info)}
+    .published-hdr{background:var(--success-pale);color:var(--success)}
+    .svc-stage-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+    .svc-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem;display:flex;flex-direction:column;transition:var(--tr)}
+    .svc-card:hover{border-color:var(--brand-light);box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .svc-card-icon{font-size:1.75rem;margin-bottom:.5rem}
+    .svc-card-name{font-weight:700;font-size:.9375rem;margin-bottom:.25rem}
+    .svc-card-desc{font-size:.8rem;color:var(--text-muted);margin-bottom:.5rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .svc-card-price{font-size:.8rem;font-weight:600;color:var(--text-mid);margin-bottom:.75rem}
+    .svc-card-actions{display:flex;gap:.375rem;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:.75rem;margin-top:auto}
+    .svc-empty{grid-column:1/-1;text-align:center;padding:2.5rem 1rem;color:var(--text-faint);border:1.5px dashed var(--border);border-radius:var(--r);font-size:.875rem}
+    /* Test modal */
     .svc-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;padding:1rem}
     .svc-modal-overlay.open{display:flex}
-    .svc-modal-box{background:var(--surface);border-radius:var(--r);max-width:560px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+    .svc-modal-box{background:var(--surface);border-radius:var(--r);max-width:480px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
     .svc-modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1}
     .svc-modal-body{padding:1.25rem;display:flex;flex-direction:column;gap:.875rem}
     .svc-modal-footer{padding:.875rem 1.25rem;border-top:1px solid var(--border);display:flex;gap:.5rem;justify-content:flex-end;position:sticky;bottom:0;background:var(--surface)}
-    @media(max-width:860px){#pipelineGrid{grid-template-columns:1fr 1fr}}
   </style>
 </head>
 <body style="visibility:hidden">
@@ -153,57 +168,108 @@
     <!-- Services tab -->
     <div class="tab-panel" id="tab-services">
 
-      <!-- Header row -->
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem">
-        <div>
-          <div style="font-weight:700;font-size:1rem">Service Pipeline</div>
-          <div style="font-size:.8125rem;color:var(--text-muted)">Create services and move them through the pipeline before users can see them</div>
-        </div>
-        <div style="display:flex;gap:.5rem">
-          <button class="btn btn-ghost btn-sm" id="btnRefreshServices">↺ Refresh</button>
-          <button class="btn btn-primary btn-sm" onclick="openSvcModal()">+ New Service</button>
+      <!-- Inner subtab nav -->
+      <div class="svc-subtab-bar">
+        <button class="svc-subtab-btn active" data-svctab="create" onclick="openSvcSubtab('create')">➕ New Service</button>
+        <button class="svc-subtab-btn" data-svctab="draft" onclick="openSvcSubtab('draft')">📝 Draft <span class="svc-stab-count" id="stab-count-draft">0</span></button>
+        <button class="svc-subtab-btn" data-svctab="testing" onclick="openSvcSubtab('testing')">🧪 Testing <span class="svc-stab-count" id="stab-count-testing">0</span></button>
+        <button class="svc-subtab-btn" data-svctab="ready" onclick="openSvcSubtab('ready')">🚀 Ready <span class="svc-stab-count" id="stab-count-ready">0</span></button>
+        <button class="svc-subtab-btn" data-svctab="active" onclick="openSvcSubtab('active')">✅ Published <span class="svc-stab-count" id="stab-count-active">0</span></button>
+        <button class="btn btn-ghost btn-sm" id="btnRefreshServices" style="margin-left:auto;flex-shrink:0">↺ Refresh</button>
+      </div>
+
+      <!-- ➕ Create / Edit panel -->
+      <div class="svc-stage-panel active" id="svctab-create">
+        <div class="card" style="max-width:660px">
+          <div class="card-header">
+            <div class="card-title" id="svcFormTitle">➕ Create New Service</div>
+            <div class="card-subtitle">Fill in all the details and set the initial stage — it will appear in the correct column</div>
+          </div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:.875rem">
+            <input type="hidden" id="svcEditId">
+            <div style="display:grid;grid-template-columns:1fr 90px;gap:.75rem">
+              <div><label class="form-label">Service Name *</label><input type="text" id="svcName" class="form-control" placeholder="e.g. Lead Generation AI"></div>
+              <div><label class="form-label">Icon (emoji)</label><input type="text" id="svcIcon" class="form-control" placeholder="🤖" maxlength="4" style="text-align:center;font-size:1.4rem"></div>
+            </div>
+            <div><label class="form-label">Short Description <span style="font-weight:400;color:var(--text-muted);font-size:.75rem">(shown on service cards)</span></label>
+              <input type="text" id="svcShortDesc" class="form-control" placeholder="One-line summary shown to users">
+            </div>
+            <div><label class="form-label">Full Description</label>
+              <textarea id="svcDesc" class="form-control" rows="3" style="resize:vertical" placeholder="Detailed description of what this service does…"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem">
+              <div><label class="form-label">Price ($)</label><input type="number" id="svcPrice" class="form-control" placeholder="49" min="0"></div>
+              <div><label class="form-label">Billing Interval</label>
+                <select id="svcInterval" class="form-control">
+                  <option value="month">Monthly</option>
+                  <option value="year">Yearly</option>
+                  <option value="once">One-time</option>
+                </select>
+              </div>
+              <div><label class="form-label">Stage / Status</label>
+                <select id="svcStatus" class="form-control">
+                  <option value="draft">📝 Draft</option>
+                  <option value="testing">🧪 Testing</option>
+                  <option value="ready">🚀 Ready</option>
+                  <option value="active">✅ Published</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="form-label">n8n Webhook URL
+                <span style="font-weight:400;color:var(--danger);font-size:.75rem;margin-left:.5rem">Backend only — never sent to users</span>
+              </label>
+              <input type="url" id="svcWebhook" class="form-control" placeholder="https://your-n8n.com/webhook/...">
+            </div>
+            <div><label class="form-label">Features <span style="font-weight:400;color:var(--text-muted);font-size:.75rem">(one per line — shown on service detail page)</span></label>
+              <textarea id="svcFeatures" class="form-control" rows="4" placeholder="Automated lead capture&#10;CRM integration&#10;Daily email reports" style="resize:vertical"></textarea>
+            </div>
+            <div style="display:flex;gap:.5rem;padding-top:.25rem;align-items:center">
+              <button id="btnDeleteSvc" class="btn btn-ghost btn-sm" style="color:var(--danger);display:none" onclick="deleteSvc()">🗑 Delete</button>
+              <div style="flex:1"></div>
+              <button class="btn btn-ghost" onclick="resetSvcForm()">Clear</button>
+              <button id="btnSaveSvc" class="btn btn-primary" onclick="saveSvc()">💾 Save Service</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Pipeline columns -->
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;align-items:start" id="pipelineGrid">
-        <!-- Draft -->
-        <div>
-          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;padding:.5rem .75rem;background:#f1f3f6;border-radius:var(--r-sm)">
-            <span style="font-size:.8rem">📝</span>
-            <span style="font-weight:700;font-size:.8125rem;color:var(--text-mid)">DRAFT</span>
-            <span class="pipeline-count" id="count-draft" style="margin-left:auto;background:#e2e8f0;color:var(--text-muted);font-size:.7rem;font-weight:700;padding:.1rem .45rem;border-radius:99px">0</span>
-          </div>
-          <div class="pipeline-col" id="col-draft"></div>
+      <!-- 📝 Draft panel -->
+      <div class="svc-stage-panel" id="svctab-draft">
+        <div class="svc-stage-hdr draft-hdr">
+          <span>📝 Draft Services</span>
+          <span class="svc-stage-note">Services still being worked on — hidden from all users</span>
         </div>
-        <!-- Testing -->
-        <div>
-          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;padding:.5rem .75rem;background:var(--warning-pale);border-radius:var(--r-sm)">
-            <span style="font-size:.8rem">🧪</span>
-            <span style="font-weight:700;font-size:.8125rem;color:var(--warning)">TESTING</span>
-            <span class="pipeline-count" id="count-testing" style="margin-left:auto;background:rgba(243,156,18,.2);color:var(--warning);font-size:.7rem;font-weight:700;padding:.1rem .45rem;border-radius:99px">0</span>
-          </div>
-          <div class="pipeline-col" id="col-testing"></div>
-        </div>
-        <!-- Ready -->
-        <div>
-          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;padding:.5rem .75rem;background:var(--info-pale);border-radius:var(--r-sm)">
-            <span style="font-size:.8rem">🚀</span>
-            <span style="font-weight:700;font-size:.8125rem;color:var(--info)">READY</span>
-            <span class="pipeline-count" id="count-ready" style="margin-left:auto;background:rgba(21,101,192,.15);color:var(--info);font-size:.7rem;font-weight:700;padding:.1rem .45rem;border-radius:99px">0</span>
-          </div>
-          <div class="pipeline-col" id="col-ready"></div>
-        </div>
-        <!-- Published -->
-        <div>
-          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;padding:.5rem .75rem;background:var(--success-pale);border-radius:var(--r-sm)">
-            <span style="font-size:.8rem">✅</span>
-            <span style="font-weight:700;font-size:.8125rem;color:var(--success)">PUBLISHED</span>
-            <span class="pipeline-count" id="count-active" style="margin-left:auto;background:rgba(15,157,88,.15);color:var(--success);font-size:.7rem;font-weight:700;padding:.1rem .45rem;border-radius:99px">0</span>
-          </div>
-          <div class="pipeline-col" id="col-active"></div>
-        </div>
+        <div class="svc-stage-grid" id="stage-draft"></div>
       </div>
+
+      <!-- 🧪 Testing panel -->
+      <div class="svc-stage-panel" id="svctab-testing">
+        <div class="svc-stage-hdr testing-hdr">
+          <span>🧪 Testing</span>
+          <span class="svc-stage-note">Trigger the workflow manually to validate — no payment required, bypasses billing entirely</span>
+        </div>
+        <div class="svc-stage-grid" id="stage-testing"></div>
+      </div>
+
+      <!-- 🚀 Ready panel -->
+      <div class="svc-stage-panel" id="svctab-ready">
+        <div class="svc-stage-hdr ready-hdr">
+          <span>🚀 Ready to Publish</span>
+          <span class="svc-stage-note">Tested and approved — publish when ready to go live for users</span>
+        </div>
+        <div class="svc-stage-grid" id="stage-ready"></div>
+      </div>
+
+      <!-- ✅ Published panel -->
+      <div class="svc-stage-panel" id="svctab-active">
+        <div class="svc-stage-hdr published-hdr">
+          <span>✅ Published</span>
+          <span class="svc-stage-note">Live and visible to all portal users — unpublish to hide</span>
+        </div>
+        <div class="svc-stage-grid" id="stage-active"></div>
+      </div>
+
       <div id="servicesLoading" style="display:none;color:var(--text-muted);font-size:.875rem;padding:1rem;text-align:center">Loading services…</div>
     </div>
 
@@ -217,48 +283,6 @@
       </div>
     </div>
   </main>
-</div>
-
-<!-- Service create/edit modal -->
-<div class="svc-modal-overlay" id="svcModal">
-  <div class="svc-modal-box">
-    <div class="svc-modal-hdr">
-      <span id="svcModalTitle" style="font-weight:700;font-size:1rem">New Service</span>
-      <button onclick="closeSvcModal()" style="background:none;border:none;font-size:1.25rem;cursor:pointer;color:var(--text-muted);line-height:1">✕</button>
-    </div>
-    <div class="svc-modal-body">
-      <input type="hidden" id="svcEditId">
-      <div style="display:grid;grid-template-columns:1fr 80px;gap:.75rem">
-        <div><label class="form-label">Service Name *</label><input type="text" id="svcName" class="form-control" placeholder="e.g. Lead Generation AI"></div>
-        <div><label class="form-label">Icon</label><input type="text" id="svcIcon" class="form-control" placeholder="🤖" maxlength="4" style="text-align:center;font-size:1.25rem"></div>
-      </div>
-      <div><label class="form-label">Short Description</label><input type="text" id="svcShortDesc" class="form-control" placeholder="One-line summary shown to users"></div>
-      <div><label class="form-label">Full Description</label><textarea id="svcDesc" class="form-control" rows="3" style="resize:vertical"></textarea></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
-        <div><label class="form-label">Price (USD)</label><input type="number" id="svcPrice" class="form-control" placeholder="99" min="0"></div>
-        <div><label class="form-label">Billing</label>
-          <select id="svcInterval" class="form-control"><option value="month">Monthly</option><option value="year">Yearly</option><option value="once">One-time</option></select>
-        </div>
-      </div>
-      <div><label class="form-label">n8n Webhook URL</label><input type="url" id="svcWebhook" class="form-control" placeholder="https://your-n8n.com/webhook/..."></div>
-      <div><label class="form-label">Stage / Status</label>
-        <select id="svcStatus" class="form-control">
-          <option value="draft">📝 Draft — still being worked on, hidden from users</option>
-          <option value="testing">🧪 Testing — ready to test, hidden from users</option>
-          <option value="ready">🚀 Ready — tested and approved, awaiting publish</option>
-          <option value="active">✅ Published — live and visible to users</option>
-        </select>
-      </div>
-      <div><label class="form-label">Features <span style="font-weight:400;color:var(--text-muted);font-size:.75rem">(one per line, shown on services page)</span></label>
-        <textarea id="svcFeatures" class="form-control" rows="4" placeholder="Automated lead capture&#10;CRM integration&#10;Daily email reports" style="resize:vertical"></textarea>
-      </div>
-    </div>
-    <div class="svc-modal-footer">
-      <button id="btnDeleteSvc" class="btn btn-ghost btn-sm" style="margin-right:auto;color:var(--danger);display:none" onclick="deleteSvc()">🗑 Delete</button>
-      <button onclick="closeSvcModal()" class="btn btn-ghost">Cancel</button>
-      <button id="btnSaveSvc" class="btn btn-primary" onclick="saveSvc()">Save Service</button>
-    </div>
-  </div>
 </div>
 
 <!-- Test run modal -->
@@ -463,9 +487,8 @@ window.revokeAccess = async function(uid, userServiceId) {
   }
 };
 
-/* ── Services pipeline ──────────────────────────────────────── */
+/* ── Services ────────────────────────────────────────────────── */
 let adminServices = [];
-let editingSvcId  = null;
 
 async function loadAdminServices() {
   document.getElementById("servicesLoading").style.display = "block";
@@ -474,7 +497,7 @@ async function loadAdminServices() {
     const json = await resp.json();
     if (!resp.ok) throw new Error(json.error);
     adminServices = json.services;
-    renderPipeline();
+    renderAllStages();
   } catch (e) {
     showToast({ title:"Failed to load services", message:e.message, type:"error" });
   } finally {
@@ -482,51 +505,93 @@ async function loadAdminServices() {
   }
 }
 
-function renderPipeline() {
-  const cols   = { draft:[], testing:[], ready:[], active:[] };
+function renderAllStages() {
+  const groups = { draft:[], testing:[], ready:[], active:[] };
   adminServices.forEach(s => {
     const st = s.status || "draft";
-    if (cols[st]) cols[st].push(s); else cols.draft.push(s);
+    (groups[st] || groups.draft).push(s);
   });
-
   ["draft","testing","ready","active"].forEach(st => {
-    document.getElementById(`count-${st}`).textContent = cols[st].length;
-    const col = document.getElementById(`col-${st}`);
-    if (!cols[st].length) {
-      col.innerHTML = `<div class="pipe-empty">No services here</div>`;
+    document.getElementById(`stab-count-${st}`).textContent = groups[st].length;
+    const grid = document.getElementById(`stage-${st}`);
+    if (!groups[st].length) {
+      grid.innerHTML = `<div class="svc-empty">No services in this stage yet.<br><span style="font-size:.75rem">Use <strong>➕ New Service</strong> to create one.</span></div>`;
       return;
     }
-    col.innerHTML = cols[st].map(s => {
-      const hasWebhook = !!s.n8n?.webhookUrl;
-      const nextBtns = {
-        draft:   `<button class="btn btn-ghost btn-sm" style="font-size:.72rem;border-color:var(--warning);color:var(--warning)" onclick="moveSvc('${s.id}','testing')">→ Testing</button>`,
-        testing: `<button class="btn btn-ghost btn-sm" style="font-size:.72rem;border-color:var(--info);color:var(--info)" onclick="moveSvc('${s.id}','ready')">→ Ready</button>`,
-        ready:   `<button class="btn btn-primary btn-sm" style="font-size:.72rem" onclick="moveSvc('${s.id}','active')">✅ Publish</button>`,
-        active:  `<button class="btn btn-ghost btn-sm" style="font-size:.72rem;color:var(--danger)" onclick="moveSvc('${s.id}','draft')">Unpublish</button>`,
-      }[st] || "";
-      const testBtn = hasWebhook && (st==="testing"||st==="ready"||st==="active")
-        ? `<button class="btn btn-ghost btn-sm" style="font-size:.72rem" onclick="openTestModal('${s.id}')">🧪 Test</button>`
-        : "";
-      return `<div class="svc-pipe-card">
-        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.375rem">
-          <span style="font-size:1.25rem">${s.icon||"⚙️"}</span>
-          <span class="svc-pipe-name" style="flex:1">${esc(s.name||s.id)}</span>
-        </div>
-        <div class="svc-pipe-desc">${esc(s.shortDescription||s.description||"")}</div>
-        ${!hasWebhook?`<div style="font-size:.7rem;color:var(--danger);margin-bottom:.5rem">⚠️ No webhook URL</div>`:""}
-        <div class="svc-pipe-actions">
-          ${nextBtns}${testBtn}
-          <button class="btn btn-ghost btn-sm" style="font-size:.72rem" onclick="openSvcModal('${s.id}')">Edit</button>
-        </div>
-      </div>`;
-    }).join("");
+    grid.innerHTML = groups[st].map(s => renderSvcCard(s, st)).join("");
   });
 }
+
+function renderSvcCard(s, st) {
+  const hasWebhook = !!s.n8n?.webhookUrl;
+  const price = s.pricing?.amount ? `$${s.pricing.amount}/${s.pricing.interval==="once"?"one-time":s.pricing.interval}` : "Free";
+  const moveActions = {
+    draft:   `<button class="btn btn-ghost btn-sm" style="font-size:.75rem;color:var(--warning);border-color:var(--warning)" onclick="moveSvc('${s.id}','testing')">→ Move to Testing</button>`,
+    testing: `<button class="btn btn-ghost btn-sm" style="font-size:.75rem;color:var(--info);border-color:var(--info)" onclick="moveSvc('${s.id}','ready')">→ Mark Ready</button>
+              <button class="btn btn-ghost btn-sm" style="font-size:.75rem;color:var(--text-muted)" onclick="moveSvc('${s.id}','draft')">← Back to Draft</button>`,
+    ready:   `<button class="btn btn-primary btn-sm" style="font-size:.75rem" onclick="moveSvc('${s.id}','active')">✅ Publish Now</button>
+              <button class="btn btn-ghost btn-sm" style="font-size:.75rem;color:var(--text-muted)" onclick="moveSvc('${s.id}','testing')">← Back to Testing</button>`,
+    active:  `<button class="btn btn-ghost btn-sm" style="font-size:.75rem;color:var(--danger)" onclick="moveSvc('${s.id}','draft')">Unpublish</button>`,
+  }[st] || "";
+  const testBtn = hasWebhook && st !== "draft"
+    ? `<button class="btn btn-ghost btn-sm" style="font-size:.75rem" onclick="openTestModal('${s.id}')">🧪 Test Run</button>`
+    : "";
+  return `<div class="svc-card">
+    <div class="svc-card-icon">${s.icon||"⚙️"}</div>
+    <div class="svc-card-name">${esc(s.name||s.id)}</div>
+    <div class="svc-card-desc">${esc(s.shortDescription||s.description||"No description")}</div>
+    <div class="svc-card-price">${price}</div>
+    ${!hasWebhook?`<div style="font-size:.72rem;color:var(--danger);margin-bottom:.5rem">⚠️ No webhook URL set</div>`:""}
+    <div class="svc-card-actions">
+      ${moveActions}${testBtn}
+      <button class="btn btn-ghost btn-sm" style="font-size:.75rem;margin-left:auto" onclick="editSvc('${s.id}')">✏️ Edit</button>
+    </div>
+  </div>`;
+}
+
+/* ── Subtab navigation ──────────────────────────────────────── */
+window.openSvcSubtab = function(tab) {
+  document.querySelectorAll(".svc-subtab-btn").forEach(b => b.classList.toggle("active", b.dataset.svctab === tab));
+  document.querySelectorAll(".svc-stage-panel").forEach(p => p.classList.toggle("active", p.id === `svctab-${tab}`));
+};
+
+/* ── Edit: switch to create panel and populate form ─────────── */
+window.editSvc = function(id) {
+  const svc = adminServices.find(s=>s.id===id); if(!svc) return;
+  document.getElementById("svcFormTitle").textContent = "✏️ Edit Service";
+  document.getElementById("svcEditId").value       = id;
+  document.getElementById("svcName").value         = svc.name || "";
+  document.getElementById("svcIcon").value         = svc.icon || "";
+  document.getElementById("svcShortDesc").value    = svc.shortDescription || "";
+  document.getElementById("svcDesc").value         = svc.description || "";
+  document.getElementById("svcPrice").value        = svc.pricing?.amount || "";
+  document.getElementById("svcInterval").value     = svc.pricing?.interval || "month";
+  document.getElementById("svcWebhook").value      = svc.n8n?.webhookUrl || "";
+  document.getElementById("svcStatus").value       = svc.status || "draft";
+  document.getElementById("svcFeatures").value     = Array.isArray(svc.features) ? svc.features.join("\n") : "";
+  document.getElementById("btnDeleteSvc").style.display = "inline-flex";
+  openSvcSubtab("create");
+};
+
+window.resetSvcForm = function() {
+  document.getElementById("svcFormTitle").textContent = "➕ Create New Service";
+  document.getElementById("svcEditId").value  = "";
+  document.getElementById("svcName").value    = "";
+  document.getElementById("svcIcon").value    = "";
+  document.getElementById("svcShortDesc").value = "";
+  document.getElementById("svcDesc").value    = "";
+  document.getElementById("svcPrice").value   = "";
+  document.getElementById("svcInterval").value = "month";
+  document.getElementById("svcWebhook").value = "";
+  document.getElementById("svcStatus").value  = "draft";
+  document.getElementById("svcFeatures").value = "";
+  document.getElementById("btnDeleteSvc").style.display = "none";
+};
 
 window.moveSvc = async function(serviceId, status) {
   const labels = { draft:"Draft", testing:"Testing", ready:"Ready to Publish", active:"Published" };
   if (status === "active" && !confirm("Publish this service? It will become visible to all users.")) return;
-  if (status === "draft"  && !confirm("Unpublish? This will hide the service from users.")) return;
+  if (status === "draft"  && !confirm("This will hide the service from users. Continue?")) return;
   try {
     const resp = await fetch("/api/admin/set-service-status", {
       method:"POST",
@@ -537,42 +602,23 @@ window.moveSvc = async function(serviceId, status) {
     if (!resp.ok) throw new Error(json.error);
     showToast({ title:`Moved to ${labels[status]}`, type:"success" });
     await loadAdminServices();
+    openSvcSubtab(status);
   } catch(e) { showToast({ title:"Failed", message:e.message, type:"error" }); }
 };
-
-/* ── Service create / edit modal ────────────────────────────── */
-window.openSvcModal = function(id) {
-  editingSvcId = id || null;
-  const svc = id ? adminServices.find(s=>s.id===id) : null;
-  document.getElementById("svcModalTitle").textContent = svc ? "Edit Service" : "New Service";
-  document.getElementById("svcEditId").value = id || "";
-  document.getElementById("svcName").value        = svc?.name || "";
-  document.getElementById("svcIcon").value        = svc?.icon || "";
-  document.getElementById("svcShortDesc").value   = svc?.shortDescription || "";
-  document.getElementById("svcDesc").value        = svc?.description || "";
-  document.getElementById("svcPrice").value       = svc?.pricing?.amount || "";
-  document.getElementById("svcInterval").value    = svc?.pricing?.interval || "month";
-  document.getElementById("svcWebhook").value     = svc?.n8n?.webhookUrl || "";
-  document.getElementById("svcStatus").value      = svc?.status || "draft";
-  document.getElementById("svcFeatures").value    = Array.isArray(svc?.features) ? svc.features.join("\n") : "";
-  document.getElementById("btnDeleteSvc").style.display = svc ? "inline-flex" : "none";
-  document.getElementById("svcModal").classList.add("open");
-};
-
-window.closeSvcModal = function() { document.getElementById("svcModal").classList.remove("open"); };
 
 window.saveSvc = async function() {
   const name = document.getElementById("svcName").value.trim();
   if (!name) { showToast({ title:"Service name is required", type:"warning" }); return; }
   const btn = document.getElementById("btnSaveSvc");
   btn.disabled = true; btn.textContent = "Saving…";
+  const status = document.getElementById("svcStatus").value;
   const payload = {
     name,
     icon:             document.getElementById("svcIcon").value.trim() || "⚙️",
     shortDescription: document.getElementById("svcShortDesc").value.trim(),
     description:      document.getElementById("svcDesc").value.trim(),
-    status:           document.getElementById("svcStatus").value,
-    active:           document.getElementById("svcStatus").value === "active",
+    status,
+    active:           status === "active",
     features:         document.getElementById("svcFeatures").value.split("\n").map(s=>s.trim()).filter(Boolean),
     pricing: {
       amount:   Number(document.getElementById("svcPrice").value) || 0,
@@ -585,26 +631,28 @@ window.saveSvc = async function() {
   try {
     const id = document.getElementById("svcEditId").value;
     if (id) {
-      await updateDoc(doc(db, "services",id), payload);
+      await updateDoc(doc(db, "services", id), payload);
     } else {
       payload.createdAt = serverTimestamp();
       await addDoc(collection(db, "services"), payload);
     }
-    closeSvcModal();
-    showToast({ title: id ? "Service updated" : "Service created", type:"success" });
+    showToast({ title: id ? "Service updated" : "Service created!", type:"success" });
+    resetSvcForm();
     await loadAdminServices();
+    openSvcSubtab(status);
   } catch(e) { showToast({ title:"Failed", message:e.message, type:"error" }); }
-  finally { btn.disabled = false; btn.textContent = "Save Service"; }
+  finally { btn.disabled = false; btn.textContent = "💾 Save Service"; }
 };
 
 window.deleteSvc = async function() {
   const id = document.getElementById("svcEditId").value;
-  if (!id || !confirm("Delete this service? This cannot be undone.")) return;
+  if (!id || !confirm("Delete this service permanently? This cannot be undone.")) return;
   try {
-    await updateDoc(doc(db, "services",id), { deleted:true, active:false, status:"draft", updatedAt:serverTimestamp() });
-    closeSvcModal();
+    await updateDoc(doc(db, "services", id), { deleted:true, active:false, status:"draft", updatedAt:serverTimestamp() });
     showToast({ title:"Service deleted", type:"success" });
+    resetSvcForm();
     await loadAdminServices();
+    openSvcSubtab("draft");
   } catch(e) { showToast({ title:"Failed", message:e.message, type:"error" }); }
 };
 
@@ -660,7 +708,7 @@ window.fireTest = async function() {
   } finally { btn.disabled=false; btn.textContent="▶ Fire Test"; }
 };
 
-document.getElementById("btnRefreshServices")?.addEventListener("click", loadAdminServices);
+document.getElementById("btnRefreshServices")?.addEventListener("click", () => loadAdminServices());
 
 /* ── Action log ─────────────────────────────────────────────── */
 async function loadActionLog() {
