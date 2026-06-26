@@ -24,8 +24,8 @@
   .hero-title .grad{background:linear-gradient(90deg,#00D2FF,#3A7BF7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
   .hero-desc{font-size:.9375rem;color:rgba(255,255,255,.5);line-height:1.65;margin-bottom:2rem}
   .hero-btns{display:flex;gap:.625rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.375rem}
-  .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.75rem 1.25rem;background:linear-gradient(135deg,#3A7BF7,#00D2FF);color:#fff;border-radius:12px;font-weight:800;font-size:.875rem;box-shadow:0 4px 20px rgba(58,123,247,.4);white-space:nowrap}
-  .btn-outline{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 1.25rem;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);border-radius:12px;font-weight:600;font-size:.875rem;background:rgba(255,255,255,.04);white-space:nowrap}
+  .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;padding:.5rem .9rem;background:linear-gradient(135deg,#3A7BF7,#00D2FF);color:#fff;border-radius:10px;font-weight:800;font-size:.8125rem;box-shadow:0 4px 20px rgba(58,123,247,.4);white-space:nowrap}
+  .btn-outline{display:inline-flex;align-items:center;justify-content:center;padding:.5rem .9rem;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);border-radius:10px;font-weight:600;font-size:.8125rem;background:rgba(255,255,255,.04);white-space:nowrap}
   .trust{display:flex;flex-wrap:wrap;gap:.375rem;justify-content:center}
   .trust-pill{font-size:.6875rem;color:rgba(255,255,255,.4);background:rgba(255,255,255,.05);padding:.3125rem .625rem;border-radius:20px;border:1px solid rgba(255,255,255,.07);font-weight:500}
 
@@ -44,26 +44,26 @@
 
   /* SERVICE CARDS — 2 per row */
   .svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.625rem}
-  .svc-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1rem;display:flex;flex-direction:column;gap:.5rem;transition:border-color .2s}
+  .svc-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;transition:border-color .2s}
   .svc-card:hover{border-color:rgba(0,210,255,.3)}
   .svc-icon{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,rgba(58,123,247,.2),rgba(0,210,255,.15));border:1px solid rgba(0,210,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.125rem}
   .svc-name{font-weight:800;font-size:.8125rem;color:#fff;line-height:1.3}
-  .svc-desc{font-size:.75rem;color:rgba(255,255,255,.4);line-height:1.4}
+  .svc-desc{font-size:.75rem;color:rgba(255,255,255,.4);line-height:1.4;text-align:justify}
   .svc-price{font-size:.6875rem;font-weight:700;color:#00D2FF;margin-top:auto}
 
   /* STEPS — 2 per row */
   .steps-grid{display:grid;grid-template-columns:1fr 1fr;gap:.625rem}
-  .step-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:.875rem;display:flex;flex-direction:column;gap:.5rem}
+  .step-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:.875rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center}
   .step-n{width:30px;height:30px;border-radius:10px;background:rgba(58,123,247,.15);border:1px solid rgba(58,123,247,.3);color:#3A7BF7;font-size:.875rem;font-weight:900;display:flex;align-items:center;justify-content:center}
   .step-title{font-weight:800;font-size:.8125rem;color:#fff;line-height:1.3}
-  .step-desc{font-size:.75rem;color:rgba(255,255,255,.4);line-height:1.4}
+  .step-desc{font-size:.75rem;color:rgba(255,255,255,.4);line-height:1.4;text-align:justify}
 
   /* PAYMENT — 3 per row */
   .pay-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem}
   .pay-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:.875rem .5rem;display:flex;flex-direction:column;align-items:center;gap:.375rem;text-align:center}
   .pay-logo{font-size:1.625rem;line-height:1}
   .pay-name{font-weight:800;font-size:.75rem;color:#fff}
-  .pay-badge{display:inline-block;font-size:.5625rem;font-weight:700;background:rgba(15,157,88,.15);color:#34D399;padding:.125rem .375rem;border-radius:6px;border:1px solid rgba(52,211,153,.2);line-height:1.4}
+  .pay-badge{display:inline-block;font-size:.5625rem;font-weight:700;background:rgba(15,157,88,.15);color:#34D399;padding:.125rem .375rem;border-radius:6px;border:1px solid rgba(52,211,153,.2);line-height:1.4;text-align:center}
 
   /* CTA */
   .cta{background:linear-gradient(135deg,#0D1528,#0B1E3D);padding:2.5rem 1.125rem;text-align:center;border-top:1px solid rgba(58,123,247,.2)}
@@ -71,8 +71,8 @@
   .cta-title .accent{background:linear-gradient(90deg,#00D2FF,#3A7BF7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
   .cta-desc{font-size:.875rem;color:rgba(255,255,255,.4);line-height:1.55;margin-bottom:1.75rem}
   .cta-btns{display:flex;gap:.625rem;justify-content:center;flex-wrap:wrap}
-  .btn-cyan{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 1.25rem;background:linear-gradient(135deg,#3A7BF7,#00D2FF);color:#fff;border-radius:12px;font-weight:800;font-size:.875rem;box-shadow:0 4px 20px rgba(58,123,247,.35);white-space:nowrap}
-  .btn-ghost{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 1.25rem;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);border-radius:12px;font-weight:600;font-size:.875rem;white-space:nowrap}
+  .btn-cyan{display:inline-flex;align-items:center;justify-content:center;padding:.5rem .9rem;background:linear-gradient(135deg,#3A7BF7,#00D2FF);color:#fff;border-radius:10px;font-weight:800;font-size:.8125rem;box-shadow:0 4px 20px rgba(58,123,247,.35);white-space:nowrap}
+  .btn-ghost{display:inline-flex;align-items:center;justify-content:center;padding:.5rem .9rem;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);border-radius:10px;font-weight:600;font-size:.8125rem;white-space:nowrap}
 
   /* FOOTER */
   .footer{background:#070A13;padding:1.75rem 1.125rem 1.25rem;border-top:1px solid rgba(255,255,255,.06)}
@@ -109,7 +109,8 @@
 </div>
 
 <div class="stats">
-  <div class="stat"><div class="stat-n">500+</div><div class="stat-l">Businesses Served</div></div>
+  <!-- STAT: Update "businesses served" count manually here, or wire to admin panel later -->
+  <div class="stat"><div class="stat-n">50+</div><div class="stat-l">Businesses Served</div></div>
   <div class="stat"><div class="stat-n">98%</div><div class="stat-l">Client Satisfaction</div></div>
   <div class="stat"><div class="stat-n">$50M+</div><div class="stat-l">Revenue Generated</div></div>
   <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Monitoring</div></div>
