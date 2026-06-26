@@ -692,111 +692,158 @@ textarea.form-control { resize:vertical; min-height:80px; }
   .navbar-center { display:none; }
 }
 
+/* ── 768px: tablet & large mobile ───────────────────────────── */
 @media(max-width:768px) {
-  :root { --nav-h:60px; }
+  :root { --nav-h:56px; }
 
-  /* Layout */
-  .portal-main { padding:1.125rem .875rem 5rem; }
+  /* ── Navbar ── */
+  .navbar-inner       { padding:0 .875rem; }
+  .btn-nav            { display:none; }               /* hide "Home" etc on mobile */
+  .brand-logo         { font-size:.9375rem; }
+  .brand-logo-icon    { width:28px; height:28px; }
+  .hamburger-btn      { width:40px; height:40px; font-size:1rem; }
+  .nav-avatar-name    { display:none; }               /* avatar only — no name text */
+  .nav-avatar-btn     { padding:.25rem; border-radius:50%; border-color:transparent; background:transparent; }
 
-  /* Typography — minimum readable sizes */
-  .page-title         { font-size:1.25rem; }
-  .page-subtitle      { font-size:.875rem; }
-  .card-title         { font-size:.9375rem; }
-  .stat-label         { font-size:.75rem; letter-spacing:.03em; }
-  .stat-value         { font-size:1.625rem; }
-  .stat-value.sm      { font-size:1.125rem; }
-  .stat-change        { font-size:.75rem; }
+  /* ── Layout ── */
+  .portal-main { padding:1rem .875rem 5.5rem; }
+
+  /* ── Typography ── */
+  .page-title         { font-size:1.1875rem; line-height:1.25; }
+  .page-subtitle      { font-size:.8125rem; }
+  .card-title         { font-size:.875rem; }
   .sidebar-name       { font-size:.875rem; }
-  .sidebar-email      { font-size:.75rem; }
-  .sidebar-link       { font-size:.875rem; padding:.625rem .75rem; }
-  .sidebar-section-label { font-size:.625rem; }
-  .data-table         { font-size:.875rem; }
-  .data-table th      { font-size:.75rem; }
+  .sidebar-email      { font-size:.6875rem; }
+  .sidebar-link       { font-size:.875rem; padding:.625rem .75rem; min-height:44px; }
+  .sidebar-section-label { font-size:.5625rem; }
   .form-label         { font-size:.875rem; }
-  .form-control       { font-size:1rem; padding:.625rem .875rem; }/* prevent iOS zoom */
-  .form-hint,
-  .form-error         { font-size:.8125rem; }
-  .badge              { font-size:.75rem; padding:.25rem .625rem; }
-  .tab-btn            { font-size:.875rem; padding:.625rem .875rem; }
+  .form-control       { font-size:1rem; padding:.625rem .875rem; } /* 16px prevents iOS zoom */
+  .form-hint, .form-error { font-size:.8125rem; }
+  .badge              { font-size:.6875rem; padding:.1875rem .5rem; }
+  .tab-btn            { font-size:.8125rem; padding:.5rem .75rem; min-height:42px; }
   .detail-label,
-  .detail-value       { font-size:.875rem; }
+  .detail-value       { font-size:.8125rem; }
+  .data-table         { font-size:.8125rem; }
+  .data-table th      { font-size:.6875rem; }
 
-  /* Touch targets — 44px minimum */
-  .btn                { min-height:44px; padding:.625rem 1.125rem; }
-  .btn-sm             { min-height:40px; padding:.5rem .875rem; font-size:.875rem; }
+  /* ── Stat cards — compact horizontal on mobile ── */
+  .stats-grid         { grid-template-columns:1fr 1fr; gap:.625rem; }
+  .stat-card          { padding:.875rem 1rem; display:flex; align-items:center; gap:.75rem; }
+  .stat-icon          { width:36px; height:36px; font-size:1rem; margin-bottom:0; flex-shrink:0; }
+  .stat-card > :not(.stat-icon) { flex:1; min-width:0; }
+  .stat-label         { font-size:.625rem; margin-bottom:.125rem; }
+  .stat-value         { font-size:1.375rem; letter-spacing:-.02em; }
+  .stat-value.sm      { font-size:1rem; }
+  .stat-change        { font-size:.6875rem; }
+
+  /* ── Touch targets ── */
+  .btn                { min-height:44px; }
+  .btn-sm             { min-height:40px; padding:.5rem .875rem; font-size:.8125rem; }
   .btn-xs             { min-height:36px; }
   .btn-signout        { min-height:44px; }
-  .sidebar-link       { min-height:44px; }
-  .tab-btn            { min-height:44px; }
-  .hamburger-btn      { width:44px; height:44px; }
-  .nav-avatar-btn     { min-height:40px; }
 
-  /* Grids */
-  .stats-grid         { grid-template-columns:1fr 1fr; gap:.75rem; }
+  /* ── Grids ── */
   .services-grid, .plans-grid, .subs-grid { grid-template-columns:1fr; }
   .seo-grid           { grid-template-columns:repeat(2,1fr); }
 
-  /* Banner */
-  .consult-banner     { flex-direction:column; text-align:center; padding:1.25rem 1.25rem; }
-  .consult-banner-title { font-size:1.125rem; }
-  .consult-banner-desc  { font-size:.875rem; }
-  .consult-banner-actions { justify-content:center; }
+  /* ── Consultation banner ── */
+  .consult-banner     { flex-direction:column; text-align:center; padding:1.125rem 1rem; gap:1rem; overflow:hidden; }
+  .consult-banner-text { min-width:0; }
+  .consult-banner-label { font-size:.625rem; }
+  .consult-banner-title { font-size:1rem; margin-bottom:.25rem; }
+  .consult-banner-desc  { font-size:.8125rem; max-width:100%; }
+  .consult-banner-actions { justify-content:center; gap:.5rem; flex-wrap:wrap; }
+  .btn-consult-white,
+  .btn-consult-outline { padding:.5rem 1rem; font-size:.8125rem; }
 
-  /* Forms */
+  /* ── Tabs ── */
+  .tabs               { gap:0; }
+  .tab-btn            { flex:1; justify-content:center; white-space:nowrap; }
+
+  /* ── Forms ── */
   .form-row, .form-row-3 { grid-template-columns:1fr; }
   .payment-options    { grid-template-columns:1fr; }
 
-  /* Toasts */
+  /* ── Cards ── */
+  .card-body          { padding:1rem; }
+  .card-header        { padding:.75rem 1rem; }
+  .card-footer        { padding:.75rem 1rem; }
+
+  /* ── Service cards ── */
+  .service-card       { padding:1.125rem; }
+  .service-card-icon  { width:40px; height:40px; font-size:1.125rem; margin-bottom:.75rem; }
+  .service-card-name  { font-size:.9375rem; }
+  .service-card-desc  { font-size:.8125rem; }
+
+  /* ── Billing toggle ── */
+  .billing-toggle     { flex-wrap:wrap; justify-content:center; }
+  .billing-opt        { font-size:.8125rem; }
+
+  /* ── Analytics tabs ── */
+  .analytics-tabs     { gap:.375rem; }
+  .analytics-tab      { font-size:.8125rem; padding:.375rem .75rem; }
+
+  /* ── Toasts ── */
   #toastRoot { left:.75rem; right:.75rem; bottom:5rem; }
   .toast { min-width:unset; max-width:100%; }
 
-  /* Misc */
-  .billing-toggle     { flex-wrap:wrap; justify-content:center; }
-  .analytics-tabs     { flex-wrap:wrap; }
-  .card-body          { padding:1.125rem; }
-  .card-header        { padding:.875rem 1.125rem; }
-
-  /* Modal — slide up from bottom on mobile */
+  /* ── Modal — slide up from bottom ── */
   .modal-overlay      { align-items:flex-end; padding:0; }
   .modal-box          {
     border-radius:var(--r-xl) var(--r-xl) 0 0;
-    max-width:100%; width:100%; max-height:88vh;
-    animation:modalSlideUp .3s cubic-bezier(.34,1.26,.64,1);
+    max-width:100%; width:100%; max-height:92vh;
+    animation:modalSlideUp .28s cubic-bezier(.34,1.26,.64,1);
   }
   @keyframes modalSlideUp {
-    from { opacity:0; transform:translateY(40px); }
+    from { opacity:0; transform:translateY(48px); }
     to   { opacity:1; transform:translateY(0); }
   }
   .modal-header,
-  .modal-footer       { padding:.875rem 1.125rem; }
-  .modal-body         { padding:1.125rem; }
+  .modal-footer       { padding:.875rem 1rem; }
+  .modal-body         { padding:1rem; }
 }
 
+/* ── 480px: compact mobile ───────────────────────────────────── */
 @media(max-width:480px) {
-  /* Typography — tighten further */
-  .page-title         { font-size:1.125rem; }
-  .stat-value         { font-size:1.375rem; }
-  .plan-price         { font-size:1.625rem; }
-  .consult-banner-title { font-size:1rem; }
+  /* ── Layout ── */
+  .portal-main        { padding:.875rem .75rem 5.5rem; }
 
-  /* Layout */
-  .portal-main        { padding:.875rem .75rem 5rem; }
-  .stats-grid         { grid-template-columns:1fr; }
+  /* ── Typography ── */
+  .page-title         { font-size:1.0625rem; }
+  .plan-price         { font-size:1.5rem; }
+  .consult-banner-title { font-size:.9375rem; }
+
+  /* ── Stats: 2-col even on small phones ── */
+  .stats-grid         { grid-template-columns:1fr 1fr; gap:.5rem; }
+  .stat-card          { padding:.75rem .875rem; flex-direction:column; align-items:flex-start; gap:.375rem; }
+  .stat-icon          { width:32px; height:32px; font-size:.875rem; margin-bottom:0; }
+  .stat-value         { font-size:1.25rem; }
+  .stat-value.sm      { font-size:.9375rem; }
+  .stat-label         { font-size:.5625rem; }
+
+  /* ── Page header ── */
   .page-header        { flex-direction:column; gap:.375rem; }
+  .page-actions .btn  { width:100%; justify-content:center; }
+
+  /* ── Card ── */
   .card-header        { flex-direction:column; align-items:flex-start; gap:.5rem; }
   .card-body          { padding:.875rem; }
-  .card-footer        { padding:.75rem .875rem; }
+  .card-footer        { padding:.625rem .875rem; flex-direction:column; }
+  .card-footer .btn   { width:100%; justify-content:center; }
 
-  /* Wizard steps — compact on tiny screens */
-  .wizard-step-label  { font-size:.6875rem; }
-  .wizard-connector   { min-width:12px; }
+  /* ── Wizard ── */
+  .wizard-step-label  { font-size:.625rem; }
+  .wizard-connector   { min-width:10px; }
 
-  /* Sub-card */
+  /* ── Sub-card ── */
   .sub-card-foot      { flex-direction:column; }
   .sub-card-foot .btn { width:100%; }
 
-  /* Seo grid — single column */
-  .seo-grid           { grid-template-columns:1fr; }
+  /* ── SEO grid ── */
+  .seo-grid           { grid-template-columns:1fr 1fr; }
+
+  /* ── Tab bar ── */
+  .tab-btn            { font-size:.75rem; padding:.4375rem .5rem; }
 }
 
 /* ── BOTTOM NAV (mobile portal navigation) ───────────────────── */
