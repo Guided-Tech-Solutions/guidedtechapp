@@ -690,56 +690,82 @@ textarea.form-control { resize:vertical; min-height:80px; }
   .portal-main { margin-left:0; }
   .hamburger-btn { display:flex; }
   .navbar-center { display:none; }
+  .stats-grid { grid-template-columns:repeat(2,1fr); }
 }
 
-/* ── 768px: tablet & large mobile ───────────────────────────── */
+/* ── Profile two-column layout ───────────────────────────────── */
+.profile-2col {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.375rem;
+  align-items:start;
+}
+
+/* ── 768px: tablet ───────────────────────────────────────────── */
 @media(max-width:768px) {
+  .profile-2col { grid-template-columns:1fr; }
   :root { --nav-h:56px; }
 
   /* ── Navbar ── */
-  .navbar-inner       { padding:0 .875rem; }
-  .btn-nav            { display:none; }               /* hide "Home" etc on mobile */
-  .brand-logo         { font-size:.9375rem; }
+  .navbar-inner       { padding:0 1rem; }
+  .btn-nav            { display:none; }
+  .brand-logo         { font-size:.9375rem; gap:.375rem; }
   .brand-logo-icon    { width:28px; height:28px; }
   .hamburger-btn      { width:40px; height:40px; font-size:1rem; }
-  .nav-avatar-name    { display:none; }               /* avatar only — no name text */
-  .nav-avatar-btn     { padding:.25rem; border-radius:50%; border-color:transparent; background:transparent; }
+  .nav-avatar-name    { display:none; }
+  .nav-avatar-btn     { padding:.25rem .375rem; gap:.375rem; }
+  .nav-avatar-circle  { width:30px; height:30px; }
 
   /* ── Layout ── */
-  .portal-main { padding:1rem .875rem 5.5rem; }
+  .portal-main { padding:1.25rem 1rem 1.5rem; }
 
-  /* ── Typography ── */
-  .page-title         { font-size:1.1875rem; line-height:1.25; }
-  .page-subtitle      { font-size:.8125rem; }
-  .card-title         { font-size:.875rem; }
-  .sidebar-name       { font-size:.875rem; }
-  .sidebar-email      { font-size:.6875rem; }
-  .sidebar-link       { font-size:.875rem; padding:.625rem .75rem; min-height:44px; }
-  .sidebar-section-label { font-size:.5625rem; }
-  .form-label         { font-size:.875rem; }
-  .form-control       { font-size:1rem; padding:.625rem .875rem; } /* 16px prevents iOS zoom */
-  .form-hint, .form-error { font-size:.8125rem; }
-  .badge              { font-size:.6875rem; padding:.1875rem .5rem; }
-  .tab-btn            { font-size:.8125rem; padding:.5rem .75rem; min-height:42px; }
-  .detail-label,
-  .detail-value       { font-size:.8125rem; }
-  .data-table         { font-size:.8125rem; }
-  .data-table th      { font-size:.6875rem; }
+  /* ── Page header ── */
+  .page-title         { font-size:1.25rem; }
+  .page-subtitle      { font-size:.875rem; }
 
-  /* ── Stat cards — compact horizontal on mobile ── */
-  .stats-grid         { grid-template-columns:1fr 1fr; gap:.625rem; }
-  .stat-card          { padding:.875rem 1rem; display:flex; align-items:center; gap:.75rem; }
-  .stat-icon          { width:36px; height:36px; font-size:1rem; margin-bottom:0; flex-shrink:0; }
-  .stat-card > :not(.stat-icon) { flex:1; min-width:0; }
-  .stat-label         { font-size:.625rem; margin-bottom:.125rem; }
-  .stat-value         { font-size:1.375rem; letter-spacing:-.02em; }
+  /* ── Cards ── */
+  .card-title         { font-size:.9375rem; }
+  .card-body          { padding:1.125rem; }
+  .card-header        { padding:.875rem 1.125rem; }
+  .card-footer        { padding:.75rem 1.125rem; }
+
+  /* ── Sidebar ── */
+  .sidebar-name       { font-size:.9375rem; }
+  .sidebar-email      { font-size:.75rem; }
+  .sidebar-link       { font-size:.9375rem; padding:.625rem .875rem; min-height:48px; }
+
+  /* ── Forms ── */
+  .form-label         { font-size:.9375rem; }
+  .form-control       { font-size:1rem; padding:.6875rem .875rem; }
+  .form-hint, .form-error { font-size:.875rem; }
+  .form-row, .form-row-3 { grid-template-columns:1fr; }
+  .payment-options    { grid-template-columns:1fr; }
+
+  /* ── Stat cards — 2×2 grid, compact card layout ── */
+  .stats-grid         { grid-template-columns:1fr 1fr; gap:.75rem; margin-bottom:1.25rem; }
+  .stat-card          {
+    padding:.875rem;
+    display:grid;
+    grid-template-columns:36px 1fr;
+    grid-template-rows:auto auto;
+    column-gap:.625rem;
+    row-gap:.125rem;
+    align-items:center;
+  }
+  .stat-card::after   { display:none; }
+  .stat-icon          {
+    grid-column:1; grid-row:1/3;
+    width:36px; height:36px; font-size:1rem;
+    margin-bottom:0; align-self:center;
+  }
+  .stat-label         { grid-column:2; grid-row:1; font-size:.625rem; margin-bottom:0; }
+  .stat-value         { grid-column:2; grid-row:2; font-size:1.375rem; letter-spacing:-.025em; line-height:1.1; }
   .stat-value.sm      { font-size:1rem; }
-  .stat-change        { font-size:.6875rem; }
+  .stat-change        { display:none; }
 
-  /* ── Touch targets ── */
+  /* ── Buttons ── */
   .btn                { min-height:44px; }
-  .btn-sm             { min-height:40px; padding:.5rem .875rem; font-size:.8125rem; }
-  .btn-xs             { min-height:36px; }
+  .btn-sm             { min-height:40px; padding:.5rem .875rem; font-size:.875rem; }
   .btn-signout        { min-height:44px; }
 
   /* ── Grids ── */
@@ -747,44 +773,35 @@ textarea.form-control { resize:vertical; min-height:80px; }
   .seo-grid           { grid-template-columns:repeat(2,1fr); }
 
   /* ── Consultation banner ── */
-  .consult-banner     { flex-direction:column; text-align:center; padding:1.125rem 1rem; gap:1rem; overflow:hidden; }
+  .consult-banner     { flex-direction:column; text-align:center; padding:1.25rem 1rem; gap:.875rem; overflow:hidden; }
   .consult-banner-text { min-width:0; }
-  .consult-banner-label { font-size:.625rem; }
-  .consult-banner-title { font-size:1rem; margin-bottom:.25rem; }
-  .consult-banner-desc  { font-size:.8125rem; max-width:100%; }
+  .consult-banner-label { font-size:.6875rem; }
+  .consult-banner-title { font-size:1.0625rem; margin-bottom:.25rem; }
+  .consult-banner-desc  { font-size:.875rem; max-width:100%; }
   .consult-banner-actions { justify-content:center; gap:.5rem; flex-wrap:wrap; }
   .btn-consult-white,
-  .btn-consult-outline { padding:.5rem 1rem; font-size:.8125rem; }
+  .btn-consult-outline { padding:.5625rem 1.125rem; font-size:.875rem; }
 
   /* ── Tabs ── */
-  .tabs               { gap:0; }
-  .tab-btn            { flex:1; justify-content:center; white-space:nowrap; }
+  .tabs               { overflow-x:auto; scrollbar-width:none; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab-btn            { font-size:.875rem; padding:.625rem .875rem; min-height:44px; white-space:nowrap; flex-shrink:0; }
 
-  /* ── Forms ── */
-  .form-row, .form-row-3 { grid-template-columns:1fr; }
-  .payment-options    { grid-template-columns:1fr; }
-
-  /* ── Cards ── */
-  .card-body          { padding:1rem; }
-  .card-header        { padding:.75rem 1rem; }
-  .card-footer        { padding:.75rem 1rem; }
-
-  /* ── Service cards ── */
-  .service-card       { padding:1.125rem; }
-  .service-card-icon  { width:40px; height:40px; font-size:1.125rem; margin-bottom:.75rem; }
-  .service-card-name  { font-size:.9375rem; }
-  .service-card-desc  { font-size:.8125rem; }
-
-  /* ── Billing toggle ── */
+  /* ── Analytics ── */
   .billing-toggle     { flex-wrap:wrap; justify-content:center; }
-  .billing-opt        { font-size:.8125rem; }
-
-  /* ── Analytics tabs ── */
+  .billing-opt        { font-size:.875rem; }
   .analytics-tabs     { gap:.375rem; }
-  .analytics-tab      { font-size:.8125rem; padding:.375rem .75rem; }
+  .analytics-tab      { font-size:.875rem; }
+
+  /* ── Badges ── */
+  .badge              { font-size:.75rem; }
+
+  /* ── Tables ── */
+  .data-table         { font-size:.875rem; }
+  .data-table th      { font-size:.75rem; }
 
   /* ── Toasts ── */
-  #toastRoot { left:.75rem; right:.75rem; bottom:5rem; }
+  #toastRoot { left:.75rem; right:.75rem; bottom:1rem; }
   .toast { min-width:unset; max-width:100%; }
 
   /* ── Modal — slide up from bottom ── */
@@ -798,52 +815,58 @@ textarea.form-control { resize:vertical; min-height:80px; }
     from { opacity:0; transform:translateY(48px); }
     to   { opacity:1; transform:translateY(0); }
   }
-  .modal-header,
-  .modal-footer       { padding:.875rem 1rem; }
-  .modal-body         { padding:1rem; }
+  .modal-header, .modal-footer { padding:.875rem 1.125rem; }
+  .modal-body         { padding:1.125rem; }
 }
 
-/* ── 480px: compact mobile ───────────────────────────────────── */
+/* ── 600px: phone ────────────────────────────────────────────── */
+@media(max-width:600px) {
+  /* ── Bottom nav active ── */
+  .portal-bottom-nav  { display:block; }
+
+  /* ── Main: add bottom padding for nav ── */
+  .portal-main        { padding-bottom:5.5rem; }
+  #toastRoot          { bottom:5rem; }
+}
+
+/* ── 480px: small phone ──────────────────────────────────────── */
 @media(max-width:480px) {
   /* ── Layout ── */
-  .portal-main        { padding:.875rem .75rem 5.5rem; }
+  .portal-main        { padding:1rem .875rem 5.5rem; }
 
-  /* ── Typography ── */
-  .page-title         { font-size:1.0625rem; }
-  .plan-price         { font-size:1.5rem; }
-  .consult-banner-title { font-size:.9375rem; }
+  /* ── Page title ── */
+  .page-title         { font-size:1.125rem; }
+  .page-header        { flex-direction:column; gap:.5rem; align-items:flex-start; }
+  .page-actions       { width:100%; }
+  .page-actions .btn  { width:100%; justify-content:center; }
 
-  /* ── Stats: 2-col even on small phones ── */
-  .stats-grid         { grid-template-columns:1fr 1fr; gap:.5rem; }
-  .stat-card          { padding:.75rem .875rem; flex-direction:column; align-items:flex-start; gap:.375rem; }
-  .stat-icon          { width:32px; height:32px; font-size:.875rem; margin-bottom:0; }
+  /* ── Stat cards ── */
+  .stat-card          { padding:.75rem; }
+  .stat-icon          { width:32px; height:32px; font-size:.875rem; }
   .stat-value         { font-size:1.25rem; }
   .stat-value.sm      { font-size:.9375rem; }
   .stat-label         { font-size:.5625rem; }
 
-  /* ── Page header ── */
-  .page-header        { flex-direction:column; gap:.375rem; }
-  .page-actions .btn  { width:100%; justify-content:center; }
-
-  /* ── Card ── */
+  /* ── Cards ── */
   .card-header        { flex-direction:column; align-items:flex-start; gap:.5rem; }
   .card-body          { padding:.875rem; }
-  .card-footer        { padding:.625rem .875rem; flex-direction:column; }
+  .card-footer        { padding:.625rem .875rem; flex-direction:column; gap:.5rem; }
   .card-footer .btn   { width:100%; justify-content:center; }
+
+  /* ── Tabs ── */
+  .tab-btn            { font-size:.8125rem; padding:.5rem .75rem; }
 
   /* ── Wizard ── */
   .wizard-step-label  { font-size:.625rem; }
   .wizard-connector   { min-width:10px; }
 
-  /* ── Sub-card ── */
+  /* ── Sub-cards ── */
   .sub-card-foot      { flex-direction:column; }
   .sub-card-foot .btn { width:100%; }
 
-  /* ── SEO grid ── */
-  .seo-grid           { grid-template-columns:1fr 1fr; }
-
-  /* ── Tab bar ── */
-  .tab-btn            { font-size:.75rem; padding:.4375rem .5rem; }
+  /* ── Modal ── */
+  .modal-header, .modal-footer { padding:.75rem .875rem; }
+  .modal-body         { padding:.875rem; }
 }
 
 /* ── BOTTOM NAV (mobile portal navigation) ───────────────────── */
@@ -851,25 +874,25 @@ textarea.form-control { resize:vertical; min-height:80px; }
   display:none;
   position:fixed; bottom:0; left:0; right:0; z-index:500;
   background:var(--surface); border-top:1px solid var(--border);
-  box-shadow:0 -2px 12px rgba(0,0,0,.08);
-  padding:0 .25rem env(safe-area-inset-bottom,.25rem);
+  box-shadow:0 -4px 20px rgba(0,0,0,.08);
+  padding-bottom:env(safe-area-inset-bottom,0);
 }
 .portal-bottom-nav-inner {
   display:flex; align-items:stretch; justify-content:space-around;
-  height:56px;
+  height:58px;
 }
 .pbn-link {
   flex:1; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:2px;
-  font-size:.5625rem; font-weight:600; text-transform:uppercase; letter-spacing:.04em;
-  color:var(--text-muted); text-decoration:none; transition:color .15s;
+  align-items:center; justify-content:center; gap:3px;
+  font-size:.5625rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--text-faint); text-decoration:none; transition:color .15s;
   border:none; background:transparent; cursor:pointer; padding:.25rem;
-  -webkit-tap-highlight-color:transparent;
+  -webkit-tap-highlight-color:transparent; position:relative;
 }
-.pbn-link .pbn-icon { font-size:1.25rem; line-height:1; }
+.pbn-link .pbn-icon { font-size:1.375rem; line-height:1; }
 .pbn-link.active    { color:var(--brand); }
-.pbn-link:active    { transform:scale(.92); }
-
-@media(max-width:768px) {
-  .portal-bottom-nav { display:block; }
+.pbn-link.active::before {
+  content:''; position:absolute; top:0; left:20%; right:20%;
+  height:2px; background:var(--brand); border-radius:0 0 2px 2px;
 }
+.pbn-link:active    { transform:scale(.9); transition:transform .1s; }
