@@ -694,23 +694,135 @@ textarea.form-control { resize:vertical; min-height:80px; }
 
 @media(max-width:768px) {
   :root { --nav-h:60px; }
-  .portal-main { padding:1.25rem 1rem; }
-  .page-title  { font-size:1.375rem; }
-  .stats-grid  { grid-template-columns:1fr 1fr; gap:.875rem; }
+
+  /* Layout */
+  .portal-main { padding:1.125rem .875rem 5rem; }
+
+  /* Typography — minimum readable sizes */
+  .page-title         { font-size:1.25rem; }
+  .page-subtitle      { font-size:.875rem; }
+  .card-title         { font-size:.9375rem; }
+  .stat-label         { font-size:.75rem; letter-spacing:.03em; }
+  .stat-value         { font-size:1.625rem; }
+  .stat-value.sm      { font-size:1.125rem; }
+  .stat-change        { font-size:.75rem; }
+  .sidebar-name       { font-size:.875rem; }
+  .sidebar-email      { font-size:.75rem; }
+  .sidebar-link       { font-size:.875rem; padding:.625rem .75rem; }
+  .sidebar-section-label { font-size:.625rem; }
+  .data-table         { font-size:.875rem; }
+  .data-table th      { font-size:.75rem; }
+  .form-label         { font-size:.875rem; }
+  .form-control       { font-size:1rem; padding:.625rem .875rem; }/* prevent iOS zoom */
+  .form-hint,
+  .form-error         { font-size:.8125rem; }
+  .badge              { font-size:.75rem; padding:.25rem .625rem; }
+  .tab-btn            { font-size:.875rem; padding:.625rem .875rem; }
+  .detail-label,
+  .detail-value       { font-size:.875rem; }
+
+  /* Touch targets — 44px minimum */
+  .btn                { min-height:44px; padding:.625rem 1.125rem; }
+  .btn-sm             { min-height:40px; padding:.5rem .875rem; font-size:.875rem; }
+  .btn-xs             { min-height:36px; }
+  .btn-signout        { min-height:44px; }
+  .sidebar-link       { min-height:44px; }
+  .tab-btn            { min-height:44px; }
+  .hamburger-btn      { width:44px; height:44px; }
+  .nav-avatar-btn     { min-height:40px; }
+
+  /* Grids */
+  .stats-grid         { grid-template-columns:1fr 1fr; gap:.75rem; }
   .services-grid, .plans-grid, .subs-grid { grid-template-columns:1fr; }
-  .consult-banner { flex-direction:column; text-align:center; }
+  .seo-grid           { grid-template-columns:repeat(2,1fr); }
+
+  /* Banner */
+  .consult-banner     { flex-direction:column; text-align:center; padding:1.25rem 1.25rem; }
+  .consult-banner-title { font-size:1.125rem; }
+  .consult-banner-desc  { font-size:.875rem; }
   .consult-banner-actions { justify-content:center; }
+
+  /* Forms */
   .form-row, .form-row-3 { grid-template-columns:1fr; }
-  .payment-options { grid-template-columns:1fr; }
-  #toastRoot { left:1rem; right:1rem; bottom:1rem; }
+  .payment-options    { grid-template-columns:1fr; }
+
+  /* Toasts */
+  #toastRoot { left:.75rem; right:.75rem; bottom:5rem; }
   .toast { min-width:unset; max-width:100%; }
-  .billing-toggle { flex-wrap:wrap; justify-content:center; }
-  .analytics-tabs { flex-wrap:wrap; }
-  .modal-box { border-radius:var(--r-lg); }
+
+  /* Misc */
+  .billing-toggle     { flex-wrap:wrap; justify-content:center; }
+  .analytics-tabs     { flex-wrap:wrap; }
+  .card-body          { padding:1.125rem; }
+  .card-header        { padding:.875rem 1.125rem; }
+
+  /* Modal — slide up from bottom on mobile */
+  .modal-overlay      { align-items:flex-end; padding:0; }
+  .modal-box          {
+    border-radius:var(--r-xl) var(--r-xl) 0 0;
+    max-width:100%; width:100%; max-height:88vh;
+    animation:modalSlideUp .3s cubic-bezier(.34,1.26,.64,1);
+  }
+  @keyframes modalSlideUp {
+    from { opacity:0; transform:translateY(40px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .modal-header,
+  .modal-footer       { padding:.875rem 1.125rem; }
+  .modal-body         { padding:1.125rem; }
 }
 
 @media(max-width:480px) {
-  .stats-grid  { grid-template-columns:1fr; }
-  .page-header { flex-direction:column; gap:.5rem; }
-  .card-header { flex-direction:column; align-items:flex-start; gap:.625rem; }
+  /* Typography — tighten further */
+  .page-title         { font-size:1.125rem; }
+  .stat-value         { font-size:1.375rem; }
+  .plan-price         { font-size:1.625rem; }
+  .consult-banner-title { font-size:1rem; }
+
+  /* Layout */
+  .portal-main        { padding:.875rem .75rem 5rem; }
+  .stats-grid         { grid-template-columns:1fr; }
+  .page-header        { flex-direction:column; gap:.375rem; }
+  .card-header        { flex-direction:column; align-items:flex-start; gap:.5rem; }
+  .card-body          { padding:.875rem; }
+  .card-footer        { padding:.75rem .875rem; }
+
+  /* Wizard steps — compact on tiny screens */
+  .wizard-step-label  { font-size:.6875rem; }
+  .wizard-connector   { min-width:12px; }
+
+  /* Sub-card */
+  .sub-card-foot      { flex-direction:column; }
+  .sub-card-foot .btn { width:100%; }
+
+  /* Seo grid — single column */
+  .seo-grid           { grid-template-columns:1fr; }
+}
+
+/* ── BOTTOM NAV (mobile portal navigation) ───────────────────── */
+.portal-bottom-nav {
+  display:none;
+  position:fixed; bottom:0; left:0; right:0; z-index:500;
+  background:var(--surface); border-top:1px solid var(--border);
+  box-shadow:0 -2px 12px rgba(0,0,0,.08);
+  padding:0 .25rem env(safe-area-inset-bottom,.25rem);
+}
+.portal-bottom-nav-inner {
+  display:flex; align-items:stretch; justify-content:space-around;
+  height:56px;
+}
+.pbn-link {
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:2px;
+  font-size:.5625rem; font-weight:600; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--text-muted); text-decoration:none; transition:color .15s;
+  border:none; background:transparent; cursor:pointer; padding:.25rem;
+  -webkit-tap-highlight-color:transparent;
+}
+.pbn-link .pbn-icon { font-size:1.25rem; line-height:1; }
+.pbn-link.active    { color:var(--brand); }
+.pbn-link:active    { transform:scale(.92); }
+
+@media(max-width:768px) {
+  .portal-bottom-nav { display:block; }
 }

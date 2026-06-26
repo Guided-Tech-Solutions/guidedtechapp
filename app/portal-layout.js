@@ -100,10 +100,13 @@ function closeSidebar() {
   document.body.style.overflow = "";
 }
 
-/* Active sidebar link */
+/* Active sidebar link & bottom nav */
 const currentPage = window.location.pathname.split("/").pop();
 document.querySelectorAll(".sidebar-link[data-page]").forEach(link => {
   if (link.dataset.page === currentPage) link.classList.add("active");
+});
+document.querySelectorAll(".pbn-link[data-pbn]").forEach(link => {
+  if (link.dataset.pbn === currentPage) link.classList.add("active");
 });
 
 /* ── Toast system ────────────────────────────────────────────── */
