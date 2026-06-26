@@ -185,45 +185,68 @@ select.form-control{cursor:pointer}
   .two-col{grid-template-columns:1fr}
 }
 @media(max-width:768px){
-  /* Typography — readable sizes on mobile */
-  .page-title{font-size:1.25rem}
-  .page-sub{font-size:.875rem}
-  .card-title{font-size:.9375rem}
-  .stat-lbl{font-size:.75rem}
-  .stat-val{font-size:1.5rem}
+  /* Topbar — compact single row, no wrap */
+  .topbar{padding:0 .875rem;height:56px}
+  .logo{font-size:.875rem}
+  .logo-icon{width:26px;height:26px}
+  .logo-icon img{width:16px;height:16px}
+  .admin-tag{font-size:.5rem;padding:1px 4px}
+  #emailEl{display:none}
+  .btn-signout{padding:.3125rem .625rem;font-size:.75rem;min-height:36px}
+  .topbar-right{gap:.5rem}
+  .avatar{width:28px;height:28px;font-size:.6875rem}
+  .hamburger{width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+
+  /* Typography */
+  .page-title{font-size:1.125rem}
+  .page-sub{font-size:.8125rem}
+  .card-title{font-size:.875rem}
   .nav-btn{font-size:.875rem;padding:.625rem .75rem;min-height:44px}
-  .nav-label{font-size:.625rem}
-  .tbl{font-size:.875rem}
-  .tbl th{font-size:.75rem}
+  .nav-label{font-size:.5625rem}
+  .tbl{font-size:.8125rem}
+  .tbl th{font-size:.6875rem}
   .form-label{font-size:.875rem}
   .form-control{font-size:1rem;padding:.625rem .875rem}
   .form-hint{font-size:.8125rem}
-  .badge{font-size:.75rem;padding:.2rem .5rem}
-  .admin-tag{font-size:.625rem}
+  .badge{font-size:.6875rem;padding:.15rem .4rem}
+
   /* Touch targets */
-  .btn{min-height:42px;padding:.5rem 1rem;font-size:.875rem}
-  .btn-sm{min-height:36px;padding:.375rem .75rem;font-size:.8125rem}
-  .btn-signout{min-height:40px}
-  .hamburger{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+  .btn{min-height:42px;padding:.5rem .875rem;font-size:.8125rem}
+  .btn-sm{min-height:36px;padding:.3125rem .625rem;font-size:.75rem}
+
   /* Layout */
-  .main{padding:1rem .875rem}
-  .stats{grid-template-columns:1fr 1fr;gap:.75rem}
-  .card-body{padding:1rem}
-  .card-hdr{padding:.75rem 1rem}
-  .page-hdr{margin-bottom:1rem}
+  .wrapper{padding-top:56px}
+  .sidebar{top:56px;height:calc(100vh - 56px)}
+  .main{padding:.875rem}
+  .stats{grid-template-columns:1fr 1fr;gap:.625rem}
+
+  /* Stat cards — compact horizontal */
+  .stat{display:flex;align-items:center;gap:.625rem;padding:.75rem .875rem}
+  .stat-icon{width:32px;height:32px;font-size:.875rem;margin-bottom:0;flex-shrink:0}
+  .stat-lbl{font-size:.5625rem;margin-bottom:.125rem}
+  .stat-val{font-size:1.125rem;letter-spacing:-.02em}
+
+  /* Cards */
+  .card-body{padding:.875rem}
+  .card-hdr{padding:.625rem .875rem}
+  .page-hdr{margin-bottom:.875rem;flex-direction:column;gap:.5rem}
+
   /* Service stage cards */
   .svc-stage-grid{grid-template-columns:1fr}
-  /* Topbar — hide email on small screens */
-  #emailEl{display:none}
+  .svc-subtabs-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;white-space:nowrap}
+
   /* Modals — slide up from bottom */
   .modal-bg{align-items:flex-end;padding:0}
-  .modal{border-radius:14px 14px 0 0;max-width:100%;width:100%;max-height:90vh;animation:mSlideUp .3s cubic-bezier(.34,1.26,.64,1)}
-  @keyframes mSlideUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+  .modal{border-radius:14px 14px 0 0;max-width:100%;width:100%;max-height:92vh;animation:mSlideUp .28s cubic-bezier(.34,1.26,.64,1)}
+  @keyframes mSlideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+  .modal-hdr{padding:.75rem 1rem}
+  .modal-body{padding:1rem}
+  .modal-sec{padding:.875rem 1rem}
+  .modal-footer{padding:.75rem 1rem}
+
   /* Toast */
   #toastRoot{left:.75rem;right:.75rem;bottom:.75rem}
   .toast{min-width:unset;max-width:100%}
-  /* svc subtabs — scrollable */
-  .svc-subtabs-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
 }
 @media(max-width:480px){
   .page-title{font-size:1.125rem}

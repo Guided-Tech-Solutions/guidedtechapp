@@ -93,10 +93,20 @@
     @keyframes spin{to{transform:rotate(360deg)}}
 
     @media(max-width:960px){.auth-brand{display:none}}
-    @media(max-width:540px){.auth-panel{width:100%}.panel-inner{padding:2rem 1.5rem}}
+    @media(max-width:540px){
+      .auth-panel{width:100%}
+      .panel-inner{padding:1.5rem 1.25rem}
+      .panel-title{font-size:1.5rem}
+      .panel-subtitle{font-size:.875rem;margin-bottom:1.5rem}
+      .btn-google{padding:.75rem 1rem;font-size:.875rem}
+      .form-control{font-size:1rem;padding:.75rem .875rem}
+      .btn-submit{padding:.875rem;font-size:.9375rem}
+      .panel-back{margin-bottom:1.5rem}
+      .form-group{margin-bottom:.875rem}
+    }
   </style>
 </head>
-<body style="visibility:hidden">
+<body style="opacity:0;transition:opacity .2s"><script>setTimeout(function(){document.body.style.opacity="1"},1500)</script>
 <div class="auth-split">
 
   <!-- Brand panel -->
@@ -263,7 +273,7 @@ onAuthStateChanged(auth, user => {
     localStorage.setItem('gts_user', JSON.stringify({ displayName: user.displayName, email: user.email, photoURL: user.photoURL }));
     window.location.href = redirect;
   } else {
-    document.body.style.visibility = "visible";
+    document.body.style.opacity = "1";
   }
 });
 </script>

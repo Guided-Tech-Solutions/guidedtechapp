@@ -210,25 +210,35 @@
       .steps-grid::before{display:none}
     }
     @media(max-width:768px){
+      .nav{height:56px}
+      .nav-inner{padding:0 1rem}
       .nav-links,.nav-cta{display:none}
-      .nav-mobile-btn{display:block}
-      section{padding:3.5rem 0}
-      .hero-inner{padding:3.5rem 1.5rem 5rem}
-      .hero-btns{flex-direction:column;align-items:center}
-      .btn-hero-primary,.btn-hero-ghost{width:100%;max-width:320px;justify-content:center}
-      .steps-grid{grid-template-columns:1fr 1fr;gap:1.5rem}
-      .stats-row{grid-template-columns:1fr 1fr;gap:1.5rem}
+      .nav-mobile-btn{display:flex;align-items:center;justify-content:center;width:40px;height:40px;font-size:1.25rem}
+      .nav-logo{font-size:.9375rem}
+      .nav-logo-icon{width:28px;height:28px;font-size:.875rem}
+      section{padding:3rem 0}
+      .container{padding:0 1rem}
+      .hero-inner{padding:3rem 1rem 4rem}
+      .hero-btns{flex-direction:column;align-items:center;gap:.75rem}
+      .btn-hero-primary,.btn-hero-ghost{width:100%;max-width:320px;justify-content:center;padding:.875rem 1.5rem;font-size:.9375rem}
+      .section-title{font-size:clamp(1.375rem,5vw,2rem)}
+      .section-desc{font-size:.9375rem}
+      .steps-grid{grid-template-columns:1fr 1fr;gap:1.25rem}
+      .stats-row{grid-template-columns:1fr 1fr;gap:1rem}
       .providers-grid{grid-template-columns:1fr}
       .pricing-grid{grid-template-columns:1fr}
-      .footer-grid{grid-template-columns:1fr;gap:2rem}
-      .footer-bottom{flex-direction:column;text-align:center}
-      .cta-btns{flex-direction:column;align-items:center}
-      .btn-cta-white,.btn-cta-ghost{width:100%;max-width:320px;justify-content:center}
+      .footer-grid{grid-template-columns:1fr;gap:1.5rem}
+      .footer-bottom{flex-direction:column;text-align:center;gap:.5rem}
+      .cta-btns{flex-direction:column;align-items:center;gap:.75rem}
+      .btn-cta-white,.btn-cta-ghost{width:100%;max-width:320px;justify-content:center;padding:.875rem 1.5rem;font-size:.9375rem}
     }
     @media(max-width:480px){
+      .nav{height:52px}
       .steps-grid{grid-template-columns:1fr}
       .stats-row{grid-template-columns:1fr 1fr}
       .services-grid{grid-template-columns:1fr}
+      .hero-title{font-size:clamp(1.875rem,8vw,3rem)}
+      .section-title{font-size:clamp(1.25rem,5vw,1.75rem)}
     }
   </style>
 </head>
