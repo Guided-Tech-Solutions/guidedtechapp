@@ -202,98 +202,117 @@
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
     .shimmer{background:linear-gradient(90deg,#f0f4f8 25%,#e2e8f0 50%,#f0f4f8 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
 
-    /* RESPONSIVE */
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
     @media(max-width:1024px){
       .analytics-grid{grid-template-columns:1fr}
       .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
-      .pricing-grid{grid-template-columns:1fr}
+      .pricing-grid{grid-template-columns:1fr 1fr}
       .steps-grid::before{display:none}
     }
 
+    /* ── 768px ─────────────────────────────────────────────── */
     @media(max-width:768px){
       /* Nav */
       .nav{height:56px}
-      .nav-inner{padding:0 1.125rem}
+      .nav-inner{padding:0 1rem}
       .nav-links,.nav-cta{display:none}
-      .nav-mobile-btn{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:var(--bg)}
+      .nav-mobile-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;background:var(--bg);font-size:1.125rem}
       .nav-logo{font-size:.9375rem}
       .nav-logo-icon{width:28px;height:28px;font-size:.875rem}
-      .mobile-nav{top:56px;padding:1rem 1.125rem 1.25rem}
-      .mobile-nav-link{padding:.625rem .875rem;border-radius:10px;font-size:.9375rem}
-      /* Sections */
-      section{padding:2.75rem 0}
-      .container{padding:0 1.125rem}
-      /* Hero */
-      .hero{min-height:auto;padding-top:56px}
-      .hero-inner{padding:2.5rem 1.125rem 3rem;text-align:left}
-      .hero-badge{font-size:.75rem;padding:.3125rem .875rem;margin-bottom:1.125rem}
-      .hero-title{font-size:clamp(2rem,7vw,2.875rem);margin-bottom:1rem;letter-spacing:-.035em}
-      .hero-desc{font-size:.9375rem;margin:0 0 1.75rem;max-width:none;line-height:1.65}
-      .hero-btns{flex-direction:column;gap:.625rem;margin-bottom:1.75rem;align-items:stretch}
-      .btn-hero-primary,.btn-hero-ghost{justify-content:center;padding:.875rem 1.5rem;font-size:.9375rem;width:100%;border-radius:10px}
-      .hero-trust{justify-content:flex-start;gap:.5rem 1.25rem;font-size:.75rem;flex-wrap:wrap}
-      /* Stats */
-      .stats-banner{padding:1.375rem 0}
-      .stats-row{grid-template-columns:1fr 1fr;gap:1rem 2rem;padding:0 .5rem}
-      .stat-num{font-size:1.625rem}
-      .stat-lbl{font-size:.8125rem}
-      /* Section text */
+      /* Mobile drawer */
+      .mobile-nav{top:56px;padding:.875rem 1rem 1.125rem;gap:.125rem;box-shadow:0 16px 40px rgba(0,0,0,.14)}
+      .mobile-nav-link{padding:.6875rem 1rem;border-radius:10px;font-size:.9375rem;font-weight:500}
+      /* Global */
+      section{padding:2.5rem 0}
+      .container{padding:0 1rem}
       .section-title{font-size:clamp(1.375rem,5vw,2rem)}
       .section-desc{font-size:.9375rem;max-width:none}
+      /* Hero */
+      .hero{min-height:auto;padding-top:56px}
+      .hero-inner{padding:2.25rem 1rem 2.75rem;text-align:left}
+      .hero-badge{font-size:.75rem;padding:.3125rem .875rem;margin-bottom:1rem}
+      .hero-title{font-size:clamp(1.875rem,6.5vw,2.625rem);margin-bottom:.875rem;letter-spacing:-.03em}
+      .hero-desc{font-size:.9375rem;margin:0 0 1.5rem;max-width:none;line-height:1.6}
+      .hero-btns{flex-direction:column;gap:.5rem;margin-bottom:1.375rem;align-items:stretch}
+      .btn-hero-primary,.btn-hero-ghost{justify-content:center;padding:.8125rem 1.25rem;font-size:.9375rem;width:100%}
+      .hero-trust{justify-content:flex-start;gap:.375rem 1rem;font-size:.75rem;flex-wrap:wrap;color:rgba(255,255,255,.5)}
+      /* Stats banner */
+      .stats-banner{padding:1.25rem 0}
+      .stats-row{grid-template-columns:1fr 1fr;gap:.875rem 1.5rem}
+      .stat-num{font-size:1.5rem}
+      .stat-lbl{font-size:.75rem}
       /* Services */
-      .services-grid{grid-template-columns:1fr;gap:1rem;margin-top:1.75rem}
-      .svc-card{padding:1.375rem}
-      .svc-icon{width:44px;height:44px;font-size:1.25rem;border-radius:12px;margin-bottom:.875rem}
-      .svc-name{font-size:1rem}
-      /* Steps — vertical timeline */
-      .steps-grid{grid-template-columns:1fr;gap:0;margin-top:1.75rem;padding:0 .25rem}
-      .step-card{display:flex;align-items:flex-start;gap:1rem;text-align:left;padding:.875rem 0;border-bottom:1px solid var(--border);position:relative;z-index:1}
+      .services-grid{grid-template-columns:1fr;gap:.875rem;margin-top:1.5rem}
+      .svc-card{padding:1.25rem}
+      .svc-card.shimmer{min-height:100px !important}
+      .svc-icon{width:40px;height:40px;border-radius:10px;font-size:1.125rem;margin-bottom:.75rem}
+      .svc-name{font-size:.9375rem}
+      .svc-desc{font-size:.8125rem;margin-bottom:.875rem}
+      /* Steps — vertical list */
+      .steps-grid{display:flex;flex-direction:column;gap:0;margin-top:1.5rem}
+      .step-card{display:flex !important;flex-direction:row !important;align-items:flex-start;gap:.875rem;text-align:left !important;padding:.875rem 0;border-bottom:1px solid var(--border)}
       .step-card:last-child{border-bottom:none;padding-bottom:0}
-      .step-num{width:44px;height:44px;font-size:1rem;flex-shrink:0;margin:0}
-      .step-title{font-size:1rem;margin-bottom:.3125rem}
-      .step-desc{font-size:.875rem}
+      .step-num{width:40px;height:40px;min-width:40px;font-size:.9375rem;margin:0 !important;border-width:2px;box-shadow:none;flex-shrink:0}
+      .step-title{font-size:.9375rem;margin-bottom:.25rem}
+      .step-desc{font-size:.8125rem;line-height:1.5}
       /* Analytics */
-      .analytics-grid{gap:2rem;margin-top:1.75rem}
-      .analytics-visual{padding:1.25rem;border-radius:16px}
-      .av-stats{gap:.625rem}
-      .av-stat{padding:.625rem .875rem;border-radius:10px}
-      .av-stat-value{font-size:1.25rem}
-      /* Payments — horizontal cards */
-      .providers-grid{grid-template-columns:1fr;gap:.875rem}
-      .provider-card{padding:1.125rem 1.25rem;display:flex;align-items:center;gap:1rem;text-align:left;border-radius:14px}
-      .provider-logo{font-size:2rem;flex-shrink:0;margin-bottom:0;line-height:1}
-      .provider-name{font-size:1rem;margin-bottom:.25rem}
-      .provider-desc{font-size:.8125rem;margin-bottom:.625rem}
+      .analytics-grid{gap:1.75rem;margin-top:1.5rem}
+      .analytics-visual{padding:1.125rem;border-radius:14px;box-shadow:0 12px 32px rgba(27,79,114,.2)}
+      .av-stats{gap:.5rem;margin-bottom:.875rem}
+      .av-stat{padding:.625rem .75rem;border-radius:10px}
+      .av-stat-label{font-size:.5625rem}
+      .av-stat-value{font-size:1.125rem}
+      .av-stat-change{font-size:.5625rem}
+      .av-bar-row{margin-bottom:.375rem}
+      .af-icon{width:34px;height:34px;border-radius:8px;font-size:1rem}
+      .af-title{font-size:.875rem}
+      .af-desc{font-size:.75rem}
+      /* Payments — compact horizontal */
+      .providers-grid{grid-template-columns:1fr;gap:.75rem;margin-top:1.5rem}
+      .provider-card{padding:1rem 1.125rem;display:flex !important;align-items:center;gap:.875rem;text-align:left !important;border-radius:12px}
+      .provider-logo{font-size:1.875rem;flex-shrink:0;margin-bottom:0 !important;line-height:1;width:2.5rem;text-align:center}
+      .provider-name{font-size:.9375rem;margin-bottom:.125rem}
+      .provider-desc{font-size:.75rem;line-height:1.4;margin-bottom:.375rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+      .provider-badge{font-size:.625rem;padding:.125rem .5rem}
       /* Pricing */
-      .pricing-grid{grid-template-columns:1fr;gap:.875rem;margin-top:1.75rem}
-      .pricing-card-top{padding:1.25rem}
-      .pricing-card-body{padding:1.25rem}
+      .pricing-grid{grid-template-columns:1fr;gap:.75rem;margin-top:1.5rem}
+      .pricing-card.shimmer{min-height:80px !important}
+      .pricing-card-top{padding:1.125rem}
+      .pricing-card-body{padding:1.125rem}
+      .plan-price{font-size:1.875rem}
       /* CTA */
-      .cta-section{padding:3rem 0}
-      .cta-title{font-size:clamp(1.625rem,5vw,2.25rem)}
-      .cta-desc{font-size:.9375rem;max-width:none}
-      .cta-btns{flex-direction:column;gap:.625rem;align-items:stretch}
-      .btn-cta-white,.btn-cta-ghost{justify-content:center;padding:.875rem 1.5rem;font-size:.9375rem;width:100%;border-radius:10px}
+      .cta-section{padding:2.5rem 0}
+      .cta-title{font-size:clamp(1.5rem,5vw,2rem)}
+      .cta-desc{font-size:.9375rem;max-width:none;margin-bottom:1.5rem}
+      .cta-btns{flex-direction:column;gap:.5rem;align-items:stretch}
+      .btn-cta-white,.btn-cta-ghost{justify-content:center;padding:.8125rem 1.25rem;font-size:.9375rem;width:100%}
       /* Footer */
-      .footer{padding:2.5rem 0 1.5rem}
-      .footer-grid{grid-template-columns:1fr 1fr;gap:1.5rem 2rem;margin-bottom:2rem}
-      .footer-bottom{flex-direction:column;text-align:center;gap:.5rem}
-      .footer-desc{font-size:.8125rem;max-width:none}
+      .footer{padding:2rem 0 1.25rem}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:1.25rem 1.5rem;margin-bottom:1.25rem}
+      .footer-grid > div:first-child{grid-column:1/-1}
+      .footer-brand-row{margin-bottom:.5rem}
+      .footer-desc{font-size:.8125rem;max-width:none;line-height:1.5}
+      .footer-col-title{font-size:.625rem;margin-bottom:.5rem}
+      .footer-link{font-size:.8125rem;margin-bottom:.3125rem}
+      .footer-bottom{flex-direction:column;text-align:center;gap:.375rem;padding-top:1rem}
     }
 
+    /* ── 480px ─────────────────────────────────────────────── */
     @media(max-width:480px){
       .nav{height:52px}
       .mobile-nav{top:52px}
-      .hero-inner{padding:1.875rem 1rem 2.75rem}
-      .hero-title{font-size:clamp(1.75rem,8.5vw,2.375rem)}
+      .hero-inner{padding:2rem 1rem 2.5rem}
+      .hero-title{font-size:clamp(1.625rem,7.5vw,2.25rem)}
       .hero-desc{font-size:.875rem}
-      .section-title{font-size:clamp(1.25rem,5.5vw,1.75rem)}
-      .stats-row{gap:.75rem 1.5rem}
-      .stat-num{font-size:1.375rem}
-      .svc-card{padding:1.125rem}
-      .provider-card{padding:1rem 1.125rem}
-      .footer-grid{grid-template-columns:1fr;gap:1.25rem}
-      .footer-brand-row{margin-bottom:.625rem}
+      .section-title{font-size:clamp(1.25rem,5.5vw,1.625rem)}
+      .stats-row{gap:.75rem 1.25rem}
+      .stat-num{font-size:1.25rem}
+      .stat-lbl{font-size:.6875rem}
+      .svc-card{padding:1rem}
+      .step-num{width:36px;height:36px;min-width:36px;font-size:.875rem}
+      .provider-card{padding:.875rem 1rem;gap:.75rem}
+      .provider-logo{font-size:1.625rem;width:2rem}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:1.125rem 1.25rem}
     }
   </style>
 </head>
@@ -449,19 +468,19 @@
       <div class="provider-card">
         <div class="provider-logo">💳</div>
         <div class="provider-name">Paystack</div>
-        <div class="provider-desc">Nigeria's leading payment gateway. Pay with debit card, USSD, bank transfer, or mobile money. Prices displayed in USD ($).</div>
+        <div class="provider-desc">Nigeria's leading gateway — debit card, USSD, bank transfer &amp; mobile money.</div>
         <span class="provider-badge">🇳🇬 Recommended for Nigeria</span>
       </div>
       <div class="provider-card">
         <div class="provider-logo">🔵</div>
         <div class="provider-name">Stripe</div>
-        <div class="provider-desc">Global card payments accepted worldwide. Pay with Visa, Mastercard, or American Express. Prices billed in USD.</div>
+        <div class="provider-desc">Global card payments — Visa, Mastercard &amp; Amex accepted worldwide.</div>
         <span class="provider-badge">🌍 Global Payments</span>
       </div>
       <div class="provider-card">
         <div class="provider-logo">🅿️</div>
         <div class="provider-name">PayPal</div>
-        <div class="provider-desc">Pay from your PayPal balance or any linked payment method. Convenient for international clients with existing PayPal accounts.</div>
+        <div class="provider-desc">Pay from your PayPal balance or any linked card — ideal for international clients.</div>
         <span class="provider-badge">🌐 PayPal Balance &amp; Cards</span>
       </div>
     </div>
