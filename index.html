@@ -46,6 +46,60 @@
     .nav-dropdown-item:hover{background:rgba(255,255,255,.06);color:#fff}
     .nav-dropdown-divider{height:1px;background:rgba(255,255,255,.08);margin:.375rem 0}
     .nav-mobile-btn{display:none;background:none;border:none;font-size:1.375rem;cursor:pointer;color:rgba(255,255,255,.6)}
+    /* THEME TOGGLE */
+    .theme-toggle{width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+    .theme-toggle:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff}
+    /* LIGHT MODE */
+    body.light{background:#F5F7FF;color:#1A1F36}
+    body.light .nav{background:rgba(245,247,255,.94);border-bottom-color:rgba(0,0,0,.07)}
+    body.light .nav-logo{color:#1A1F36}
+    body.light .nav-link{color:rgba(26,31,54,.55)}
+    body.light .nav-link:hover{background:rgba(58,123,247,.08);color:#1A1F36}
+    body.light .btn-nav-outline{color:#2563EB;border-color:rgba(37,99,235,.35)}
+    body.light .btn-nav-outline:hover{background:rgba(37,99,235,.08)}
+    body.light .nav-mobile-btn{color:rgba(26,31,54,.6)}
+    body.light .mobile-nav{background:#F5F7FF;border-color:rgba(0,0,0,.07)}
+    body.light .mobile-nav-link{color:rgba(26,31,54,.6)}
+    body.light .mobile-nav-link:hover{background:rgba(58,123,247,.07);color:#1A1F36}
+    body.light .mob-divider{background:rgba(0,0,0,.07)}
+    body.light .theme-toggle{border-color:rgba(0,0,0,.15);background:rgba(0,0,0,.05);color:rgba(26,31,54,.7)}
+    body.light .theme-toggle:hover{background:rgba(0,0,0,.1);color:#1A1F36}
+    body.light .hero{background:linear-gradient(160deg,#EEF2FF 0%,#E8F4FF 60%,#F0FFFE 100%)}
+    body.light .hero-badge{background:rgba(58,123,247,.1);color:#2563EB;border-color:rgba(58,123,247,.2)}
+    body.light .hero-title{color:#1A1F36}
+    body.light .hero-desc{color:#475569}
+    body.light .hero-trust-item{color:#475569}
+    body.light .stats-banner{background:#fff;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06)}
+    body.light .stat-lbl{color:#64748B}
+    body.light section{background:transparent}
+    body.light .section-badge{background:rgba(58,123,247,.1);color:#2563EB;border-color:rgba(58,123,247,.2)}
+    body.light .section-title{color:#1A1F36}
+    body.light .section-desc{color:#475569}
+    body.light .svc-card{background:#fff;border-color:rgba(0,0,0,.07);box-shadow:0 2px 16px rgba(0,0,0,.06)}
+    body.light .svc-name{color:#1A1F36}
+    body.light .svc-desc{color:#475569}
+    body.light .svc-price-val{color:#1A1F36}
+    body.light .svc-price-per{color:#64748B}
+    body.light .svc-card-cta{background:rgba(58,123,247,.08);color:#2563EB}
+    body.light .step-card{background:#fff;border-color:rgba(0,0,0,.07);box-shadow:0 2px 16px rgba(0,0,0,.06)}
+    body.light .step-title{color:#1A1F36}
+    body.light .step-desc{color:#475569}
+    body.light .analytics-visual{background:#fff;border-color:rgba(0,0,0,.07)}
+    body.light .av-stat{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.06)}
+    body.light .av-stat-label{color:#64748B}
+    body.light .av-stat-value{color:#1A1F36}
+    body.light .av-bar-track{background:rgba(0,0,0,.06)}
+    body.light .provider-card{background:#fff;border-color:rgba(0,0,0,.07);box-shadow:0 2px 12px rgba(0,0,0,.06)}
+    body.light .provider-name{color:#1A1F36}
+    body.light .pricing-card{background:#fff;border-color:rgba(0,0,0,.07);box-shadow:0 2px 16px rgba(0,0,0,.06)}
+    body.light .plan-name{color:#1A1F36}
+    body.light .plan-tagline{color:#64748B}
+    body.light .plan-price{color:#1A1F36}
+    body.light .plan-per{color:#64748B}
+    body.light .plan-feature{color:#475569}
+    body.light .cta-section{background:linear-gradient(135deg,#2563EB 0%,#3A7BF7 50%,#00D2FF 100%)}
+    body.light .footer{background:#1A1F36}
+    body.light .shimmer{background:linear-gradient(90deg,rgba(0,0,0,.04) 25%,rgba(0,0,0,.08) 50%,rgba(0,0,0,.04) 75%);background-size:200% 100%;border-color:rgba(0,0,0,.06)}
     .mobile-nav{display:none;position:fixed;top:68px;left:0;right:0;background:#0D1221;border-bottom:1px solid rgba(255,255,255,.07);padding:1rem 1.5rem;z-index:99;flex-direction:column;gap:.25rem;box-shadow:0 12px 32px rgba(0,0,0,.4);transform:translateY(-8px);opacity:0;transition:transform .2s ease,opacity .2s ease}
     .mobile-nav.show{display:flex;transform:translateY(0);opacity:1}
     .mobile-nav-link{padding:.625rem .875rem;border-radius:10px;font-weight:500;color:rgba(255,255,255,.6);font-size:.9375rem;transition:background .15s,color .15s}
@@ -344,6 +398,7 @@
       <a href="./app/login.html"  class="btn-nav-outline">Sign In</a>
       <a href="./app/signup.html" class="btn-nav-solid">Get Started Free →</a>
     </div>
+    <button class="theme-toggle" id="themeToggle" title="Toggle light/dark mode">🌙</button>
     <button class="nav-mobile-btn" id="mobileMenuToggle">☰</button>
   </div>
 </nav>
@@ -477,20 +532,14 @@
       <div class="provider-card">
         <div class="provider-logo">💳</div>
         <div class="provider-name">Paystack</div>
-        <div class="provider-desc">Nigeria's leading gateway — debit card, USSD, bank transfer &amp; mobile money.</div>
-        <span class="provider-badge">🇳🇬 Recommended for Nigeria</span>
       </div>
       <div class="provider-card">
         <div class="provider-logo">🔵</div>
         <div class="provider-name">Stripe</div>
-        <div class="provider-desc">Global card payments — Visa, Mastercard &amp; Amex accepted worldwide.</div>
-        <span class="provider-badge">🌍 Global Payments</span>
       </div>
       <div class="provider-card">
         <div class="provider-logo">🅿️</div>
         <div class="provider-name">PayPal</div>
-        <div class="provider-desc">Pay from your PayPal balance or any linked card — ideal for international clients.</div>
-        <span class="provider-badge">🌐 PayPal Balance &amp; Cards</span>
       </div>
     </div>
     <div style="text-align:center;margin-top:1.5rem;font-size:.875rem;color:var(--text-muted)">🔒 All transactions are secured with industry-standard encryption. Your payment details are never stored on our servers.</div>
@@ -793,6 +842,17 @@ loadPricingCards().then(updateCtaButtons);
 </script>
 
 <script>
+  // Theme toggle
+  (function(){
+    var btn=document.getElementById("themeToggle");
+    var saved=localStorage.getItem("gts_theme");
+    if(saved==="light"){document.body.classList.add("light");btn.textContent="☀️";}
+    btn.addEventListener("click",function(){
+      var isLight=document.body.classList.toggle("light");
+      btn.textContent=isLight?"☀️":"🌙";
+      localStorage.setItem("gts_theme",isLight?"light":"dark");
+    });
+  })();
   document.getElementById("mobileMenuToggle").addEventListener("click",()=>{
     document.getElementById("mobileNav").classList.toggle("show");
   });
