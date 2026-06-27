@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Mockup 4 — Soft Gradient</title>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{font-size:16px;-webkit-font-smoothing:antialiased}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F4FF;color:#1A1F36;max-width:390px;margin:0 auto}
+  a{text-decoration:none;color:inherit}
+
+  /* NAV */
+  .nav{background:rgba(255,255,255,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:0 1.125rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(99,102,241,.1)}
+  .nav-logo{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:.9375rem;color:#1A1F36;letter-spacing:-.02em}
+  .logo-mark{width:30px;height:30px;background:linear-gradient(135deg,#6366F1,#8B5CF6);border-radius:9px;display:flex;align-items:center;justify-content:center;color:white;font-size:.875rem;font-weight:900}
+  .nav-cta{font-size:.8125rem;font-weight:700;color:#6366F1;background:#EEF2FF;padding:.4375rem 1rem;border-radius:20px}
+
+  /* HERO */
+  .hero{padding:2.5rem 1.125rem 2rem;background:linear-gradient(160deg,#EEF2FF 0%,#F5F3FF 50%,#FDF2F8 100%)}
+  .hero-badge{display:inline-flex;align-items:center;gap:.375rem;font-size:.6875rem;font-weight:700;color:#6366F1;background:#fff;padding:.375rem .75rem;border-radius:20px;box-shadow:0 1px 4px rgba(99,102,241,.15);margin-bottom:1.25rem}
+  .hero-badge::before{content:"✦";font-size:.625rem}
+  .hero-title{font-size:2rem;font-weight:900;line-height:1.1;letter-spacing:-.04em;color:#1A1F36;margin-bottom:1rem}
+  .hero-title .grad{background:linear-gradient(90deg,#6366F1,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-desc{font-size:.9375rem;color:#64748B;line-height:1.65;margin-bottom:1.75rem}
+  .btn-primary{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:1rem;background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;border-radius:14px;font-weight:700;font-size:.9375rem;margin-bottom:.625rem;box-shadow:0 4px 16px rgba(99,102,241,.35)}
+  .btn-outline{display:flex;align-items:center;justify-content:center;width:100%;padding:1rem;border:1.5px solid #C7D2FE;color:#6366F1;border-radius:14px;font-weight:600;font-size:.9375rem;background:#fff}
+  .trust{display:flex;flex-wrap:wrap;gap:.375rem;margin-top:1.25rem}
+  .trust-pill{font-size:.6875rem;color:#6366F1;background:rgba(99,102,241,.08);padding:.3125rem .625rem;border-radius:20px;font-weight:600}
+
+  /* STATS */
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:.875rem;padding:1.5rem 1.125rem;background:#fff;border-top:1px solid #E8ECF1;border-bottom:1px solid #E8ECF1}
+  .stat{background:linear-gradient(135deg,#F0F4FF,#F5F3FF);border-radius:16px;padding:1.125rem 1rem;text-align:center}
+  .stat-n{font-size:1.625rem;font-weight:900;background:linear-gradient(135deg,#6366F1,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.04em}
+  .stat-l{font-size:.6875rem;color:#94A3B8;margin-top:.25rem;font-weight:500}
+
+  /* SECTION */
+  .section{padding:2rem 1.125rem}
+  .section-label{display:inline-flex;align-items:center;gap:.375rem;font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6366F1;margin-bottom:.75rem}
+  .section-title{font-size:1.4375rem;font-weight:900;letter-spacing:-.035em;color:#1A1F36;margin-bottom:.5rem;line-height:1.2}
+  .section-sub{font-size:.875rem;color:#64748B;line-height:1.6;margin-bottom:1.5rem}
+
+  /* SERVICE CARDS */
+  .svc-card{background:#fff;border-radius:20px;padding:1.25rem;margin-bottom:.75rem;display:flex;gap:.875rem;align-items:flex-start;box-shadow:0 2px 12px rgba(99,102,241,.07)}
+  .svc-icon{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#EEF2FF,#F5F3FF);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
+  .svc-name{font-weight:800;font-size:.9375rem;color:#1A1F36;margin-bottom:.25rem;letter-spacing:-.01em}
+  .svc-desc{font-size:.8125rem;color:#64748B;line-height:1.45}
+  .svc-price{font-size:.75rem;font-weight:700;color:#6366F1;margin-top:.375rem;background:#EEF2FF;display:inline-block;padding:.2rem .5rem;border-radius:6px}
+
+  /* STEPS */
+  .steps-list{display:flex;flex-direction:column;gap:0}
+  .step{display:flex;gap:.875rem;align-items:flex-start;padding:1rem 0;border-bottom:1px solid #F1F5F9;position:relative}
+  .step:last-child{border-bottom:none}
+  .step-n{width:36px;height:36px;min-width:36px;border-radius:12px;background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;font-size:.875rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(99,102,241,.3)}
+  .step-title{font-weight:800;font-size:.9375rem;color:#1A1F36;margin-bottom:.25rem;letter-spacing:-.01em}
+  .step-desc{font-size:.8125rem;color:#64748B;line-height:1.45}
+
+  /* PAYMENT */
+  .pay-card{background:#fff;border-radius:16px;padding:1rem 1.125rem;margin-bottom:.625rem;display:flex;align-items:center;gap:.875rem;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+  .pay-logo{font-size:1.75rem;width:2.5rem;text-align:center;flex-shrink:0}
+  .pay-name{font-weight:800;font-size:.9375rem;color:#1A1F36;letter-spacing:-.01em}
+  .pay-badge{display:inline-block;font-size:.625rem;font-weight:700;background:#E6F4EA;color:#0F9D58;padding:.1875rem .5rem;border-radius:8px;margin-top:.25rem}
+
+  /* CTA */
+  .cta{background:linear-gradient(135deg,#6366F1 0%,#8B5CF6 50%,#EC4899 100%);padding:2rem 1.125rem;text-align:center}
+  .cta-title{font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.04em;margin-bottom:.625rem;line-height:1.2}
+  .cta-desc{font-size:.875rem;color:rgba(255,255,255,.7);line-height:1.55;margin-bottom:1.5rem}
+  .btn-white{display:flex;align-items:center;justify-content:center;width:100%;padding:1rem;background:#fff;color:#6366F1;border-radius:14px;font-weight:800;font-size:.9375rem;margin-bottom:.625rem;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+  .btn-ghost-white{display:flex;align-items:center;justify-content:center;width:100%;padding:1rem;border:1.5px solid rgba(255,255,255,.4);color:#fff;border-radius:14px;font-weight:600;font-size:.9375rem}
+
+  /* FOOTER */
+  .footer{background:#1A1F36;padding:1.75rem 1.125rem 1.25rem}
+  .footer-brand{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem}
+  .footer-brand-name{font-weight:800;color:#fff;font-size:.9375rem;letter-spacing:-.02em}
+  .footer-tagline{font-size:.8125rem;color:rgba(255,255,255,.4);margin-bottom:1.375rem;line-height:1.5}
+  .footer-links{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.875rem;margin-bottom:1.125rem}
+  .footer-col-title{font-size:.625rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:.5rem}
+  .footer-link{display:block;font-size:.8125rem;color:rgba(255,255,255,.45);margin-bottom:.3125rem}
+  .footer-copy{font-size:.75rem;color:rgba(255,255,255,.2);padding-top:.875rem;border-top:1px solid rgba(255,255,255,.07)}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo"><div class="logo-mark">G</div>GTS Amplify</div>
+  <a href="#" class="nav-cta">Sign In</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Powered by Guided Tech Solutions</div>
+  <h1 class="hero-title">Grow your business with <span class="grad">intelligent solutions</span></h1>
+  <p class="hero-desc">Lead generation, cloud migration, automation and SEO — all in one platform with real-time dashboards.</p>
+  <a href="#" class="btn-primary">🚀 Get Started Free</a>
+  <a href="#" class="btn-outline">Explore Services →</a>
+  <div class="trust">
+    <span class="trust-pill">✓ No setup fees</span>
+    <span class="trust-pill">✓ Cancel anytime</span>
+    <span class="trust-pill">✓ Real-time dashboards</span>
+    <span class="trust-pill">✓ Paystack · Stripe · PayPal</span>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-n">500+</div><div class="stat-l">Businesses Served</div></div>
+  <div class="stat"><div class="stat-n">98%</div><div class="stat-l">Client Satisfaction</div></div>
+  <div class="stat"><div class="stat-n">$50M+</div><div class="stat-l">Revenue Generated</div></div>
+  <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Monitoring</div></div>
+</div>
+
+<div class="section">
+  <div class="section-label">✦ Our Services</div>
+  <h2 class="section-title">Everything your business needs to scale</h2>
+  <p class="section-sub">Each service includes a dedicated real-time analytics dashboard.</p>
+  <div class="svc-card"><div class="svc-icon">🎯</div><div><div class="svc-name">Lead Generation</div><div class="svc-desc">Capture, score and convert leads with AI-powered tools.</div><div class="svc-price">From $75 / month</div></div></div>
+  <div class="svc-card"><div class="svc-icon">☁️</div><div><div class="svc-name">Cloud Migration</div><div class="svc-desc">Move infrastructure with zero downtime and live tracking.</div><div class="svc-price">From $120 / month</div></div></div>
+  <div class="svc-card"><div class="svc-icon">🤖</div><div><div class="svc-name">Automation</div><div class="svc-desc">Automate workflows and monitor every run live.</div><div class="svc-price">From $90 / month</div></div></div>
+</div>
+
+<div class="section" style="background:#fff;padding:2rem 1.125rem">
+  <div class="section-label">✦ How It Works</div>
+  <h2 class="section-title">From sign-up to results in minutes</h2>
+  <p class="section-sub">Streamlined onboarding with full visibility from day one.</p>
+  <div class="steps-list">
+    <div class="step"><div class="step-n">1</div><div><div class="step-title">Create Your Account</div><div class="step-desc">Sign up with Google or email. No credit card required.</div></div></div>
+    <div class="step"><div class="step-n">2</div><div><div class="step-title">Choose a Service</div><div class="step-desc">Browse and pay with Paystack, Stripe or PayPal.</div></div></div>
+    <div class="step"><div class="step-n">3</div><div><div class="step-title">Configure via Wizard</div><div class="step-desc">Guided setup activates your service in minutes.</div></div></div>
+    <div class="step"><div class="step-n">4</div><div><div class="step-title">Watch Results Live</div><div class="step-desc">Dashboard updates in real time from day one.</div></div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">✦ Secure Payments</div>
+  <h2 class="section-title">Pay the way that works for you</h2>
+  <p class="section-sub">Three payment providers so you can choose.</p>
+  <div class="pay-card"><div class="pay-logo">💳</div><div><div class="pay-name">Paystack</div><div class="pay-badge">🇳🇬 Recommended for Nigeria</div></div></div>
+  <div class="pay-card"><div class="pay-logo">🔵</div><div><div class="pay-name">Stripe</div><div class="pay-badge">🌍 Global Payments</div></div></div>
+  <div class="pay-card"><div class="pay-logo">🅿️</div><div><div class="pay-name">PayPal</div><div class="pay-badge">🌐 Balance &amp; Cards</div></div></div>
+</div>
+
+<div class="cta">
+  <h2 class="cta-title">Not sure where to start? Talk to our experts — free.</h2>
+  <p class="cta-desc">Book a free 30-minute discovery call. No pressure, no commitment.</p>
+  <a href="#" class="btn-white">📅 Book Free Discovery Call</a>
+  <a href="#" class="btn-ghost-white">💼 Paid Strategy Session</a>
+</div>
+
+<footer class="footer">
+  <div class="footer-brand"><div class="logo-mark" style="width:26px;height:26px;font-size:.75rem">G</div><div class="footer-brand-name">GTS Amplify</div></div>
+  <div class="footer-tagline">Helping businesses grow smarter with data-driven technology.</div>
+  <div class="footer-links">
+    <div><div class="footer-col-title">Services</div><a href="#" class="footer-link">Lead Gen</a><a href="#" class="footer-link">Cloud</a><a href="#" class="footer-link">Automation</a><a href="#" class="footer-link">SEO</a></div>
+    <div><div class="footer-col-title">Platform</div><a href="#" class="footer-link">Get Started</a><a href="#" class="footer-link">Sign In</a><a href="#" class="footer-link">Pricing</a></div>
+    <div><div class="footer-col-title">Company</div><a href="#" class="footer-link">About</a><a href="#" class="footer-link">Privacy</a><a href="#" class="footer-link">Terms</a></div>
+  </div>
+  <div class="footer-copy">© 2025 Guided Tech Solutions. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
