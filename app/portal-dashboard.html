@@ -14,6 +14,7 @@
   </div>
   <div class="navbar-right">
     <a href="../index.html" class="btn-nav btn-nav-ghost" style="font-size:.8125rem">Home</a>
+    <button class="theme-toggle" id="themeToggle" title="Toggle light/dark mode">🌙</button>
     <div class="nav-avatar-wrap" style="visibility:hidden">
       <button class="nav-avatar-btn">
         <div class="nav-avatar-circle" id="navAvatarCircle">?</div>
@@ -114,5 +115,6 @@
 </nav>
 <div id="toastRoot"></div>
 <script type="module" src="./portal-dashboard.js"></script>
+<script>(function(){var btn=document.getElementById("themeToggle");var s=localStorage.getItem("gts_theme");if(s==="light"){document.body.classList.add("light");btn.textContent="☀️";}btn.addEventListener("click",function(){var l=document.body.classList.toggle("light");btn.textContent=l?"☀️":"🌙";localStorage.setItem("gts_theme",l?"light":"dark");});})()</script>
 </body>
 </html>

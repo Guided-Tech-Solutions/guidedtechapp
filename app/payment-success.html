@@ -6,30 +6,30 @@
   <link rel="icon" href="../asset/logo-icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root{--brand:#1B4F72;--brand-dark:#0F2E42;--brand-pale:#EBF5FB;--success:#0F9D58;--success-pale:#E6F4EA;--danger:#E53935;--danger-pale:#FDECEA;--warning:#F39C12;--warning-pale:#FEF9E7;--border:#E2E8F0;--text:#0D1B2A;--text-muted:#64748B;--surface:#fff;--bg:#F2F5F9;--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif}
+    :root{--brand:#3A7BF7;--brand-dark:#2563EB;--brand-pale:rgba(58,123,247,.15);--success:#34D399;--success-pale:rgba(52,211,153,.15);--danger:#F87171;--danger-pale:rgba(248,113,113,.15);--warning:#FBBF24;--warning-pale:rgba(251,191,36,.15);--border:rgba(255,255,255,.08);--text:#E8EDF5;--text-muted:rgba(255,255,255,.45);--surface:rgba(255,255,255,.04);--bg:#0B0F1A;--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif}
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     body{font-family:var(--ff-b);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:1.5rem;-webkit-font-smoothing:antialiased}
-    .card{background:var(--surface);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.1);max-width:480px;width:100%;padding:2.5rem;text-align:center}
+    .card{background:rgba(255,255,255,.05);border:1px solid var(--border);backdrop-filter:blur(12px);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.4);max-width:480px;width:100%;padding:2.5rem;text-align:center}
     .icon{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.25rem}
     .icon.success{background:var(--success-pale);color:var(--success)}
     .icon.error  {background:var(--danger-pale); color:var(--danger)}
     .icon.pending{background:var(--warning-pale);color:var(--warning)}
     h1{font-family:var(--ff-d);font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:.5rem}
     p{font-size:.9375rem;color:var(--text-muted);line-height:1.65;margin-bottom:1.5rem}
-    .detail-box{background:var(--bg);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;text-align:left}
+    .detail-box{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;text-align:left}
     .detail-row{display:flex;justify-content:space-between;align-items:center;padding:.3125rem 0;border-bottom:1px solid var(--border);font-size:.875rem}
     .detail-row:last-child{border-bottom:none}
     .detail-label{color:var(--text-muted)}
     .detail-value{font-weight:600;color:var(--text)}
     .btn{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 1.5rem;border-radius:10px;font-weight:700;font-size:.9375rem;cursor:pointer;transition:all .2s;border:none;text-decoration:none;gap:.375rem;font-family:var(--ff-b)}
-    .btn-primary{background:var(--brand);color:white}
-    .btn-primary:hover{background:var(--brand-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(27,79,114,.3)}
-    .btn-ghost{background:var(--bg);color:var(--text-muted);border:1px solid var(--border)}
-    .btn-ghost:hover{background:var(--border)}
+    .btn-primary{background:linear-gradient(135deg,#1B4F72,#3A7BF7);color:white}
+    .btn-primary:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 6px 20px rgba(58,123,247,.35)}
+    .btn-ghost{background:rgba(255,255,255,.06);color:var(--text-muted);border:1px solid var(--border)}
+    .btn-ghost:hover{background:rgba(255,255,255,.1)}
     .btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
     .logo{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:1.875rem}
-    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--brand),#2471A3);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
-    .logo-text{font-family:var(--ff-d);font-size:1rem;font-weight:700;color:var(--brand)}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#1B4F72,#3A7BF7);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+    .logo-text{font-family:var(--ff-d);font-size:1rem;font-weight:700;color:var(--text)}
     .spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 1rem}
     @keyframes spin{to{transform:rotate(360deg)}}
     @keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}

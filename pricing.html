@@ -5,126 +5,216 @@
   <title>Pricing — GTS Amplify</title>
   <meta name="description" content="Transparent pricing for all GTS Amplify services. Individual services or bundle plans. Pay with Paystack, Stripe or PayPal.">
   <link rel="icon" href="./asset/logo-icon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
   <style>
-    :root{--brand:#1B4F72;--brand-dark:#0F2E42;--brand-mid:#2471A3;--brand-pale:#EBF5FB;--accent:#E67E22;--success:#0F9D58;--success-pale:#E6F4EA;--text:#0D1B2A;--text-mid:#334155;--text-muted:#64748B;--border:#E2E8F0;--surface:#fff;--bg:#F2F5F9;--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif}
+    :root{
+      --brand:#3A7BF7;--brand-dark:#2563EB;--brand-mid:#00D2FF;--brand-pale:rgba(58,123,247,.15);
+      --success:#34D399;
+      --text:#E8EDF5;--text-mid:#CBD5E1;--text-muted:rgba(255,255,255,.45);
+      --border:rgba(255,255,255,.08);--surface:rgba(255,255,255,.04);--bg:#0D1221;
+      --ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif;
+    }
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{font-family:var(--ff-b);color:var(--text);background:var(--surface);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-    a{text-decoration:none;color:inherit}
+    body{font-family:var(--ff-b);color:var(--text);background:#0B0F1A;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    a{text-decoration:none;color:inherit}img{max-width:100%;display:block}
 
-    /* Nav */
-    .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(226,232,240,.8);height:68px}
-    .nav-inner{max-width:1200px;margin:0 auto;padding:0 1.5rem;height:100%;display:flex;align-items:center;justify-content:space-between}
-    .nav-logo{display:flex;align-items:center;gap:.5rem;font-family:var(--ff-d);font-size:1.0625rem;font-weight:700;color:var(--brand)}
-    .nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:8px;display:flex;align-items:center;justify-content:center}
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(11,15,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);height:68px}
+    .nav-inner{max-width:1200px;margin:0 auto;padding:0 1.5rem;height:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .nav-logo{display:flex;align-items:center;gap:.5rem;font-family:var(--ff-d);font-size:1.0625rem;font-weight:700;color:#fff}
+    .nav-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,#3A7BF7,#00D2FF);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 2px 8px rgba(58,123,247,.3)}
     .nav-links{display:flex;align-items:center;gap:.25rem}
-    .nav-link{padding:.4375rem .875rem;border-radius:8px;font-size:.875rem;font-weight:500;color:var(--text-mid);transition:all .2s}
-    .nav-link:hover{background:var(--bg);color:var(--brand)}
-    .nav-link.active{color:var(--brand);font-weight:600}
+    .nav-link{padding:.4375rem .875rem;border-radius:8px;font-size:.875rem;font-weight:500;color:rgba(255,255,255,.55);transition:all .2s}
+    .nav-link:hover{background:rgba(255,255,255,.06);color:#fff}
+    .nav-link.active{color:#00D2FF;background:rgba(0,210,255,.08)}
     .nav-cta{display:flex;gap:.625rem;align-items:center}
-    .btn-nav-outline{padding:.5rem 1rem;border-radius:8px;font-weight:600;font-size:.875rem;color:var(--brand);border:1.5px solid var(--brand);background:transparent;cursor:pointer;transition:all .2s}
-    .btn-nav-outline:hover{background:var(--brand-pale)}
-    .btn-nav-solid{padding:.5rem 1.25rem;border-radius:8px;font-weight:600;font-size:.875rem;color:white;background:var(--brand);border:none;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(27,79,114,.2)}
-    .btn-nav-solid:hover{background:var(--brand-dark)}
+    .btn-nav-outline{padding:.5rem 1.125rem;border-radius:8px;font-weight:600;font-size:.875rem;color:#00D2FF;border:1.5px solid rgba(0,210,255,.3);background:transparent;cursor:pointer;transition:all .2s}
+    .btn-nav-outline:hover{background:rgba(0,210,255,.08)}
+    .btn-nav-solid{padding:.5rem 1.25rem;border-radius:8px;font-weight:600;font-size:.875rem;color:white;background:linear-gradient(135deg,#1B4F72,#3A7BF7);border:none;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(58,123,247,.3)}
+    .btn-nav-solid:hover{opacity:.9;transform:translateY(-1px)}
     .nav-avatar-wrap{position:relative}
-    .nav-avatar-btn{display:flex;align-items:center;gap:.5rem;padding:.3125rem .75rem .3125rem .3125rem;border-radius:100px;border:1.5px solid var(--border);background:white;cursor:pointer;transition:all .2s;text-decoration:none}
-    .nav-avatar-btn:hover{border-color:var(--brand);background:var(--brand-pale)}
-    .nav-avatar-circle{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-mid));display:flex;align-items:center;justify-content:center;font-size:.8125rem;font-weight:700;color:white;overflow:hidden;flex-shrink:0}
+    .nav-avatar-btn{display:flex;align-items:center;gap:.5rem;padding:.3125rem .75rem .3125rem .3125rem;border-radius:100px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);cursor:pointer;transition:all .2s;text-decoration:none}
+    .nav-avatar-btn:hover{border-color:rgba(0,210,255,.4);background:rgba(0,210,255,.08)}
+    .nav-avatar-circle{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#1B4F72,#3A7BF7);display:flex;align-items:center;justify-content:center;font-size:.8125rem;font-weight:700;color:white;overflow:hidden;flex-shrink:0}
     .nav-avatar-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-    .nav-avatar-name{font-size:.8125rem;font-weight:600;color:var(--text);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .nav-dropdown{position:absolute;top:calc(100% + .5rem);right:0;background:white;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.12);min-width:200px;padding:.5rem;z-index:200;opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s}
+    .nav-avatar-name{font-size:.8125rem;font-weight:600;color:#fff;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .nav-dropdown{position:absolute;top:calc(100% + .5rem);right:0;background:#141A2E;border:1.5px solid rgba(255,255,255,.1);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.4);min-width:200px;padding:.5rem;z-index:200;opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s}
     .nav-avatar-wrap:hover .nav-dropdown,.nav-avatar-wrap:focus-within .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
-    .nav-dropdown-item{display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:8px;font-size:.875rem;font-weight:500;color:var(--text-mid);transition:background .15s}
-    .nav-dropdown-item:hover{background:var(--bg);color:var(--brand)}
-    .nav-dropdown-divider{height:1px;background:var(--border);margin:.375rem 0}
-    .nav-mobile-btn{display:none;background:none;border:none;font-size:1.375rem;cursor:pointer;color:var(--text-mid)}
-    .mobile-nav{display:none;position:fixed;top:68px;left:0;right:0;background:white;border-bottom:1px solid var(--border);padding:1rem 1.5rem;z-index:99;flex-direction:column;gap:.25rem;box-shadow:0 8px 24px rgba(0,0,0,.1)}
-    .mobile-nav.show{display:flex}
-    .mobile-nav-link{display:block;padding:.625rem .75rem;border-radius:8px;font-weight:500;color:var(--text-mid)}
-    .mobile-nav-link:hover{background:var(--bg);color:var(--brand)}
-    .mob-divider{height:1px;background:var(--border);margin:.5rem 0}
-    @media(max-width:768px){.nav{height:56px}.nav-inner{padding:0 1rem}.nav-links,.nav-cta{display:none}.nav-mobile-btn{display:flex;align-items:center;justify-content:center;width:40px;height:40px;font-size:1.25rem}.nav-logo{font-size:.9375rem}.nav-logo-icon{width:28px;height:28px}}
+    .nav-dropdown-item{display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:8px;font-size:.875rem;font-weight:500;color:rgba(255,255,255,.6);transition:background .15s}
+    .nav-dropdown-item:hover{background:rgba(255,255,255,.06);color:#fff}
+    .nav-dropdown-divider{height:1px;background:rgba(255,255,255,.08);margin:.375rem 0}
+    .nav-mobile-btn{display:none;background:none;border:none;font-size:1.375rem;cursor:pointer;color:rgba(255,255,255,.6)}
+    .theme-toggle{width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+    .theme-toggle:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff}
+    .mobile-nav{display:none;position:fixed;top:68px;left:0;right:0;background:#0D1221;border-bottom:1px solid rgba(255,255,255,.07);padding:1rem 1.5rem;z-index:99;flex-direction:column;gap:.25rem;box-shadow:0 12px 32px rgba(0,0,0,.4);transform:translateY(-8px);opacity:0;transition:transform .2s ease,opacity .2s ease}
+    .mobile-nav.show{display:flex;transform:translateY(0);opacity:1}
+    .mobile-nav-link{padding:.625rem .875rem;border-radius:10px;font-weight:500;color:rgba(255,255,255,.6);font-size:.9375rem;transition:background .15s,color .15s}
+    .mobile-nav-link:hover{background:rgba(255,255,255,.06);color:#fff}
+    .mob-divider{height:1px;background:rgba(255,255,255,.08);margin:.5rem 0}
 
-    /* Hero */
-    .hero{padding:6rem 0 4rem;background:linear-gradient(170deg,#08111C,#0F2E42,#1B4F72);text-align:center;margin-top:68px}
-    .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:.3125rem .875rem;font-size:.8125rem;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:1.25rem;letter-spacing:.02em}
-    .hero-title{font-family:var(--ff-d);font-size:clamp(2rem,5vw,3.5rem);font-weight:900;color:white;letter-spacing:-.04em;line-height:1.1;margin-bottom:1rem}
-    .hero-desc{font-size:1.0625rem;color:rgba(255,255,255,.65);max-width:520px;margin:0 auto 2rem;line-height:1.7}
+    /* LIGHT MODE NAV */
+    body.light{background:#F5F7FF;color:#1A1F36}
+    body.light .nav{background:rgba(245,247,255,.94);border-bottom-color:rgba(0,0,0,.07)}
+    body.light .nav-logo{color:#1A1F36}
+    body.light .nav-link{color:rgba(26,31,54,.55)}
+    body.light .nav-link:hover{background:rgba(58,123,247,.08);color:#1A1F36}
+    body.light .nav-link.active{color:#2563EB;background:rgba(37,99,235,.08)}
+    body.light .btn-nav-outline{color:#2563EB;border-color:rgba(37,99,235,.35)}
+    body.light .btn-nav-outline:hover{background:rgba(37,99,235,.08)}
+    body.light .nav-mobile-btn{color:rgba(26,31,54,.6)}
+    body.light .mobile-nav{background:#F5F7FF;border-color:rgba(0,0,0,.07)}
+    body.light .mobile-nav-link{color:rgba(26,31,54,.6)}
+    body.light .mobile-nav-link:hover{background:rgba(58,123,247,.07);color:#1A1F36}
+    body.light .mob-divider{background:rgba(0,0,0,.07)}
+    body.light .theme-toggle{border-color:rgba(0,0,0,.15);background:rgba(0,0,0,.05);color:rgba(26,31,54,.7)}
+    body.light .theme-toggle:hover{background:rgba(0,0,0,.1);color:#1A1F36}
+    body.light .nav-avatar-btn{border-color:rgba(0,0,0,.1);background:rgba(0,0,0,.03)}
+    body.light .nav-avatar-name{color:#1A1F36}
+    body.light .nav-dropdown{background:#fff;border-color:rgba(0,0,0,.1);box-shadow:0 12px 32px rgba(0,0,0,.12)}
+    body.light .nav-dropdown-item{color:#475569}
+    body.light .nav-dropdown-item:hover{background:rgba(58,123,247,.06);color:#1A1F36}
 
-    /* Billing toggle */
-    .billing-toggle-row{display:flex;justify-content:center;margin-bottom:3rem}
-    .billing-toggle{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:.3rem;gap:.25rem}
-    .billing-btn{padding:.4375rem 1.25rem;border-radius:100px;border:none;font-size:.875rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all .2s;background:transparent;display:flex;align-items:center;gap:.375rem}
-    .billing-btn.active{background:var(--brand);color:white;box-shadow:0 2px 8px rgba(27,79,114,.25)}
-    .save-tag{background:var(--success-pale);color:var(--success);font-size:.5625rem;font-weight:700;padding:1px 5px;border-radius:8px}
-
-    /* Sections */
+    /* SHARED */
     section{padding:5rem 0}
     .container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
-    .section-badge{display:inline-block;background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:.25rem .875rem;border-radius:100px;margin-bottom:.875rem}
-    .section-title{font-family:var(--ff-d);font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;color:var(--text);letter-spacing:-.03em;line-height:1.15;margin-bottom:.875rem}
-    .section-desc{font-size:1rem;color:var(--text-muted);max-width:560px;line-height:1.7}
+    .section-badge{display:inline-flex;align-items:center;gap:.375rem;background:rgba(0,210,255,.1);color:#00D2FF;font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:.25rem .875rem;border-radius:100px;border:1px solid rgba(0,210,255,.2);margin-bottom:.875rem}
+    .section-title{font-family:var(--ff-d);font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.15;margin-bottom:.875rem}
+    .section-desc{font-size:1rem;color:rgba(255,255,255,.5);max-width:560px;line-height:1.7}
     .text-center{text-align:center}.text-center .section-desc{margin:0 auto}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-    /* Plans */
+    /* HERO */
+    .hero{padding:6rem 0 4rem;background:radial-gradient(ellipse at 50% -10%,rgba(58,123,247,.22) 0%,transparent 60%),#0B0F1A;text-align:center;margin-top:68px;position:relative;overflow:hidden}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+    .hero-inner{position:relative;z-index:1}
+    .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:.375rem 1rem;font-size:.8125rem;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:1.5rem}
+    .hero-title{font-family:var(--ff-d);font-size:clamp(2rem,5vw,3.5rem);font-weight:900;color:white;letter-spacing:-.04em;line-height:1.1;margin-bottom:1rem}
+    .hero-desc{font-size:1.0625rem;color:rgba(255,255,255,.55);max-width:520px;margin:0 auto 2rem;line-height:1.7}
+
+    /* BILLING TOGGLE */
+    .billing-toggle-row{display:flex;justify-content:center;margin-bottom:3rem}
+    .billing-toggle{display:flex;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:.3rem;gap:.25rem}
+    .billing-btn{padding:.4375rem 1.25rem;border-radius:100px;border:none;font-size:.875rem;font-weight:600;color:rgba(255,255,255,.4);cursor:pointer;transition:all .2s;background:transparent;display:flex;align-items:center;gap:.375rem}
+    .billing-btn.active{background:linear-gradient(135deg,#1B4F72,#3A7BF7);color:white;box-shadow:0 2px 8px rgba(58,123,247,.3)}
+    .save-tag{background:rgba(52,211,153,.15);color:#34D399;font-size:.5625rem;font-weight:700;padding:1px 5px;border-radius:8px;border:1px solid rgba(52,211,153,.2)}
+
+    /* PLAN CARDS */
     .plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
-    .plan-card{border:1.5px solid var(--border);border-radius:16px;overflow:hidden;background:var(--surface);transition:all .3s;display:flex;flex-direction:column}
-    .plan-card:hover{border-color:var(--brand);transform:translateY(-4px);box-shadow:0 12px 40px rgba(27,79,114,.1)}
-    .plan-card.featured{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
-    .plan-card-top{padding:1.75rem;border-bottom:1px solid var(--border);background:#FAFBFD}
-    .plan-card.featured .plan-card-top{background:linear-gradient(135deg,var(--brand-pale),#d4eaf8)}
-    .popular-tag{display:inline-block;background:var(--brand);color:white;font-size:.5625rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:20px;margin-bottom:.5rem}
-    .plan-name{font-family:var(--ff-d);font-size:1.125rem;font-weight:700;color:var(--text)}
-    .plan-tagline{font-size:.8125rem;color:var(--text-muted);margin-top:.2rem;margin-bottom:.875rem}
-    .plan-price{font-family:var(--ff-d);font-size:2.5rem;font-weight:900;color:var(--brand);letter-spacing:-.04em}
-    .plan-per{font-size:.875rem;color:var(--text-muted);font-weight:400}
-    .plan-orig{font-size:.875rem;color:var(--text-faint,#94A3B8);text-decoration:line-through;margin-left:.375rem}
+    .plan-card{border:1.5px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.04);transition:all .3s;display:flex;flex-direction:column}
+    .plan-card:hover{border-color:rgba(0,210,255,.3);transform:translateY(-4px);box-shadow:0 12px 40px rgba(58,123,247,.15)}
+    .plan-card.featured{border-color:rgba(0,210,255,.4);box-shadow:0 0 0 1px rgba(0,210,255,.2)}
+    .plan-card-top{padding:1.75rem;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+    .plan-card.featured .plan-card-top{background:linear-gradient(135deg,rgba(58,123,247,.15),rgba(0,210,255,.1))}
+    .popular-tag{display:inline-block;background:linear-gradient(135deg,#3A7BF7,#00D2FF);color:white;font-size:.5625rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:20px;margin-bottom:.5rem}
+    .plan-name{font-family:var(--ff-d);font-size:1.125rem;font-weight:700;color:#fff}
+    .plan-tagline{font-size:.8125rem;color:rgba(255,255,255,.45);margin-top:.2rem;margin-bottom:.875rem}
+    .plan-price{font-family:var(--ff-d);font-size:2.5rem;font-weight:900;color:#00D2FF;letter-spacing:-.04em}
+    .plan-per{font-size:.875rem;color:rgba(255,255,255,.35);font-weight:400}
+    .plan-orig{font-size:.875rem;color:rgba(255,255,255,.25);text-decoration:line-through;margin-left:.375rem}
     .plan-card-body{padding:1.75rem;flex:1;display:flex;flex-direction:column}
-    .feat{display:flex;gap:.5rem;font-size:.875rem;color:var(--text-mid);padding:.375rem 0;border-bottom:1px solid var(--border)}
+    .feat{display:flex;gap:.5rem;font-size:.875rem;color:rgba(255,255,255,.6);padding:.375rem 0;border-bottom:1px solid rgba(255,255,255,.06)}
     .feat:last-of-type{border-bottom:none}
-    .feat-check{color:var(--success);font-weight:700;font-size:.75rem;flex-shrink:0;margin-top:2px}
-    .btn-plan{width:100%;margin-top:1.5rem;padding:.8125rem;border-radius:10px;font-weight:700;font-size:.9375rem;cursor:pointer;transition:all .25s;border:none;font-family:var(--ff-b)}
-    .btn-plan-primary{background:var(--brand);color:white;box-shadow:0 4px 12px rgba(27,79,114,.25)}.btn-plan-primary:hover{background:var(--brand-dark);transform:translateY(-1px)}
-    .btn-plan-outline{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}.btn-plan-outline:hover{background:var(--brand-pale)}
+    .feat-check{color:#34D399;font-weight:700;font-size:.75rem;flex-shrink:0;margin-top:2px}
+    .btn-plan{width:100%;margin-top:1.5rem;padding:.8125rem;border-radius:10px;font-weight:700;font-size:.9375rem;cursor:pointer;transition:all .25s;border:none;font-family:var(--ff-b);display:block;text-align:center}
+    .btn-plan-primary{background:linear-gradient(135deg,#1B4F72,#3A7BF7);color:white;box-shadow:0 4px 12px rgba(58,123,247,.3)}.btn-plan-primary:hover{opacity:.9;transform:translateY(-1px)}
+    .btn-plan-outline{background:transparent;color:#00D2FF;border:1.5px solid rgba(0,210,255,.3)}.btn-plan-outline:hover{background:rgba(0,210,255,.08)}
 
-    /* Individual services table */
+    /* SERVICES TABLE */
     .svc-pricing-table{width:100%;border-collapse:collapse;margin-top:2rem}
-    .svc-pricing-table th{padding:.75rem 1rem;text-align:left;font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);background:#F8FAFC;border-bottom:2px solid var(--border)}
-    .svc-pricing-table td{padding:.875rem 1rem;border-bottom:1px solid var(--border);color:var(--text-mid);vertical-align:middle}
+    .svc-pricing-table th{padding:.75rem 1rem;text-align:left;font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,.3);background:rgba(255,255,255,.03);border-bottom:2px solid rgba(255,255,255,.08)}
+    .svc-pricing-table td{padding:.875rem 1rem;border-bottom:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.6);vertical-align:middle}
     .svc-pricing-table tr:last-child td{border-bottom:none}
-    .svc-pricing-table tr:hover td{background:#F8FAFC}
-    .td-name{font-weight:700;color:var(--text)}
-    .td-sub{font-size:.75rem;color:var(--text-muted);margin-top:2px}
+    .svc-pricing-table tr:hover td{background:rgba(255,255,255,.03)}
+    .td-name{font-weight:700;color:#fff}
+    .td-sub{font-size:.75rem;color:rgba(255,255,255,.35);margin-top:2px}
 
     /* FAQ */
-    .faq-section{background:var(--bg)}
+    .faq-section{background:#0D1221}
     .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem}
-    .faq-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
-    .faq-q{font-family:var(--ff-d);font-weight:700;font-size:.9375rem;color:var(--text);margin-bottom:.5rem}
-    .faq-a{font-size:.875rem;color:var(--text-muted);line-height:1.65}
+    .faq-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1.25rem}
+    .faq-q{font-family:var(--ff-d);font-weight:700;font-size:.9375rem;color:#fff;margin-bottom:.5rem}
+    .faq-a{font-size:.875rem;color:rgba(255,255,255,.5);line-height:1.65}
 
     /* CTA */
-    .cta-section{background:linear-gradient(135deg,var(--brand-dark),var(--brand),var(--brand-mid));padding:5rem 0;text-align:center}
+    .cta-section{background:linear-gradient(135deg,#0F2E42 0%,#1B4F72 60%,#2471A3 100%);padding:5rem 0;text-align:center;position:relative;overflow:hidden}
+    .cta-section::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(58,123,247,.15),transparent 70%)}
+    .cta-inner{position:relative;z-index:1}
     .cta-title{font-family:var(--ff-d);font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;color:white;letter-spacing:-.03em;margin-bottom:1rem}
     .cta-desc{font-size:1rem;color:rgba(255,255,255,.7);max-width:480px;margin:0 auto 2rem;line-height:1.65}
     .cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
-    .btn-cta-white{padding:.875rem 2rem;border-radius:10px;font-weight:700;font-size:.9375rem;background:white;color:var(--brand);border:none;cursor:pointer;transition:all .25s}
-    .btn-cta-white:hover{background:var(--brand-pale);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+    .btn-cta-primary{padding:.875rem 2rem;border-radius:10px;font-weight:700;font-size:.9375rem;background:linear-gradient(135deg,#3A7BF7,#00D2FF);color:white;border:none;cursor:pointer;transition:all .25s;box-shadow:0 6px 20px rgba(58,123,247,.35)}
+    .btn-cta-primary:hover{opacity:.9;transform:translateY(-2px)}
     .btn-cta-ghost{padding:.875rem 2rem;border-radius:10px;font-weight:600;font-size:.9375rem;background:rgba(255,255,255,.1);color:white;border:1.5px solid rgba(255,255,255,.3);cursor:pointer;transition:all .25s}
     .btn-cta-ghost:hover{background:rgba(255,255,255,.2)}
 
-    /* Footer minimal */
-    .footer-mini{background:#0B1E30;padding:2rem 0;text-align:center}
-    .footer-mini-logo{display:flex;align-items:center;justify-content:center;gap:.5rem;font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:white;margin-bottom:.75rem}
-    .footer-mini-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--brand),var(--brand-mid));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.875rem}
-    .footer-mini-copy{font-size:.8125rem;color:rgba(255,255,255,.3)}
-    .footer-mini-links{display:flex;gap:1.25rem;justify-content:center;margin-bottom:.75rem}
-    .footer-mini-link{font-size:.8125rem;color:rgba(255,255,255,.45);transition:color .2s}
-    .footer-mini-link:hover{color:rgba(255,255,255,.8)}
+    /* FOOTER */
+    .footer{background:#070A13;padding:4rem 0 2rem;border-top:1px solid rgba(255,255,255,.06)}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+    .footer-brand-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.875rem}
+    .footer-brand-icon{width:32px;height:32px;background:linear-gradient(135deg,#3A7BF7,#00D2FF);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9375rem}
+    .footer-brand-name{font-family:var(--ff-d);font-size:.9375rem;font-weight:700;color:white}
+    .footer-desc{font-size:.875rem;color:rgba(255,255,255,.35);line-height:1.65;max-width:280px}
+    .footer-col-title{font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.25);margin-bottom:.875rem}
+    .footer-link{display:block;font-size:.875rem;color:rgba(255,255,255,.4);margin-bottom:.4375rem;transition:color .2s}
+    .footer-link:hover{color:rgba(255,255,255,.85)}
+    .footer-bottom{padding-top:2rem;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .footer-copy{font-size:.8125rem;color:rgba(255,255,255,.2)}
+    .footer-socials{display:flex;gap:.5rem}
+    .social-btn{width:32px;height:32px;background:rgba(255,255,255,.05);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.875rem;color:rgba(255,255,255,.35);transition:all .2s;border:1px solid rgba(255,255,255,.08)}
+    .social-btn:hover{background:rgba(255,255,255,.1);color:white}
 
-    @media(max-width:1024px){.plans-grid{grid-template-columns:1fr}.faq-grid{grid-template-columns:1fr}}
-    @media(max-width:768px){section{padding:2.5rem 0}.hero{padding:3.5rem 0 2.5rem}.container{padding:0 1rem}.section-title{font-size:clamp(1.375rem,5vw,2rem)}.cta-btns{flex-direction:column;align-items:center}.btn-cta-white,.btn-cta-ghost{width:100%;max-width:320px;justify-content:center;padding:.875rem 1.5rem}}
+    /* LIGHT MODE */
+    body.light .hero{background:linear-gradient(160deg,#EEF2FF 0%,#E8F4FF 60%,#F0FFFE 100%)}
+    body.light .hero-badge{background:rgba(58,123,247,.1);color:#2563EB;border-color:rgba(58,123,247,.2)}
+    body.light .hero-title{color:#1A1F36}
+    body.light .hero-desc{color:#475569}
+    body.light section{background:transparent}
+    body.light #bundlePlans{background:#fff}
+    body.light #individualSvcs{background:#EEF2F7}
+    body.light .section-badge{background:rgba(58,123,247,.1);color:#2563EB;border-color:rgba(58,123,247,.2)}
+    body.light .section-title{color:#1A1F36}
+    body.light .section-desc{color:#475569}
+    body.light .billing-toggle{background:#fff;border-color:rgba(0,0,0,.1)}
+    body.light .billing-btn{color:#64748B}
+    body.light .plan-card{background:#fff;border-color:rgba(0,0,0,.08);box-shadow:0 2px 12px rgba(0,0,0,.06)}
+    body.light .plan-card.featured{border-color:#2563EB;box-shadow:0 0 0 1px rgba(37,99,235,.2)}
+    body.light .plan-card-top{background:#FAFBFD;border-bottom-color:rgba(0,0,0,.08)}
+    body.light .plan-card.featured .plan-card-top{background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(0,210,255,.06))}
+    body.light .plan-name{color:#1A1F36}
+    body.light .plan-tagline{color:#64748B}
+    body.light .plan-price{color:#1B4F72}
+    body.light .plan-per{color:#64748B}
+    body.light .plan-orig{color:#94A3B8}
+    body.light .feat{color:#334155;border-bottom-color:rgba(0,0,0,.06)}
+    body.light .btn-plan-outline{color:#2563EB;border-color:rgba(37,99,235,.3)}
+    body.light .btn-plan-outline:hover{background:rgba(37,99,235,.06)}
+    body.light .svc-pricing-table th{background:#F8FAFC;color:#64748B;border-bottom-color:rgba(0,0,0,.1)}
+    body.light .svc-pricing-table td{color:#334155;border-bottom-color:rgba(0,0,0,.06)}
+    body.light .td-name{color:#1A1F36}
+    body.light .td-sub{color:#64748B}
+    body.light .svc-pricing-table tr:hover td{background:#F8FAFC}
+    body.light .faq-section{background:#EEF2F7}
+    body.light .faq-item{background:#fff;border-color:rgba(0,0,0,.08)}
+    body.light .faq-q{color:#1A1F36}
+    body.light .faq-a{color:#475569}
+    body.light .footer{background:#1A1F36}
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){.plans-grid{grid-template-columns:1fr}.faq-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr;gap:2rem}}
+    @media(max-width:768px){
+      .nav{height:56px}.nav-inner{padding:0 1rem}
+      .nav-links,.nav-cta{display:none}
+      .nav-mobile-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,.06);font-size:1.125rem;color:rgba(255,255,255,.6)}
+      .nav-logo{font-size:.9375rem}.nav-logo-icon{width:28px;height:28px;font-size:.875rem}
+      .mobile-nav{top:56px;padding:.875rem 1rem 1.125rem}
+      section{padding:2.5rem 0}.hero{padding:3.5rem 0 2.5rem}
+      .container{padding:0 1rem}
+      .section-title{font-size:clamp(1.375rem,5vw,2rem)}
+      .cta-btns{flex-direction:column;align-items:center}
+      .btn-cta-primary,.btn-cta-ghost{width:100%;max-width:320px;justify-content:center}
+      .footer-grid{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
@@ -144,57 +234,57 @@
       <a href="./app/login.html"  class="btn-nav-outline">Sign In</a>
       <a href="./app/signup.html" class="btn-nav-solid">Get Started →</a>
     </div>
+    <button class="theme-toggle" id="themeToggle" title="Toggle light/dark mode">🌙</button>
     <button class="nav-mobile-btn" id="mobileMenuToggle">☰</button>
   </div>
 </nav>
 <script>!function(){try{var u=JSON.parse(localStorage.getItem('gts_user'));var el=document.getElementById('navAuth');if(!el)return;if(u){var i=(u.displayName||u.email||'?')[0].toUpperCase();var n=u.displayName?u.displayName.split(' ')[0]:(u.email||'').split('@')[0];var av=u.photoURL?'<img src="'+u.photoURL.replace(/"/g,'&quot;')+'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':i;el.innerHTML='<div class=\"nav-avatar-wrap\"><a href=\"./app/portal-dashboard.html\" class=\"nav-avatar-btn\"><div class=\"nav-avatar-circle\">'+av+'</div><span class=\"nav-avatar-name\">'+n+'</span><span style=\"font-size:.6rem;color:#64748B;margin-left:2px\">▾</span></a><div class=\"nav-dropdown\"><a href=\"./app/portal-dashboard.html\" class=\"nav-dropdown-item\">📊 Dashboard</a><a href=\"./app/portal-services.html\" class=\"nav-dropdown-item\">🛒 Services &amp; Pricing</a><a href=\"./app/portal-profile.html\" class=\"nav-dropdown-item\">👤 My Profile</a><div class=\"nav-dropdown-divider\"></div><a href=\"#\" class=\"nav-dropdown-item\" style=\"color:#E53935\" id=\"navOut\">Sign Out</a></div></div>';}el.style.visibility='visible';}catch(e){var x=document.getElementById('navAuth');if(x)x.style.visibility='visible';}}();</script>
+
 <div class="mobile-nav" id="mobileNav">
   <a href="./index.html#services"     class="mobile-nav-link">Services</a>
-  <a href="./pricing.html"            class="mobile-nav-link">Pricing</a>
+  <a href="./pricing.html"            class="mobile-nav-link" style="color:#00D2FF;font-weight:600">Pricing</a>
   <a href="./index.html#consultation" class="mobile-nav-link">Consultation</a>
   <a href="./about.html"              class="mobile-nav-link">About</a>
   <div class="mob-divider"></div>
   <div id="mobileAuthLinks">
-    <a href="./app/login.html"  class="mobile-nav-link" style="color:var(--brand);font-weight:600">Sign In</a>
-    <a href="./app/signup.html" class="mobile-nav-link" style="background:var(--brand);color:white;border-radius:8px;text-align:center;font-weight:700;padding:.625rem .75rem;display:block">Get Started →</a>
+    <a href="./app/login.html"  class="mobile-nav-link" style="color:#00D2FF;font-weight:600">Sign In</a>
+    <a href="./app/signup.html" class="mobile-nav-link" style="background:linear-gradient(135deg,#1B4F72,#3A7BF7);color:white;border-radius:8px;text-align:center;font-weight:700;display:block;padding:.625rem .75rem">Get Started →</a>
   </div>
 </div>
 
 <div class="hero">
-  <div class="container">
+  <div class="hero-grid"></div>
+  <div class="hero-inner container">
     <div class="hero-badge">💰 Transparent Pricing</div>
     <h1 class="hero-title">Simple pricing,<br>no surprises</h1>
     <p class="hero-desc">Choose individual services or save with a bundle. Every plan includes full real-time analytics dashboards.</p>
   </div>
 </div>
 
-<!-- BUNDLE PLANS — loaded live from Firestore (managed in Admin Panel) -->
-<section style="background:var(--surface)" id="bundlePlans">
+<!-- BUNDLE PLANS -->
+<section id="bundlePlans">
   <div class="container">
     <div class="text-center">
       <div class="section-badge">Bundle Plans</div>
       <h2 class="section-title">Save more with a bundle</h2>
       <p class="section-desc">Combine services and save up to 20% compared to subscribing individually.</p>
     </div>
-
     <div class="billing-toggle-row">
       <div class="billing-toggle">
         <button class="billing-btn active" id="btnMonthly">Monthly</button>
         <button class="billing-btn" id="btnYearly">Yearly <span class="save-tag">Save 20%</span></button>
       </div>
     </div>
-
-    <!-- Dynamically populated -->
     <div class="plans-grid" id="plansGrid">
-      <div class="plan-card" style="min-height:360px;background:linear-gradient(90deg,#f0f4f8 25%,#e2e8f0 50%,#f0f4f8 75%);background-size:200% 100%;animation:shimmer 1.4s infinite"></div>
-      <div class="plan-card" style="min-height:360px;background:linear-gradient(90deg,#f0f4f8 25%,#e2e8f0 50%,#f0f4f8 75%);background-size:200% 100%;animation:shimmer 1.4s infinite 0.15s"></div>
-      <div class="plan-card" style="min-height:360px;background:linear-gradient(90deg,#f0f4f8 25%,#e2e8f0 50%,#f0f4f8 75%);background-size:200% 100%;animation:shimmer 1.4s infinite 0.3s"></div>
+      <div class="plan-card" style="min-height:360px;background:linear-gradient(90deg,rgba(255,255,255,.03) 25%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.03) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite"></div>
+      <div class="plan-card" style="min-height:360px;background:linear-gradient(90deg,rgba(255,255,255,.03) 25%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.03) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite .15s"></div>
+      <div class="plan-card" style="min-height:360px;background:linear-gradient(90deg,rgba(255,255,255,.03) 25%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.03) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite .3s"></div>
     </div>
   </div>
 </section>
 
-<!-- INDIVIDUAL SERVICES — loaded live from Firestore -->
-<section style="background:var(--bg)" id="individualSvcs">
+<!-- INDIVIDUAL SERVICES -->
+<section id="individualSvcs" style="background:#0D1221">
   <div class="container">
     <div class="text-center">
       <div class="section-badge">Individual Services</div>
@@ -205,14 +295,83 @@
       <table class="svc-pricing-table" id="svcsTable">
         <thead><tr><th>Service</th><th>Monthly</th><th>Yearly (save 20%)</th><th>Billing</th><th>Dashboard</th><th></th></tr></thead>
         <tbody id="svcsBody">
-          <tr><td colspan="6" style="text-align:center;padding:2rem;color:#94A3B8">Loading services...</td></tr>
+          <tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(255,255,255,.35)">Loading services...</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </section>
 
-<style>@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}</style>
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-badge">FAQ</div>
+      <h2 class="section-title">Common pricing questions</h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item"><div class="faq-q">Can I cancel anytime?</div><div class="faq-a">Yes. There are no lock-in contracts. You can cancel your subscription at any time and retain access until the end of your billing period.</div></div>
+      <div class="faq-item"><div class="faq-q">Which payment methods are accepted?</div><div class="faq-a">We accept payments via Paystack (card, USSD, bank transfer), Stripe (global card payments in USD), and PayPal.</div></div>
+      <div class="faq-item"><div class="faq-q">What currency are prices in?</div><div class="faq-a">All prices are in US Dollars ($). When you checkout with Paystack, the equivalent amount is charged in your local currency at the current exchange rate.</div></div>
+      <div class="faq-item"><div class="faq-q">What happens after I subscribe?</div><div class="faq-a">After payment, your service is activated and a setup wizard guides you through configuration. Your analytics dashboard becomes live once setup is complete.</div></div>
+      <div class="faq-item"><div class="faq-q">Is there a free trial?</div><div class="faq-a">We offer a free 30-minute discovery call so you can understand exactly what you'll get before subscribing. Our consultants will walk you through everything.</div></div>
+      <div class="faq-item"><div class="faq-q">Can I switch between plans?</div><div class="faq-a">Yes, you can upgrade or add more services at any time. Contact us and we'll prorate the difference. Downgrades take effect at the next billing cycle.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container cta-inner">
+    <h2 class="cta-title">Ready to get started?</h2>
+    <p class="cta-desc">Sign up free and book your discovery call. No credit card required to explore the platform.</p>
+    <div class="cta-btns">
+      <a href="./app/signup.html" class="btn-cta-primary" id="ctaMain">🚀 Start Free</a>
+      <a href="./app/signup.html" class="btn-cta-ghost">📅 Book Discovery Call</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-row">
+          <div class="footer-brand-icon"><img src="./asset/logo-icon.png" alt="GTS Amplify" style="width:100%;height:100%;object-fit:contain;border-radius:6px"></div>
+          <div class="footer-brand-name">GTS Amplify</div>
+        </div>
+        <div class="footer-desc">Guided Tech Solutions helps businesses grow smarter with data-driven technology services and real-time analytics dashboards.</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <a href="./index.html#services" class="footer-link">Lead Generation</a>
+        <a href="./index.html#services" class="footer-link">Cloud Migration</a>
+        <a href="./index.html#services" class="footer-link">Automation</a>
+        <a href="./index.html#services" class="footer-link">SEO</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <a href="./app/signup.html" class="footer-link">Get Started</a>
+        <a href="./app/login.html"  class="footer-link">Sign In</a>
+        <a href="./index.html#consultation" class="footer-link">Book Consultation</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <a href="./about.html"   class="footer-link">About GTS</a>
+        <a href="./privacy.html" class="footer-link">Privacy Policy</a>
+        <a href="./terms.html"   class="footer-link">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Guided Tech Solutions. All rights reserved.</div>
+      <div class="footer-socials">
+        <a href="#" class="social-btn">𝕏</a>
+        <a href="#" class="social-btn">in</a>
+        <a href="#" class="social-btn">ig</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <script type="module">
 import { initializeApp }  from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
@@ -234,21 +393,17 @@ const auth = getAuth(app);
 function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function fmt(n){ return n?'$'+Number(n).toLocaleString():'—'; }
 
-// Nav auth
 let currentAuthUser = null;
 function updateCtaButtons() {
   const u = currentAuthUser;
-  // Plan cards
   document.querySelectorAll('.btn-plan[data-default-link]').forEach(a => {
     if (u) { a.textContent = 'Subscribe'; a.href = './app/portal-services.html'; }
     else   { a.textContent = a.dataset.defaultText; a.href = a.dataset.defaultLink; }
   });
-  // Services table rows
   document.querySelectorAll('a[data-svc-cta]').forEach(a => {
     if (u) { a.textContent = 'Subscribe →'; a.href = './app/portal-services.html'; }
     else   { a.textContent = 'Get Started →'; a.href = './app/signup.html'; }
   });
-  // Bottom CTA
   const ctaMain = document.getElementById('ctaMain');
   if (ctaMain) {
     if (u) { ctaMain.textContent = '📊 Go to Dashboard'; ctaMain.href = './app/portal-dashboard.html'; }
@@ -262,7 +417,7 @@ onAuthStateChanged(auth, u => {
   if (!el) return;
   if (!u) {
     el.innerHTML = `<a href="./app/login.html" class="btn-nav-outline">Sign In</a><a href="./app/signup.html" class="btn-nav-solid">Get Started</a>`;
-    if (mob) mob.innerHTML = `<a href="./app/login.html" class="mobile-nav-link">Sign In</a><a href="./app/signup.html" class="mobile-nav-link" style="background:var(--brand);color:white;border-radius:8px;text-align:center;font-weight:700;padding:.625rem .75rem;display:block">Get Started</a>`;
+    if (mob) mob.innerHTML = `<a href="./app/login.html" class="mobile-nav-link" style="color:#00D2FF;font-weight:600">Sign In</a><a href="./app/signup.html" class="mobile-nav-link" style="background:linear-gradient(135deg,#1B4F72,#3A7BF7);color:white;border-radius:8px;text-align:center;font-weight:700;padding:.625rem .75rem;display:block">Get Started</a>`;
     el.style.visibility = 'visible';
     return;
   }
@@ -270,14 +425,13 @@ onAuthStateChanged(auth, u => {
   const name = u.displayName ? u.displayName.split(' ')[0] : (u.email||'').split('@')[0];
   el.innerHTML = `<div class="nav-avatar-wrap"><a href="./app/portal-dashboard.html" class="nav-avatar-btn"><div class="nav-avatar-circle">${u.photoURL?`<img src="${u.photoURL}" alt="">`:init}</div><span class="nav-avatar-name">${name}</span><span style="font-size:.6rem;color:#64748B;margin-left:2px">▾</span></a><div class="nav-dropdown"><a href="./app/portal-dashboard.html" class="nav-dropdown-item">📊 Dashboard</a><a href="./app/portal-services.html" class="nav-dropdown-item">🛒 Services &amp; Pricing</a><a href="./app/portal-profile.html" class="nav-dropdown-item">👤 My Profile</a><div class="nav-dropdown-divider"></div><a href="#" class="nav-dropdown-item" style="color:#E53935" id="navOut">Sign Out</a></div></div>`;
   document.getElementById('navOut').addEventListener('click', e => { e.preventDefault(); auth.signOut(); });
-  if (mob) mob.innerHTML = `<a href="./app/portal-dashboard.html" class="mobile-nav-link" style="color:var(--brand);font-weight:700">📊 Go to Dashboard</a>`;
+  if (mob) mob.innerHTML = `<a href="./app/portal-dashboard.html" class="mobile-nav-link" style="color:#00D2FF;font-weight:700">📊 Go to Dashboard</a>`;
   el.style.visibility = 'visible';
 });
 
 let allPlans = [];
 let billingMode = 'monthly';
 
-/* ── Plans ────────────────────────────────────────────────── */
 async function loadPlans() {
   const grid = document.getElementById('plansGrid');
   try {
@@ -293,7 +447,7 @@ async function loadPlans() {
     updateCtaButtons();
   } catch(e) {
     console.warn('Plans load error:', e);
-    if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#64748B">Could not load plans. Please refresh.</div>`;
+    if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:rgba(255,255,255,.35)">Could not load plans. Please refresh.</div>`;
   }
 }
 
@@ -301,7 +455,6 @@ function renderPlans() {
   const grid = document.getElementById('plansGrid');
   if (!grid || !allPlans.length) return;
   const isYearly = billingMode === 'yearly';
-
   grid.innerHTML = allPlans.map(p => {
     const isCustom  = p.customPricing === true;
     const monthly   = Number(p.priceMonthly) || 0;
@@ -315,18 +468,12 @@ function renderPlans() {
     const ctaText     = (!isCustom && currentAuthUser) ? 'Subscribe' : defaultText;
     const ctaLink     = (!isCustom && currentAuthUser) ? './app/portal-services.html' : defaultLink;
     const isPopular = !!p.popular;
-
-    return `
-    <div class="plan-card ${isPopular?'featured':''}">
+    return `<div class="plan-card ${isPopular?'featured':''}">
       <div class="plan-card-top">
         ${isPopular?'<div class="popular-tag">Most Popular</div>':''}
         <div class="plan-name">${esc(p.name)}</div>
         <div class="plan-tagline">${esc(p.tagline||p.description||'')}</div>
-        <div>
-          <span class="plan-price" ${isCustom?'style="font-size:1.75rem"':''}>${esc(price)}</span>
-          <span class="plan-per">${period}</span>
-          ${origPrice?`<span class="plan-orig">${esc(origPrice)}</span>`:''}
-        </div>
+        <div><span class="plan-price" ${isCustom?'style="font-size:1.75rem"':''}>${esc(price)}</span><span class="plan-per">${period}</span>${origPrice?`<span class="plan-orig">${esc(origPrice)}</span>`:''}</div>
       </div>
       <div class="plan-card-body">
         ${features.map(f=>`<div class="feat"><span class="feat-check">✓</span>${esc(f)}</div>`).join('')}
@@ -336,7 +483,6 @@ function renderPlans() {
   }).join('');
 }
 
-/* ── Services ─────────────────────────────────────────────── */
 async function loadServices() {
   const tbody = document.getElementById('svcsBody');
   try {
@@ -344,12 +490,7 @@ async function loadServices() {
     const svcs = [];
     snap.forEach(d => svcs.push({ id:d.id, ...d.data() }));
     svcs.sort((a,b)=> (a.sortOrder||99) - (b.sortOrder||99) || (a.name||'').localeCompare(b.name||''));
-
-    if (!svcs.length) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:#94A3B8">No individual services configured yet.</td></tr>`;
-      return;
-    }
-
+    if (!svcs.length) { tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(255,255,255,.35)">No individual services configured yet.</td></tr>`; return; }
     tbody.innerHTML = svcs.map(s => {
       const monthly = Number(s.price) || 0;
       const yearly  = Math.round(monthly * 12 * 0.8);
@@ -357,26 +498,21 @@ async function loadServices() {
       const isOnce  = period === 'once';
       const dashMap = { lead_generation:'Live Dashboard', cloud_migration:'Progress Tracker', automation:'Run History', seo:'Rankings Tracker', consultation:'Booking History', generic:'Status Panel' };
       const dashLabel = dashMap[s.dashboardType] || 'Dashboard';
-
       return `<tr>
-        <td>
-          <div class="td-name">${esc(s.icon||'')} ${esc(s.name)}</div>
-          <div class="td-sub">${esc((s.description||'').substring(0,60))}...</div>
-        </td>
+        <td><div class="td-name">${esc(s.icon||'')} ${esc(s.name)}</div><div class="td-sub">${esc((s.description||'').substring(0,60))}...</div></td>
         <td><strong>${fmt(monthly)}</strong></td>
-        <td><strong style="color:var(--success)">${isOnce?'N/A':fmt(yearly)}</strong></td>
+        <td><strong style="color:#34D399">${isOnce?'N/A':fmt(yearly)}</strong></td>
         <td>${esc(isOnce?'One-time':'Monthly / Yearly')}</td>
-        <td><span style="background:var(--brand-pale);color:var(--brand);font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">${esc(dashLabel)}</span></td>
-        <td><a href="./app/signup.html" style="color:var(--brand);font-weight:600;font-size:.875rem" data-svc-cta="1">Get Started →</a></td>
+        <td><span style="background:rgba(0,210,255,.12);color:#00D2FF;font-size:.6875rem;font-weight:700;padding:2px 7px;border-radius:20px">${esc(dashLabel)}</span></td>
+        <td><a href="./app/signup.html" style="color:#3A7BF7;font-weight:600;font-size:.875rem" data-svc-cta="1">Get Started →</a></td>
       </tr>`;
     }).join('');
   } catch(e) {
     console.warn('Services load error:', e);
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:#94A3B8">Could not load services. Please refresh.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(255,255,255,.35)">Could not load services. Please refresh.</td></tr>`;
   }
 }
 
-/* ── Billing toggle ────────────────────────────────────────── */
 document.getElementById('btnMonthly').addEventListener('click', () => {
   billingMode = 'monthly';
   document.getElementById('btnMonthly').classList.add('active');
@@ -396,53 +532,18 @@ loadServices();
 document.getElementById('mobileMenuToggle').addEventListener('click', () => document.getElementById('mobileNav').classList.toggle('show'));
 document.querySelectorAll('#mobileNav a').forEach(a => a.addEventListener('click', () => document.getElementById('mobileNav').classList.remove('show')));
 </script>
-
-<!-- Individual Services section now rendered dynamically above via Firestore -->
-
-<!-- FAQ -->
-<section class="faq-section">
-  <div class="container">
-    <div class="text-center">
-      <div class="section-badge">FAQ</div>
-      <h2 class="section-title">Common pricing questions</h2>
-    </div>
-    <div class="faq-grid">
-      <div class="faq-item"><div class="faq-q">Can I cancel anytime?</div><div class="faq-a">Yes. There are no lock-in contracts. You can cancel your subscription at any time and retain access until the end of your billing period.</div></div>
-      <div class="faq-item"><div class="faq-q">Which payment methods are accepted?</div><div class="faq-a">We accept payments via Paystack (card, USSD, bank transfer — great for Nigeria), Stripe (global card payments in USD), and PayPal.</div></div>
-      <div class="faq-item"><div class="faq-q">What currency are prices in?</div><div class="faq-a">All prices are in US Dollars ($). When you checkout with Paystack, the equivalent amount is charged in your local currency at the current exchange rate.</div></div>
-      <div class="faq-item"><div class="faq-q">What happens after I subscribe?</div><div class="faq-a">After payment, your service is activated and a setup wizard guides you through configuration. Your analytics dashboard becomes live once setup is complete.</div></div>
-      <div class="faq-item"><div class="faq-q">Is there a free trial?</div><div class="faq-a">We offer a free 30-minute discovery call so you can understand exactly what you'll get before subscribing. No trial period, but our consultants will walk you through everything.</div></div>
-      <div class="faq-item"><div class="faq-q">Can I switch between plans?</div><div class="faq-a">Yes, you can upgrade or add more services at any time. Contact us and we'll prorate the difference. Downgrades take effect at the next billing cycle.</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section">
-  <div class="container">
-    <h2 class="cta-title">Ready to get started?</h2>
-    <p class="cta-desc">Sign up free and book your discovery call. No credit card required to explore the platform.</p>
-    <div class="cta-btns">
-      <a href="./app/signup.html" class="btn-cta-white" id="ctaMain">🚀 Start Free</a>
-      <a href="./app/signup.html" class="btn-cta-ghost">📅 Book Discovery Call</a>
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer class="footer-mini">
-  <div class="container">
-    <div class="footer-mini-logo"><div class="footer-mini-icon"><img src="./asset/logo-icon.png" alt="GTS Amplify" style="width:28px;height:28px;object-fit:contain;border-radius:6px"></div>GTS Amplify</div>
-    <div class="footer-mini-links">
-      <a href="./index.html"   class="footer-mini-link">Home</a>
-      <a href="./about.html"   class="footer-mini-link">About</a>
-      <a href="./privacy.html" class="footer-mini-link">Privacy</a>
-      <a href="./terms.html"   class="footer-mini-link">Terms</a>
-    </div>
-    <div class="footer-mini-copy">© 2025 Guided Tech Solutions. All rights reserved.</div>
-  </div>
-</footer>
-
-<!-- Billing toggle and Firestore loading handled by module script above -->
+<script>
+(function(){
+  var btn=document.getElementById("themeToggle");
+  if(!btn)return;
+  var saved=localStorage.getItem("gts_theme");
+  if(saved==="light"){document.body.classList.add("light");btn.textContent="☀️";}
+  btn.addEventListener("click",function(){
+    var isLight=document.body.classList.toggle("light");
+    btn.textContent=isLight?"☀️":"🌙";
+    localStorage.setItem("gts_theme",isLight?"light":"dark");
+  });
+})();
+</script>
 </body>
 </html>

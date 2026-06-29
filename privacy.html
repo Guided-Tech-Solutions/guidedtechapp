@@ -6,38 +6,72 @@
   <link rel="icon" href="./asset/logo-icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root{--brand:#1B4F72;--brand-mid:#2471A3;--brand-pale:#EBF5FB;--text:#0D1B2A;--text-mid:#334155;--text-muted:#64748B;--border:#E2E8F0;--surface:#fff;--bg:#F2F5F9;--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif}
-    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--ff-b);color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
-    .nav{background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;height:64px}
-    .nav-logo{display:flex;align-items:center;gap:.5rem;font-family:var(--ff-d);font-size:1rem;font-weight:700;color:var(--brand);text-decoration:none}
-    .nav-icon{width:30px;height:30px;border-radius:7px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    :root{--brand:#3A7BF7;--brand-mid:#00D2FF;--text:#E8EDF5;--text-mid:#CBD5E1;--text-muted:rgba(255,255,255,.45);--border:rgba(255,255,255,.08);--surface:rgba(255,255,255,.04);--ff-d:'Outfit',sans-serif;--ff-b:'DM Sans',sans-serif}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:var(--ff-b);color:var(--text);background:#0B0F1A;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{color:#00D2FF;text-decoration:none}a:hover{text-decoration:underline}
+
+    /* NAV */
+    .nav{background:rgba(11,15,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;height:68px}
+    .nav-logo{display:flex;align-items:center;gap:.5rem;font-family:var(--ff-d);font-size:1rem;font-weight:700;color:#fff;text-decoration:none}
+    .nav-logo-icon{width:30px;height:30px;background:linear-gradient(135deg,#3A7BF7,#00D2FF);border-radius:7px;display:flex;align-items:center;justify-content:center;overflow:hidden}
     .nav-links-inline{display:flex;align-items:center;gap:.125rem}
-    .nav-link-sm{padding:.375rem .75rem;border-radius:7px;font-size:.8125rem;font-weight:500;color:var(--text-mid);text-decoration:none;transition:all .2s}
-    .nav-link-sm:hover{background:var(--bg);color:var(--brand)}
+    .nav-link-sm{padding:.375rem .75rem;border-radius:7px;font-size:.8125rem;font-weight:500;color:rgba(255,255,255,.5);text-decoration:none;transition:all .2s}
+    .nav-link-sm:hover{background:rgba(255,255,255,.06);color:#fff;text-decoration:none}
+    .nav-right-area{display:flex;align-items:center;gap:.625rem}
     .nav-right-btns{display:flex;gap:.5rem;align-items:center}
-    .btn-sm-outline{padding:.375rem .875rem;border-radius:7px;font-size:.8125rem;font-weight:600;color:var(--brand);border:1.5px solid var(--brand);background:transparent;text-decoration:none;transition:all .2s}
-    .btn-sm-outline:hover{background:var(--brand-pale)}
-    .btn-sm-solid{padding:.375rem .875rem;border-radius:7px;font-size:.8125rem;font-weight:600;color:white;background:var(--brand);text-decoration:none;transition:all .2s}
-    .btn-sm-solid:hover{background:var(--brand-dark)}
-    @media(max-width:640px){.nav{height:52px;padding:0 1rem}.nav-links-inline{display:none}.nav-logo{font-size:.9375rem}}
-    .wrapper{max-width:760px;margin:3rem auto;background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:3rem;box-shadow:0 4px 16px rgba(0,0,0,.06)}
-    .doc-header{margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
-    .doc-title{font-family:var(--ff-d);font-size:2rem;font-weight:800;color:var(--text);letter-spacing:-.03em;margin-bottom:.5rem}
-    .doc-meta{font-size:.875rem;color:var(--text-muted)}
-    h2{font-family:var(--ff-d);font-size:1.125rem;font-weight:700;color:var(--text);margin:2rem 0 .75rem}
-    p{font-size:.9375rem;color:var(--text-mid);line-height:1.75;margin-bottom:.875rem}
+    .btn-sm-outline{padding:.375rem .875rem;border-radius:7px;font-size:.8125rem;font-weight:600;color:#00D2FF;border:1.5px solid rgba(0,210,255,.3);background:transparent;text-decoration:none;transition:all .2s}
+    .btn-sm-outline:hover{background:rgba(0,210,255,.08)}
+    .btn-sm-solid{padding:.375rem .875rem;border-radius:7px;font-size:.8125rem;font-weight:600;color:white;background:linear-gradient(135deg,#1B4F72,#3A7BF7);text-decoration:none;transition:all .2s}
+    .btn-sm-solid:hover{opacity:.9}
+    .theme-toggle{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:.9375rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+    .theme-toggle:hover{background:rgba(255,255,255,.12);color:#fff}
+    @media(max-width:640px){.nav{height:56px;padding:0 1rem}.nav-links-inline{display:none}.nav-logo{font-size:.9375rem}}
+
+    /* DOC */
+    .wrapper{max-width:760px;margin:3rem auto;background:rgba(255,255,255,.04);border-radius:16px;border:1px solid rgba(255,255,255,.08);padding:3rem;box-shadow:0 4px 32px rgba(0,0,0,.3)}
+    .doc-header{margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,.08)}
+    .doc-title{font-family:var(--ff-d);font-size:2rem;font-weight:800;color:#fff;letter-spacing:-.03em;margin-bottom:.5rem}
+    .doc-meta{font-size:.875rem;color:rgba(255,255,255,.35)}
+    h2{font-family:var(--ff-d);font-size:1.125rem;font-weight:700;color:#fff;margin:2rem 0 .75rem}
+    p{font-size:.9375rem;color:rgba(255,255,255,.6);line-height:1.75;margin-bottom:.875rem}
     ul{padding-left:1.25rem;margin-bottom:.875rem}
-    li{font-size:.9375rem;color:var(--text-mid);line-height:1.7;margin-bottom:.375rem}
-    a{color:var(--brand)}
-    .footer-mini{text-align:center;padding:2rem 1.5rem;font-size:.8125rem;color:var(--text-muted)}
-    .footer-mini a{color:var(--brand);font-weight:600}
-    @media(max-width:800px){.wrapper{margin:1.5rem;padding:1.75rem}}@media(max-width:480px){.wrapper{margin:.75rem;padding:1.125rem}}
+    li{font-size:.9375rem;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:.375rem}
+    strong{color:rgba(255,255,255,.85)}
+
+    /* FOOTER */
+    .footer-mini{text-align:center;padding:2rem 1.5rem;font-size:.8125rem;color:rgba(255,255,255,.3);border-top:1px solid rgba(255,255,255,.06)}
+    .footer-mini a{color:#00D2FF;font-weight:600;text-decoration:none}
+    .footer-mini a:hover{text-decoration:underline}
+
+    /* LIGHT MODE */
+    body.light{background:#F5F7FF;color:#1A1F36}
+    body.light .nav{background:rgba(245,247,255,.94);border-bottom-color:rgba(0,0,0,.07)}
+    body.light .nav-logo{color:#1A1F36}
+    body.light .nav-link-sm{color:#475569}
+    body.light .nav-link-sm:hover{background:rgba(58,123,247,.08);color:#1A1F36}
+    body.light .btn-sm-outline{color:#2563EB;border-color:rgba(37,99,235,.35)}
+    body.light .btn-sm-outline:hover{background:rgba(37,99,235,.08)}
+    body.light .theme-toggle{border-color:rgba(0,0,0,.15);background:rgba(0,0,0,.05);color:rgba(26,31,54,.7)}
+    body.light .wrapper{background:#fff;border-color:rgba(0,0,0,.08);box-shadow:0 4px 16px rgba(0,0,0,.06)}
+    body.light .doc-header{border-bottom-color:rgba(0,0,0,.08)}
+    body.light .doc-title{color:#1A1F36}
+    body.light .doc-meta{color:#64748B}
+    body.light h2{color:#1A1F36}
+    body.light p,body.light li{color:#334155}
+    body.light strong{color:#0D1B2A}
+    body.light a{color:#1B4F72}
+    body.light .footer-mini{color:#64748B;border-top-color:rgba(0,0,0,.08)}
+    body.light .footer-mini a{color:#1B4F72}
+
+    @media(max-width:800px){.wrapper{margin:1.5rem;padding:1.75rem}}
+    @media(max-width:480px){.wrapper{margin:.75rem;padding:1.125rem}}
   </style>
 </head>
 <body>
 <nav class="nav">
   <a href="./index.html" class="nav-logo">
-    <div class="nav-icon"><img src="./asset/logo-icon.png" alt="GTS Amplify" style="width:30px;height:30px;object-fit:contain;border-radius:6px"></div>
+    <div class="nav-logo-icon"><img src="./asset/logo-icon.png" alt="GTS Amplify" style="width:30px;height:30px;object-fit:contain;border-radius:6px"></div>
     GTS Amplify
   </a>
   <div class="nav-links-inline">
@@ -46,19 +80,23 @@
     <a href="./index.html#consultation" class="nav-link-sm">Consultation</a>
     <a href="./about.html"              class="nav-link-sm">About</a>
   </div>
-  <div class="nav-right-btns" id="navAuth" style="visibility:hidden">
-    <a href="./app/login.html"  class="btn-sm-outline">Sign In</a>
-    <a href="./app/signup.html" class="btn-sm-solid">Get Started →</a>
+  <div class="nav-right-area">
+    <div class="nav-right-btns" id="navAuth" style="visibility:hidden">
+      <a href="./app/login.html"  class="btn-sm-outline">Sign In</a>
+      <a href="./app/signup.html" class="btn-sm-solid">Get Started →</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle" title="Toggle light/dark mode">🌙</button>
   </div>
 </nav>
-<script>!function(){try{var u=JSON.parse(localStorage.getItem('gts_user'));var el=document.getElementById('navAuth');if(!el)return;if(u){var i=(u.displayName||u.email||'?')[0].toUpperCase();var n=u.displayName?u.displayName.split(' ')[0]:(u.email||'').split('@')[0];var av=u.photoURL?'<img src="'+u.photoURL.replace(/"/g,'&quot;')+'" alt="" style=\"width:100%;height:100%;object-fit:cover;border-radius:50%\">':i;el.innerHTML='<a href=\"./app/portal-dashboard.html\" style=\"display:flex;align-items:center;gap:.5rem;padding:.3125rem .75rem .3125rem .3125rem;border-radius:100px;border:1.5px solid #E2E8F0;background:white;font-size:.8125rem;font-weight:600;color:#0D1B2A;text-decoration:none\"><div style=\"width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1B4F72,#2471A3);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:white;overflow:hidden\">'+av+'</div>'+n+' · Dashboard</a>';}el.style.visibility='visible';}catch(e){var x=document.getElementById('navAuth');if(x)x.style.visibility='visible';}}();</script>
+<script>!function(){try{var u=JSON.parse(localStorage.getItem('gts_user'));var el=document.getElementById('navAuth');if(!el)return;if(u){var i=(u.displayName||u.email||'?')[0].toUpperCase();var n=u.displayName?u.displayName.split(' ')[0]:(u.email||'').split('@')[0];var av=u.photoURL?'<img src="'+u.photoURL.replace(/"/g,'&quot;')+'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':i;el.innerHTML='<a href="./app/portal-dashboard.html" style="display:flex;align-items:center;gap:.5rem;padding:.3125rem .75rem .3125rem .3125rem;border-radius:100px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);font-size:.8125rem;font-weight:600;color:#fff;text-decoration:none"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1B4F72,#3A7BF7);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:white;overflow:hidden">'+av+'</div>'+n+' · Dashboard</a>';}el.style.visibility='visible';}catch(e){var x=document.getElementById('navAuth');if(x)x.style.visibility='visible';}}();</script>
+
 <div class="wrapper">
   <div class="doc-header">
     <div class="doc-title">Privacy Policy</div>
-    <div class="doc-meta">Last updated: 1 January 2025 · Guided Tech Solutions</div>
+    <div class="doc-meta">Last updated: January 1, 2025 &nbsp;·&nbsp; Guided Tech Solutions</div>
   </div>
 
-  <p>This Privacy Policy describes how Guided Tech Solutions ("we", "us", or "our") collects, uses, and protects your personal information when you use GTS Amplify and related services.</p>
+  <p>This Privacy Policy describes how Guided Tech Solutions ("we", "us", or "our") collects, uses, and protects your personal information when you use GTS Amplify and related services. Guided Tech Solutions is a technology company based in Mississippi, United States.</p>
 
   <h2>1. Information We Collect</h2>
   <p>We collect information you provide directly to us, including:</p>
@@ -79,7 +117,7 @@
     <li>Populate your real-time analytics dashboards</li>
     <li>Personalise your experience on the platform</li>
     <li>Detect and prevent fraud and misuse</li>
-    <li>Comply with legal obligations under Nigerian law (NDPR) and applicable international regulations</li>
+    <li>Comply with applicable US federal and state laws</li>
   </ul>
 
   <h2>3. Data Sharing</h2>
@@ -88,23 +126,22 @@
     <li><strong>Payment processors:</strong> Paystack, Stripe, and PayPal receive data required to complete transactions.</li>
     <li><strong>Firebase (Google):</strong> We use Firebase for authentication and database services. Your data is stored in Google's infrastructure.</li>
     <li><strong>Service providers:</strong> We may share data with vetted third-party providers who help us operate our platform, under strict confidentiality agreements.</li>
-    <li><strong>Legal requirements:</strong> We may disclose information if required by Nigerian law, court order, or government authority.</li>
+    <li><strong>Legal requirements:</strong> We may disclose information if required by applicable law, court order, or government authority.</li>
   </ul>
 
-  <h2>4. Data Storage & Security</h2>
-  <p>Your data is stored on Google Firebase infrastructure with industry-standard encryption at rest and in transit. We implement technical and organisational measures to protect against unauthorised access, disclosure, or destruction. However, no internet transmission is completely secure, and we cannot guarantee absolute security.</p>
+  <h2>4. Data Storage &amp; Security</h2>
+  <p>Your data is stored on Google Firebase infrastructure with industry-standard encryption at rest and in transit. We implement technical and organisational measures to protect against unauthorised access, disclosure, or destruction. Sensitive credentials you provide are encrypted using AES-256-GCM and are never stored in plain text. No internet transmission is completely secure and we cannot guarantee absolute security.</p>
 
-  <h2>5. Your Rights (NDPR & GDPR)</h2>
+  <h2>5. Your Rights</h2>
   <p>You have the right to:</p>
   <ul>
     <li>Access the personal data we hold about you</li>
     <li>Correct inaccurate or incomplete data</li>
     <li>Request deletion of your account and associated data</li>
     <li>Object to or restrict certain processing activities</li>
-    <li>Data portability — receive your data in a structured format</li>
     <li>Withdraw consent at any time where processing is consent-based</li>
   </ul>
-  <p>To exercise any of these rights, contact us at <a href="mailto:privacy@guidedtechsolutions.com">privacy@guidedtechsolutions.com</a>.</p>
+  <p>To exercise any of these rights, contact us at <a href="mailto:info@guidedtechms.com">info@guidedtechms.com</a>.</p>
 
   <h2>6. Cookies</h2>
   <p>We use essential session cookies required for authentication and platform functionality. We do not use advertising or tracking cookies. You can disable cookies in your browser settings, but this may affect platform functionality.</p>
@@ -118,13 +155,16 @@
   <h2>9. Contact Us</h2>
   <p>For privacy inquiries, please contact:<br>
   <strong>Guided Tech Solutions</strong><br>
-  Email: <a href="mailto:privacy@guidedtechsolutions.com">privacy@guidedtechsolutions.com</a><br>
-  Lagos, Nigeria</p>
+  Email: <a href="mailto:info@guidedtechms.com">info@guidedtechms.com</a><br>
+  Website: <a href="https://www.guidedtechms.com" target="_blank" rel="noopener">www.guidedtechms.com</a><br>
+  Mississippi, United States</p>
 </div>
+
 <div class="footer-mini">
   <a href="./index.html">Home</a> · <a href="./pricing.html">Pricing</a> · <a href="./terms.html">Terms of Service</a> · <a href="./about.html">About Us</a><br>
   <div style="margin-top:.5rem">© 2025 Guided Tech Solutions · Mississippi, United States · <a href="mailto:info@guidedtechms.com">info@guidedtechms.com</a></div>
 </div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
@@ -136,10 +176,25 @@ onAuthStateChanged(_auth, u => {
   const init = u ? (u.displayName||u.email||'?')[0].toUpperCase() : '';
   const name = u ? (u.displayName ? u.displayName.split(' ')[0] : (u.email||'').split('@')[0]) : '';
   if (u) {
-    el.innerHTML = `<a href="./app/portal-dashboard.html" style="display:flex;align-items:center;gap:.5rem;padding:.3125rem .75rem .3125rem .3125rem;border-radius:100px;border:1.5px solid #E2E8F0;background:white;font-size:.8125rem;font-weight:600;color:#0D1B2A;text-decoration:none"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1B4F72,#2471A3);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:white;overflow:hidden">${u.photoURL?`<img src="${u.photoURL}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:init}</div>${name} · Dashboard</a>`;
+    el.innerHTML = `<a href="./app/portal-dashboard.html" style="display:flex;align-items:center;gap:.5rem;padding:.3125rem .75rem .3125rem .3125rem;border-radius:100px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);font-size:.8125rem;font-weight:600;color:#fff;text-decoration:none"><div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1B4F72,#3A7BF7);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:white;overflow:hidden">${u.photoURL?`<img src="${u.photoURL}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:init}</div>${name} · Dashboard</a>`;
+  } else {
+    el.innerHTML = `<a href="./app/login.html" class="btn-sm-outline">Sign In</a><a href="./app/signup.html" class="btn-sm-solid">Get Started →</a>`;
   }
   el.style.visibility = 'visible';
 });
+</script>
+<script>
+(function(){
+  var btn=document.getElementById("themeToggle");
+  if(!btn)return;
+  var saved=localStorage.getItem("gts_theme");
+  if(saved==="light"){document.body.classList.add("light");btn.textContent="☀️";}
+  btn.addEventListener("click",function(){
+    var isLight=document.body.classList.toggle("light");
+    btn.textContent=isLight?"☀️":"🌙";
+    localStorage.setItem("gts_theme",isLight?"light":"dark");
+  });
+})();
 </script>
 </body>
 </html>
