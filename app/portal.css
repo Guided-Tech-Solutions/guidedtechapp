@@ -120,6 +120,7 @@ button, input, select, textarea { font-family:var(--ff-b); }
   display:flex; align-items:center;
 }
 body.light .navbar { background:rgba(255,255,255,.92); }
+body.light .brand-logo { color:var(--text); }
 .navbar-inner {
   width:100%; max-width:1600px; margin:0 auto;
   padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between;
@@ -185,13 +186,13 @@ body.light .navbar { background:rgba(255,255,255,.92); }
 .brand-logo {
   display:flex; align-items:center; gap:.5rem;
   font-family:var(--ff-d); font-size:1.0625rem; font-weight:700;
-  color:var(--brand); letter-spacing:-.01em;
+  color:#fff; letter-spacing:-.01em;
 }
 .brand-logo-icon {
   width:34px; height:34px; border-radius:var(--r-sm);
-  background:linear-gradient(135deg, var(--brand), var(--brand-mid));
+  background:linear-gradient(135deg,#3A7BF7,#00D2FF);
   display:flex; align-items:center; justify-content:center;
-  font-size:.9375rem; box-shadow:0 2px 8px rgba(27,79,114,.3);
+  font-size:.9375rem; box-shadow:0 2px 8px rgba(58,123,247,.3);
 }
 
 .btn-nav {
