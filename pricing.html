@@ -31,12 +31,12 @@
     .nav-cta{display:flex;gap:.625rem;align-items:center}
     .btn-nav-outline{padding:.5rem 1.125rem;border-radius:8px;font-weight:600;font-size:.875rem;color:#00D2FF;border:1.5px solid rgba(0,210,255,.3);background:transparent;cursor:pointer;transition:all .2s}
     .btn-nav-outline:hover{background:rgba(0,210,255,.08)}
-    .btn-nav-solid{padding:.5rem 1.25rem;border-radius:8px;font-weight:600;font-size:.875rem;color:white;background:linear-gradient(135deg,#1B4F72,#3A7BF7);border:none;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(58,123,247,.3)}
+    .btn-nav-solid{padding:.5rem 1.25rem;border-radius:8px;font-weight:600;font-size:.875rem;color:white;background:linear-gradient(135deg,#3A7BF7,#00D2FF);border:none;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(58,123,247,.3)}
     .btn-nav-solid:hover{opacity:.9;transform:translateY(-1px)}
     .nav-avatar-wrap{position:relative}
     .nav-avatar-btn{display:flex;align-items:center;gap:.5rem;padding:.3125rem .75rem .3125rem .3125rem;border-radius:100px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);cursor:pointer;transition:all .2s;text-decoration:none}
     .nav-avatar-btn:hover{border-color:rgba(0,210,255,.4);background:rgba(0,210,255,.08)}
-    .nav-avatar-circle{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#1B4F72,#3A7BF7);display:flex;align-items:center;justify-content:center;font-size:.8125rem;font-weight:700;color:white;overflow:hidden;flex-shrink:0}
+    .nav-avatar-circle{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#3A7BF7,#00D2FF);display:flex;align-items:center;justify-content:center;font-size:.8125rem;font-weight:700;color:white;overflow:hidden;flex-shrink:0}
     .nav-avatar-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%}
     .nav-avatar-name{font-size:.8125rem;font-weight:600;color:#fff;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .nav-dropdown{position:absolute;top:calc(100% + .5rem);right:0;background:#141A2E;border:1.5px solid rgba(255,255,255,.1);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.4);min-width:200px;padding:.5rem;z-index:200;opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s}
@@ -96,7 +96,7 @@
     .billing-toggle-row{display:flex;justify-content:center;margin-bottom:3rem}
     .billing-toggle{display:flex;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:.3rem;gap:.25rem}
     .billing-btn{padding:.4375rem 1.25rem;border-radius:100px;border:none;font-size:.875rem;font-weight:600;color:rgba(255,255,255,.4);cursor:pointer;transition:all .2s;background:transparent;display:flex;align-items:center;gap:.375rem}
-    .billing-btn.active{background:linear-gradient(135deg,#1B4F72,#3A7BF7);color:white;box-shadow:0 2px 8px rgba(58,123,247,.3)}
+    .billing-btn.active{background:linear-gradient(135deg,#3A7BF7,#00D2FF);color:white;box-shadow:0 2px 8px rgba(58,123,247,.3)}
     .save-tag{background:rgba(52,211,153,.15);color:#34D399;font-size:.5625rem;font-weight:700;padding:1px 5px;border-radius:8px;border:1px solid rgba(52,211,153,.2)}
 
     /* PLAN CARDS */
@@ -117,7 +117,7 @@
     .feat:last-of-type{border-bottom:none}
     .feat-check{color:#34D399;font-weight:700;font-size:.75rem;flex-shrink:0;margin-top:2px}
     .btn-plan{width:100%;margin-top:1.5rem;padding:.8125rem;border-radius:10px;font-weight:700;font-size:.9375rem;cursor:pointer;transition:all .25s;border:none;font-family:var(--ff-b);display:block;text-align:center}
-    .btn-plan-primary{background:linear-gradient(135deg,#1B4F72,#3A7BF7);color:white;box-shadow:0 4px 12px rgba(58,123,247,.3)}.btn-plan-primary:hover{opacity:.9;transform:translateY(-1px)}
+    .btn-plan-primary{background:linear-gradient(135deg,#3A7BF7,#00D2FF);color:white;box-shadow:0 4px 12px rgba(58,123,247,.3)}.btn-plan-primary:hover{opacity:.9;transform:translateY(-1px)}
     .btn-plan-outline{background:transparent;color:#00D2FF;border:1.5px solid rgba(0,210,255,.3)}.btn-plan-outline:hover{background:rgba(0,210,255,.08)}
 
     /* SERVICES TABLE */
@@ -248,7 +248,7 @@
   <div class="mob-divider"></div>
   <div id="mobileAuthLinks">
     <a href="./app/login.html"  class="mobile-nav-link" style="color:#00D2FF;font-weight:600">Sign In</a>
-    <a href="./app/signup.html" class="mobile-nav-link" style="background:linear-gradient(135deg,#1B4F72,#3A7BF7);color:white;border-radius:8px;text-align:center;font-weight:700;display:block;padding:.625rem .75rem">Get Started →</a>
+    <a href="./app/signup.html" class="mobile-nav-link" style="background:linear-gradient(135deg,#3A7BF7,#00D2FF);color:white;border-radius:8px;text-align:center;font-weight:700;display:block;padding:.625rem .75rem">Get Started →</a>
   </div>
 </div>
 
@@ -417,7 +417,7 @@ onAuthStateChanged(auth, u => {
   if (!el) return;
   if (!u) {
     el.innerHTML = `<a href="./app/login.html" class="btn-nav-outline">Sign In</a><a href="./app/signup.html" class="btn-nav-solid">Get Started</a>`;
-    if (mob) mob.innerHTML = `<a href="./app/login.html" class="mobile-nav-link" style="color:#00D2FF;font-weight:600">Sign In</a><a href="./app/signup.html" class="mobile-nav-link" style="background:linear-gradient(135deg,#1B4F72,#3A7BF7);color:white;border-radius:8px;text-align:center;font-weight:700;padding:.625rem .75rem;display:block">Get Started</a>`;
+    if (mob) mob.innerHTML = `<a href="./app/login.html" class="mobile-nav-link" style="color:#00D2FF;font-weight:600">Sign In</a><a href="./app/signup.html" class="mobile-nav-link" style="background:linear-gradient(135deg,#3A7BF7,#00D2FF);color:white;border-radius:8px;text-align:center;font-weight:700;padding:.625rem .75rem;display:block">Get Started</a>`;
     el.style.visibility = 'visible';
     return;
   }
