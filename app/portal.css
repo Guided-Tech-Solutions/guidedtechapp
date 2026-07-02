@@ -440,7 +440,8 @@ textarea.form-control { resize:vertical; min-height:80px; }
 
 /* ── CONSULTATION BANNER ─────────────────────────────────────── */
 .consult-banner {
-  background:linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 55%, var(--brand-mid) 100%);
+  background:linear-gradient(135deg,#0F1E3D 0%,#1A3260 50%,#0D2847 100%);
+  border:1px solid rgba(58,123,247,.2);
   border-radius:var(--r-lg); padding:1.75rem 2rem;
   margin-bottom:1.625rem; display:flex; align-items:center;
   justify-content:space-between; gap:1.5rem;
@@ -448,11 +449,11 @@ textarea.form-control { resize:vertical; min-height:80px; }
 }
 .consult-banner::before {
   content:''; position:absolute; top:-60px; right:-60px;
-  width:220px; height:220px; background:rgba(255,255,255,.04); border-radius:50%;
+  width:220px; height:220px; background:rgba(58,123,247,.06); border-radius:50%;
 }
 .consult-banner::after {
   content:''; position:absolute; bottom:-80px; right:120px;
-  width:180px; height:180px; background:rgba(255,255,255,.03); border-radius:50%;
+  width:180px; height:180px; background:rgba(0,210,255,.04); border-radius:50%;
 }
 .consult-banner-text { position:relative; z-index:1; }
 .consult-banner-label { font-size:.6875rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.6); margin-bottom:.375rem; }
