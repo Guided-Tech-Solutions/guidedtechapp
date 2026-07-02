@@ -739,15 +739,22 @@ onAuthStateChanged(auth, u => {
     el.style.visibility = 'visible';
     return;
   }
+  // If quick-load already rendered the avatar correctly, don't re-render
+  if (el.querySelector('.nav-avatar-circle')) {
+    document.getElementById('navOut')?.addEventListener('click', e => { e.preventDefault(); auth.signOut(); });
+    el.style.visibility = 'visible';
+    return;
+  }
+  // Fallback: quick-load had no localStorage data (e.g. just signed in)
   const _su=JSON.parse(localStorage.getItem('gts_user')||'null');
   const _ck=_su?.displayName||_su?.email||u.email||'?';
   const init=(_ck.split(/[\s@]+/).slice(0,2).map(s=>s[0]?s[0].toUpperCase():'').join(''))||'?';
   const COLORS=["#3B82F6","#10B981","#8B5CF6","#F59E0B","#EF4444","#06B6D4","#EC4899","#84CC16"];
   const acFn=s=>{let h=0;for(let j=0;j<s.length;j++)h=(h*31+s.charCodeAt(j))>>>0;return COLORS[h%COLORS.length];};
   const col=acFn(_ck);
-  const name = u.displayName ? u.displayName.split(' ')[0] : (u.email||'').split('@')[0];
-  el.innerHTML = `<div class="nav-avatar-wrap"><a href="./app/portal-dashboard.html" class="nav-avatar-btn"><div class="nav-avatar-circle">${u.photoURL?`<img src="${u.photoURL}" alt="">`:init}</div><span class="nav-avatar-name">${name}</span><span style="font-size:.6rem;color:#64748B;margin-left:2px">▾</span></a><div class="nav-dropdown"><a href="./app/portal-dashboard.html" class="nav-dropdown-item">📊 Dashboard</a><a href="./app/portal-services.html" class="nav-dropdown-item">🛒 Services &amp; Pricing</a><a href="./app/portal-profile.html" class="nav-dropdown-item">👤 My Profile</a><div class="nav-dropdown-divider"></div><a href="#" class="nav-dropdown-item" style="color:#E53935" id="navOut">Sign Out</a></div></div>`;
-  const avc=el.querySelector('.nav-avatar-circle');if(avc&&!u?.photoURL)avc.style.background=window._gtsAvatarBg||col;
+  const name=(_su?.displayName||u.email||'').split(/[\s@]+/)[0];
+  el.innerHTML = `<div class="nav-avatar-wrap"><a href="./app/portal-dashboard.html" class="nav-avatar-btn"><div class="nav-avatar-circle">${init}</div><span class="nav-avatar-name">${name}</span><span style="font-size:.6rem;color:#64748B;margin-left:2px">▾</span></a><div class="nav-dropdown"><a href="./app/portal-dashboard.html" class="nav-dropdown-item">📊 Dashboard</a><a href="./app/portal-services.html" class="nav-dropdown-item">🛒 Services &amp; Pricing</a><a href="./app/portal-profile.html" class="nav-dropdown-item">👤 My Profile</a><div class="nav-dropdown-divider"></div><a href="#" class="nav-dropdown-item" style="color:#E53935" id="navOut">Sign Out</a></div></div>`;
+  const avc=el.querySelector('.nav-avatar-circle');if(avc)avc.style.background=col;
   document.getElementById('navOut').addEventListener('click', e => { e.preventDefault(); auth.signOut(); });
   if (mob) mob.innerHTML = `<a href="./app/portal-dashboard.html" class="mobile-nav-link" style="color:var(--brand);font-weight:700">📊 Go to Dashboard</a>`;
   el.style.visibility = 'visible';
